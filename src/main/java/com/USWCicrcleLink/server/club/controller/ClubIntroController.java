@@ -24,8 +24,8 @@ public class ClubIntroController {
     }
 
     //지원서 작성 페이지로 이동
-    @GetMapping("/{id}/apply")
-    public ResponseEntity<ApiResponse> showApplyPage(@PathVariable("id") Long id) {
+    @GetMapping("/{clubId}/apply")
+    public ResponseEntity<ApiResponse> showApplyPage(@PathVariable("clubId") Long id) {
         ClubIntro clubIntro = clubIntroService.getClubIntroByClubId(id);
         if (!clubIntro.getRecruitmentStatus().isOpen()) {
             return new ResponseEntity<>(new ApiResponse("모집이 마감되었습니다."), HttpStatus.FORBIDDEN);
@@ -35,8 +35,8 @@ public class ClubIntroController {
     }
 
     //구글 폼으로 이동
-    @GetMapping("/{id}/apply/form")
-    public ResponseEntity<Void> applyToClub(@PathVariable("id") Long id) {
+    @GetMapping("/{clubId}/apply/form")
+    public ResponseEntity<Void> applyToClub(@PathVariable("clubId") Long id) {
         ClubIntro clubIntro = clubIntroService.getClubIntroByClubId(id);
         if (!clubIntro.getRecruitmentStatus().isOpen()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

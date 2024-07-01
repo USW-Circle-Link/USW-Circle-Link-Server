@@ -16,7 +16,7 @@ import java.util.List;
 public class AplictController {
     private final AplictService aplictService;
 
-    // 지원서 제출하기
+    //지원서 제출하기
     @PostMapping("/submit")
     public ResponseEntity<ApiResponse> submitAplict(@RequestBody AplictRequest request) {
         aplictService.submitAplict(request);

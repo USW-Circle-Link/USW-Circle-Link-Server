@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 public class ClubService {
     private final ClubRepository clubRepository;
 
+    //모든 동아리 조회
     @Transactional(readOnly = true)
     public List<Club> getAllClubs(){
         log.info("모든 동아리 조회");
@@ -27,7 +28,8 @@ public class ClubService {
         }
         return clubs;
     }
-
+    
+    //동아리 조회
     @Transactional(readOnly = true)
     public Club getClubById(Long id) {
         log.info("동아리 조회 id: {}", id);
@@ -36,6 +38,7 @@ public class ClubService {
         );
     }
 
+    //분과별 동아리 조회
     @Transactional(readOnly = true)
     public List<Club> getClubsByDepartment(Department department) {
         log.info("분과별 동아리 조회: {}", department);

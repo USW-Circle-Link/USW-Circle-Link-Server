@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 public class ClubIntroService {
     private final ClubIntroRepository clubIntroRepository;
 
+    //동아리 소개글 조회
     @Transactional(readOnly = true)
     public ClubIntro getClubIntroByClubId(Long clubId) {
         log.info("동아리 소개 조회 id: {}", clubId);

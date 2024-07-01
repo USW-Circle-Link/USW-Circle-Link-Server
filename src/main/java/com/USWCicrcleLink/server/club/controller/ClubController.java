@@ -28,8 +28,8 @@ public class ClubController {
     }
 
     //동아리 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getClubById(@PathVariable("id") Long id) {
+    @GetMapping("/{clubId}")
+    public ResponseEntity<ApiResponse> getClubById(@PathVariable("clubId") Long id) {
         Club club = clubService.getClubById(id);
         ApiResponse response = new ApiResponse("동아리 조회 성공", club);
         return ResponseEntity.ok(response);

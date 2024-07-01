@@ -16,18 +16,27 @@ public class ClubIntroController {
     private final ClubIntroService clubIntroService;
 
     // 동아리 소개글 조회
-    @GetMapping("/{id}/clubIntro")
-    public ResponseEntity<ApiResponse> getClubIntroByClubId(@PathVariable("id") Long id) {
+    @GetMapping("/{clubId}/clubIntro")
+    public ResponseEntity<ApiResponse> getClubIntroByClubId(@PathVariable("clubId") Long id) {
         ClubIntro clubIntro = clubIntroService.getClubIntroByClubId(id);
         ApiResponse response = new ApiResponse("동아리 소개글 조회 성공", clubIntro);
         return ResponseEntity.ok(response);
     }
 
-    // 동아리 지원
-    @PostMapping("/{id}/apply")
-    public ResponseEntity<ApiResponse> applyToClub(@PathVariable("id") Long id) {
-        clubIntroService.applyToClub(id);
-        ApiResponse response = new ApiResponse("지원이 완료되었습니다.");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    // 지원서 작성 페이지로 이동
+    @GetMapping("/{clubId}/apply")
+    public ResponseEntity<ApiResponse> showApplyPage(@PathVariable("clubId") Long id) {
+        ClubIntro clubIntro = clubIntroService.getClubIntroByClubId(id);
+        ApiResponse response = new ApiResponse("지원 페이지 이동 성공", clubIntro.getGoogleFormUrl());
+        return ResponseEntity.ok(response);
+    }
+
+    // 구글 폼으로 이동
+    @GetMapping("/{clubId}/apply/form")
+    public ResponseEntity<Void> applyToClub(@PathVariable("clubId") Long id) {
+        ClubIntro clubIntro = clubIntroService.getClubIntroByClubId(id);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", clubIntro.getGoogleFormUrl())
+                .build();
     }
 }

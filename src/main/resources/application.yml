@@ -8,29 +8,11 @@ logging:
       USWRandomChat:
         backend: debug
 
-#email url
-email:
-  config:
-    baseUrl: "http://localhost:8080"
-
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: false
-    freemarker:
-      cache: false
-
   datasource:
-    url: jdbc:h2:tcp://localhost/~/swchat
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/CircleLink
     username: sa
     password:
-    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:

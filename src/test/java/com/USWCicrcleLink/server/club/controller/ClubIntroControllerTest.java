@@ -15,8 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class ClubIntroControllerTest {
@@ -53,6 +55,7 @@ class ClubIntroControllerTest {
                 .recruitmentStatus(RecruitmentStatus.OPEN)
                 .googleFormUrl("http://example.com/form")
                 .build();
+        clubIntro.setRecruitmentStatus(RecruitmentStatus.OPEN); // 모집 상태 설정
 
         when(clubIntroService.getClubIntroByClubId(1L)).thenReturn(clubIntro);
 
@@ -70,6 +73,18 @@ class ClubIntroControllerTest {
                 .andExpect(jsonPath("$.data.additionalPhotoPath1", is("/path/to/photo1")))
                 .andExpect(jsonPath("$.data.additionalPhotoPath2", is("/path/to/photo2")))
                 .andExpect(jsonPath("$.data.recruitmentStatus", is("OPEN")))
-                .andExpect(jsonPath("$.data.googleFormUrl", is("http://example.com/form")));
+                .andExpect(jsonPath("$.data.googleFormUrl", is("http://example.com/form")))
+                .andExpect(jsonPath("$.data.recruitmentStatus", is("OPEN")));
+    }
+
+    @Test
+    void applyToClub() throws Exception {
+        doNothing().when(clubIntroService).applyToClub(1L);
+
+        mockMvc.perform(post("/clubs/1/apply")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("지원이 완료되었습니다.")));
     }
 }

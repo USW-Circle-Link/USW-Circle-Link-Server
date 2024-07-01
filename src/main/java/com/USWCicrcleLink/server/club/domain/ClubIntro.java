@@ -32,7 +32,7 @@ public class ClubIntro {
     @Column(name = "additional_photo_path2")
     private String additionalPhotoPath2;
 
-    @Column(name = "recruitment_status")
+    @Transient
     private RecruitmentStatus recruitmentStatus;
 
     @Column(name = "googleForm_url")

@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.application.domain;
+package com.USWCicrcleLink.server.aplict.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Table(name = "APPLICATION_TABLE")
-public class Aplct {
+public class Aplict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aplctId;
@@ -26,7 +26,7 @@ public class Aplct {
     private String aplctText;
 
     @Enumerated(EnumType.STRING)
-    private  AplctStatus status;
+    private AplictStatus status;
 
     private LocalDateTime aplctSubmittedAt;
 

@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.clubLeaders.domain;
+package com.USWCicrcleLink.server.club.domain;
 
 public enum Department {
 

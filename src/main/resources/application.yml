@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+#log setting
+logging:
+  level:
+    com:
+      USWRandomChat:
+        backend: debug
+
+#email url
+email:
+  config:
+    baseUrl: "http://localhost:8080"
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+    freemarker:
+      cache: false
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/swchat
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #      show_sql: true
+        format_sql: true

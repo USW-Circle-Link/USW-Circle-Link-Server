@@ -1,33 +1,40 @@
 package com.USWCicrcleLink.server.aplict.domain;
 
+import com.USWCicrcleLink.server.club.domain.Club;
+import com.USWCicrcleLink.server.profile.domain.Profile;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "APPLICATION_TABLE")
+@Table(name = "aplict")
 public class Aplict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long aplctId;
+    @Column(name = "aplict_id")
+    private Long id;
 
-    private Long clubId;
+    @ManyToOne
+    @JoinColumn(name = "profile_id", nullable = false)
+    private Profile profile;
 
-    private Long profileId;
+    @ManyToOne
+    @JoinColumn(name = "club_id", nullable = false)
+    private Club club;
 
-    private String aplctText;
+    @Column(name = "aplict_google_form_url", nullable = false)
+    private String aplictGoogleFormUrl;
+
+    @Column(name = "aplict_submitted_at", nullable = false)
+    private LocalDateTime submittedAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "aplict_status", nullable = false)
     private AplictStatus status;
-
-    private LocalDateTime aplctSubmittedAt;
-
 }

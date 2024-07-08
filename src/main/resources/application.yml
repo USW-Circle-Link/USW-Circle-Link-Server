@@ -1,0 +1,41 @@
+# default
+spring:
+  config:
+    import:
+      - classpath:/yaml/application-prod.yml
+      - classpath:/yaml/application-dev.yml
+      - classpath:/yaml/application-local.yml
+      - classpath:/yaml/application-secret.yml
+  profiles:
+    active: local #default
+    group:
+      local:
+        - secret # local + secret 실행
+      dev:
+        - secret # dev + secret
+      prod:
+        - secret # prod + secret
+---
+spring:
+  config:
+    activate:
+      on-profile: local # local + secret 실행
+      import:
+        - classpath:/yaml/application-local.yml
+        - classpath:/yaml/application-secret.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: dev # dev + secret
+      import:
+        - classpath:/yaml/application-dev.yml
+        - classpath:/yaml/application-secret.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: prod # prod + secret
+      import:
+        - classpath:/yaml/application-prod.yml
+        - classpath:/yaml/application-secret.yml

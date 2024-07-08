@@ -1,10 +1,8 @@
 package com.USWCicrcleLink.server.profile.domain;
 
+import com.USWCicrcleLink.server.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -19,18 +17,20 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profileId;
 
-    private Long userId;
-
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    private User user;
+    @Setter
     private String userName;
-
+    @Setter
     private String studentNumber;
-
+    @Setter
     private String userHp;
-
+    @Setter
     private String major;
 
     private LocalDateTime profileCreatedAt;
-
+    @Setter
     private LocalDateTime profileUpdatedAt;
 
 }

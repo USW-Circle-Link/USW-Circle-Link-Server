@@ -93,23 +93,35 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(noticeId).orElse(null);
         if (notice != null) {
             if (request.getNoticeTitle() != null) {
-                notice.setNoticeTitle(request.getNoticeTitle());
+                notice.updateTitle(request.getNoticeTitle());
             }
             if (request.getNoticeContent() != null) {
-                notice.setNoticeContent(request.getNoticeContent());
+                notice.updateContent(request.getNoticeContent());
             }
             if (request.getNoticePhotos() != null) {
-                //기존 사진 삭제 후 새 사진 저장
-                noticePhotoRepository.deleteByNotice(notice);
+                List<NoticePhoto> existingPhotos = noticePhotoRepository.findByNotice(notice);
 
-                List<NoticePhoto> photos = request.getNoticePhotos().stream()
-                        .map(photoPath -> NoticePhoto.builder()
-                                .photoPath(photoPath)
-                                .notice(notice)
-                                .build())
+                List<NoticePhoto> newPhotos = request.getNoticePhotos().stream()
+                        .map(photoPath -> {
+                            for (NoticePhoto existingPhoto : existingPhotos) {
+                                if (existingPhoto.getPhotoPath().equals(photoPath)) {
+                                    return existingPhoto;
+                                }
+                            }
+                            return NoticePhoto.builder()
+                                    .photoPath(photoPath)
+                                    .notice(notice)
+                                    .build();
+                        })
                         .collect(Collectors.toList());
 
-                noticePhotoRepository.saveAll(photos);
+                noticePhotoRepository.saveAll(newPhotos);
+
+                List<NoticePhoto> photosToRemove = existingPhotos.stream()
+                        .filter(existingPhoto -> !newPhotos.contains(existingPhoto))
+                        .collect(Collectors.toList());
+
+                noticePhotoRepository.deleteAll(photosToRemove);
             }
             Notice updatedNotice = noticeRepository.save(notice);
             List<String> photoPaths = noticePhotoRepository.findByNotice(updatedNotice).stream()

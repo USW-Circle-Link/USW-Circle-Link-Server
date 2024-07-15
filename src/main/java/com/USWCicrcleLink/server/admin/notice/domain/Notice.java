@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,4 +30,12 @@ public class Notice {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
+
+    public void updateTitle(String noticeTitle) {
+        this.noticeTitle = noticeTitle;
+    }
+
+    public void updateContent(String noticeContent) {
+        this.noticeContent = noticeContent;
+    }
 }

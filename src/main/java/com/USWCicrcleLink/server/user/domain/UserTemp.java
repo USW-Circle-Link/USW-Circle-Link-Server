@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "USERTEMP_TABLE")
 public class UserTemp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="USERTEMP_ID")
     private Long userTempId;
-
-    private Long emailTokenId;
 
     private String tempAccount;
 
@@ -31,8 +31,8 @@ public class UserTemp {
 
     private String tempMajor;
 
+    @Column(nullable = false, unique = true)
     private String tempEmail;
 
     private boolean isEmailVerified;
-
 }

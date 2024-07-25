@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+# log setting
+logging:
+  level:
+    com:
+      USWRandomChat:
+        backend: warn
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://3.35.83.91:3306/CircleLinkProd?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+
+  data:
+    redis:
+      host: prod-redis-server
+      port: 6379

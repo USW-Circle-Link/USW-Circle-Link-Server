@@ -1,12 +1,10 @@
 package com.USWCicrcleLink.server.user.service;
 
-import com.USWCicrcleLink.server.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
-import com.USWCicrcleLink.server.global.exception.errortype.AuthCodeException;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
 import com.USWCicrcleLink.server.user.domain.User;
-import com.USWCicrcleLink.server.user.dto.UserInfoDto;
+import com.USWCicrcleLink.server.user.dto.AuthCodeRequest;
 import com.USWCicrcleLink.server.user.repository.AuthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +40,7 @@ public class AuthTokenService {
     }
 
     // 인증 코드 토큰 검증
-    public void verifyAuthToken(UUID uuid, UserInfoDto request) {
+    public void verifyAuthToken(UUID uuid, AuthCodeRequest request) {
 
         log.debug("인증 코드 토큰 검증 메서드 시작");
         AuthToken authToken = authTokenRepository.findByUserUserUUID(uuid)

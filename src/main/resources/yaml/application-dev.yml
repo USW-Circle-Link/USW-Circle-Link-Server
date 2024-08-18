@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${BASIC_PORT}
 
 # log setting
 logging:
@@ -16,9 +16,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/CircleLinkDev?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username:
-    password:
+    url: ${DEV_SQL_URL}
+    username: ${DEV_SQL_USERNAME}
+    password: ${DEV_SQL_PASSWORD}
 
   jpa:
     hibernate:
@@ -29,5 +29,5 @@ spring:
 
   data:
     redis:
-      host: dev-redis-server
-      port: 6379
+      host: ${DEV_REDIS_HOST}
+      port: ${REDIS_PORT}

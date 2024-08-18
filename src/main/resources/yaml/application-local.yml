@@ -1,7 +1,7 @@
 server:
-  port: 8080
+  port: ${BASIC_PORT}
   base:
-    url: "http://localhost:8080"
+    url: ${LOCAL_URL}
 
 # log setting
 logging:
@@ -13,7 +13,7 @@ logging:
 #email url
 email:
   config:
-    baseUrl: "http://localhost:8080"
+    baseUrl: ${LOCAL_URL}
 
 spring:
   config:
@@ -22,9 +22,9 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/CircleLink
-    username: sa
-    password:
+    url: ${H2_URL}
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
 
   jpa:
     hibernate:
@@ -35,5 +35,5 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}

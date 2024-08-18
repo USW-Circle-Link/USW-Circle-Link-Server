@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoDto {
 
+    @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String userAccount;
-    private String userPw;
-    private String email;
-    private String authCode; // 인증 코드
 
+    @NotBlank(message = "이메일 필수 입력 값입니다.")
+    private String email;
 }

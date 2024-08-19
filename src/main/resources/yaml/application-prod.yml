@@ -1,7 +1,7 @@
 server:
-  port: 8080
+  port: ${BASIC_PORT}
   base:
-    url: "${SERVER_BASE_URL}"
+    url: ${SERVER_URL}
 
 # log setting
 logging:
@@ -13,18 +13,33 @@ logging:
 #email url
 email:
   config:
-    baseUrl: "http://43.200.140.186:8080"
+    baseUrl: ${SERVER_URL}
 
 spring:
   config:
     activate:
       on-profile: prod
 
+  firebase:
+    config-path:${SERVER_FIREBASE_CONFIG_PATH}
+
+cloud:
+  aws:
+    s3:
+      bucket: prod-sw-circle-link-upload-files
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://43.200.140.186:3306/circle_link_prod?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: circlelink
-    password: 12345678
+    url: ${SERVER_MYSQL_URL}
+    username: ${SERVER_MYSQL_USERNAME}
+    password: ${SERVER_MYSQL_PASSWORD}
 
   jpa:
     hibernate:
@@ -35,6 +50,6 @@ spring:
 
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      password: ""
+      host: ${SERVER_REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${SERVER_REDIS_PASSWORD}

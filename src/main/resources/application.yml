@@ -3,11 +3,9 @@ spring:
   config:
     import:
       - classpath:/yaml/application-prod.yml
-      - classpath:/yaml/application-dev.yml
       - classpath:/yaml/application-local.yml
       - classpath:/yaml/application-secret.yml
       - classpath:/yaml/application-file.yml
-      - classpath:/yaml/application-aws.yml
 
   profiles:
     active: local #default
@@ -15,25 +13,14 @@ spring:
       local:
         - secret
         - file # local + secret + file 실행
-        - s3
-      dev:
-        - secret
-        - file
-        - s3
       prod:
         - secret
         - file
-        - s3
 ---
 spring:
   config:
     activate:
       on-profile: local # local + secret 실행
----
-spring:
-  config:
-    activate:
-      on-profile: dev # dev + secret
 ---
 spring:
   config:

@@ -8,11 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoDto {
-
-    @NotBlank(message = "아이디는 필수 입력 값입니다.")
-    private String userAccount;
-
-    @NotBlank(message = "이메일 필수 입력 값입니다.")
-    private String email;
+public class AuthCodeRequest {
+    @NotBlank(message = "인증 코드를 입력해주세요.")
+    private String authCode;
 }

@@ -5,6 +5,7 @@ import com.USWCicrcleLink.server.email.service.EmailTokenService;
 import com.USWCicrcleLink.server.global.exception.errortype.EmailException;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.global.security.dto.TokenDto;
+import com.USWCicrcleLink.server.global.validation.ValidationSequence;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.domain.UserTemp;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,7 +66,7 @@ public class UserController {
 
     // 임시 회원 등록 및 인증 메일 전송
     @PostMapping("/temporary")
-    public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Valid @RequestBody SignUpRequest request)  {
+    public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Validated(ValidationSequence.class) @RequestBody SignUpRequest request)  {
 
         UserTemp userTemp = userService.registerUserTemp(request);
         EmailToken emailToken = emailTokenService.createEmailToken(userTemp);
@@ -85,10 +87,10 @@ public class UserController {
         try {
             UserTemp userTemp = userService.verifyEmailToken(emailToken_uuid);
             userService.signUp(userTemp);
-            modelAndView.setViewName("email_verification_success"); // Name of the success page
+            modelAndView.setViewName("email_verification_success");
             modelAndView.addObject("message", "이메일 인증이 성공했습니다. 앱으로 돌아가 회원가입 완료 버튼을 눌러주세요");
         } catch (EmailException e) {
-            modelAndView.setViewName("email_verification_failure"); // Name of the failure page
+            modelAndView.setViewName("email_verification_failure");
             modelAndView.addObject("message", "이메일 인증이 실패 했습니다. 이메일을 재전송 해주세요");
         }
         return modelAndView;
@@ -107,14 +109,14 @@ public class UserController {
 
     // 회원 가입 완료 처리
     @PostMapping("/finish-signup")
-    public ResponseEntity<ApiResponse<String>> signUpFinish(@RequestBody VerifyEmailRequest request) {
+    public ResponseEntity<ApiResponse<String>> signUpFinish(@RequestBody FinishSignupRequest request) {
         ApiResponse<String> apiResponse = new ApiResponse<>(userService.signUpFinish(request.getAccount()), "회원가입 완료");
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<TokenDto>> logIn(@RequestBody @Valid LogInRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponse<TokenDto>> logIn(@RequestBody @Validated(ValidationSequence.class) LogInRequest request, HttpServletResponse response) {
         TokenDto tokenDto = userService.logIn(request, response);
         ApiResponse<TokenDto> apiResponse = new ApiResponse<>("로그인 성공", tokenDto);
         return ResponseEntity.ok(apiResponse);
@@ -145,12 +147,12 @@ public class UserController {
 
     // 인증 코드 검증
     @PostMapping("/auth/verify-token")
-    public ResponseEntity<ApiResponse<String>> verifyAuthToken(@RequestHeader UUID uuid, @RequestBody UserInfoDto request) {
+    public ResponseEntity<ApiResponse<UUID>> verifyAuthToken(@RequestHeader UUID uuid,@Valid @RequestBody AuthCodeRequest request) {
 
         authTokenService.verifyAuthToken(uuid, request);
         authTokenService.deleteAuthToken(uuid);
 
-        ApiResponse<String> response = new ApiResponse<>("인증 코드 검증이 완료되었습니다",request.getUserAccount());
+        ApiResponse<UUID> response = new ApiResponse<>("인증 코드 검증이 완료되었습니다",uuid);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

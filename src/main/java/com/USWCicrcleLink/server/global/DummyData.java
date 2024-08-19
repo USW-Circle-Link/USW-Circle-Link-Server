@@ -64,7 +64,7 @@ public class DummyData {
                 .userUUID(UUID.randomUUID())
                 .userAccount("user11")
                 .userPw("12345")
-                .email("user11")
+                .email("user111")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)

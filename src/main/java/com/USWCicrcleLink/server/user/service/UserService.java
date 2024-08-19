@@ -166,10 +166,10 @@ public class UserService {
             throw new UserException(ExceptionType.USER_NOT_EXISTS);
         }
 
-//        // 아이디와 비밀번호 검증
-//        if (!user.getUserAccount().equals(request.getAccount()) || !passwordEncoder.matches(request.getPassword(), user.getUserPw()) ) {
-//            throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
-//        }
+        // 아이디와 비밀번호 검증
+        if (!user.getUserAccount().equals(request.getAccount()) || !passwordEncoder.matches(request.getPassword(), user.getUserPw()) ) {
+            throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+        }
 
         // 로그인 성공 시 토큰 발급
         String accessToken = jwtProvider.createAccessToken(userDetails.getUsername());

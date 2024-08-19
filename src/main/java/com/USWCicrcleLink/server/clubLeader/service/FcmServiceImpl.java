@@ -3,6 +3,7 @@ package com.USWCicrcleLink.server.clubLeader.service;
 import com.USWCicrcleLink.server.aplict.domain.Aplict;
 import com.USWCicrcleLink.server.aplict.domain.AplictStatus;
 import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
+import com.USWCicrcleLink.server.clubLeader.config.FirebaseConfig;
 import com.USWCicrcleLink.server.clubLeader.dto.FcmMessageDto;
 import com.USWCicrcleLink.server.clubLeader.dto.FcmSendDto;
 import com.USWCicrcleLink.server.profile.domain.Profile;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -29,9 +32,8 @@ import java.util.Optional;
 public class FcmServiceImpl implements FcmService {
 
     private final String FCM_API_URL = "https://fcm.googleapis.com/v1/projects/usw-circle-link/messages:send";
-    private final String firebaseConfigPath = "firebase/usw-circle-link-firebase-adminsdk-u25m3-791f80d22c.json";
+    private final FirebaseConfig firebaseConfig;
     private final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
-
     private final String APLICT_TITLE_MESSAGE = "동아리 지원 결과";
     private final String APLICT_PASS_MESSAGE = "에 합격했습니다.";
     private final String APLICT_FAIL_MESSAGE = "에 불합격했습니다.";
@@ -70,7 +72,7 @@ public class FcmServiceImpl implements FcmService {
     // Firebase Admin SDK의 비공개 키 참조해 bearer 토큰 발급
     private String getAccessToken() throws IOException {
         GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                .fromStream(new ClassPathResource(firebaseConfig.getConfigPath()).getInputStream())
                 .createScoped(List.of(GOOGLE_AUTH_URL));
 
         // 토큰 만료 ? 갱신 : 토큰

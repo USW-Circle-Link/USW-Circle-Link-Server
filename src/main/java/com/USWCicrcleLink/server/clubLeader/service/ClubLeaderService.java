@@ -100,7 +100,8 @@ public class ClubLeaderService {
                 club.getClubName(),
                 club.getLeaderName(),
                 club.getLeaderHp(),
-                club.getClubInsta()
+                club.getClubInsta(),
+                club.getDepartment()
         );
 
         return new ApiResponse<>("동아리 기본 정보 조회 완료", clubInfoResponse);

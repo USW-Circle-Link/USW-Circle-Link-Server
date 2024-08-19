@@ -27,7 +27,8 @@ public class RepositoryExceptionAspect {
                        "execution(* com.USWCicrcleLink.server.email.repository.*.*(..)) || " +
                        "execution(* com.USWCicrcleLink.server.aplict.repository.*.*(..))"+
                         "execution(* com.USWCicrcleLink.server.club.repository.*.*(..)) || "+
-                        "execution(* com.USWCicrcleLink.server.clubLeader.repository.*.*(..)) || ",
+                        "execution(* com.USWCicrcleLink.server.clubLeader.repository.*.*(..)) || "+
+                        "execution(* com.USWCicrcleLink.server.admin.repository.*.*(..)) || ",
             throwing = "ex"
     )
 

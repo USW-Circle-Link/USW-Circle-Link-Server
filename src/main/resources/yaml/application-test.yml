@@ -38,7 +38,7 @@ spring:
       port: ${REDIS_PORT}
 
   firebase:
-    config-path: ${LOCAL_FIREBASE_CONFIG_PATH}
+    config-path:${LOCAL_FIREBASE_CONFIG_PATH}
 
 cloud:
   aws:

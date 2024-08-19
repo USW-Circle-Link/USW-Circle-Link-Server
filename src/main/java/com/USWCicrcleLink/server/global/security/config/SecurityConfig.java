@@ -53,7 +53,9 @@ public class SecurityConfig {
                             "/auth/refresh-token", // 토큰 재발급
                             "/integration/login", // 동아리 회장, 동연회-개발자 통합 로그인
                             "/mainPhoto/**",
-                            "/introPhoto/**"
+                            "/introPhoto/**",
+                            "/my-notices/**",
+                            "/clubs/**"
                     ).permitAll();
 
                     // photo
@@ -85,6 +87,7 @@ public class SecurityConfig {
                     // USER
                     auth.requestMatchers(HttpMethod.PATCH, "/profiles/change","/users/userpw").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET,"/my-notices","/mypages/my-clubs","/mypages/aplict-clubs","/profiles/me","/my-notices/{noticeId}/details").hasRole("USER");
+
 
                     // LEADER
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/info").hasRole("LEADER");

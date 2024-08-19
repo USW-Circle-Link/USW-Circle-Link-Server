@@ -1,7 +1,5 @@
 server:
-  port: 8080
-  base:
-    url: "${SERVER_BASE_URL}"
+  port: ${BASIC_PORT}
 
 # log setting
 logging:
@@ -13,28 +11,43 @@ logging:
 #email url
 email:
   config:
-    baseUrl: "http://43.200.140.186:8080"
+    baseUrl: ${PROD_SERVER_URL}
 
 spring:
   config:
+    import: optional:file:.env[.properties]
     activate:
       on-profile: prod
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://43.200.140.186:3306/circle_link_prod?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: circlelink
-    password: 12345678
+    url: jdbc:mysql://${PROD_MYSQL_HOST}:${PROD_MYSQL_PORT}/${PROD_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${PROD_MYSQL_USER}
+    password: ${PROD_MYSQL_PASS}
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: false
 
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      password: ""
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  firebase:
+    config-path: ${SERVER_FIREBASE_CONFIG_PATH}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${SERVER_AWS_S3_BUCKET}
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

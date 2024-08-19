@@ -1,30 +1,3 @@
-# default
-spring:
-  config:
-    import:
-      - classpath:/yaml/application-prod.yml
-      - classpath:/yaml/application-dev.yml
-      - classpath:/yaml/application-local.yml
-      - classpath:/yaml/application-secret.yml
-      - classpath:/yaml/application-file.yml
-      - classpath:/yaml/application-aws.yml
-
-  profiles:
-    active: local #default
-    group:
-      local:
-        - secret
-        - file # local + secret + file 실행
-        - s3
-      dev:
-        - secret
-        - file
-        - s3
-      prod:
-        - secret
-        - file
-        - s3
----
 spring:
   config:
     activate:
@@ -33,9 +6,33 @@ spring:
 spring:
   config:
     activate:
-      on-profile: dev # dev + secret
+      on-profile: prod # prod + secret
 ---
 spring:
   config:
     activate:
-      on-profile: prod # prod + secret
+      on-profile: test
+---
+
+
+# default
+spring:
+  config:
+    import:
+      - classpath:/yaml/application-prod.yml
+      - classpath:/yaml/application-local.yml
+      - classpath:/yaml/application-secret.yml
+      - classpath:/yaml/application-file.yml
+      - classpath:/yaml/application-test.yml
+  profiles:
+    active: local #default
+    group:
+      local:
+        - secret
+        - file # local + secret + file 실행
+      prod:
+        - secret
+        - file
+      test:
+        - secret
+        - file

@@ -57,23 +57,34 @@ public class SecurityConfig {
                     ).permitAll();
 
                     // photo
-                    auth.requestMatchers(HttpMethod.GET, "/mainPhoto/**", "/introPhoto/**")
+                    auth.requestMatchers(HttpMethod.GET, "/mainPhoto/**", "/introPhoto/**", "/noticePhoto/**")
 //                            .hasAnyRole("USER", "ADMIN", "LEADER");
                             .permitAll();
-                    // ADMIN
-                    auth.requestMatchers(HttpMethod.POST, "/admin/clubs", "/admin/notices").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/notices", "/admin/notices/paged").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.PATCH, "/admin/notices").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE, "/admin/clubs", "/admin/notices").hasRole("ADMIN");
+                    // CLUB(웹)
+                    auth.requestMatchers(HttpMethod.POST, "/admin/clubs").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubId}").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.DELETE, "/admin/clubs").hasRole("ADMIN");
+
+                    // NOTICE(웹)
+                    auth.requestMatchers(HttpMethod.POST,"/notices").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.GET, "/notices/{noticeId}", "/notices/paged").hasAnyRole("ADMIN", "LEADER");
+                    auth.requestMatchers(HttpMethod.DELETE,"/notices/{noticeId}").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.PATCH, "/notices/{noticeId}").hasRole("ADMIN");
+
+                    // CLUBINTRO(모바일)
+                    auth.requestMatchers(HttpMethod.GET, "/clubs/{department}", "/clubs/{department}/{recruitmentStatus}", "/clubs/intro/{clubId}").hasRole("USER");
+
+                    // APLICT(모바일)
+                    auth.requestMatchers(HttpMethod.POST, "/apply/").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET, "/apply/").hasRole("USER");
 
                     // 테스트 api 삭제
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/fcm-token", "/club-leader/s3upload").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/club-leader/s3download").permitAll();
 
                     // USER
-                    auth.requestMatchers(HttpMethod.POST, "/apply/").hasRole("USER");
                     auth.requestMatchers(HttpMethod.PATCH, "/profiles/change","/users/userpw").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.GET, "/apply/", "/clubs/", "/clubs/intro/","/my-notices","/mypages/my-clubs","/mypages/aplict-clubs","/profiles/me","/my-notices/{noticeId}/details").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET,"/my-notices","/mypages/my-clubs","/mypages/aplict-clubs","/profiles/me","/my-notices/{noticeId}/details").hasRole("USER");
 
                     // LEADER
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/info").hasRole("LEADER");
@@ -91,8 +102,9 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.PATCH, "/club-leader/{clubId}/**").hasRole("LEADER");
                     auth.requestMatchers(HttpMethod.DELETE, "/club-leader/{clubId}/members").hasRole("LEADER");
 
-                    // INTEGRATION
+                    // INTEGRATION(모바일, 웹)
                     auth.requestMatchers(HttpMethod.POST, "/integration/logout").authenticated(); // 통합 로그아웃 api
+
                     // 기타 모든 요청
                     auth.anyRequest().authenticated();
                 })

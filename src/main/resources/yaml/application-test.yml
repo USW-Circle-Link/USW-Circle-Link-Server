@@ -1,36 +1,36 @@
 server:
-  port: 8080
-  base:
-    url: "http://localhost:8080"
+  port: ${BASIC_PORT}
 
+# log setting
 logging:
   level:
     com:
       USWCicrcleLink:
         server: debug
 
+# email url
 email:
   config:
-    baseUrl: "http://localhost:8080"
+    baseUrl: ${TEST_SERVER_URL}
 
 spring:
   config:
     import: optional:file:.env[.properties]
     activate:
-      on-profile: local
+      on-profile: test
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/CircleLink
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${TEST_MYSQL_USER}
+    password: ${TEST_MYSQL_PASS}
 
   jpa:
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
   data:
     redis:

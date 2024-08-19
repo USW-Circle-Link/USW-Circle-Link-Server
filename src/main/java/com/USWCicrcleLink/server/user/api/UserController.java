@@ -116,7 +116,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<TokenDto>> logIn(@RequestBody @Valid LogInRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponse<TokenDto>> logIn(@RequestBody @Validated(ValidationSequence.class) LogInRequest request, HttpServletResponse response) {
         TokenDto tokenDto = userService.logIn(request, response);
         ApiResponse<TokenDto> apiResponse = new ApiResponse<>("로그인 성공", tokenDto);
         return ResponseEntity.ok(apiResponse);

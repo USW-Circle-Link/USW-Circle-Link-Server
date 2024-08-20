@@ -75,7 +75,6 @@ public class DummyData {
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
                 .build();
-
         userRepository.save(user1);
 
         User user2 = User.builder()
@@ -86,7 +85,6 @@ public class DummyData {
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .build();
-
         userRepository.save(user2);
 
         User user3 = User.builder()
@@ -97,7 +95,6 @@ public class DummyData {
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .build();
-
         userRepository.save(user3);
 
         User user4 = User.builder()
@@ -108,7 +105,6 @@ public class DummyData {
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .build();
-
         userRepository.save(user4);
 
         Profile profile1 = Profile.builder()
@@ -120,7 +116,6 @@ public class DummyData {
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
                 .build();
-
         profileRepository.save(profile1);
 
         Profile profile2 = Profile.builder()
@@ -132,7 +127,6 @@ public class DummyData {
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
                 .build();
-
         profileRepository.save(profile2);
 
         Profile profile3 = Profile.builder()
@@ -144,7 +138,6 @@ public class DummyData {
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
                 .build();
-
         profileRepository.save(profile3);
 
         Profile profile4 = Profile.builder()
@@ -156,21 +149,37 @@ public class DummyData {
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
                 .build();
-
         profileRepository.save(profile4);
 
-        Club club = Club.builder()
+        Club flagClub = Club.builder()
                 .clubName("FLAG")
                 .leaderName("flag")
                 .leaderHp("dddd")
                 .department(Department.ACADEMIC)
                 .clubInsta("ddddddd")
                 .build();
+        clubRepository.save(flagClub);
 
-        clubRepository.save(club);
+        Club badmintonClub = Club.builder()
+                .clubName("배드민턴동아리")
+                .leaderName("배드민턴")
+                .leaderHp("00000000000")
+                .department(Department.SPORT)
+                .clubInsta("badminton_insta")
+                .build();
+        clubRepository.save(badmintonClub);
+
+        Club volunteerClub = Club.builder()
+                .clubName("봉사동아리")
+                .leaderName("봉사")
+                .leaderHp("00000000000")
+                .department(Department.VOLUNTEER)
+                .clubInsta("volunteer_insta")
+                .build();
+        clubRepository.save(volunteerClub);
 
         ClubMainPhoto clubMainPhoto = ClubMainPhoto.builder()
-                .club(club)
+                .club(flagClub)
                 .clubMainPhotoName("")
                 .clubMainPhotoS3Key("")
                 .build();
@@ -179,87 +188,110 @@ public class DummyData {
         Leader leader = Leader.builder()
                 .leaderAccount("flag")
                 .leaderPw("1234")
-                .club(club)
+                .club(flagClub)
                 .role(Role.LEADER)
                 .build();
-
         leaderRepository.save(leader);
 
-        // ClubIntro 객체 생성 및 저장 (중복되는 필드 초기화 제거)
         ClubIntro clubIntro = ClubIntro.builder()
-                .club(club)
+                .club(flagClub)
                 .clubIntro("플래그입니다.")
                 .googleFormUrl("flag_google_url")
                 .build();
-
         clubIntroRepository.save(clubIntro);
 
-        // ClubIntroPhoto 객체 초기화 (order 1~5)
         for (int i = 1; i <= 5; i++) {
             ClubIntroPhoto clubIntroPhoto = ClubIntroPhoto.builder()
                     .clubIntro(clubIntro)
-                    .clubIntroPhotoName("") // 초기값으로 빈 문자열 설정
+                    .clubIntroPhotoName("")
                     .clubIntroPhotoS3Key("")
-                    .order(i) // 순서를 1부터 5까지 설정
+                    .order(i)
                     .build();
             clubIntroPhotoRepository.save(clubIntroPhoto);
         }
 
         ClubMembers clubMembers1 = ClubMembers.builder()
-                .club(club)
+                .club(flagClub)
                 .profile(profile1)
                 .build();
         clubMembersRepository.save(clubMembers1);
 
         ClubMembers clubMembers2 = ClubMembers.builder()
-                .club(club)
+                .club(flagClub)
                 .profile(profile2)
                 .build();
-
         clubMembersRepository.save(clubMembers2);
 
-        // 일반 지원자
+        // FLAG 동아리 지원자
         Aplict aplict1 = Aplict.builder()
                 .profile(profile1)
-                .club(club)
+                .club(flagClub)
                 .aplictGoogleFormUrl("flag_google_url1")
                 .submittedAt(LocalDateTime.now())
                 .build();
-
         aplictRepository.save(aplict1);
 
         Aplict aplict2 = Aplict.builder()
                 .profile(profile2)
-                .club(club)
+                .club(flagClub)
                 .aplictGoogleFormUrl("flag_google_url1")
                 .submittedAt(LocalDateTime.now())
                 .build();
-
         aplictRepository.save(aplict2);
 
-        // 불합격자
         Aplict aplict3 = Aplict.builder()
                 .profile(profile3)
-                .club(club)
+                .club(flagClub)
                 .aplictGoogleFormUrl("flag_google_url1")
                 .submittedAt(LocalDateTime.now())
                 .checked(true)
                 .aplictStatus(AplictStatus.FAIL)
                 .build();
-
         aplictRepository.save(aplict3);
 
         Aplict aplict4 = Aplict.builder()
                 .profile(profile4)
-                .club(club)
+                .club(flagClub)
                 .aplictGoogleFormUrl("flag_google_url1")
                 .submittedAt(LocalDateTime.now())
                 .checked(true)
                 .aplictStatus(AplictStatus.FAIL)
                 .build();
-
         aplictRepository.save(aplict4);
+
+        // 배드민턴동아리 소속 및 지원
+        ClubMembers badmintonMember = ClubMembers.builder()
+                .club(badmintonClub)
+                .profile(profile1)
+                .build();
+        clubMembersRepository.save(badmintonMember);
+
+        Aplict badmintonAplict = Aplict.builder()
+                .profile(profile1)
+                .club(badmintonClub)
+                .aplictGoogleFormUrl("badminton_google_url")
+                .submittedAt(LocalDateTime.now())
+                .aplictStatus(AplictStatus.PASS)
+                .build();
+        aplictRepository.save(badmintonAplict);
+
+        // 봉사동아리 소속 및 지원
+        ClubMembers volunteerMember = ClubMembers.builder()
+                .club(volunteerClub)
+                .profile(profile1)
+                .build();
+        clubMembersRepository.save(volunteerMember);
+
+        Aplict volunteerAplict = Aplict.builder()
+                .profile(profile1)
+                .club(volunteerClub)
+                .aplictGoogleFormUrl("volunteer_google_url")
+                .submittedAt(LocalDateTime.now())
+                .aplictStatus(AplictStatus.FAIL)
+                .build();
+        aplictRepository.save(volunteerAplict);
     }
+
 
     //user2, 올어바웃 데이터
     public void initUser2() {

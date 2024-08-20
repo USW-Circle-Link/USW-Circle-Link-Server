@@ -16,6 +16,7 @@ public class NoticeDetailResponse {
     private String noticeContent;
     private List<String> noticePhotos;
     private LocalDateTime noticeCreatedAt;
+    private String adminName;
 
     public static NoticeDetailResponse from(Notice notice, List<String> noticePhotoPath) {
         return NoticeDetailResponse.builder()
@@ -24,6 +25,7 @@ public class NoticeDetailResponse {
                 .noticeContent(notice.getNoticeContent())
                 .noticePhotos(noticePhotoPath)
                 .noticeCreatedAt(notice.getNoticeCreatedAt())
+                .adminName(notice.getAdmin().getAdminName())
                 .build();
     }
 }

@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClubByDepartmentResponse {
+    private Long clubId;
     private String clubName;
     private String mainPhoto;
     private String departmentName;
@@ -19,6 +20,7 @@ public class ClubByDepartmentResponse {
         this.clubName = club.getClubName();
         this.mainPhoto = mainPhotoUrl;
         this.departmentName = club.getDepartment().name();
+        this.clubId = club.getClubId();
     }
 }
 

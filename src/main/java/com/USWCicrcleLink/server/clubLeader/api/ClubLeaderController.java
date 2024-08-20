@@ -119,10 +119,4 @@ public class ClubLeaderController {
         return new ResponseEntity<>(new ApiResponse<>("추합 결과 처리 완료"), HttpStatus.OK);
     }
 
-    // fcm token 저장 테스트 실제로는 로그인에서 처리해야함
-    @PostMapping("/fcm-token")
-    public ResponseEntity<String> getFcmToken(FcmTokenTestRequest fcmTestRequest) {
-        clubLeaderService.updateFcmToken(fcmTestRequest);
-        return new ResponseEntity<>("fcm token: " + fcmTestRequest.getFcmToken(), HttpStatus.OK);
-    }
 }

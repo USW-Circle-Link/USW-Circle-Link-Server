@@ -121,7 +121,7 @@ public class ClubLeaderService {
         if (!existingPhoto.getClubMainPhotoS3Key().isEmpty() && !existingPhoto.getClubMainPhotoName().isEmpty()) {
             // 기존 S3 파일 삭제
             s3FileUploadService.deleteFile(existingPhoto.getClubMainPhotoS3Key());
-            log.debug("기존 사진 삭제 완료: {}", existingPhoto.getClubMainPhotoS3Key());
+            log.debug("기존 대표 사진 삭제 완료: {}", existingPhoto.getClubMainPhotoS3Key());
         }
 
         // 새로운 파일 업로드 및 메타 데이터 업데이트
@@ -142,7 +142,7 @@ public class ClubLeaderService {
         // s3key 및 photoname 업데이트
         existingPhoto.updateClubMainPhoto(mainPhoto.getOriginalFilename(), s3FileResponse.getS3FileName());
         clubMainPhotoRepository.save(existingPhoto);
-        log.debug("사진 정보 저장 및 업데이트 완료: {}", s3FileResponse.getS3FileName());
+        log.debug("기존 대표 사진 업데이트 완료: {}", s3FileResponse.getS3FileName());
 
         return s3FileResponse;
     }
@@ -192,7 +192,7 @@ public class ClubLeaderService {
                 if (!existingPhoto.getClubIntroPhotoS3Key().isEmpty() && !existingPhoto.getClubIntroPhotoS3Key().isEmpty()) {
                     // 기존 S3 파일 삭제
                     s3FileUploadService.deleteFile(existingPhoto.getClubIntroPhotoS3Key());
-                    log.debug("기존 사진 삭제 완료: {}", existingPhoto.getClubIntroPhotoS3Key());
+                    log.debug("기존 소개 사진 삭제 완료: {}", existingPhoto.getClubIntroPhotoS3Key());
                 }
                 // 새로운 파일 업로드 및 메타 데이터 업데이트
                 s3FileResponse = updateClubIntroPhotoAndS3File(introPhoto, existingPhoto, order);
@@ -206,7 +206,7 @@ public class ClubLeaderService {
         clubIntro.updateClubIntro(clubIntroRequest.getClubIntro(), clubIntroRequest.getGoogleFormUrl());
         clubIntroRepository.save(clubIntro);
 
-        log.debug("{} 소개 저장 완료", club.getClubName());
+        log.debug("{} 동아리 소개 변경 완료", club.getClubName());
         return new ApiResponse<>("동아리 소개 변경 완료", new UpdateClubIntroResponse(presignedUrls));
     }
 
@@ -444,7 +444,7 @@ public class ClubLeaderService {
                 log.debug("합격 처리 완료: {}", applicant.getId());
             } else if (aplictResult == AplictStatus.FAIL) {
                 applicant.updateAplictStatus(aplictResult, true, LocalDateTime.now().plusDays(4));
-//                fcmService.sendMessageTo(applicant, aplictResult);
+                fcmService.sendMessageTo(applicant, aplictResult);
                 log.debug("불합격 처리 완료: {}", applicant.getId());
             }
 
@@ -518,7 +518,7 @@ public class ClubLeaderService {
             AplictStatus aplictResult = result.getAplictStatus();
             applicant.updateFailedAplictStatus(aplictResult);
             fcmService.sendMessageTo(applicant, aplictResult);
-            log.debug("합격 처리 완료: {}", applicant.getId());
+            log.debug("추가 합격 처리 완료: {}", applicant.getId());
 
             aplictRepository.save(applicant);
         }

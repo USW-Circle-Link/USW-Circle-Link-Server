@@ -80,24 +80,9 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/apply/").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET, "/apply/").hasRole("USER");
 
-                    // 테스트 api 삭제
-                    auth.requestMatchers(HttpMethod.POST, "/club-leader/fcm-token", "/club-leader/s3upload").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/club-leader/s3download").permitAll();
-
                     // USER
                     auth.requestMatchers(HttpMethod.PATCH, "/profiles/change","/users/userpw").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET,"/my-notices","/mypages/my-clubs","/mypages/aplict-clubs","/profiles/me","/my-notices/{noticeId}/details").hasRole("USER");
-
-
-                    // LEADER
-                    auth.requestMatchers(HttpMethod.POST, "/club-leader/info").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.GET, "/club-leader/members", "/club-leader/members/export").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.PATCH, "/club-leader/info", "/club-leader/intro", "/club-leader/toggle-recruitment").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.DELETE, "/club-leader/members").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.POST, "/club-leader/{clubId}/**", "/club-leader/fcm-token").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.GET, "/club-leader/{clubId}/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.PATCH, "/club-leader/{clubId}/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.DELETE, "/club-leader/{clubId}/members").hasRole("LEADER");
 
                     // LEADER
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/{clubId}/**").hasRole("LEADER");

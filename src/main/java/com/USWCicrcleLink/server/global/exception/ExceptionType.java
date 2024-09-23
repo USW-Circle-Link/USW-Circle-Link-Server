@@ -77,6 +77,7 @@ public enum ExceptionType {
     NOTICE_NOT_EXISTS("NOT-201", "공지사항이 존재하지 않습니다.", NOT_FOUND),
     UP_TO_5_PHOTOS_CAN_BE_UPLOADED("NOT-202", "최대 5개의 사진이 업로드 가능합니다.", PAYLOAD_TOO_LARGE),
     TITEL_AND_CONENT_REQUIRED("NOT-203", "제목과 내용을 모두 입력해주세요.", UNPROCESSABLE_ENTITY),
+    NOTICE_PHOTO_NOT_EXISTS("NOT-204", "사진이 존재하지 않습니다.", NOT_FOUND),
 
     /**
      * Domain: Profile

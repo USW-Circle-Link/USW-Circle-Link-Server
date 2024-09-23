@@ -37,13 +37,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NoticeService {
 
+    private static final int FILE_LIMIT = 5; // 최대 업로드 가능한 파일 수
+    private static final String S3_NOTICE_PHOTO_DIR = "noticePhoto/"; // 공지사항 사진 경로
     private final NoticeRepository noticeRepository;
     private final NoticeListResponseAssembler noticeListResponseAssembler;
     private final NoticePhotoRepository noticePhotoRepository;
     private final S3FileUploadService s3FileUploadService;
-
-    private static final int FILE_LIMIT = 5; // 최대 업로드 가능한 파일 수
-    private static final String S3_NOTICE_PHOTO_DIR = "noticePhoto/"; // 공지사항 사진 경로
 
     // 공지사항 리스트 조회(페이징)
     @Transactional(readOnly = true)
@@ -92,41 +91,36 @@ public class NoticeService {
     }
 
     // 공지사항 수정(웹)
-    public NoticeDetailResponse updateNotice(Long noticeId, NoticeUpdateRequest request, List<MultipartFile> noticePhotos) {
+    public NoticeDetailResponse updateNotice(Long noticeId, NoticeUpdateRequest request, List<MultipartFile> noticePhotos, List<Long> deletedPhotos) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new NoticeException(ExceptionType.NOTICE_NOT_EXISTS));
 
         // 제목과 내용이 null이거나 비어있을 경우 예외 처리
         validateNoticeTitleAndContent(request.getNoticeTitle(), request.getNoticeContent());
 
-        // 입력값 검증 (XSS 공격 방지)
         String sanitizedTitle = InputValidator.sanitizeContent(request.getNoticeTitle());
         String sanitizedContent = InputValidator.sanitizeContent(request.getNoticeContent());
 
         notice.updateTitle(sanitizedTitle);
         notice.updateContent(sanitizedContent);
 
-        // 기존 사진 유지 및 삭제 처리
-        List<NoticePhoto> existingPhotos = noticePhotoRepository.findByNotice(notice);
-        List<NoticePhoto> photosToKeep = new ArrayList<>();
-        List<NoticePhoto> photosToRemove = new ArrayList<>();
+        // 실제로 삭제할 사진 처리
+        if (deletedPhotos != null && !deletedPhotos.isEmpty()) {
+            for (Long photoId : deletedPhotos) {
+                NoticePhoto photo = noticePhotoRepository.findById(photoId)
+                        .orElseThrow(() -> new NoticeException(ExceptionType.NOTICE_PHOTO_NOT_EXISTS));
 
-        for (NoticePhoto photo : existingPhotos) {
-            if (request.getPhotoIds().contains(photo.getNoticePhotoId())) {
-                photosToKeep.add(photo);
-            } else {
-                photosToRemove.add(photo);
+                s3FileUploadService.deleteFile(photo.getNoticePhotoS3Key());  // S3에서 삭제
+                noticePhotoRepository.delete(photo);  // DB에서 삭제
             }
         }
-
-        // S3에서 삭제할 사진 제거
-        photosToRemove.forEach(photo -> s3FileUploadService.deleteFile(photo.getNoticePhotoS3Key()));
-        noticePhotoRepository.deleteAll(photosToRemove);
 
         // 새로운 사진 추가 및 순서 지정
         List<String> presignedUrls = handleNoticePhotos(notice, noticePhotos, request.getPhotoOrders());
 
-        List<String> photoUrls = photosToKeep.stream()
+        // 기존 및 새 사진 URL 생성
+        List<String> photoUrls = noticePhotoRepository.findByNotice(notice).stream()
+                .sorted(Comparator.comparingInt(NoticePhoto::getOrder))
                 .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getNoticePhotoS3Key()))
                 .collect(Collectors.toList());
         photoUrls.addAll(presignedUrls);

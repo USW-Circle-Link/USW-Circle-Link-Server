@@ -43,9 +43,7 @@ public class NoticeController {
     @PostMapping()
     public ResponseEntity<ApiResponse<NoticeDetailResponse>> createNotice(
             @RequestPart(value = "request", required = false) @Valid NoticeCreationRequest request,
-            //사진 배열 처리
             @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos) {
-
         NoticeDetailResponse createdNotice = noticeService.createNotice(request, noticePhotos);
         ApiResponse<NoticeDetailResponse> response = new ApiResponse<>("공지사항 생성 성공", createdNotice);
         return ResponseEntity.ok(response);
@@ -56,10 +54,9 @@ public class NoticeController {
     public ResponseEntity<ApiResponse<NoticeDetailResponse>> updateNotice(
             @PathVariable("noticeId") Long noticeId,
             @RequestPart(value = "request", required = false) @Valid NoticeUpdateRequest request,
-            //사진 배열 처리
-            @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos) {
-
-        NoticeDetailResponse updatedNotice = noticeService.updateNotice(noticeId, request, noticePhotos);
+            @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos,
+            @RequestPart(value = "deletedPhotos", required = false) List<Long> deletedPhotos) {
+        NoticeDetailResponse updatedNotice = noticeService.updateNotice(noticeId, request, noticePhotos, deletedPhotos);
         ApiResponse<NoticeDetailResponse> response = new ApiResponse<>("공지사항 수정 성공", updatedNotice);
         return ResponseEntity.ok(response);
     }

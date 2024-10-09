@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.domain;
 
+import com.USWCicrcleLink.server.global.bucket4j.ClientIdentifier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.Random;
 @AllArgsConstructor
 @Builder
 @Table(name = "WITHDRAWAL_TOKEN")
-public class WithdrawalToken {
+public class WithdrawalToken implements ClientIdentifier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,5 +55,11 @@ public class WithdrawalToken {
     // 새로운 인증 번호 생성
     public void updateWithdrawalCode(){
         this.withdrawalCode=generateRandomAuthCode();
+    }
+
+    @Override
+    public String getClientId() {
+        String uuid= String.valueOf(this.user.getUserUUID());
+        return uuid;
     }
 }

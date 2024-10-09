@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.domain;
 
+import com.USWCicrcleLink.server.global.bucket4j.ClientIdentifier;
 import com.USWCicrcleLink.server.global.security.domain.Role;
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "USER_TABLE")
-public class User {
+public class User implements ClientIdentifier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
@@ -71,5 +72,9 @@ public class User {
         this.userPw = userPw;
     }
 
+    @Override
+    public String getClientId() {
+        return this.email;
+    }
 }
 

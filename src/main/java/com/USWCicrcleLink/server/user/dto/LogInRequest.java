@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.dto;
 
+import com.USWCicrcleLink.server.global.bucket4j.ClientIdentifier;
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogInRequest {
+public class LogInRequest implements ClientIdentifier {
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.",groups = ValidationGroups.NotBlankGroup.class)
     @Size(min = 5, max = 20, message = "아이디는 5~20자 이내여야 합니다.",groups = ValidationGroups.SizeGroup.class )
@@ -24,4 +25,9 @@ public class LogInRequest {
     private String password;
 
     private String fcmToken;
+
+    @Override
+    public String getClientId() {
+        return this.account;
+    }
 }

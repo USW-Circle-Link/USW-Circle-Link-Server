@@ -57,6 +57,6 @@ public class APIRateLimiter {
     public void logBucketState(String bucketId, RateLimitAction action) {
         Bucket bucket = getOrCreateBucket(bucketId, action);
         long availableTokens = bucket.getAvailableTokens();
-        log.debug("bucketId= {}, 이용가능한 토큰 수= {} ", bucketId, availableTokens);
+        log.debug("버킷 아이디= {}, 이용가능한 토큰 수= {} ", bucketId, availableTokens);
     }
 }

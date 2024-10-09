@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.domain;
 
+import com.USWCicrcleLink.server.global.bucket4j.ClientIdentifier;
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "USER_TEMP_TABLE")
-public class UserTemp {
+public class UserTemp implements ClientIdentifier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +44,9 @@ public class UserTemp {
     private String tempEmail;
 
     private boolean isEmailVerified;
+
+    @Override
+    public String getClientId() {
+        return this.tempEmail;
+    }
 }

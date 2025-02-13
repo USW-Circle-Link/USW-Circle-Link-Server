@@ -64,16 +64,16 @@ public class CustomUserDetailsService implements UserDetailsService {
             if (user != null) {
                 Profile profile = profileRepository.findByUser_UserUUID(userUuid)
                         .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
-                List<Long> clubIds = getUserClubIds(profile);
-                return new CustomUserDetails(user, clubIds);
+                List<UUID> clubUUIDs = getUserClubUUIDs(profile);
+                return new CustomUserDetails(user, clubUUIDs);
             }
         }
 
         if (role == null || role == Role.LEADER) {
             Leader leader = leaderRepository.findByLeaderUUID(userUuid).orElse(null);
             if (leader != null) {
-                Long clubId = leader.getClub().getClubId();
-                return new CustomLeaderDetails(leader, clubId);
+                UUID clubUUD = leader.getClub().getClubUUID();
+                return new CustomLeaderDetails(leader, clubUUD);
             }
         }
 
@@ -94,16 +94,16 @@ public class CustomUserDetailsService implements UserDetailsService {
             if (user != null) {
                 Profile profile = profileRepository.findByUser_UserUUID(user.getUserUUID())
                         .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
-                List<Long> clubIds = getUserClubIds(profile);
-                return new CustomUserDetails(user, clubIds);
+                List<UUID> clubUUIDs = getUserClubUUIDs(profile);
+                return new CustomUserDetails(user, clubUUIDs);
             }
         }
 
         if (role == null || role == Role.LEADER) {
             Leader leader = leaderRepository.findByLeaderAccount(account).orElse(null);
             if (leader != null) {
-                Long clubId = leader.getClub().getClubId();
-                return new CustomLeaderDetails(leader, clubId);
+                UUID clubUUID = leader.getClub().getClubUUID();
+                return new CustomLeaderDetails(leader, clubUUID);
             }
         }
 
@@ -112,10 +112,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     // 프로필을 통해 사용자 clubId 조회
-    private List<Long> getUserClubIds(Profile profile) {
+    private List<UUID> getUserClubUUIDs(Profile profile) {
         return clubMembersRepository.findByProfileProfileId(profile.getProfileId())
                 .stream()
-                .map(clubMember -> clubMember.getClub().getClubId())
+                .map(clubMember -> clubMember.getClub().getClubUUID())
                 .collect(Collectors.toList());
     }
 }

@@ -48,6 +48,7 @@ import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -121,10 +122,10 @@ public class ClubLeaderService {
         }
 
         // 클럽 ID, 동의 여부 설정
-        Long clubId = null;
+        UUID clubUUID = null;
         Boolean isAgreedTerms = false;
         if (userDetails instanceof CustomLeaderDetails leaderDetails) {
-            clubId = leaderDetails.getClubId();
+            clubUUID = leaderDetails.getClubUUID();
             isAgreedTerms = leaderDetails.getIsAgreedTerms();
         }
 
@@ -133,7 +134,7 @@ public class ClubLeaderService {
         String refreshToken = jwtProvider.createRefreshToken(userDetails.getUsername(), response);
 
         log.debug("로그인 성공, uuid: {}", userDetails.getUsername());
-        return new LeaderLoginResponse(accessToken, refreshToken, role, clubId, isAgreedTerms);
+        return new LeaderLoginResponse(accessToken, refreshToken, role, clubUUID, isAgreedTerms);
     }
 
     // 로그인 타입
@@ -156,9 +157,9 @@ public class ClubLeaderService {
 
     // 동아리 기본 정보 조회
     @Transactional(readOnly = true)
-    public ApiResponse<ClubInfoResponse> getClubInfo(Long clubId) {
+    public ApiResponse<ClubInfoResponse> getClubInfo(UUID clubUUID) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         Optional<ClubMainPhoto> clubMainPhoto = Optional.ofNullable(clubMainPhotoRepository.findByClub_ClubId(club.getClubId()));
 
@@ -179,9 +180,9 @@ public class ClubLeaderService {
     }
 
     // 동아리 기본 정보 변경
-    public ApiResponse<UpdateClubInfoResponse> updateClubInfo(Long clubId, ClubInfoRequest clubInfoRequest, MultipartFile mainPhoto) throws IOException {
+    public ApiResponse<UpdateClubInfoResponse> updateClubInfo(UUID clubUUID, ClubInfoRequest clubInfoRequest, MultipartFile mainPhoto) throws IOException {
         // 동아리 회장 유효성 검증
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomLeaderDetails leaderDetails = (CustomLeaderDetails) authentication.getPrincipal();
@@ -197,33 +198,33 @@ public class ClubLeaderService {
         }
 
         // 해시태그 업데이트
-        updateClubHashtags(club, clubId, clubInfoRequest.getClubHashtag());
+        updateClubHashtags(club, clubInfoRequest.getClubHashtag());
 
         // 카테고리 업데이트
-        updateClubCategories(club, clubId, clubInfoRequest.getClubCategoryName());
+        updateClubCategories(club, clubInfoRequest.getClubCategoryName());
 
         // 사진 업데이트
-        String mainPhotoUrl = updateClubMainPhoto(clubId, mainPhoto);
+        String mainPhotoUrl = updateClubMainPhoto(club.getClubId(), mainPhoto);
 
         club.updateClubInfo(clubInfoRequest.getLeaderName(), clubInfoRequest.getLeaderHp(), clubInfoRequest.getClubInsta(), clubInfoRequest.getClubRoomNumber());
-        log.info("동아리 기본 정보 변경 완료 - Club ID: {}, Club Name: {}", clubId, club.getClubName());
+        log.info("동아리 기본 정보 변경 완료 - Club ID: {}, Club Name: {}", club.getClubId(), club.getClubName());
 
         return new ApiResponse<>("동아리 기본 정보 변경 완료", new UpdateClubInfoResponse(mainPhotoUrl));
     }
 
     // 동아리 해시태그 업데이트
-    private void updateClubHashtags(Club club, Long clubId, List<String> newHashtags) {
+    private void updateClubHashtags(Club club, List<String> newHashtags) {
         if (newHashtags == null) return;
 
-        List<String> existingHashtags = clubHashtagRepository.findHashtagsByClubId(clubId);
+        List<String> existingHashtags = clubHashtagRepository.findHashtagsByClubId(club.getClubId());
         Set<String> newHashtagsSet = new HashSet<>(newHashtags);
 
         // 삭제할 해시태그 찾기
         existingHashtags.stream()
                 .filter(existing -> !newHashtagsSet.contains(existing))
                 .forEach(existing -> {
-                    clubHashtagRepository.deleteByClub_ClubIdAndClubHashtag(clubId, existing);
-                    log.info("삭제된 해시태그 - Club ID: {}, Hashtag: {}", clubId, existing);
+                    clubHashtagRepository.deleteByClub_ClubIdAndClubHashtag(club.getClubId(), existing);
+                    log.info("삭제된 해시태그 - Club ID: {}, Hashtag: {}", club.getClubId(), existing);
                 });
 
         // 추가할 해시태그 찾기
@@ -235,16 +236,16 @@ public class ClubLeaderService {
                             .clubHashtag(newHashtag)
                             .build();
                     clubHashtagRepository.save(clubHashtag);
-                    log.info("새로운 해시태그 추가 - Club ID: {}, Hashtag: {}", clubId, newHashtag);
+                    log.info("새로운 해시태그 추가 - Club ID: {}, Hashtag: {}", club.getClubId(), newHashtag);
                 });
     }
 
     // 동아리 카테고리 업데이트
-    private void updateClubCategories(Club club, Long clubId, List<String> newCategories) {
+    private void updateClubCategories(Club club, List<String> newCategories) {
         if (newCategories == null) return;
 
         // 현재 매핑된 카테고리 조회
-        List<ClubCategoryMapping> existingMappings = clubCategoryMappingRepository.findByClub_ClubId(clubId);
+        List<ClubCategoryMapping> existingMappings = clubCategoryMappingRepository.findByClub_ClubId(club.getClubId());
         Set<String> existingCategoryNames = existingMappings.stream()
                 .map(mapping -> mapping.getClubCategory().getClubCategoryName())
                 .collect(Collectors.toSet());
@@ -256,7 +257,7 @@ public class ClubLeaderService {
                 .filter(mapping -> !newCategoriesSet.contains(mapping.getClubCategory().getClubCategoryName()))
                 .forEach(mapping -> {
                     clubCategoryMappingRepository.delete(mapping);
-                    log.info("삭제된 카테고리 - Club ID: {}, Category: {}", clubId, mapping.getClubCategory().getClubCategoryName());
+                    log.info("삭제된 카테고리 - Club ID: {}, Category: {}", club.getClubId(), mapping.getClubCategory().getClubCategoryName());
                 });
 
         // 추가할 카테고리 찾기
@@ -270,7 +271,7 @@ public class ClubLeaderService {
                         .build())
                 .forEach(clubCategoryMappingRepository::save);
 
-        log.info("카테고리 업데이트 완료 - Club ID: {}", clubId);
+        log.info("카테고리 업데이트 완료 - Club ID: {}", club.getClubId());
     }
 
     // 동아리 메인 사진 업데이트
@@ -316,8 +317,8 @@ public class ClubLeaderService {
 
     // 동아리 요약 조회
     @Transactional(readOnly = true)
-    public ClubSummaryResponse getClubSummary(Long clubId) {
-        Club club = validateLeader(clubId);
+    public ClubSummaryResponse getClubSummary(UUID clubUUID) {
+        Club club = validateLeader(clubUUID);
 
         // 동아리 소개 조회
         ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
@@ -351,8 +352,8 @@ public class ClubLeaderService {
 
     // 동아리 소개 조회
     @Transactional(readOnly = true)
-    public ApiResponse<ClubIntroResponse> getClubIntro(Long clubId) {
-        Club club = validateLeader(clubId);
+    public ApiResponse<ClubIntroResponse> getClubIntro(UUID clubUUID) {
+        Club club = validateLeader(clubUUID);
 
         // 동아리 소개 조회
         ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
@@ -374,9 +375,9 @@ public class ClubLeaderService {
     }
 
     // 동아리 소개 변경
-    public ApiResponse updateClubIntro(Long clubId, ClubIntroRequest clubIntroRequest, List<MultipartFile> introPhotos) throws IOException {
+    public ApiResponse updateClubIntro(UUID clubUUID, ClubIntroRequest clubIntroRequest, List<MultipartFile> introPhotos) throws IOException {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
                 .orElseThrow(() -> new ClubIntroException(ExceptionType.CLUB_INTRO_NOT_EXISTS));
@@ -475,7 +476,7 @@ public class ClubLeaderService {
         // 순서 값
         for (int order : orders) {
             if (order < 1 || order > PHOTO_LIMIT) { // 1 ~ 5 사이여야 함
-                new ClubPhotoException(ExceptionType.PHOTO_ORDER_MISS_MATCH);
+                throw new ClubPhotoException(ExceptionType.PHOTO_ORDER_MISS_MATCH);
             }
         }
 
@@ -494,9 +495,9 @@ public class ClubLeaderService {
     }
 
     // 동아리 모집 상태 변경
-    public ApiResponse toggleRecruitmentStatus(Long clubId) {
+    public ApiResponse toggleRecruitmentStatus(UUID clubUUID) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
                 .orElseThrow(() -> new ClubIntroException(ExceptionType.CLUB_INTRO_NOT_EXISTS));
@@ -532,11 +533,11 @@ public class ClubLeaderService {
 
     // 소속 동아리 회원 조회(가나다순 정렬)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ClubMembersResponse>> getClubMembers(Long clubId) {
+    public ApiResponse<List<ClubMembersResponse>> getClubMembers(UUID clubUUID) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
-        List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByName(clubId);
+        List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByName(club.getClubId());
 
         // 동아리원과 프로필 조회
         List<ClubMembersResponse> memberProfiles = findClubMembers.stream()
@@ -551,11 +552,11 @@ public class ClubLeaderService {
 
     // 소속 동아리 회원 조회(정회원/ 비회원 정렬)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ClubMembersResponse>> getClubMembersByMemberType(Long clubId, MemberType memberType) {
+    public ApiResponse<List<ClubMembersResponse>> getClubMembersByMemberType(UUID clubUUID, MemberType memberType) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
-        List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByMemberType(clubId, memberType);
+        List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByMemberType(club.getClubId(), memberType);
 
         // 동아리원과 프로필 조회
         List<ClubMembersResponse> memberProfiles = findClubMembers.stream()
@@ -575,9 +576,9 @@ public class ClubLeaderService {
     }
 
     // 소속 동아리원 삭제
-    public ApiResponse deleteClubMembers(Long clubId, List<ClubMembersDeleteRequest> clubMemberIdList) {
+    public ApiResponse deleteClubMembers(UUID clubUUID, List<ClubMembersDeleteRequest> clubMemberIdList) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         List<Long> clubMemberIds = clubMemberIdList.stream()
                 .map(ClubMembersDeleteRequest::getClubMemberId)
@@ -613,9 +614,9 @@ public class ClubLeaderService {
 
     // 소속 동아리원 엑셀 다운
     @Transactional(readOnly = true)
-    public void downloadExcel(Long clubId, HttpServletResponse response) {
+    public void downloadExcel(UUID clubUUID, HttpServletResponse response) {
 
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         // 해당 동아리원 조회
         List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByClubClubId(club.getClubId());
@@ -625,7 +626,7 @@ public class ClubLeaderService {
                 .map(cm -> new ClubMembersExportExcelResponse(
                         cm.getProfile()
                 ))
-                .collect(toList());
+                .toList();
 
         // 파일 이름 설정
         String fileName = club.getClubName() + "_회원_명단.xlsx";
@@ -701,8 +702,8 @@ public class ClubLeaderService {
 
     // 동아리 지원자 조회
     @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getApplicants(Long clubId) {
-        Club club = validateLeader(clubId);
+    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID) {
+        Club club = validateLeader(clubUUID);
 
         // 합/불 처리되지 않은 동아리 지원자 조회
         List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubId(club.getClubId(), false);
@@ -717,8 +718,8 @@ public class ClubLeaderService {
     }
 
     // 최초 합격자 알림
-    public void updateApplicantResults(Long clubId, List<ApplicantResultsRequest> results) throws IOException {
-        Club club = validateLeader(clubId);
+    public void updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
+        Club club = validateLeader(clubUUID);
 
         // 동아리 지원자 전원 조회(최초 합격)
         List<Aplict> applicants = aplictRepository.findByClub_ClubIdAndChecked(club.getClubId(), false);
@@ -786,8 +787,8 @@ public class ClubLeaderService {
 
     // 불합격자 조회
     @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getFailedApplicants(Long clubId) {
-        Club club = validateLeader(clubId);
+    public ApiResponse<List<ApplicantsResponse>> getFailedApplicants(UUID clubUUID) {
+        Club club = validateLeader(clubUUID);
 
         // 불합격자 동아리 지원자 조회
         List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubIdAndFailed(club.getClubId(), true, AplictStatus.FAIL);
@@ -802,8 +803,8 @@ public class ClubLeaderService {
     }
 
     // 동아리 지원자 추가 합격 처리
-    public void updateFailedApplicantResults(Long clubId, List<ApplicantResultsRequest> results) throws IOException {
-        Club club = validateLeader(clubId);
+    public void updateFailedApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
+        Club club = validateLeader(clubUUID);
 
         // 지원자 검증(지원한 동아리 + 지원서 + check된 상태 + 불합)
         for (ApplicantResultsRequest result : results) {
@@ -836,7 +837,7 @@ public class ClubLeaderService {
     }
 
     // 회장 검증 및 소속 동아리
-    private Club validateLeader(Long clubId) {
+    private Club validateLeader(UUID clubUUID) {
         // SecurityContextHolder에서 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomLeaderDetails leaderDetails = (CustomLeaderDetails) authentication.getPrincipal();
@@ -844,12 +845,12 @@ public class ClubLeaderService {
         log.debug("인증된 동아리 회장: {}", leader.getLeaderAccount());
 
         // 동아리 조회
-        Club club = clubRepository.findById(leader.getClub().getClubId())
+        Club club = clubRepository.findByClubUUID(leader.getClub().getClubUUID())
                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
         log.debug("동아리 조회 결과: {}", club.getClubName());
 
-        // 요청된 clubId와 인증된 회장의 clubId 비교
-        if (!club.getClubId().equals(clubId)) {
+        // 요청된 clubUUID 와 인증된 회장의 clubUUID 비교
+        if (!club.getClubUUID().equals(clubUUID)) {
             throw new ClubLeaderException(ExceptionType.CLUB_LEADER_ACCESS_DENIED);
         }
 
@@ -858,8 +859,8 @@ public class ClubLeaderService {
 
     // 기존 동아리원 가져오기(엑셀 파일)
     @Transactional(readOnly = true)
-    public ApiResponse<ClubMembersImportExcelResponse> uploadExcel(Long clubId, MultipartFile clubMembersFile) throws IOException {
-        validateLeader(clubId);
+    public ApiResponse<ClubMembersImportExcelResponse> uploadExcel(UUID clubUUID, MultipartFile clubMembersFile) throws IOException {
+        validateLeader(clubUUID);
 
         // 엑셀 파일의 개수 확인
         if (clubMembersFile == null || clubMembersFile.isEmpty()) {
@@ -985,8 +986,8 @@ public class ClubLeaderService {
     }
 
     // 기존 동아리원 추가(엑셀)
-    public void addClubMembersFromExcel(Long clubId, List<ClubMembersAddFromExcelRequest> clubMembersAddFromExcelRequests) {
-        Club club = validateLeader(clubId);
+    public void addClubMembersFromExcel(UUID clubUUID, List<ClubMembersAddFromExcelRequest> clubMembersAddFromExcelRequests) {
+        Club club = validateLeader(clubUUID);
 
         // 중복 확인 데이터 수집
         Map<String, ClubMembersAddFromExcelRequest> requestDataMap = new HashMap<>();
@@ -1056,8 +1057,8 @@ public class ClubLeaderService {
     }
 
     // 프로필 중복 동아리 회원 추가
-    public ApiResponse addDuplicateProfileMember(Long clubId, DuplicateProfileMemberRequest duplicateProfileMemberRequest) {
-        Club club = validateLeader(clubId);
+    public ApiResponse addDuplicateProfileMember(UUID clubUUID, DuplicateProfileMemberRequest duplicateProfileMemberRequest) {
+        Club club = validateLeader(clubUUID);
 
         // 프로필 중복 회원 조회
         Profile duplicateProfile = profileRepository
@@ -1081,10 +1082,10 @@ public class ClubLeaderService {
     }
 
     // 비회원 프로필 업데이트
-    public ApiResponse updateNonMemberProfile(Long clubId,
+    public ApiResponse updateNonMemberProfile(UUID clubUUID,
                                               Long clubMemberId,
                                               ClubNonMemberUpdateRequest request) {
-        Club club = validateLeader(clubId);
+        Club club = validateLeader(clubUUID);
 
         // 동아리 회원 확인
         ClubMembers clubMember = clubMembersRepository.findByClubClubIdAndClubMemberId(club.getClubId(), clubMemberId)
@@ -1105,8 +1106,8 @@ public class ClubLeaderService {
 
     // 기존 동아리 회원 가입 요청 조회
     @Transactional(readOnly = true)
-    public ApiResponse getSignUpRequest(Long clubId) {
-        Club club = validateLeader(clubId);
+    public ApiResponse getSignUpRequest(UUID clubUUID) {
+        Club club = validateLeader(clubUUID);
 
         List<ClubMemberAccountStatus> signUpClubMember = clubMemberAccountStatusRepository.findAllWithClubMemberTemp(club.getClubId());
         List<SignUpRequestResponse> signUpRequestResponse = signUpClubMember.stream().map(
@@ -1120,8 +1121,8 @@ public class ClubLeaderService {
     }
 
     // 기존 동아리 회원 가입 요청 삭제
-    public ApiResponse deleteSignUpRequest(Long clubId, Long clubMemberAccountStatusId) {
-        Club club = validateLeader(clubId);
+    public ApiResponse deleteSignUpRequest(UUID clubUUID, Long clubMemberAccountStatusId) {
+        Club club = validateLeader(clubUUID);
 
         // 동아리 + 기존 동아리 회원 가입 요청 확인
         ClubMemberAccountStatus clubMemberAccountStatus = clubMemberAccountStatusRepository.findByClubMemberAccountStatusIdAndClub_ClubId(clubMemberAccountStatusId, club.getClubId())
@@ -1132,8 +1133,8 @@ public class ClubLeaderService {
     }
 
     // 기존 동아리 회원 가입 요청 수락
-    public ApiResponse acceptSignUpRequest(Long clubId, ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
-        Club club = validateLeader(clubId);
+    public ApiResponse acceptSignUpRequest(UUID clubUUID, ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
+        Club club = validateLeader(clubUUID);
 
         ClubMemberProfileRequest signUpProfile = clubMembersAcceptSignUpRequest.getSignUpProfileRequest();
         ClubMemberProfileRequest clubNonMemberProfile = clubMembersAcceptSignUpRequest.getClubNonMemberProfileRequest();

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,7 @@ public class LeaderLoginResponse {
 
     private Role role;
 
-    private Long clubId;
+    private UUID clubUUID;
 
     private Boolean isAgreedTerms;
 }

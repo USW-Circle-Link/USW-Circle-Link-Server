@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-public record CustomLeaderDetails(Leader leader, Long clubId) implements UserDetails {
+import java.util.UUID;
 
-    public Long getClubId() {
-        return clubId;
+public record CustomLeaderDetails(Leader leader, UUID clubUUID) implements UserDetails {
+
+    public UUID getClubUUID() {
+        return clubUUID;
     }
 
     @Override

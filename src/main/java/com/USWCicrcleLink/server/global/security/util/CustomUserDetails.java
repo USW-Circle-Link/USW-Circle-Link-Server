@@ -7,10 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-public record CustomUserDetails(User user, List<Long> clubIds) implements UserDetails {
+import java.util.UUID;
 
-    public List<Long> getClubIds() {
-        return clubIds;
+public record CustomUserDetails(User user, List<UUID> clubUUIDs) implements UserDetails {
+
+    public List<UUID> getClubUUIDs() {
+        return clubUUIDs;
     }
 
     @Override

@@ -56,7 +56,6 @@ public class UserService {
     private final EmailTokenRepository emailTokenRepository;
     private final EmailService emailService;
     private final EmailTokenService emailTokenService;
-    private final CustomUserDetailsService customUserDetailsService;
     private final ClubMemberAccountStatusService clubMemberAccountStatusService;
     private final PasswordService passwordService;
 

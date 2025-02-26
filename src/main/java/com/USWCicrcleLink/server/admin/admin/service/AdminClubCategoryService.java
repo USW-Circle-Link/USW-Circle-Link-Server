@@ -32,8 +32,6 @@ public class AdminClubCategoryService {
     @Transactional(readOnly = true)
     public List<ClubCategoryResponse> getAllClubCategories() {
         List<ClubCategory> clubCategories = clubCategoryRepository.findAll();
-        log.debug("동아리 카테고리 조회 성공 - {}개 카테고리 반환", clubCategories.size());
-
         return ClubCategoryMapper.toDtoList(clubCategories);
     }
 

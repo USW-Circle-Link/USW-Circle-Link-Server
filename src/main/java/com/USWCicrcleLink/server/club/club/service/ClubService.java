@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.club.club.service;
 
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubIntroResponse;
+import com.USWCicrcleLink.server.club.club.dto.UserClubIntroResponse;
 import com.USWCicrcleLink.server.admin.admin.mapper.ClubCategoryMapper;
 import com.USWCicrcleLink.server.club.club.domain.Club;
 import com.USWCicrcleLink.server.club.club.domain.ClubCategory;
@@ -42,7 +42,9 @@ public class ClubService {
     private final ClubRepository clubRepository;
     private final ClubIntroPhotoRepository clubIntroPhotoRepository;
 
-    // 전체 동아리 리스트 조회 (모바일)
+    /**
+     * 전체 동아리 리스트 조회 (User)
+     */
     @Transactional(readOnly = true)
     public List<ClubListResponse> getAllClubs() {
 
@@ -77,7 +79,9 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
-    // 기존 회원가입시 동아리 리스트 출력
+    /**
+     * 기존 회원가입시 동아리 리스트 출력(User)
+     */
     @Transactional(readOnly = true)
     public List<ClubInfoListResponse> getAllClubsInfo() {
         log.debug("전체 동아리 리스트 조회");
@@ -99,7 +103,9 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
-    // 관심 카테고리 필터 적용한 전체 동아리 리스트 조회 (모바일)
+    /**
+     * 관심 카테고리 필터 적용한 전체 동아리 리스트 조회 (User)
+     */
     @Transactional(readOnly = true)
     public List<ClubListByClubCategoryResponse> getAllClubsByClubCategories(List<UUID> clubCategoryUUIDs) {
         validateCategoryLimit(clubCategoryUUIDs);
@@ -151,7 +157,9 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
-    // 모집 중 동아리 리스트 조회 (모바일)
+    /**
+     * 모집 중 동아리 리스트 조회 (User)
+     */
     @Transactional(readOnly = true)
     public List<ClubListResponse> getOpenClubs() {
 
@@ -184,7 +192,9 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
-    // 관심 카테고리 필터 적용한 모집 중 동아리 리스트 조회 (모바일)
+    /**
+     * 관심 카테고리 필터 적용한 모집 중 동아리 리스트 조회 (User)
+     */
     @Transactional(readOnly = true)
     public List<ClubListByClubCategoryResponse> getOpenClubsByClubCategories(List<UUID> clubCategoryUUIDs) {
         validateCategoryLimit(clubCategoryUUIDs);
@@ -245,16 +255,20 @@ public class ClubService {
         }
     }
 
-    // 카테고리 조회
+    /**
+     * 카테고리 리스트 조회(User)
+     */
     @Transactional(readOnly = true)
     public List<ClubCategoryResponse> getAllClubCategories() {
         List<ClubCategory> clubCategories = clubCategoryRepository.findAll();
         return ClubCategoryMapper.toDtoList(clubCategories);
     }
 
-    // 동아리 소개/모집글 페이지 조회 (웹 - 운영팀, 모바일)
+    /**
+     * 동아리 소개/모집글 조회 (User)
+     */
     @Transactional(readOnly = true)
-    public AdminClubIntroResponse getClubIntro(UUID clubUUID) {
+    public UserClubIntroResponse getClubIntro(UUID clubUUID) {
         Club club = clubRepository.findByClubUUID(clubUUID)
                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
 
@@ -283,7 +297,7 @@ public class ClubService {
                 .map(mapping -> mapping.getClubCategory().getClubCategoryName())
                 .collect(Collectors.toList());
 
-        return new AdminClubIntroResponse(
+        return new UserClubIntroResponse(
                 club.getClubUUID(),
                 mainPhotoUrl,
                 introPhotoUrls,

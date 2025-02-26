@@ -1,13 +1,13 @@
 package com.USWCicrcleLink.server.admin.admin.service;
 
 import com.USWCicrcleLink.server.admin.admin.domain.Admin;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubCreationRequest;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubListResponse;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubPageListResponse;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminPwRequest;
+import com.USWCicrcleLink.server.admin.admin.dto.*;
 import com.USWCicrcleLink.server.club.club.domain.Club;
+import com.USWCicrcleLink.server.club.club.domain.ClubHashtag;
 import com.USWCicrcleLink.server.club.club.domain.ClubMainPhoto;
 import com.USWCicrcleLink.server.club.club.domain.RecruitmentStatus;
+import com.USWCicrcleLink.server.club.club.repository.ClubCategoryMappingRepository;
+import com.USWCicrcleLink.server.club.club.repository.ClubHashtagRepository;
 import com.USWCicrcleLink.server.club.club.repository.ClubMainPhotoRepository;
 import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
@@ -15,11 +15,13 @@ import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
 import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;
 import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
 import com.USWCicrcleLink.server.clubLeader.domain.Leader;
+import com.USWCicrcleLink.server.clubLeader.dto.club.ClubSummaryResponse;
 import com.USWCicrcleLink.server.clubLeader.repository.LeaderRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.AdminException;
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
+import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
 import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;
 import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +34,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,10 +48,13 @@ public class AdminClubService {
     private final ClubIntroRepository clubIntroRepository;
     private final ClubMainPhotoRepository clubMainPhotoRepository;
     private final ClubIntroPhotoRepository clubIntroPhotoRepository;
+    private final ClubHashtagRepository clubHashtagRepository;
+    private final ClubCategoryMappingRepository clubCategoryMappingRepository;
+    private final S3FileUploadService s3FileUploadService;
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * 메인 페이지(ADMIN) - 동아리 목록 조회
+     * 메인 페이지 - 동아리 목록 조회 (Admin)
      */
     @Transactional(readOnly = true)
     public AdminClubPageListResponse getAllClubs(Pageable pageable) {
@@ -62,6 +66,45 @@ public class AdminClubService {
                 .totalPages(clubs.getTotalPages())
                 .totalElements(clubs.getTotalElements())
                 .currentPage(clubs.getNumber())
+                .build();
+    }
+
+    /**
+     * 메인 페이지 - 동아리 요약조회 (Admin)
+     */
+    @Transactional(readOnly = true)
+    public AdminClubSummaryResponse getClubSummary(UUID clubUUID) {
+
+        Club club = clubRepository.findByClubUUID(clubUUID)
+                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
+
+        ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
+                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INTRO_NOT_EXISTS));
+
+        List<String> clubHashtags = clubHashtagRepository.findByClubClubId(club.getClubId())
+                .stream().map(ClubHashtag::getClubHashtag)
+                .collect(Collectors.toList());
+
+        List<String> clubCategories = clubCategoryMappingRepository.findByClubClubId(club.getClubId())
+                .stream().map(mapping -> mapping.getClubCategory().getClubCategoryName())
+                .collect(Collectors.toList());
+
+        String mainPhotoUrl = clubMainPhotoRepository.findByClubClubId(club.getClubId())
+                .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getClubMainPhotoS3Key()))
+                .orElse(null);
+
+        List<String> introPhotoUrls = clubIntroPhotoRepository.findByClubIntro(clubIntro).stream()
+                .sorted(Comparator.comparingInt(ClubIntroPhoto::getOrder))
+                .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getClubIntroPhotoS3Key()))
+                .collect(Collectors.toList());
+
+        return AdminClubSummaryResponse.builder()
+                .clubUUID(clubUUID)
+                .clubName(club.getClubName())
+                .clubHashtag(clubHashtags)
+                .clubCategories(clubCategories)
+                .mainPhoto(mainPhotoUrl)
+                .introPhotos(introPhotoUrls)
                 .build();
     }
 

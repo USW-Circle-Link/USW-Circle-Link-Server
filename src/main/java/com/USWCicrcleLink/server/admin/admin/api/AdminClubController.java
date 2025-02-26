@@ -1,11 +1,10 @@
 package com.USWCicrcleLink.server.admin.admin.api;
 
 import com.USWCicrcleLink.server.admin.admin.dto.AdminClubCreationRequest;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubIntroResponse;
 import com.USWCicrcleLink.server.admin.admin.dto.AdminClubPageListResponse;
+import com.USWCicrcleLink.server.admin.admin.dto.AdminClubSummaryResponse;
 import com.USWCicrcleLink.server.admin.admin.dto.AdminPwRequest;
 import com.USWCicrcleLink.server.admin.admin.service.AdminClubService;
-import com.USWCicrcleLink.server.club.club.service.ClubService;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import java.util.UUID;
 public class AdminClubController {
 
     private final AdminClubService adminClubService;
-    private final ClubService clubService;
 
     // 메인 페이지 - 동아리 목록 조회 (ADMIN)
     @GetMapping
@@ -38,9 +36,9 @@ public class AdminClubController {
 
     // 동아리 소개/모집글 페이지 조회 (ADMIN, LEADER)
     @GetMapping("/{clubUUID}")
-    public ResponseEntity<ApiResponse<AdminClubIntroResponse>> getClubById(@PathVariable("clubUUID") UUID clubUUID) {
-        AdminClubIntroResponse clubIntroResponse = clubService.getClubIntro(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("동아리 소개/모집글 페이지 조회 성공", clubIntroResponse));
+    public ResponseEntity<ApiResponse<AdminClubSummaryResponse>> getClubById(@PathVariable("clubUUID") UUID clubUUID) {
+        AdminClubSummaryResponse response = adminClubService.getClubSummary(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 요약글 조회 성공", response));
     }
 
     // 동아리 추가 - 동아리 추가 (ADMIN)

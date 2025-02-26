@@ -4,7 +4,7 @@ import com.USWCicrcleLink.server.club.club.dto.ClubCategoryResponse;
 import com.USWCicrcleLink.server.club.club.dto.ClubListByClubCategoryResponse;
 import com.USWCicrcleLink.server.club.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.club.service.ClubService;
-import com.USWCicrcleLink.server.admin.admin.dto.AdminClubIntroResponse;
+import com.USWCicrcleLink.server.club.club.dto.UserClubIntroResponse;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.club.club.dto.ClubInfoListResponse;
 import lombok.RequiredArgsConstructor;
@@ -65,11 +65,11 @@ public class ClubController {
         return ResponseEntity.ok(new ApiResponse<>("카테고리 조회 완료", clubCategoryResponses));
     }
 
-    // 동아리 소개글 조회 (모바일)
+    // 동아리 소개/모집글 조회 (모바일)
     @GetMapping("/intro/{clubUUID}")
-    public ResponseEntity<ApiResponse<AdminClubIntroResponse>> getClubIntroByClubId(@PathVariable("clubUUID") UUID clubUUID) {
-        AdminClubIntroResponse clubIntroResponse = clubService.getClubIntro(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("동아리 소개글 조회 성공", clubIntroResponse));
+    public ResponseEntity<ApiResponse<UserClubIntroResponse>> getClubIntroByClubId(@PathVariable("clubUUID") UUID clubUUID) {
+        UserClubIntroResponse userClubIntroResponse = clubService.getClubIntro(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 소개글 조회 성공", userClubIntroResponse));
 
     }
 }

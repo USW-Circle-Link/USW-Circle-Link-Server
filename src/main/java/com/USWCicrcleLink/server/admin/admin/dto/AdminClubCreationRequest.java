@@ -36,8 +36,8 @@ public class AdminClubCreationRequest {
     private String leaderPwConfirm;
 
     @NotBlank(message = "동아리명은 필수 입력 값입니다.")
-    @Size(max = 20, message = "동아리명은 20글자 이내여야 합니다.")
-    @Pattern(regexp = "^[가-힣a-zA-Z0-9]+$", message = "동아리명에는 공백 또는 특수문자를 포함할 수 없습니다.")
+    @Size(max = 10, message = "동아리명은 10자 이내여야 합니다.")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9\\s]+$", message = "동아리명에는 특수문자를 포함할 수 없습니다.")
     @Sanitize
     private String clubName;
 

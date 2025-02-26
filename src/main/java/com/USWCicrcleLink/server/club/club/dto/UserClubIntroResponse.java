@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.admin.admin.dto;
+package com.USWCicrcleLink.server.club.club.dto;
 
 import com.USWCicrcleLink.server.club.club.domain.RecruitmentStatus;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminClubIntroResponse {
+public class UserClubIntroResponse {
     private UUID clubUUID;
     private String mainPhoto;
     private List<String> introPhotos;

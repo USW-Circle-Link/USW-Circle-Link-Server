@@ -15,7 +15,7 @@ import java.util.List;
 public class AdminNoticeCreationRequest {
 
     @NotBlank(message = "공지사항 제목은 비워둘 수 없습니다.")
-    @Size(max = 100, message = "공지사항 제목은 최대 100자까지 입력 가능합니다.")
+    @Size(max = 200, message = "공지사항 제목은 최대 200자까지 입력 가능합니다.")
     @Sanitize
     private String noticeTitle;
 

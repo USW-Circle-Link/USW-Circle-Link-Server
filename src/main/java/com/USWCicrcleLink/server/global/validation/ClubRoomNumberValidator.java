@@ -7,14 +7,14 @@ import java.util.regex.Pattern;
 
 public class ClubRoomNumberValidator implements ConstraintValidator<ValidClubRoomNumber, String> {
 
-    // 허용된 동아리방 목록 (B109, 111, 204 제외)
+    // 허용된 동아리방 목록 (B109, 204 제외)
     private static final Set<String> VALID_ROOMS = Set.of(
             // 지하
             "B101", "B102", "B103", "B104", "B105", "B106", "B107", "B108",
             "B110", "B111", "B112", "B113", "B114", "B115", "B116", "B117", "B118",
             "B119", "B120", "B121", "B122", "B123",
             // 1층
-            "102", "103", "104", "105", "106", "107", "108", "109", "110", "112",
+            "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112",
             // 2층
             "203", "205", "206", "207", "208", "209", "210"
     );

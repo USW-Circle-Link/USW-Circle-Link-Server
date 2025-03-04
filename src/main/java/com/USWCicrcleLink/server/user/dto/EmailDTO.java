@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmailDTO {
 
-    @NotBlank(message = "이메일을 입력해주세요")
+    @NotBlank(message = "이메일을 입력해주세요",groups = ValidationGroups.NotBlankGroup.class)
     @Size(min = 1, max = 30, message = "이메일은 1~30자 이내여야 합니다.",groups = ValidationGroups.SizeGroup.class )
     private String email;
 

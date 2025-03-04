@@ -2,8 +2,8 @@ package com.USWCicrcleLink.server.admin.admin.service;
 
 import com.USWCicrcleLink.server.admin.admin.dto.AdminClubCategoryCreationRequest;
 import com.USWCicrcleLink.server.admin.admin.mapper.ClubCategoryMapper;
-import com.USWCicrcleLink.server.club.club.dto.ClubCategoryResponse;
 import com.USWCicrcleLink.server.club.club.domain.ClubCategory;
+import com.USWCicrcleLink.server.club.club.dto.ClubCategoryResponse;
 import com.USWCicrcleLink.server.club.club.repository.ClubCategoryMappingRepository;
 import com.USWCicrcleLink.server.club.club.repository.ClubCategoryRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,17 +24,6 @@ public class AdminClubCategoryService {
 
     private final ClubCategoryRepository clubCategoryRepository;
     private final ClubCategoryMappingRepository clubCategoryMappingRepository;
-
-    /**
-     * 동아리 카테고리 설정(ADMIN, LEADER) - 카테고리 조회
-     */
-    @Transactional(readOnly = true)
-    public List<ClubCategoryResponse> getAllClubCategories() {
-        List<ClubCategory> clubCategories = clubCategoryRepository.findAll();
-        log.debug("동아리 카테고리 조회 성공 - {}개 카테고리 반환", clubCategories.size());
-
-        return ClubCategoryMapper.toDtoList(clubCategories);
-    }
 
     /**
      * 동아리 카테고리 설정(ADMIN) - 카테고리 추가

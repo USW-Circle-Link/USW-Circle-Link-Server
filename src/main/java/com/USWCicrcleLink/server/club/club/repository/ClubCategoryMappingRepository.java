@@ -23,9 +23,6 @@ public interface ClubCategoryMappingRepository
     @Query("DELETE FROM ClubCategoryMapping cm WHERE cm.clubCategory.clubCategoryId = :clubCategoryId")
     void deleteByClubCategoryId(@Param("clubCategoryId") Long clubCategoryId);
 
-    @Query("SELECT cm.club FROM ClubCategoryMapping cm WHERE cm.clubCategory.clubCategoryId IN :clubCategoryIds")
-    List<Club> findClubsByCategoryIds(@Param("clubCategoryIds") List<Long> clubCategoryIds);
-
     @Query("SELECT DISTINCT cm.club FROM ClubCategoryMapping cm " +
             "WHERE cm.clubCategory.clubCategoryId IN :clubCategoryIds " +
             "AND cm.club.clubId IN :openClubIds")
@@ -37,4 +34,6 @@ public interface ClubCategoryMappingRepository
     @Transactional
     void deleteAllByClub_ClubIdAndClubCategory_ClubCategoryNameNotIn(Long clubId, Set<String> categoryNames);
 
+    @Query("SELECT cm FROM ClubCategoryMapping cm WHERE cm.clubCategory.clubCategoryId IN :clubCategoryIds")
+    List<ClubCategoryMapping> findByClubCategoryIds(@Param("clubCategoryIds") List<Long> clubCategoryIds);
 }

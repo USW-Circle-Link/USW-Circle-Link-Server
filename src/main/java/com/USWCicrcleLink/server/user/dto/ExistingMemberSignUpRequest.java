@@ -58,6 +58,7 @@ public class ExistingMemberSignUpRequest {
     private String major;
 
     @NotBlank(message = "이메일 필수 입력 값입니다.")
+    @Size(min = 1, max = 30, message = "이메일은 1~30자 이내여야 합니다.",groups = ValidationGroups.SizeGroup.class )
     private String email;
 
     // 가입하려는 동아리 리스트

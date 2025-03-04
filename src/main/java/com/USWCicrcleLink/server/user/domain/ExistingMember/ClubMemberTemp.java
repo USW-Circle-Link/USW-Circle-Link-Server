@@ -25,7 +25,7 @@ public class ClubMemberTemp {
     @Column(name = "CLUB_MEMBERTEMP_ID")
     private Long clubMemberTempId;
 
-    @Column(nullable = false,length = 20)
+    @Column( unique = true,nullable = false,length = 20)
     private String profileTempAccount;
 
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class ClubMemberTemp {
     @Column(nullable = false,length = 20)
     private String profileTempMajor;
 
-    @Column(nullable = false,length = 30)
+    @Column(unique = true,nullable = false,length = 30)
     private String profileTempEmail;
 
     @Column(nullable = false)

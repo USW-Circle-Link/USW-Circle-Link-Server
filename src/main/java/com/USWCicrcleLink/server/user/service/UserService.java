@@ -13,7 +13,6 @@ import com.USWCicrcleLink.server.global.security.Integration.service.Integration
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.global.security.jwt.JwtProvider;
 import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
-import com.USWCicrcleLink.server.profile.domain.MemberType;
 import com.USWCicrcleLink.server.profile.domain.Profile;
 import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.profile.service.ProfileService;
@@ -24,7 +23,6 @@ import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
 import com.USWCicrcleLink.server.user.dto.*;
 import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
 import com.USWCicrcleLink.server.user.repository.UserRepository;
-import com.USWCicrcleLink.server.user.repository.WithdrawalTokenRepository;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -242,7 +240,7 @@ public class UserService {
         return emailToken;
     }
 
-    // 아이디 중복 확인
+    // 아이디 중복 확인 ( 회원, 기존 회원가입 요청한 사람들의 아이디 )
     public void verifyAccountDuplicate(String account) {
         log.debug("계정 중복 체크 요청 시작 account = {}", account);
         if (userRepository.findByUserAccount(account).isPresent() || clubMemberTempRepository.findByProfileTempAccount(account).isPresent()) {
@@ -451,13 +449,12 @@ public class UserService {
         log.debug("2- 비밀번호 유효성 검사");
         passwordService.validatePassword(request.getPassword(), request.getConfirmPassword());
 
-        log.debug("3- 프로필 중복 확인 검사");
+        log.debug("3- 프로필 중복 확인 검사"); // 이미 프로필이 존재하는지, 아닌지 구분(기존회원가입,신규회원가입 구분)
         profileService.checkProfileDuplicated(request.getUserName(),request.getStudentNumber(), request.getTelephone());
 
     }
 
     // 기존 회원 가입 전 조건 검사
-    //fixme 기존회원가입 시 검사해야하는 조건 생각해보기(프로필 중복확인)
     public void checkExistingSignupCondition(ExistingMemberSignUpRequest request) {
 
         // 아이디 중복 확인 검사
@@ -466,8 +463,9 @@ public class UserService {
         // 비밀번호 유효성 검사
         passwordService.validatePassword(request.getPassword(),request.getConfirmPassword());
 
-        // clubMemberTemp 테이블에서 프로필 중복 확인(이름&&학번&&전화번호)
+        // clubMemberTemp 테이블에서 프로필 중복 확인(이름&&학번&&전화번호) -- 이전에 같은 요청을 보냈는지 확인하는 용도
         checkClubMemberTempProfileDuplicate(request.getUserName(), request.getStudentNumber(), request.getTelephone());
+
     }
 
     // clubMemberTemp에서 이메일로 중복 확인

@@ -17,7 +17,6 @@ import com.USWCicrcleLink.server.user.service.UserService;
 import com.USWCicrcleLink.server.user.service.WithdrawalTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -77,7 +76,7 @@ public class UserController {
 
     // 신규회원가입 요청 - 인증 메일 전송
     @PostMapping("/temporary/register")
-    public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Validated @RequestBody EmailDTO request)  {
+    public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Validated(ValidationSequence.class) @RequestBody EmailDTO request)  {
 
         // 이메일 중복 검증
         EmailToken emailToken = userService.checkEmailDuplication(request.getEmail());
@@ -113,7 +112,7 @@ public class UserController {
 
     // 인증 확인 버튼
     @GetMapping("/email/verification")
-    public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated @RequestBody EmailDTO request){
+    public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated(ValidationSequence.class) @RequestBody EmailDTO request){
 
         EmailToken emailToken = emailTokenService.checkEmailIsVerified(request.getEmail());
 
@@ -141,7 +140,7 @@ public class UserController {
 
     // 아이디 찾기
     @GetMapping ("/find-account/{email}")
-    ResponseEntity<ApiResponse<String>> findUserAccount(@PathVariable("email") String email) {
+    ResponseEntity<ApiResponse<String>> findUserAccount(@PathVariable("email")String email) {
 
         User findUser= userService.findUser(email);
         userService.sendAccountInfoMail(findUser);
@@ -153,7 +152,7 @@ public class UserController {
     // 비밀번호 찾기 - 인증 코드 전송
     @PostMapping("/auth/send-code")
     @RateLimite(action = "PW_FOUND_EMAIL")
-    ResponseEntity<ApiResponse<UUID>> sendAuthCode (@Valid @RequestBody UserInfoDto request) {
+    ResponseEntity<ApiResponse<UUID>> sendAuthCode (@Validated(ValidationSequence.class) @RequestBody UserInfoDto request) {
 
         User user = userService.validateAccountAndEmail(request);
         AuthToken authToken = authTokenService.createOrUpdateAuthToken(user);
@@ -166,7 +165,7 @@ public class UserController {
     // 비밀 번호 찾기- 인증 코드 검증
     @PostMapping("/auth/verify-token")
     @RateLimite(action = "VALIDATE_CODE")
-    public ApiResponse<String> verifyAuthToken(@RequestHeader("uuid") UUID uuid,@Valid @RequestBody AuthCodeRequest request) {
+    public ApiResponse<String> verifyAuthToken(@RequestHeader("uuid") UUID uuid,@Validated(ValidationSequence.class) @RequestBody AuthCodeRequest request) {
 
         authTokenService.verifyAuthToken(uuid, request);
         authTokenService.deleteAuthToken(uuid);
@@ -176,7 +175,7 @@ public class UserController {
 
     // 비밀번호 찾기 - 비밀번호 재설정
     @PatchMapping("/reset-password")
-    public ApiResponse<String> resetUserPw(@RequestHeader("uuid") UUID uuid, @RequestBody PasswordRequest request) {
+    public ApiResponse<String> resetUserPw(@RequestHeader("uuid") UUID uuid, @Validated(ValidationSequence.class) @RequestBody PasswordRequest request) {
 
         userService.resetPW(uuid,request);
 
@@ -209,7 +208,7 @@ public class UserController {
     // 회원 탈퇴 인증 번호 확인
     @DeleteMapping("/exit")
     @RateLimite(action ="WITHDRAWAL_CODE")
-    public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,@Valid @RequestBody AuthCodeRequest authCodeRequest){
+    public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,@Validated(ValidationSequence.class) @RequestBody AuthCodeRequest authCodeRequest){
 
         // 토큰 검증 및 삭제
         UUID uuid = withdrawalTokenService.verifyWithdrawalToken(authCodeRequest);

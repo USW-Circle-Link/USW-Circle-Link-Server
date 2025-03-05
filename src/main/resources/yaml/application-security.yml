@@ -11,15 +11,15 @@ spring:
       - /users/email/verification
       - /users/signup
       - /users/existing/register
-      - /users/verify-duplicate/{account}
+      - /users/account/verify-duplicate
       - /users/validate-passwords-match
-      - /users/find-account/{email}
+      - /users/find-account
       - /users/auth/send-code
       - /users/auth/verify-token
       - /users/reset-password
       - /users/email/resend-confirmation
       - /users/login
-      - /users/check/{email}/duplicate
+      - /users/check/email/duplicate
       - /club-leader/login
       - /admin/login
       - /integration/**

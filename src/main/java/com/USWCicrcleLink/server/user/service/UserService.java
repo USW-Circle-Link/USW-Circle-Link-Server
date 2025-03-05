@@ -460,9 +460,6 @@ public class UserService {
         // 아이디 중복 확인 검사
         verifyAccountDuplicate(request.getAccount());
 
-        // 비밀번호 유효성 검사
-        passwordService.validatePassword(request.getPassword(),request.getConfirmPassword());
-
         // clubMemberTemp 테이블에서 프로필 중복 확인(이름&&학번&&전화번호) -- 이전에 같은 요청을 보냈는지 확인하는 용도
         checkClubMemberTempProfileDuplicate(request.getUserName(), request.getStudentNumber(), request.getTelephone());
 

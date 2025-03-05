@@ -45,19 +45,18 @@ public class UserController {
     }
 
     // 아이디 중복 체크
-    @GetMapping("/verify-duplicate/{account}")
-    public ResponseEntity<ApiResponse<String>> verifyAccountDuplicate(@PathVariable("account") String account) {
+    @PostMapping("/account/verify-duplicate")
+    public ResponseEntity<ApiResponse<String>> verifyAccountDuplicate(@Validated(ValidationSequence.class) @RequestBody AccountDto request) {
 
-        userService.verifyAccountDuplicate(account);
-
+        userService.verifyAccountDuplicate(request.getAccount());
         ApiResponse<String> response = new ApiResponse<>("사용 가능한 ID 입니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 기존회원 가입시 이메일 중복 확인
-    @GetMapping("/check/{email}/duplicate")
-    public ResponseEntity<ApiResponse<String>> verifyEmailDuplicate(@PathVariable("email") String email) {
-        userService.verifyEmailDuplicate(email);
+    @PostMapping("/check/email/duplicate")
+    public ResponseEntity<ApiResponse<String>> verifyEmailDuplicate(@Validated(ValidationSequence.class) @RequestBody EmailDTO reqeust) {
+        userService.verifyEmailDuplicate(reqeust.getEmail());
         ApiResponse<String> response = new ApiResponse<>("이메일 중복 확인에 성공하였습니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -139,10 +138,10 @@ public class UserController {
 
 
     // 아이디 찾기
-    @GetMapping ("/find-account/{email}")
-    ResponseEntity<ApiResponse<String>> findUserAccount(@PathVariable("email")String email) {
+    @PostMapping("/find-account")
+    ResponseEntity<ApiResponse<String>> findUserAccount(@Validated(ValidationSequence.class) @RequestBody EmailDTO request) {
 
-        User findUser= userService.findUser(email);
+        User findUser= userService.findUser(request.getEmail());
         userService.sendAccountInfoMail(findUser);
 
         ApiResponse<String> response = new ApiResponse<>("계정 정보 전송 완료");

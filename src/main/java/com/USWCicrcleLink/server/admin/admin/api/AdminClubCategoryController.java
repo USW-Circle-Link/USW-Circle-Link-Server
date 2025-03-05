@@ -3,6 +3,7 @@ package com.USWCicrcleLink.server.admin.admin.api;
 import com.USWCicrcleLink.server.admin.admin.dto.AdminClubCategoryCreationRequest;
 import com.USWCicrcleLink.server.admin.admin.service.AdminClubCategoryService;
 import com.USWCicrcleLink.server.club.club.dto.ClubCategoryResponse;
+import com.USWCicrcleLink.server.club.club.service.ClubService;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,12 @@ import java.util.UUID;
 public class AdminClubCategoryController {
 
     private final AdminClubCategoryService adminClubCategoryService;
+    private final ClubService clubService;
 
     // 동아리 카테고리 설정 - 카테고리 조회
     @GetMapping
     public ResponseEntity<ApiResponse<List<ClubCategoryResponse>>> getAllClubCategories() {
-        List<ClubCategoryResponse> clubCategories = adminClubCategoryService.getAllClubCategories();
+        List<ClubCategoryResponse> clubCategories = clubService.getAllClubCategories();
         return ResponseEntity.ok(new ApiResponse<>("카테고리 리스트 조회 성공", clubCategories));
     }
 

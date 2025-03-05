@@ -1,8 +1,8 @@
 package com.USWCicrcleLink.server.clubLeader.api;
 
-import com.USWCicrcleLink.server.admin.admin.service.AdminClubCategoryService;
 import com.USWCicrcleLink.server.aplict.dto.ApplicantResultsRequest;
 import com.USWCicrcleLink.server.club.club.dto.ClubCategoryResponse;
+import com.USWCicrcleLink.server.club.club.service.ClubService;
 import com.USWCicrcleLink.server.clubLeader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.clubLeader.dto.club.*;
 import com.USWCicrcleLink.server.clubLeader.dto.clubMembers.*;
@@ -34,19 +34,19 @@ import java.util.UUID;
 public class ClubLeaderController {
 
     private final ClubLeaderService clubLeaderService;
-    private final AdminClubCategoryService adminClubCategoryService;
+    private final ClubService clubService;
     private final FcmServiceImpl fcmService;
 
     // 약관 동의 완료 업데이트
     @PatchMapping("/terms/agreement")
-    public ResponseEntity<ApiResponse<String>> SetAgreedTermsTrue (){
+    public ResponseEntity<ApiResponse<String>> SetAgreedTermsTrue() {
         clubLeaderService.updateAgreedTermsTrue();
-        return new ResponseEntity<>(new ApiResponse<>("약관 동의 완료"),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>("약관 동의 완료"), HttpStatus.OK);
     }
 
     // 동아리 기본 정보 조회
     @GetMapping("/{clubUUID}/info")
-    public ResponseEntity<ApiResponse> getClubInfo(@PathVariable("clubUUID")UUID clubUUID) {
+    public ResponseEntity<ApiResponse> getClubInfo(@PathVariable("clubUUID") UUID clubUUID) {
         ApiResponse<ClubInfoResponse> clubInfo = clubLeaderService.getClubInfo(clubUUID);
         return new ResponseEntity<>(clubInfo, HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class ClubLeaderController {
     // 동아리 기본 정보 변경 - 카테고리 조회
     @GetMapping("/category")
     public ResponseEntity<ApiResponse<List<ClubCategoryResponse>>> getAllCategories() {
-        List<ClubCategoryResponse> categories = adminClubCategoryService.getAllClubCategories();
+        List<ClubCategoryResponse> categories = clubService.getAllClubCategories();
         return ResponseEntity.ok(new ApiResponse<>("카테고리 리스트 조회 성공", categories));
     }
 

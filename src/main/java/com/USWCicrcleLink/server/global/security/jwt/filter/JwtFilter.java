@@ -6,7 +6,6 @@ import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.global.security.exception.CustomAuthenticationEntryPoint;
 import com.USWCicrcleLink.server.global.security.exception.CustomAuthenticationException;
 import com.USWCicrcleLink.server.global.security.jwt.JwtProvider;
-import com.USWCicrcleLink.server.global.security.jwt.domain.TokenValidationResult;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -24,6 +22,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.USWCicrcleLink.server.global.util.IpUtil.getClientIp;
 
 /**
  * JWT 유효성 검증 필터 (User, Admin, Leader UUID 처리)
@@ -53,24 +53,33 @@ public class JwtFilter extends OncePerRequestFilter {
         String accessToken = jwtProvider.resolveAccessToken(request);
 
         try {
-            TokenValidationResult tokenValidationResult = jwtProvider.validateAccessToken(accessToken);
+            jwtProvider.validateAccessToken(accessToken);
 
-            switch (tokenValidationResult) {
-                case EXPIRED -> throw new CustomAuthenticationException("TOKEN_EXPIRED");
-                case INVALID -> throw new CustomAuthenticationException("INVALID_TOKEN");
-                case VALID -> {
-                    Authentication auth = jwtProvider.getAuthentication(accessToken);
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    setMDCUserDetails(auth);
-                    filterChain.doFilter(request, response);
-                }
+            Authentication auth = jwtProvider.getAuthentication(accessToken);
+            setMDCUserDetails(auth);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            filterChain.doFilter(request, response);
+
+        } catch (CustomAuthenticationException e) {
+            if ("INVALID_TOKEN".equals(e.getMessage())) {
+                log.error("[SECURITY ALERT] 변조된 토큰 감지 | API: {} {} | IP: {} | Token: {}",
+                        request.getMethod(), request.getRequestURI(), getClientIp(request), maskToken(accessToken));
             }
-        } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
             customAuthenticationEntryPoint.commence(request, response, e);
         } finally {
             MDC.clear();
         }
+    }
+
+    /**
+     * JWT 토큰 마스킹 (앞 10자만 노출)
+     */
+    private String maskToken(String token) {
+        if (token.length() <= 10) {
+            return token;
+        }
+        return token.substring(0, 10) + "...";
     }
 
     /**

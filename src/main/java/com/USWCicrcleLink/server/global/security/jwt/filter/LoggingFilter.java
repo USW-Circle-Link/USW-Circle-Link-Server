@@ -15,6 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+import static com.USWCicrcleLink.server.global.util.IpUtil.getClientIp;
+
 /**
  * 특정 API 요청에서만 사용자 정보를 로깅하는 필터
  */
@@ -36,11 +38,12 @@ public class LoggingFilter extends OncePerRequestFilter {
         String requestMethod = request.getMethod();
 
         if (isLoggingPath(requestPath) && isLoggingMethod(requestMethod)) {
-            log.info("[{}: {}] {} 요청 경로: {}",
+            log.info("[{}: {}] {} 요청 경로: {} | IP: {}",
                     getMdcValue("userType"),
                     getMdcValue("userUUID"),
                     requestMethod,
-                    requestPath);
+                    requestPath,
+                    getClientIp(request));
         }
 
         filterChain.doFilter(request, response);

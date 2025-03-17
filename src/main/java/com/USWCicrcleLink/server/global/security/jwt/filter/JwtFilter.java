@@ -61,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 case VALID -> {
                     Authentication auth = jwtProvider.getAuthentication(accessToken);
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                    setMDCUserDetails(auth, request.getMethod(), request.getRequestURI());
+                    setMDCUserDetails(auth);
                     filterChain.doFilter(request, response);
                 }
             }
@@ -76,7 +76,7 @@ public class JwtFilter extends OncePerRequestFilter {
     /**
      * MDC(User Type, UUID) 설정
      */
-    private void setMDCUserDetails(Authentication auth, String method, String path) {
+    private void setMDCUserDetails(Authentication auth) {
         if (auth.getPrincipal() instanceof CustomAdminDetails adminDetails) {
             MDC.put("userType", "Admin");
             MDC.put("userUUID", adminDetails.getAdminUUID().toString());
@@ -86,10 +86,9 @@ public class JwtFilter extends OncePerRequestFilter {
         } else if (auth.getPrincipal() instanceof CustomLeaderDetails leaderDetails) {
             MDC.put("userType", "Leader");
             MDC.put("userUUID", leaderDetails.getLeaderUUID().toString());
-        }
-
-        if (log.isDebugEnabled()) {
-            log.info("[{}: {}] {} 요청 경로: {}", MDC.get("userType"), MDC.get("userUUID"), method, path);
+        } else {
+            MDC.put("userType", "Unknown");
+            MDC.put("userUUID", "Unknown");
         }
     }
 

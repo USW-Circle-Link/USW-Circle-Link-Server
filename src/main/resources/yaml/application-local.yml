@@ -40,10 +40,10 @@ spring:
       on-profile: local
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/CircleLink
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${TEST_MYSQL_USER}
+    password: ${TEST_MYSQL_PASS}
 
   jpa:
     hibernate:

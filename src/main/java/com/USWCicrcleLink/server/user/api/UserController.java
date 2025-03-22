@@ -212,11 +212,11 @@ public class UserController {
     public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,@Valid @RequestBody AuthCodeRequest authCodeRequest){
 
         // 토큰 검증 및 삭제
-        UUID uuid = withdrawalTokenService.verifyWithdrawalToken(authCodeRequest);
-        withdrawalTokenService.deleteWithdrawalToken(uuid);
+        UUID userUUID = withdrawalTokenService.verifyWithdrawalToken(authCodeRequest);
+        withdrawalTokenService.deleteWithdrawalToken(userUUID);
 
         // 인증 토큰 존재시 인증 토큰도 삭제
-        authTokenService.delete(uuid);
+        authTokenService.delete(userUUID);
 
         // 회원 탈퇴 진행
         userService.cancelMembership(request,response);

@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.user.dto;
 
+import com.USWCicrcleLink.server.global.validation.ValidationGroups;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthCodeRequest {
-    @NotBlank(message = "인증 코드를 입력해주세요.")
-    @Pattern(regexp = "\\d+", message = "인증 코드는 숫자만 입력 가능합니다.")
+    @NotBlank(message = "인증 코드를 입력해주세요.",groups = ValidationGroups.NotBlankGroup.class)
     private String authCode;
 }

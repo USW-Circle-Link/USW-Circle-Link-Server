@@ -103,7 +103,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod(HttpMethod.PUT);
         configuration.addAllowedMethod(HttpMethod.PATCH);
         configuration.addAllowedMethod(HttpMethod.DELETE);
-        configuration.addAllowedMethod(HttpMethod.OPTIONS); // Preflight 요청에 사용되는 OPTIONS 메서드 허용
+        configuration.addAllowedMethod(HttpMethod.OPTIONS);
 
         // 허용할 헤더 명시
         configuration.addAllowedHeader("Authorization");

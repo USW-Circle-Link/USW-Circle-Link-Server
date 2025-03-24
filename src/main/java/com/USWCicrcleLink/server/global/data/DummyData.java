@@ -320,7 +320,7 @@ public class DummyData {
                 .profileTempStudentNumber("00001009")
                 .profileTempHp("01055556666")
                 .profileTempMajor("정보보호학과")
-                .profileTempEmail("clubMemberTemp1@naver.com")
+                .profileTempEmail("clubMemberTemp1")
                 .totalClubRequest(2)
                 .clubRequestCount(0)
                 .clubMemberTempExpiryDate(LocalDateTime.now().plusDays(7))

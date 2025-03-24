@@ -7,7 +7,7 @@ import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.global.security.details.service.UserDetailsServiceManager;
-import com.USWCicrcleLink.server.global.security.jwt.domain.TokenValidationResult;
+import com.USWCicrcleLink.server.global.security.exception.CustomAuthenticationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -101,28 +101,17 @@ public class JwtProvider {
     /**
      * 액세스 토큰 유효성 검증
      */
-    public TokenValidationResult validateAccessToken(String accessToken) {
+    public void validateAccessToken(String accessToken) {
         if (accessToken == null || accessToken.trim().isEmpty()) {
-            return TokenValidationResult.INVALID; // 비어있는 토큰
+            throw new CustomAuthenticationException("TOKEN_MISSING"); // 비어있는 토큰
         }
 
         try {
-            Claims claims = getClaims(accessToken);
-
-            if (claims == null) {
-                return TokenValidationResult.INVALID; // claims null
-            }
-
-            return claims.getExpiration().before(new Date()) ? TokenValidationResult.EXPIRED : TokenValidationResult.VALID;
-
+            getClaims(accessToken); // 정상 토큰
         } catch (ExpiredJwtException e) {
-            return TokenValidationResult.EXPIRED; // 만료된 토큰
-        } catch (MalformedJwtException e) {
-            return TokenValidationResult.INVALID; // 토큰이 변조되었거나 잘못된 형식
-        } catch (SignatureException e) {
-            return TokenValidationResult.INVALID; // 서명이 맞지 않음 (변조 가능성)
-        } catch (JwtException | IllegalArgumentException e) {
-            return TokenValidationResult.INVALID; // 기타 JWT 오류
+            throw new CustomAuthenticationException("TOKEN_EXPIRED"); // 만료된 토큰
+        } catch (MalformedJwtException | SignatureException | JwtException | IllegalArgumentException e) {
+            throw new CustomAuthenticationException("INVALID_TOKEN"); // 변조된 토큰
         }
     }
 

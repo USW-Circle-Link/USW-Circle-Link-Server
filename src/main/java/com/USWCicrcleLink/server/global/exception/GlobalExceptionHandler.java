@@ -2,6 +2,7 @@ package com.USWCicrcleLink.server.global.exception;
 
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.response.ErrorResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GlobalExceptionHandler {
 
     @Value("${spring.profiles.active:dev}")
@@ -54,13 +56,10 @@ public class GlobalExceptionHandler {
     private void logByHttpStatus(HttpStatus status, String logMessage, Throwable e, HttpServletRequest request) {
         String requestInfo = String.format("Request: %s %s", request.getMethod(), request.getRequestURI());
 
-        boolean isProduction = "prod".equals(activeProfile);
-
-        if (status.is4xxClientError() && isProduction) {
-            return;
-        }
-
         if (status.is4xxClientError()) {
+            if ("prod".equals(activeProfile)) {
+                return;
+            }
             log.warn("[Client Error] {} | {}", logMessage, requestInfo);
         } else if (status.is5xxServerError()) {
             log.error("[Server Error] {} | {}", logMessage, requestInfo, e);
@@ -112,22 +111,37 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        Map<String, String> fieldErrors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            fieldErrors.put(fieldName, errorMessage);
-        });
-
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        logByHttpStatus(status, "Validation failed: " + fieldErrors, ex, request);
+
+        final Map<String, String> fieldErrors = new HashMap<>();
+
+        StringBuilder rejectedValuesLog = new StringBuilder();
+
+        if (!"prod".equals(activeProfile)) {
+            ex.getBindingResult().getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                String fieldName = fieldError.getField();
+                String rejectedValue = fieldError.getRejectedValue() != null ? fieldError.getRejectedValue().toString() : "null";
+                fieldErrors.put(fieldName, error.getDefaultMessage());
+
+                rejectedValuesLog.append(String.format("[%s: %s] ", fieldName, rejectedValue));
+            });
+        }
+
+        if ("prod".equals(activeProfile)) {
+            log.error("입력 값 검증 오류 | Request: {} {} | Invalid Values: {}",
+                    request.getMethod(), request.getRequestURI(), rejectedValuesLog);
+        } else {
+            log.warn("입력 값 검증 오류 | Request: {} {} | Invalid Values: {} | Errors: {}",
+                    request.getMethod(), request.getRequestURI(), rejectedValuesLog, fieldErrors);
+        }
 
         ErrorResponse errorResponse = buildErrorResponse(
                 ex.getClass().getSimpleName(),
                 "INVALID_ARGUMENT",
                 "입력 값 검증에 실패했습니다.",
                 status,
-                fieldErrors
+                fieldErrors.isEmpty() ? null : fieldErrors
         );
 
         return new ResponseEntity<>(errorResponse, status);

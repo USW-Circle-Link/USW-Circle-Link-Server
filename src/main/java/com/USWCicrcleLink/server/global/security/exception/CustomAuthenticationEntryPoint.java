@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -18,11 +17,9 @@ import java.util.Map;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
-    private final String activeProfile;
 
-    public CustomAuthenticationEntryPoint(ObjectMapper objectMapper, Environment environment) {
+    public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.activeProfile = environment.getProperty("spring.profiles.active", "dev");
     }
 
     @Override
@@ -41,14 +38,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 errorMessage = "토큰이 만료되었습니다.";
             } else if ("INVALID_TOKEN".equals(errorCode)) {
                 errorMessage = "인증이 필요합니다.";
-
-                if ("prod".equals(activeProfile)) {
-                    log.error("[SECURITY ALERT] 변조된 JWT 감지 - IP: {} | 요청 경로: {}",
-                            request.getRemoteAddr(), request.getRequestURI());
-                } else {
-                    log.warn("[JWT WARNING] 변조된 JWT 감지 - IP: {} | 요청 경로: {}",
-                            request.getRemoteAddr(), request.getRequestURI());
-                }
             }
         }
 

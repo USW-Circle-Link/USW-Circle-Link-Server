@@ -57,6 +57,7 @@ public class UserService {
     private final ClubMemberAccountStatusService clubMemberAccountStatusService;
     private final PasswordService passwordService;
     private final IntegrationAuthService integrationAuthService;
+    private final SignupTokenService signupTokenService;
 
     private static final int FCM_TOKEN_CERTIFICATION_TIME = 60;
 
@@ -116,6 +117,7 @@ public class UserService {
 
 
     // 신규 회원 가입
+    @Transactional
     public void signUpUser(SignUpRequest request,String email) {
         // user 객체 생성
         User user = createUser(request,email);
@@ -127,10 +129,6 @@ public class UserService {
         profileRepository.save(profile);
         log.debug("profile 객체 생성: profile_id={}",profile.getProfileId());
 
-
-        // emailToken 테이블 삭제
-        emailTokenService.deleteEmailToken(email);
-        log.debug("임시 회원 정보 삭제 완료");
     }
 
     // user 객체 생성
@@ -224,21 +222,29 @@ public class UserService {
     }
 
     // 이메일 토큰의 유효성 확인
-    public EmailToken verifyEmailToken(UUID emailTokenUUID) {
+    public void verifyEmailToken(UUID emailTokenUUID) {
 
-        // 이메일 토큰 검증
-        EmailToken emailToken = emailTokenService.verifyEmailToken(emailTokenUUID);
+        // 제한시간(5분)안에 이메일 인증을 했는지 확인
+        EmailToken emailToken = emailTokenRepository.findById(emailTokenUUID)
+                .orElseThrow(() -> {
+                    log.error("이메일 토큰 만료 or  존재하지 않음: {}", emailTokenUUID);
+                    return new EmailTokenException(ExceptionType.EMAIL_TOKEN_IS_EXPIRED);
+                });
 
-        // 이메일 토큰 인증 완료 처리
+        // 인증이 완료된 경우 회원가입을 위한 SignupToken 생성
         try {
-            emailToken.verifyEmail();
-            emailTokenRepository.save(emailToken);
+            signupTokenService.createSignupToken(emailToken);
         } catch (Exception e) {
-            log.error("이메일 토큰 인증 완료처리 중 오류가 발생함");
-            throw new EmailException(ExceptionType.EMAIL_TOKEN_STATUS_UPATE_FALIED);
+            log.error("SignupToken 생성 실패: {}", emailTokenUUID, e);
+            throw new SignupTokenException(ExceptionType.SIGNUP_TOKEN_CREATION_FAILED);
         }
-        return emailToken;
+
+        // redis에 저장된 emailToken 관련 객체 모두 삭제
+
+
+
     }
+
 
     // 아이디 중복 확인 ( 회원, 기존 회원가입 요청한 사람들의 아이디 )
     public void verifyAccountDuplicate(String account) {
@@ -364,26 +370,28 @@ public class UserService {
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public EmailToken checkEmailDuplication(String email) {
+    public EmailToken checkEmailTokenIsExist(String email) {
         log.debug("이메일 중복 확인 시작, email: {}", email);
 
         EmailToken emailToken;
 
-        // 실제 사용중인 이메일 확인
+        // 회원가입 유무 확인
         if (userRepository.findByEmail(email).isPresent()) {
             log.error("user 테이블에서 중복된 이메일 존재, email 값= {}", email);
             throw new UserException(ExceptionType.USER_OVERLAP);
         }
+        // 회원가입 요청(이메일 토큰)이 이미 존재하는 경우(이메일 재전송)
         else if (emailTokenRepository.findByEmail(email).isPresent()) {
             log.debug("요청 가입 대기자 존재 - emailToken 테이블에서 중복된 이메일 존재, email 값= {}", email);
 
-            // 토큰 만료시간 업데이트
-            emailToken = emailTokenService.getEmailTokenByEmail(email);
-            log.debug("emailToken 조회 완료, emailTokenUUID= {}", emailToken.getEmailTokenUUID());
-            emailTokenService.updateCertificationTime(emailToken);
-            log.debug("이메일 인증 만료시간 업데이트 완료, emailTokenUUID= {}", emailToken.getEmailTokenUUID());
-        } else{
-            // 그 외의 경우 새로운 이메일 토큰 생성
+            // 기존 토큰 재사용 및 TTL 갱신
+            emailToken = emailTokenRepository.findByEmail(email).get();
+            log.debug("기존 emailToken 조회 완료, UUID: {}", emailToken.getEmailTokenUUID());
+            emailTokenRepository.save(emailToken); // TTL 5분으로 재설정
+            log.debug("TTL 재설정 완료");
+        }
+        // 이메일 토큰이 존재하지 않는 경우 -> 새로운 이메일 토큰 생성
+        else{
             emailToken = emailTokenService.createEmailToken(email);
         }
         log.debug("이메일 중복 확인 완료");
@@ -391,20 +399,6 @@ public class UserService {
         return emailToken;
     }
 
-
-    // 이메일 인증 받은 사용자인지 검증하기
-    public String isEmailVerified(UUID emailTokenUUID,UUID requestSignupUUID) {
-
-        // 이메일 토큰 조회
-        EmailToken emailToken = emailTokenService.getEmailTokenByEmailTokenUUID(emailTokenUUID);
-
-        // 이메일 토큰 조회로 찾은 signupuuid와 프론트에서 가지고 있던 signupuuid비교
-        if(!emailToken.getSignupUUID().equals(requestSignupUUID)){
-            throw new UserException(ExceptionType.USER_UUID_IS_NOT_VALID);
-        }
-
-        return emailToken.getEmail();
-    }
 
     /**
      * 회원 탈퇴 (User)

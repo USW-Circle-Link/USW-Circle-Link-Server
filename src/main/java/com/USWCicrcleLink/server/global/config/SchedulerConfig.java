@@ -24,28 +24,10 @@ import java.util.UUID;
 @Slf4j
 public class SchedulerConfig {
 
-    private final EmailTokenRepository emailTokenRepository;
     private final AplictRepository aplictRepository;
     private final ProfileRepository profileRepository;
     private final ClubMemberTempRepository clubMemberTempRepository;
     private final ClubMemberAccountStatusService clubMemberAccountStatusService;
-
-
-    // 미인증 회원 삭제
-    @Scheduled(cron = "0 0 * * * *") // 1시간 마다 실행
-    @Transactional
-    public void deleteExpiredTokens() {
-
-            LocalDateTime time = LocalDateTime.now().minusHours(1); // 만료시간 1시간 경과된 토큰 삭제
-            List<EmailToken> tokens = emailTokenRepository.findAllByExpirationTimeBefore(time);
-
-            if(!tokens.isEmpty()){
-                emailTokenRepository.deleteAll(tokens);
-                log.debug("만료된 이메일 토큰 삭제");
-            }else{
-                log.debug("삭제할 이메일 토큰 존재하지않음");
-            }
-    }
 
     // 매일 00시(자정)에 실행
     // 최초 합 통보 후 4일이 지난 지원서 삭제

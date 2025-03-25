@@ -34,6 +34,13 @@ public enum ExceptionType {
 
 
     /**
+     * Domain: SignupToken
+     */
+    SIGNUP_TOKEN_NOT_FOUND("SIGNUP_TOKEN-001", "이메일 인증이 완료되지 않았습니다.재인증을 해주세요", BAD_REQUEST),
+    SIGNUP_UUID_IS_NOT_MATCH("SIGNUP_TOKEN-002", "signupuuid가 일치하지않습니다.재인증을 해주세요",BAD_REQUEST),
+    SIGNUP_TOKEN_CREATION_FAILED("SIGNUP_TOKEN-003", "SignupToken 생성중 오류가 발생했습니다",INTERNAL_SERVER_ERROR),
+
+    /**
      * Domain: User
      */
     USER_NOT_EXISTS("USR-201", "사용자가 존재하지 않습니다.", BAD_REQUEST),

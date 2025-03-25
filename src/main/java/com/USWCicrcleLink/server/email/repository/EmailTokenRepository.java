@@ -3,6 +3,7 @@ package com.USWCicrcleLink.server.email.repository;
 import com.USWCicrcleLink.server.email.domain.EmailToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -11,10 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EmailTokenRepository extends JpaRepository<EmailToken, Long> {
-
-    Optional<EmailToken> findByEmailTokenUUID (UUID emailTokenUUID);
-    List<EmailToken> findAllByExpirationTimeBefore(LocalDateTime time);
+public interface EmailTokenRepository extends CrudRepository<EmailToken, UUID> {
 
     Optional<EmailToken> findByEmail(String email);
 }

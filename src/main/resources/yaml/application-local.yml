@@ -57,7 +57,7 @@ spring:
     enabled: true
     baseline-on-migrate: true
     baseline-version: 0
-    locations: classpath:db/migration/common, db/migration/test
+    locations: classpath:db/migration/common, db/migration/local
     url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     user: ${TEST_MYSQL_USER}
     password: ${TEST_MYSQL_PASS}

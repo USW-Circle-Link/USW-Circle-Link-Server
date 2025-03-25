@@ -43,23 +43,14 @@ spring:
   jpa:
     defer-datasource-initialization: false # flyway 실행 후 jpa
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
     generate-ddl: false
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
-    baseline-version: 0
-    locations: classpath:db/migration/common, db/migration/test
-    url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    user: ${TEST_MYSQL_USER}
-    password: ${TEST_MYSQL_PASS}
-    out-of-order: true # 버전 순서 옵션, 배포 서버에서는 꺼야함
-    validate-on-migrate: true  # 마이그레이션 파일 유효성 검사
-    clean-disabled: false  # flyway clean
+    enabled: false
 
   data:
     redis:

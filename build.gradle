@@ -39,11 +39,11 @@ flyway {
 		password = System.getenv("PROD_MYSQL_PASS")
 		locations = ["classpath:db/migration/common", "classpath:db/migration/prod"]
 		cleanDisabled = true
-	} else if (profile == "local" || profile == "test") {
+	} else if (profile == "local") {
 		url = System.getenv("TEST_DB_URL")
 		user = System.getenv("TEST_MYSQL_USER")
 		password = System.getenv("TEST_MYSQL_PASS")
-		locations = ["classpath:db/migration/common", "classpath:db/migration/test"]
+		locations = ["classpath:db/migration/common", "classpath:db/migration/local"]
 		cleanDisabled = false
 	} else {
 		throw new GradleException("❌ 정의된 프로필 없음: '${profile}'. Use -Pprofile=test or -Pprofile=prod")

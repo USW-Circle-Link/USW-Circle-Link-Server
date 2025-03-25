@@ -61,11 +61,6 @@ spring:
 cors:
   allowed-origins: ${TEST_SERVER_ALLOWED_ORIGINS}
 
- # 쿠키 설정 추가
-security:
-  cookie:
-    secure: false
-
 cloud:
   aws:
     s3:

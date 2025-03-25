@@ -9,11 +9,14 @@ server:
 logging:
   level:
     root: info
+    # 서비스
     com.USWCicrcleLink.server: debug
-    org.springframework.security: warn
+    # 스프링 프레임워크
+    org.springframework: error
     org.springframework.web: warn
     org.apache.catalina.core: warn
-    org.springframework: error
+    org.springframework.security: warn
+    # JPA
     org.hibernate.SQL: info
     org.hibernate.type: info
     p6spy: info
@@ -38,11 +41,16 @@ spring:
     password: ${TEST_MYSQL_PASS}
 
   jpa:
+    defer-datasource-initialization: false # flyway 실행 후 jpa
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
+    generate-ddl: false
+
+  flyway:
+    enabled: false
 
   data:
     redis:

@@ -6,6 +6,7 @@ import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Component
 @Transactional
 @RequiredArgsConstructor
-@org.springframework.context.annotation.Profile("prod")
+@Profile({"local", "test"})
 public class SeedData {
     private final PasswordEncoder passwordEncoder;
     private final AdminRepository adminRepository;
@@ -22,8 +23,8 @@ public class SeedData {
 
     @PostConstruct
     public void init() {
-        if (adminRepository.findTop1ByOrderByAdminIdAsc()==null){
-        initAdmin();
+        if (adminRepository.findTop1ByOrderByAdminIdAsc() == null) {
+            initAdmin();
         }
     }
 

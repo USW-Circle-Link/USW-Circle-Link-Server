@@ -43,6 +43,19 @@ spring:
     properties:
       hibernate:
         format_sql: false
+    generate-ddl: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    locations: classpath:db/migration/common, db/migration/prod
+    url: jdbc:mysql://${PROD_MYSQL_HOST}:${PROD_MYSQL_PORT}/${PROD_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    user: ${PROD_MYSQL_USER}
+    password: ${PROD_MYSQL_PASS}
+    validate-on-migrate: true  # 마이그레이션 파일 유효성 검사
+    out-of-order: false
+    clean-disabled: true
 
   data:
     redis:

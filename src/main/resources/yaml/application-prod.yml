@@ -8,8 +8,9 @@ server:
 
 logging:
   level:
-    root: warn
-    com.USWCicrcleLink.server: info  # 프로젝트 관련 로그
+    root: error
+    com.USWCicrcleLink.server: error  # 프로젝트 관련 로그
+    com.USWCicrcleLink.server.global.security.jwt.filter.LoggingFilter: info
     org.springframework.security: error  # Spring Security 로그
     org.springframework.web: error  # 서블릿 로그
     org.apache.catalina.core: error  # Tomcat 로그
@@ -43,6 +44,19 @@ spring:
     properties:
       hibernate:
         format_sql: false
+    generate-ddl: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    locations: classpath:db/migration/common, db/migration/prod
+    url: jdbc:mysql://${PROD_MYSQL_HOST}:${PROD_MYSQL_PORT}/${PROD_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    user: ${PROD_MYSQL_USER}
+    password: ${PROD_MYSQL_PASS}
+    validate-on-migrate: true  # 마이그레이션 파일 유효성 검사
+    out-of-order: false
+    clean-disabled: true
 
   data:
     redis:
@@ -52,11 +66,6 @@ spring:
 # CORS 설정 추가
 cors:
   allowed-origins: ${PROD_SERVER_ALLOWED_ORIGINS}
-
-# 쿠키 설정 추가
-security:
-  cookie:
-    secure: true
 
 cloud:
   aws:

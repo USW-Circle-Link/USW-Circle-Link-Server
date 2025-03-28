@@ -57,11 +57,19 @@ public class DummyData {
 
     @PostConstruct
     public void init() {
-        initAdmin();
-        initUser1();
-        initUser2();
-        initUser3();
-        initclub();
+        if (adminRepository.count() == 0) {
+            initAdmin();
+        }
+        if (userRepository.count() == 0 ||
+                clubRepository.count() == 0 ||
+                clubCategoryMappingRepository.count() == 0 ||
+                clubMemberTempRepository.count() == 0 ||
+                clubHashtagRepository.count() == 0) {
+            initUser1();
+            initUser2();
+            initUser3();
+            initClub();
+        }
     }
 
     //관리자 동연회 데이터
@@ -69,8 +77,8 @@ public class DummyData {
         // 동아리 연합회 관리자 계정
         Admin clubUnion = Admin.builder()
                 .adminUUID(UUID.randomUUID())
-                .adminAccount("clubUnion")
-                .adminPw(passwordEncoder.encode("hpsEetcTf7ymgy6"))  // 비밀번호 암호화
+                .adminAccount("clubAdmin")
+                .adminPw(passwordEncoder.encode("clubAdmin!"))  // 비밀번호 암호화
                 .adminName("동아리 연합회")
                 .role(Role.ADMIN)
                 .build();
@@ -78,8 +86,8 @@ public class DummyData {
         // 개발자 계정
         Admin developer = Admin.builder()
                 .adminUUID(UUID.randomUUID())
-                .adminAccount("developer")
-                .adminPw(passwordEncoder.encode("5MYcg7Cuvrh50fS"))  // 비밀번호 암호화
+                .adminAccount("devAdmin")
+                .adminPw(passwordEncoder.encode("devAdmin!"))  // 비밀번호 암호화
                 .adminName("운영자")
                 .role(Role.ADMIN)
                 .build();
@@ -94,9 +102,9 @@ public class DummyData {
 
         User user1 = User.builder()
                 .userUUID(UUID.randomUUID())
-                .userAccount("user11")
-                .userPw(passwordEncoder.encode("qwer1234!"))
-                .email("user111")
+                .userAccount("user111")
+                .userPw(passwordEncoder.encode("user111!"))
+                .email("user111@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -106,8 +114,8 @@ public class DummyData {
         User user2 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user222")
-                .userPw(passwordEncoder.encode("qwer1234!"))
-                .email("user222")
+                .userPw(passwordEncoder.encode("user222!"))
+                .email("user222@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -117,8 +125,8 @@ public class DummyData {
         User user3 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user333")
-                .userPw(passwordEncoder.encode("qwer1234!"))
-                .email("user333")
+                .userPw(passwordEncoder.encode("user333!"))
+                .email("user333@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -128,8 +136,8 @@ public class DummyData {
         User user4 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user444")
-                .userPw(passwordEncoder.encode("qwer1234!"))
-                .email("user444")
+                .userPw(passwordEncoder.encode("user444!"))
+                .email("user444@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -139,7 +147,7 @@ public class DummyData {
         User user5 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user555")
-                .userPw(passwordEncoder.encode("qwer1234!"))
+                .userPw(passwordEncoder.encode("user555!"))
                 .email("user555@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
@@ -150,7 +158,7 @@ public class DummyData {
         User user6 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user666")
-                .userPw(passwordEncoder.encode("qwer1234!"))
+                .userPw(passwordEncoder.encode("user666!"))
                 .email("user666@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
@@ -161,7 +169,7 @@ public class DummyData {
         User user7 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user777")
-                .userPw(passwordEncoder.encode("qwer1234!"))
+                .userPw(passwordEncoder.encode("user777!"))
                 .email("user777@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
@@ -172,7 +180,7 @@ public class DummyData {
         User user8 = User.builder()
                 .userUUID(UUID.randomUUID())
                 .userAccount("user888")
-                .userPw(passwordEncoder.encode("qwer1234!"))
+                .userPw(passwordEncoder.encode("user888!"))
                 .email("user888@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
@@ -182,9 +190,9 @@ public class DummyData {
 
         Profile profile1 = Profile.builder()
                 .user(user1)
-                .userName("김땡떙")
+                .userName("김이름")
                 .studentNumber("00001001")
-                .userHp("01012345678")
+                .userHp("01012345601")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -194,9 +202,9 @@ public class DummyData {
 
         Profile profile2 = Profile.builder()
                 .user(user2)
-                .userName("김빵빵")
+                .userName("방이름")
                 .studentNumber("00001002")
-                .userHp("01012345678")
+                .userHp("01012345602")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -206,9 +214,9 @@ public class DummyData {
 
         Profile profile3 = Profile.builder()
                 .user(user3)
-                .userName("user3")
+                .userName("최이름")
                 .studentNumber("00001003")
-                .userHp("01012345678")
+                .userHp("01012345603")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -218,9 +226,9 @@ public class DummyData {
 
         Profile profile4 = Profile.builder()
                 .user(user4)
-                .userName("user4")
+                .userName("이이름")
                 .studentNumber("00001004")
-                .userHp("01012345678")
+                .userHp("01012345604")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -231,9 +239,9 @@ public class DummyData {
         // 동아리 회원 정렬 가나다순, 정회원, 비회원
         Profile profile5 = Profile.builder()
                 .user(user5)
-                .userName("이성계")
+                .userName("유이름")
                 .studentNumber("00001005")
-                .userHp("01011112222")
+                .userHp("01012345605")
                 .major("컴퓨터공학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -243,9 +251,9 @@ public class DummyData {
 
         Profile profile6 = Profile.builder()
                 .user(user6)
-                .userName("이순신")
+                .userName("정이름")
                 .studentNumber("00001006")
-                .userHp("01022223333")
+                .userHp("01012345606")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -255,9 +263,9 @@ public class DummyData {
 
         Profile profile7 = Profile.builder()
                 .user(user7)
-                .userName("장보고")
+                .userName("송이름")
                 .studentNumber("00001007")
-                .userHp("01033334444")
+                .userHp("01012345607")
                 .major("데이터과학부")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -267,9 +275,9 @@ public class DummyData {
 
         Profile profile8 = Profile.builder()
                 .user(user8)
-                .userName("김유신")
+                .userName("남궁이름")
                 .studentNumber("00001008")
-                .userHp("01044445555")
+                .userHp("01012345608")
                 .major("소프트웨어학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -279,9 +287,9 @@ public class DummyData {
 
         // 다른 동아리의 비회원 프로필 수정
         Profile profile11 = Profile.builder()
-                .userName("김엑삼")//
-                .studentNumber("00001011")
-                .userHp("01077778888")
+                .userName("박이름")//
+                .studentNumber("00001009")
+                .userHp("01012345609")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -291,9 +299,9 @@ public class DummyData {
 
         // 엑셀로 들어간 비회원(FLAG, BADMINTON, FLAG, BADMINTON)
         Profile profile9 = Profile.builder()
-                .userName("김엑원")
-                .studentNumber("00001009")
-                .userHp("01055556666")
+                .userName("한이름")
+                .studentNumber("00001010")
+                .userHp("01012345610")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -302,9 +310,9 @@ public class DummyData {
         profileRepository.save(profile9);
 
         Profile profile10 = Profile.builder()
-                .userName("김엑투")// 틀린 정보
-                .studentNumber("00001010")
-                .userHp("01066667777")
+                .userName("강이름")// 틀린 정보
+                .studentNumber("00001011")
+                .userHp("01012345611")
                 .major("정보보호학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -314,13 +322,13 @@ public class DummyData {
 
         // 기존 동아리 회원 가입 요청 프로필(FLAG, BADMINTON, FLAG)
         ClubMemberTemp clubMemberTemp1 = ClubMemberTemp.builder()
-                .profileTempAccount("clubMemberTemp1")
-                .profileTempPw(passwordEncoder.encode("clubMemberTemp111"))
-                .profileTempName("김엑원")
-                .profileTempStudentNumber("00001009")
-                .profileTempHp("01055556666")
+                .profileTempAccount("clubMemberTemp111")
+                .profileTempPw(passwordEncoder.encode("clubMemberTemp111!"))
+                .profileTempName("하이름")
+                .profileTempStudentNumber("00001012")
+                .profileTempHp("01001110111")
                 .profileTempMajor("정보보호학과")
-                .profileTempEmail("clubMemberTemp1")
+                .profileTempEmail("clubMemberTemp1@example.com")
                 .totalClubRequest(2)
                 .clubRequestCount(0)
                 .clubMemberTempExpiryDate(LocalDateTime.now().plusDays(7))
@@ -328,13 +336,13 @@ public class DummyData {
         clubMemberTempRepository.save(clubMemberTemp1);
 
         ClubMemberTemp clubMemberTemp2 = ClubMemberTemp.builder()
-                .profileTempAccount("clubMemberTemp2")
-                .profileTempPw(passwordEncoder.encode("clubMemberTemp222"))
-                .profileTempName("김엑둘")
-                .profileTempStudentNumber("00001010")
-                .profileTempHp("01066667777")
+                .profileTempAccount("clubMemberTemp222")
+                .profileTempPw(passwordEncoder.encode("clubMemberTemp222!"))
+                .profileTempName("신이름")
+                .profileTempStudentNumber("00001013")
+                .profileTempHp("01002220222")
                 .profileTempMajor("정보보호학과")
-                .profileTempEmail("clubMemberTemp2@naver.com")
+                .profileTempEmail("clubMemberTemp2@@example.com")
                 .totalClubRequest(1)
                 .clubRequestCount(0)
                 .clubMemberTempExpiryDate(LocalDateTime.now().plusDays(7))
@@ -704,9 +712,9 @@ public class DummyData {
         //유저 데이터
         User user = User.builder()
                 .userUUID(UUID.randomUUID())
-                .userAccount("user22")
-                .userPw(passwordEncoder.encode(""))
-                .email("user22")
+                .userAccount("user999")
+                .userPw(passwordEncoder.encode("user999!"))
+                .email("user999@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -716,9 +724,9 @@ public class DummyData {
 
         Profile profile = Profile.builder()
                 .user(user)
-                .userName("이댕댕")
-                .studentNumber("00001008")
-                .userHp("01012345678")
+                .userName("조이름")
+                .studentNumber("00001014")
+                .userHp("01012345612")
                 .major("컴퓨터SW학과")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -791,9 +799,9 @@ public class DummyData {
 
         User user = User.builder()
                 .userUUID(UUID.randomUUID())
-                .userAccount("user33")
-                .userPw(passwordEncoder.encode("12345"))
-                .email("user33")
+                .userAccount("user000")
+                .userPw(passwordEncoder.encode("user000!"))
+                .email("user000@example.com")
                 .userCreatedAt(LocalDateTime.now())
                 .userUpdatedAt(LocalDateTime.now())
                 .role(Role.USER)
@@ -803,9 +811,9 @@ public class DummyData {
 
         Profile profile = Profile.builder()
                 .user(user)
-                .userName("박둥둥")
-                .studentNumber("00001009")
-                .userHp("01012345678")
+                .userName("오이름")
+                .studentNumber("00001015")
+                .userHp("01012345613")
                 .major("데이터과학부")
                 .profileCreatedAt(LocalDateTime.now())
                 .profileUpdatedAt(LocalDateTime.now())
@@ -859,7 +867,7 @@ public class DummyData {
         aplictRepository.save(aplict);
     }
 
-    void initclub() {
+    void initClub() {
         //테니스 동아리
         Club tennisclub = Club.builder()
                 .clubName("테니스")
@@ -1064,6 +1072,5 @@ public class DummyData {
                 .build();
         leaderRepository.save(catLeader);
     }
-
 
 }

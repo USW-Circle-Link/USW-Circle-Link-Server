@@ -72,6 +72,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET,"/my-notices","/mypages/my-clubs","/mypages/aplict-clubs","/profiles/me","/my-notices/{noticeUUID}/details").hasRole("USER");
                     auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET, "/users/exit/email").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
 

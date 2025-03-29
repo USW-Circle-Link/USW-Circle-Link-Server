@@ -196,6 +196,13 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>("로그인 성공", tokenDto));
     }
 
+    // 회원 탈퇴 - 이메일 보여주기
+    @GetMapping("/exit/email")
+    public ApiResponse<String> getWithdrawalEmail() {
+        User user = userService.getUserByAuth();
+        return new ApiResponse<>(user.getEmail());
+    }
+
     // 회원 탈퇴 요청 및 메일 전송
     @PostMapping("/exit/send-code")
     @RateLimite(action = "WITHDRAWAL_EMAIL")

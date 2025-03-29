@@ -1,7 +1,6 @@
 package com.USWCicrcleLink.server.user.api;
 
 import com.USWCicrcleLink.server.email.domain.EmailToken;
-import com.USWCicrcleLink.server.email.service.EmailTokenService;
 import com.USWCicrcleLink.server.global.bucket4j.RateLimite;
 import com.USWCicrcleLink.server.global.exception.errortype.EmailTokenException;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
@@ -9,10 +8,12 @@ import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
 import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
+import com.USWCicrcleLink.server.user.domain.SignupToken;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
 import com.USWCicrcleLink.server.user.dto.*;
 import com.USWCicrcleLink.server.user.service.AuthTokenService;
+import com.USWCicrcleLink.server.user.service.SignupTokenService;
 import com.USWCicrcleLink.server.user.service.UserService;
 import com.USWCicrcleLink.server.user.service.WithdrawalTokenService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,8 +37,7 @@ public class UserController {
     private final UserService userService;
     private final AuthTokenService authTokenService;
     private final WithdrawalTokenService withdrawalTokenService;
-    private final EmailTokenService emailTokenService;
-
+    private final SignupTokenService signupTokenService;
     @PatchMapping("/userpw")
     public ApiResponse<String> updateUserPw(@Validated(ValidationSequence.class) @RequestBody UpdatePwRequest request) {
         userService.updateNewPW(request);
@@ -52,6 +52,7 @@ public class UserController {
         ApiResponse<String> response = new ApiResponse<>("사용 가능한 ID 입니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     // 기존회원 가입시 이메일 중복 확인
     @PostMapping("/check/email/duplicate")
@@ -77,8 +78,8 @@ public class UserController {
     @PostMapping("/temporary/register")
     public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Validated(ValidationSequence.class) @RequestBody EmailDTO request)  {
 
-        // 이메일 중복 검증
-        EmailToken emailToken = userService.checkEmailDuplication(request.getEmail());
+        // 이메일 토큰이 존재하는지 확인
+        EmailToken emailToken = userService.checkEmailTokenIsExist(request.getEmail());
 
         // 신규회원가입을 위한 이메일 전송
         userService.sendSignUpMail(emailToken);
@@ -96,7 +97,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
 
         try {
-            // 제한시간 안에 인증에 성공
+            // 제한시간 안에 인증에 성공 -> SignupToken 생성
             userService.verifyEmailToken(emailTokenUUID);
             modelAndView.setViewName("success");
         } catch (EmailTokenException e) {
@@ -113,26 +114,30 @@ public class UserController {
     @GetMapping("/email/verification")
     public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated(ValidationSequence.class) @RequestBody EmailDTO request){
 
-        EmailToken emailToken = emailTokenService.checkEmailIsVerified(request.getEmail());
-
+        // signupToken 조회
+        SignupToken singUpToken = signupTokenService.getSignUpTokenByEmail(request.getEmail());
         ApiResponse<SignUpuuidResponse> response = new ApiResponse<>("인증 확인 버튼 클릭 후, 이메일 인증 완료",
-                new SignUpuuidResponse(emailToken.getEmailTokenUUID(),emailToken.getSignupUUID()));
+                new SignUpuuidResponse(singUpToken.getEmailTokenUUID(),singUpToken.getSignupUUID()));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 신규 회원 가입 정보 등록하기 (다음 버튼 누른 후)
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<Void>> signUp(@Validated(ValidationSequence.class) @RequestBody  SignUpRequest request,@RequestHeader("emailTokenUUID") UUID emailTokenUUID,@RequestHeader("signupUUID") UUID signupUUID) {
+    public ResponseEntity<ApiResponse<Void>> signUp(@Validated(ValidationSequence.class) @RequestBody  SignUpRequest request,@RequestHeader("emailTokenUUID") UUID emailTokenUUID,@RequestHeader("signupUUID") UUID requestSignupUUID) {
 
         // 인증을 받은 사용자가 맞는지 검증하기
-        String email = userService.isEmailVerified(emailTokenUUID, signupUUID);
+        SignupToken signupToken =signupTokenService.verifyUser(emailTokenUUID, requestSignupUUID);
 
         // 신규 회원가입을 위한 조건 검사
         userService.checkNewSignupCondition(request);
 
         // 회원가입 진행
-        userService.signUpUser(request,email);
+        userService.signUpUser(request,signupToken.getEmail());
+
+        // signupToken 삭제
+        signupTokenService.deleteSignUpTokenFromRedis(signupToken);
+
         return ResponseEntity.ok(new ApiResponse<>("회원가입이 정상적으로 완료되어 로그인이 가능합니다."));
     }
 
@@ -161,7 +166,7 @@ public class UserController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    // 비밀 번호 찾기- 인증 코드 검증
+    // 비밀번호 찾기- 인증 코드 검증
     @PostMapping("/auth/verify-token")
     @RateLimite(action = "VALIDATE_CODE")
     public ApiResponse<String> verifyAuthToken(@RequestHeader("uuid") UUID uuid,@Validated(ValidationSequence.class) @RequestBody AuthCodeRequest request) {
@@ -191,6 +196,13 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>("로그인 성공", tokenDto));
     }
 
+    // 회원 탈퇴 - 이메일 보여주기
+    @GetMapping("/exit/email")
+    public ApiResponse<String> getWithdrawalEmail() {
+        User user = userService.getUserByAuth();
+        return new ApiResponse<>(user.getEmail());
+    }
+
     // 회원 탈퇴 요청 및 메일 전송
     @PostMapping("/exit/send-code")
     @RateLimite(action = "WITHDRAWAL_EMAIL")
@@ -210,11 +222,11 @@ public class UserController {
     public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,@Validated(ValidationSequence.class) @RequestBody AuthCodeRequest authCodeRequest){
 
         // 토큰 검증 및 삭제
-        UUID uuid = withdrawalTokenService.verifyWithdrawalToken(authCodeRequest);
-        withdrawalTokenService.deleteWithdrawalToken(uuid);
+        UUID userUUID = withdrawalTokenService.verifyWithdrawalToken(authCodeRequest);
+        withdrawalTokenService.deleteWithdrawalToken(userUUID);
 
         // 인증 토큰 존재시 인증 토큰도 삭제
-        authTokenService.delete(uuid);
+        authTokenService.delete(userUUID);
 
         // 회원 탈퇴 진행
         userService.cancelMembership(request,response);

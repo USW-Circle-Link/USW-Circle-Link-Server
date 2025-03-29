@@ -1,11 +1,11 @@
 package com.USWCicrcleLink.server.global.redis;
 
 import com.USWCicrcleLink.server.email.domain.EmailToken;
+import com.USWCicrcleLink.server.user.domain.SignupToken;
 import io.lettuce.core.RedisClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -50,12 +50,16 @@ public class RedisConfig {
         config.setDatabase(2); // EmailToken 전용 DB 2번
         return new LettuceConnectionFactory(config);
     }
+    @Bean
+    public RedisConnectionFactory signUpTokenRedisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, Integer.parseInt(redisPort));
+        config.setDatabase(3); //SignupToken 전용 DB 3번
+        return new LettuceConnectionFactory(config);
+    }
 
-
-    @Primary
     @Bean(name = "redisTemplate")
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
@@ -65,12 +69,11 @@ public class RedisConfig {
 
 
     @Bean(name = "bucketRedisTemplate")
-    public RedisTemplate<String, String> bucketRedisTemplate() {
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(bucketRedisConnectionFactory());
-
+    public RedisTemplate<String, Object> bucketRedisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Object.class));
         return redisTemplate;
     }
 
@@ -78,11 +81,19 @@ public class RedisConfig {
     public RedisTemplate<String, EmailToken> emailTokenRedisTemplate() {
         RedisTemplate<String, EmailToken> template = new RedisTemplate<>();
         template.setConnectionFactory(emailTokenRedisConnectionFactory());
-
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(EmailToken.class));
-
         return template;
     }
+
+    @Bean(name = "singUpTokenRedisTemplate")
+    public RedisTemplate<String, SignupToken> signUpTokenRedisTemplate() {
+        RedisTemplate<String, SignupToken> template = new RedisTemplate<>();
+        template.setConnectionFactory(signUpTokenRedisConnectionFactory());
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(SignupToken.class));
+        return template;
+    }
+
 
 }

@@ -1,15 +1,15 @@
 package com.USWCicrcleLink.server.user.service;
 
-import com.USWCicrcleLink.server.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.SignupTokenException;
 import com.USWCicrcleLink.server.user.domain.SignupToken;
-import com.USWCicrcleLink.server.user.repository.SignupTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.UUID;
 
 @Service
@@ -17,49 +17,70 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SignupTokenService {
 
-    private final SignupTokenRepository signupTokenRepository;
+    private final RedisTemplate<String, SignupToken> signUpTokenRedisTemplate;
 
-    // SignupToken 생성
+    // SignupToken 저장
     @Transactional
-    public void createSignupToken(EmailToken emailToken) {
-        log.debug("SignupToken 생성 시작 - email: {}", emailToken.getEmail());
-        signupTokenRepository.save(SignupToken.createSignupToken(emailToken));
-        log.debug("SignupToken 생성 완료");
+    public void saveSignUpToken(SignupToken signUpToken) {
+
+        String keyByUUID = "signUpToken:" + signUpToken.getEmailTokenUUID().toString();
+        String keyByEmail = "signUpToken:" + signUpToken.getEmail();
+
+        // 1시간 TTL 설정하여 저장
+        signUpTokenRedisTemplate.opsForValue().set(keyByUUID, signUpToken,Duration.ofHours(1));
+        signUpTokenRedisTemplate.opsForValue().set(keyByEmail, signUpToken,Duration.ofHours(1));
     }
 
-    // 이메일로 SignupToken 조회
-    public SignupToken getSignupTokenByEmail(String email) {
-        log.debug("SignupToken 이메일 조회 시작 - email: {}", email);
-        return signupTokenRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    log.error("SignupToken 조회 실패 - email: {}", email);
-                    return new SignupTokenException(ExceptionType.SIGNUP_TOKEN_NOT_FOUND);
-                });
-    }
+    // uuid로 이메일 토큰 조회
+    @Transactional(readOnly = true)
+    public SignupToken getSignUpTokenByUUID(String emailTokenUUID) {
+        String keyByUUID = "signUpToken:" + emailTokenUUID;
+        SignupToken signupToken = signUpTokenRedisTemplate.opsForValue().get(keyByUUID);
 
-    // 이메일 인증이 완료된 사용자인지 검증하기
-    public SignupToken verifyUser(UUID emailTokenUUID, UUID requestSignupUUID) {
-        log.debug("이메일 인증 유저 검증 시작 - emailTokenUUID: {}, requestSignupUUID: {}", emailTokenUUID, requestSignupUUID);
-        SignupToken signupToken = signupTokenRepository.findByEmailTokenUUID(emailTokenUUID)
-                .orElseThrow(() -> {
-                    log.error("SignupToken 조회 실패 - emailTokenUUID: {}", emailTokenUUID);
-                    return new SignupTokenException(ExceptionType.SIGNUP_TOKEN_NOT_FOUND);
-                });
-
-        if (!signupToken.getSignupUUID().equals(requestSignupUUID)) {
-            log.error("SignupUUID 불일치 - 저장된: {}, 요청된: {}", signupToken.getSignupUUID(), requestSignupUUID);
-            throw new SignupTokenException(ExceptionType.SIGNUP_UUID_IS_NOT_MATCH);
+        // emailTokenUUID에 해당하는 SignupToken 존재하지 않는 경우
+        if(signupToken==null){
+            throw new SignupTokenException(ExceptionType.SIGNUP_TOKEN_NOT_FOUND);
         }
 
-        log.debug("이메일 인증 유저 검증 성공");
         return signupToken;
     }
 
-    // signupToken 삭제
+    // email로 이메일 토큰 조회
+    @Transactional(readOnly = true)
+    public SignupToken getSignUpTokenByEmail(String email) {
+
+        String keyByEmail = "signUpToken:" + email;
+        SignupToken signUpToken = signUpTokenRedisTemplate.opsForValue().get(keyByEmail);
+
+        // signUpToken이 존재하지 않는 경우 -> 미인증
+        if(signUpToken==null){
+            throw new SignupTokenException(ExceptionType.SIGNUP_TOKEN_NOT_FOUND);
+        }
+        return signUpToken;
+    }
+
+    // SignUpToken 검증하기 (인증받은 사용자가 맞는지 확인하기)
+    public SignupToken verifyUser(UUID emailTokenUUID, UUID requestSignupUUID) {
+
+        // emailTokenUUID로 SingUpToken 조회
+        SignupToken signupToken = getSignUpTokenByUUID(emailTokenUUID.toString());
+
+        // SignUpToken에 저장된 uuid와 매개변수 uuid값이 일치하는지 확인
+        if(!signupToken.getSignupUUID().equals(requestSignupUUID)){
+            throw new SignupTokenException(ExceptionType.SIGNUP_UUID_IS_NOT_MATCH);
+        }
+
+        return signupToken;
+    }
+
+    // SignUpToken 레디스에서 삭제하기
     @Transactional
-    public void delete(SignupToken signupToken) {
-        log.debug("SignupToken 삭제 시작 - emailTokenUUID: {}", signupToken.getEmailTokenUUID());
-        signupTokenRepository.delete(signupToken);
-        log.debug("SignupToken 삭제 완료");
+    public void deleteSignUpTokenFromRedis(SignupToken signupToken) {
+
+        String keyByUUID = "signUpToken:" + signupToken.getEmailTokenUUID();
+        String keyByEmail = "signUpToken:" + signupToken.getEmail();
+
+        signUpTokenRedisTemplate.delete(keyByUUID);
+        signUpTokenRedisTemplate.delete(keyByEmail);
     }
 }

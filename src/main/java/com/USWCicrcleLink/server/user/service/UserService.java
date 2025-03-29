@@ -3,7 +3,6 @@ package com.USWCicrcleLink.server.user.service;
 import com.USWCicrcleLink.server.club.club.domain.Club;
 import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
 import com.USWCicrcleLink.server.email.domain.EmailToken;
-import com.USWCicrcleLink.server.email.repository.EmailTokenRepository;
 import com.USWCicrcleLink.server.email.service.EmailService;
 import com.USWCicrcleLink.server.email.service.EmailTokenService;
 import com.USWCicrcleLink.server.global.bucket4j.RateLimite;
@@ -18,6 +17,7 @@ import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.profile.service.ProfileService;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
 import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
+import com.USWCicrcleLink.server.user.domain.SignupToken;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
 import com.USWCicrcleLink.server.user.dto.*;
@@ -28,6 +28,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,13 +53,13 @@ public class UserService {
     private final ProfileService profileService;
     private final ClubMemberTempRepository clubMemberTempRepository;
     private final ClubRepository clubRepository;
-    private final EmailTokenRepository emailTokenRepository;
     private final EmailService emailService;
     private final EmailTokenService emailTokenService;
     private final ClubMemberAccountStatusService clubMemberAccountStatusService;
     private final PasswordService passwordService;
     private final IntegrationAuthService integrationAuthService;
     private final SignupTokenService signupTokenService;
+
 
     private static final int FCM_TOKEN_CERTIFICATION_TIME = 60;
 
@@ -225,24 +227,26 @@ public class UserService {
     public void verifyEmailToken(UUID emailTokenUUID) {
 
         // 제한시간(5분)안에 이메일 인증을 했는지 확인
-        EmailToken emailToken = emailTokenRepository.findById(emailTokenUUID)
-                .orElseThrow(() -> {
-                    log.error("이메일 토큰 만료 or  존재하지 않음: {}", emailTokenUUID);
-                    return new EmailTokenException(ExceptionType.EMAIL_TOKEN_IS_EXPIRED);
-                });
+        EmailToken emailToken = emailTokenService.getEmailTokenByUUID(emailTokenUUID.toString());
 
-        // 인증이 완료된 경우 회원가입을 위한 SignupToken 생성
+        // 이메일 토큰이 존재하지 않는 경우
+        if(emailToken==null){
+            log.error("이메일 토큰 만료 or  존재하지 않음: {}", emailTokenUUID);
+            throw  new EmailTokenException(ExceptionType.EMAIL_TOKEN_IS_EXPIRED);
+        }
+
+        // 이메일 토큰이 존재하는 경우,  회원가입을 위한 SignupToken 생성 및 저장
         try {
-            signupTokenService.createSignupToken(emailToken);
+            SignupToken signupToken = SignupToken.createSignupToken(emailToken);
+            signupTokenService.saveSignUpToken(signupToken);
+            log.debug("SignUpToken 생성완료 - emailTokenUUID={} ",emailTokenUUID);
         } catch (Exception e) {
             log.error("SignupToken 생성 실패: {}", emailTokenUUID, e);
             throw new SignupTokenException(ExceptionType.SIGNUP_TOKEN_CREATION_FAILED);
         }
 
-        // redis에 저장된 emailToken 관련 객체 모두 삭제
-
-
-
+        // Reids에 저장된 emailToken 삭제
+        emailTokenService.deleteEmailTokenFromRedis(emailToken);
     }
 
 
@@ -380,23 +384,20 @@ public class UserService {
             log.error("user 테이블에서 중복된 이메일 존재, email 값= {}", email);
             throw new UserException(ExceptionType.USER_OVERLAP);
         }
-        // 회원가입 요청(이메일 토큰)이 이미 존재하는 경우(이메일 재전송)
-        else if (emailTokenRepository.findByEmail(email).isPresent()) {
-            log.debug("요청 가입 대기자 존재 - emailToken 테이블에서 중복된 이메일 존재, email 값= {}", email);
+        else if(emailTokenService.getEmailTokenByEmail(email)!=null){
 
-            // 기존 토큰 재사용 및 TTL 갱신
-            emailToken = emailTokenRepository.findByEmail(email).get();
-            log.debug("기존 emailToken 조회 완료, UUID: {}", emailToken.getEmailTokenUUID());
-            emailTokenRepository.save(emailToken); // TTL 5분으로 재설정
-            log.debug("TTL 재설정 완료");
+            // 이메일 토큰 조회
+            emailToken = emailTokenService.getEmailTokenByEmail(email);
+            //  TTL 갱신 후 반환
+            EmailToken updatedEmailToken = emailTokenService.updateExpirationTime(emailToken);
+            log.debug("이메일 토큰이 이미 존재하여 TTL 갱신 후 재전송 진행, email={}", email);
+            return updatedEmailToken;
         }
-        // 이메일 토큰이 존재하지 않는 경우 -> 새로운 이메일 토큰 생성
-        else{
-            emailToken = emailTokenService.createEmailToken(email);
+        else {
+            // 토큰이 존재하지 않는 경우, 새로운 토큰 생성 및 저장
+            log.debug("이메일 토큰이 존재하지 않아, 새로운 이메일 토큰 생성");
+            return emailTokenService.saveEmailToken(emailTokenService.createEmailToken(email));
         }
-        log.debug("이메일 중복 확인 완료");
-
-        return emailToken;
     }
 
 

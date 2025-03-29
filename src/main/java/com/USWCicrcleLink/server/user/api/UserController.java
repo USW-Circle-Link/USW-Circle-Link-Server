@@ -115,9 +115,9 @@ public class UserController {
     public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated(ValidationSequence.class) @RequestBody EmailDTO request){
 
         // signupToken 조회
-        SignupToken singupToken = signupTokenService.getSignupTokenByEmail(request.getEmail());
+        SignupToken singUpToken = signupTokenService.getSignUpTokenByEmail(request.getEmail());
         ApiResponse<SignUpuuidResponse> response = new ApiResponse<>("인증 확인 버튼 클릭 후, 이메일 인증 완료",
-                new SignUpuuidResponse(singupToken.getEmailTokenUUID(),singupToken.getSignupUUID()));
+                new SignUpuuidResponse(singUpToken.getEmailTokenUUID(),singUpToken.getSignupUUID()));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -136,8 +136,7 @@ public class UserController {
         userService.signUpUser(request,signupToken.getEmail());
 
         // signupToken 삭제
-        signupTokenService.delete(signupToken);
-
+        signupTokenService.deleteSignUpTokenFromRedis(signupToken);
 
         return ResponseEntity.ok(new ApiResponse<>("회원가입이 정상적으로 완료되어 로그인이 가능합니다."));
     }

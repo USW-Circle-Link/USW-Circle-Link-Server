@@ -1,30 +1,29 @@
 package com.USWCicrcleLink.server.user.domain;
 
 import com.USWCicrcleLink.server.global.bucket4j.ClientIdentifier;
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.util.Random;
+import java.util.UUID;
 
-@Entity
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "WITHDRAWAL_TOKEN")
-public class WithdrawalToken implements ClientIdentifier {
+@RedisHash(value = "withdrawalToken",timeToLive = 300)
+public class WithdrawalToken implements ClientIdentifier, Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "WITHDRAWAL_ID")
-    private Long withdrawalId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", unique = true)
-    private User user;
+    @Column(name = "userUUID")
+    private UUID userUUID;
 
     @Column(name="withdrawal_code",nullable = false)
     private String withdrawalCode;
@@ -33,7 +32,7 @@ public class WithdrawalToken implements ClientIdentifier {
     public static WithdrawalToken createWithdrawalToken(User user) {
         String authCode = generateRandomAuthCode();
         return WithdrawalToken.builder()
-                .user(user)
+                .userUUID(user.getUserUUID())
                 .withdrawalCode(authCode)
                 .build();
     }
@@ -60,7 +59,6 @@ public class WithdrawalToken implements ClientIdentifier {
 
     @Override
     public String getClientId() {
-        String uuid= String.valueOf(this.user.getUserUUID());
-        return uuid;
+        return String.valueOf(this.userUUID);
     }
 }

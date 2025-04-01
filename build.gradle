@@ -1,7 +1,14 @@
+buildscript {
+	dependencies {
+		classpath 'org.flywaydb:flyway-mysql:10.0.0'
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.1'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'org.flywaydb.flyway' version '10.0.0'
 }
 
 group = 'com.USWCicrcleLink'
@@ -23,6 +30,26 @@ repositories {
 	mavenCentral()
 }
 
+def profile = project.findProperty("profile") ?: "local" // default local
+
+flyway {
+	if (profile == "prod") {
+		url = System.getenv("PROD_DB_URL")
+		user = System.getenv("PROD_MYSQL_USER")
+		password = System.getenv("PROD_MYSQL_PASS")
+		locations = ["classpath:db/migration/common", "classpath:db/migration/prod"]
+		cleanDisabled = true
+	} else if (profile == "local") {
+		url = System.getenv("TEST_DB_URL")
+		user = System.getenv("TEST_MYSQL_USER")
+		password = System.getenv("TEST_MYSQL_PASS")
+		locations = ["classpath:db/migration/common", "classpath:db/migration/local"]
+		cleanDisabled = false
+	} else {
+		throw new GradleException("❌ 정의된 프로필 없음: '${profile}'. Use -Pprofile=test or -Pprofile=prod")
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -34,18 +61,29 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 	// db
-	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// flyway
+	// https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+	implementation 'org.flywaydb:flyway-core:10.0.0'
+	implementation 'org.flywaydb:flyway-mysql:10.0.0'
+
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+	//thymeleaf
+	implementation'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	//mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -68,14 +106,6 @@ dependencies {
 	//spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
-
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-	//thymeleaf
-	implementation'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	// aws-s3
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws

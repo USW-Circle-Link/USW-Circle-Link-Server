@@ -1,29 +1,27 @@
 package com.USWCicrcleLink.server.user.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.util.Random;
+import java.util.UUID;
 
-@Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "AUTH_TOKEN_TABLE")
-public class AuthToken {
+@RedisHash(value="authToken",timeToLive = 300)
+public class AuthToken implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "auth_token_id")
-    private Long authTokenId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", unique = true)
-    private User user;
+    @Column(name="userUUID")
+    private UUID userUUID;
 
     @Column(name="auth_code",nullable = false)
     private String authCode;
@@ -32,7 +30,7 @@ public class AuthToken {
     public static AuthToken createAuthToken(User user) {
         String authCode = generateRandomAuthCode();
         return AuthToken.builder()
-                .user(user)
+                .userUUID(user.getUserUUID())
                 .authCode(authCode)
                 .build();
     }

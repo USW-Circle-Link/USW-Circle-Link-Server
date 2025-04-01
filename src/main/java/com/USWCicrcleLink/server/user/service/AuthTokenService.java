@@ -25,7 +25,7 @@ public class AuthTokenService {
     @Transactional
     public AuthToken createOrUpdateAuthToken(User user) {
         // 인증 토큰이 이미 존재하는지 확인
-        return authTokenRepository.findByUserUserUUID(user.getUserUUID())
+        return authTokenRepository.findByUserUUID(user.getUserUUID())
                 .map(existingAuthToken -> {
                     // 토큰이 존재할 경우, 인증 코드를 업데이트
                     log.debug("회원의 인증 코드 토큰이 이미 존재 user_uuid=  {}. 인증 코드 업데이트 메서드 실행.", user.getUserUUID());
@@ -46,7 +46,8 @@ public class AuthTokenService {
     public void verifyAuthToken(UUID uuid, AuthCodeRequest request) {
 
         log.debug("인증 코드 토큰 검증 메서드 시작");
-        AuthToken authToken = authTokenRepository.findByUserUserUUID(uuid)
+        // 인증 토큰이 존재하지 않는 경우, 5분이 지나서 재인증이 필요한 경우임
+        AuthToken authToken = authTokenRepository.findByUserUUID(uuid)
                 .orElseThrow(() -> new AuthCodeException(ExceptionType.AUTHCODETOKEN_NOT_EXISTS));
 
         log.debug("uuid ={} 에 해당하는 회원 조회 완료", uuid);
@@ -62,7 +63,7 @@ public class AuthTokenService {
     @Transactional
     public void deleteAuthToken(UUID uuid) {
 
-        AuthToken authToken = authTokenRepository.findByUserUserUUID(uuid)
+        AuthToken authToken = authTokenRepository.findByUserUUID(uuid)
                 .orElseThrow(() -> new AuthCodeException(ExceptionType.AUTHCODETOKEN_NOT_EXISTS));
 
         authTokenRepository.delete(authToken);
@@ -73,7 +74,7 @@ public class AuthTokenService {
     @Transactional
     public void delete(UUID uuid){
         log.debug("회원 탈퇴시, 인증 완료하지 않은 auth_token 삭제");
-        authTokenRepository.findByUserUserUUID(uuid)
+        authTokenRepository.findByUserUUID(uuid)
                 .ifPresent(authTokenRepository::delete);
     }
 }

@@ -1,18 +1,16 @@
-package com.USWCicrcleLink.server.profile.dto;
+package com.USWCicrcleLink.server.profile.profile.dto;
 
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
-import com.USWCicrcleLink.server.profile.domain.Profile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProfileResponse {
+public class ProfileRequest {
+
+    @NotBlank
+    private String userPw;
 
     @NotBlank(message = "이름은 필수 입력 값입니다.", groups = ValidationGroups.NotBlankGroup.class)
     @Size(min = 2, max = 30, message = "이름은 2~30자 이내여야 합니다.", groups = ValidationGroups.SizeGroup.class)
@@ -33,11 +31,4 @@ public class ProfileResponse {
     @Size(min = 1, max = 20, message = "학과는 1~20자 이내여야 합니다.", groups = ValidationGroups.SizeGroup.class)
     @Pattern(regexp = "^[가-힣a-zA-Z]+$", message = "학과는 한글 또는 영어만 입력 가능합니다.", groups = ValidationGroups.PatternGroup.class)
     private String major;
-
-    public ProfileResponse(Profile profile){
-        this.userName=profile.getUserName();
-        this.studentNumber=profile.getStudentNumber();
-        this.userHp=profile.getUserHp();
-        this.major=profile.getMajor();
-    }
 }

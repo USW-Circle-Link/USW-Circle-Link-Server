@@ -2,7 +2,7 @@ package com.USWCicrcleLink.server.club.club.repository;
 
 import com.USWCicrcleLink.server.club.club.domain.ClubMembers;
 
-import com.USWCicrcleLink.server.profile.domain.MemberType;
+import com.USWCicrcleLink.server.profile.profile.domain.MemberType;
 
 import java.util.List;
 

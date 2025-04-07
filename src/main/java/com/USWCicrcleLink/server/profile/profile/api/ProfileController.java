@@ -1,10 +1,10 @@
-package com.USWCicrcleLink.server.profile.api;
+package com.USWCicrcleLink.server.profile.profile.api;
 
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
-import com.USWCicrcleLink.server.profile.dto.ProfileRequest;
-import com.USWCicrcleLink.server.profile.dto.ProfileResponse;
-import com.USWCicrcleLink.server.profile.service.ProfileService;
+import com.USWCicrcleLink.server.profile.profile.dto.ProfileRequest;
+import com.USWCicrcleLink.server.profile.profile.dto.ProfileResponse;
+import com.USWCicrcleLink.server.profile.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

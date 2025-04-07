@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.aplict.domain;
 
 import com.USWCicrcleLink.server.club.club.domain.Club;
-import com.USWCicrcleLink.server.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.profile.service;
+package com.USWCicrcleLink.server.profile.profile.service;
 
 import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
 import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
@@ -6,10 +6,10 @@ import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
-import com.USWCicrcleLink.server.profile.dto.ProfileRequest;
-import com.USWCicrcleLink.server.profile.dto.ProfileResponse;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.profile.profile.dto.ProfileRequest;
+import com.USWCicrcleLink.server.profile.profile.dto.ProfileResponse;
 import com.USWCicrcleLink.server.user.domain.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -130,5 +130,8 @@ public class ProfileService {
                 });
         log.debug("프로필 중복 확인 완료- 중복없음");
     }
+
+    // 학과 선택
+
 
 }

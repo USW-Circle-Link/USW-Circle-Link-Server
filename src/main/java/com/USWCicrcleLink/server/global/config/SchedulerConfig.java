@@ -1,8 +1,8 @@
 package com.USWCicrcleLink.server.global.config;
 import com.USWCicrcleLink.server.aplict.domain.Aplict;
 import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
 import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
 import com.USWCicrcleLink.server.user.service.ClubMemberAccountStatusService;

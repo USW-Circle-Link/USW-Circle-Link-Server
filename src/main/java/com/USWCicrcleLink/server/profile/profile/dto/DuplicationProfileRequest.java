@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.profile.dto;
+package com.USWCicrcleLink.server.profile.profile.dto;
 
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
 import jakarta.validation.constraints.NotBlank;

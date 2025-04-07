@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.club.club.repository;
 
 import com.USWCicrcleLink.server.club.club.domain.ClubMembers;
-import com.USWCicrcleLink.server.profile.domain.MemberType;
+import com.USWCicrcleLink.server.profile.profile.domain.MemberType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;

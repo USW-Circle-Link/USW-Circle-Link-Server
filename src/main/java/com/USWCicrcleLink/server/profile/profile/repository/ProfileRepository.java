@@ -1,7 +1,6 @@
-package com.USWCicrcleLink.server.profile.repository;
+package com.USWCicrcleLink.server.profile.profile.repository;
 
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.user.domain.User;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.aplict.dto;
 
-import com.USWCicrcleLink.server.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

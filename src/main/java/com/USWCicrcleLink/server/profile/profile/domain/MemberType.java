@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.profile.domain;
+package com.USWCicrcleLink.server.profile.profile.domain;
 
 public enum MemberType {
     REGULARMEMBER,

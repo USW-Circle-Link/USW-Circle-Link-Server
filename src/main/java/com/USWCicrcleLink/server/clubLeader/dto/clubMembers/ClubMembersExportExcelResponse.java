@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.clubLeader.dto.clubMembers;
 
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
-import com.USWCicrcleLink.server.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

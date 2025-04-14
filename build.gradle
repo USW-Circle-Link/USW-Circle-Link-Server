@@ -39,7 +39,7 @@ flyway {
 		password = System.getenv("PROD_MYSQL_PASS")
 		locations = ["classpath:db/migration/common", "classpath:db/migration/prod"]
 		cleanDisabled = true
-	} else if (profile == "local") {
+	} else if (profile == "local" || profile == "test") {
 		url = System.getenv("TEST_DB_URL")
 		user = System.getenv("TEST_MYSQL_USER")
 		password = System.getenv("TEST_MYSQL_PASS")

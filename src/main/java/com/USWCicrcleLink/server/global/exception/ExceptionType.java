@@ -28,8 +28,8 @@ public enum ExceptionType {
      */
     EMAIL_TOKEN_NOT_FOUND("EMAIL_TOKEN-001", "해당 토큰이 존재하지 않습니다.", BAD_REQUEST),
     EMAIL_TOKEN_IS_EXPIRED("EMAIL_TOKEN-002", "토큰이 만료되었습니다. 다시 이메일인증 해주세요", BAD_REQUEST),
-    EMAIL_TOKEN_CREATION_FALILED("EMAIL_TOKEN-003", "이메일 토큰 생성중 오류가 발생했습니다.", INTERNAL_SERVER_ERROR),
-    EMAIL_TOKEN_STATUS_UPATE_FALIED("EMAIL_TOKEN-004", "이메일 토큰의 필드 업데이트 후, 저장하는 과정에서 오류가 발생했습니다.", INTERNAL_SERVER_ERROR),
+    EMAIL_TOKEN_CREATION_FAILED("EMAIL_TOKEN-003", "이메일 토큰 생성중 오류가 발생했습니다.", INTERNAL_SERVER_ERROR),
+    EMAIL_TOKEN_STATUS_UPDATE_FAILED("EMAIL_TOKEN-004", "이메일 토큰의 필드 업데이트 후, 저장하는 과정에서 오류가 발생했습니다.", INTERNAL_SERVER_ERROR),
     EMAIL_TOKEN_NOT_VERIFIED("EMAIL_TOKEN-005", "인증이 완료되지 않은 이메일 토큰입니다.",BAD_REQUEST),
 
 
@@ -73,7 +73,7 @@ public enum ExceptionType {
     CLUB_MEMBER_ACCOUNTSTATUS_CREATE_FAILED("CMEM-ACST-301","AccountStatus 객체 생성 과정중 오류가 발생했습니다",INTERNAL_SERVER_ERROR),
     CLUB_MEMBER_ACCOUNTSTATUS_SAVE_FAILED("CMEM-ACST-302","AccountStatus 객체 저장 과정중 오류가 발생했습니다",INTERNAL_SERVER_ERROR),
     CLUB_MEMBER_ACCOUNTSTATUS_COUNT_NOT_MATCH("CMEM-ACST-303","사용자가 요청한 개수와 실제 요청된 개수가 다릅니다",INTERNAL_SERVER_ERROR),
-    CLUB_MEMBER_ACCOUNTSTATUS_REQEUST_NOT_MATCH("CMEM-ACST-304","사용자가 요청한 동아리와 실제 요청값이 다르게 생성되었습니다",INTERNAL_SERVER_ERROR),
+    CLUB_MEMBER_ACCOUNTSTATUS_REQUEST_NOT_MATCH("CMEM-ACST-304","사용자가 요청한 동아리와 실제 요청값이 다르게 생성되었습니다",INTERNAL_SERVER_ERROR),
 
 
     /**

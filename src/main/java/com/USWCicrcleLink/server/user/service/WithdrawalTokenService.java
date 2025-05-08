@@ -2,6 +2,7 @@ package com.USWCicrcleLink.server.user.service;
 
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.WithdrawalTokenException;
+import com.USWCicrcleLink.server.global.security.context.AuthContext;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
@@ -9,8 +10,6 @@ import com.USWCicrcleLink.server.user.dto.AuthCodeRequest;
 import com.USWCicrcleLink.server.user.repository.WithdrawalTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,19 +21,13 @@ import java.util.UUID;
 public class WithdrawalTokenService {
 
     private final WithdrawalTokenRepository withdrawalTokenRepository;
-
-    // 어세스토큰에서 유저정보 가져오기
-    private User getUserByAuth() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.user();
-    }
+    private final AuthContext authContext;
 
     // 탈퇴 토큰 생성 or 업데이트
     public WithdrawalToken createOrUpdateWithdrawalToken() {
 
         // 탈퇴를 요청한 회원 정보 가져오기
-        User user = getUserByAuth();
+        User user = authContext.getUserByAuth();
 
         // 토큰이 이미 존재하는지 확인
         return withdrawalTokenRepository.findByUserUUID(user.getUserUUID())
@@ -55,7 +48,7 @@ public class WithdrawalTokenService {
     // 탈퇴 코드 토큰 검증
     public UUID verifyWithdrawalToken(AuthCodeRequest authCodeRequest) {
 
-        UUID userUUID  = getUserByAuth().getUserUUID();
+        UUID userUUID  = authContext.getUserByAuth().getUserUUID();
 
         log.debug("탈퇴 코드 토큰 검증 메서드 시작");
         WithdrawalToken token = withdrawalTokenRepository.findByUserUUID(userUUID)

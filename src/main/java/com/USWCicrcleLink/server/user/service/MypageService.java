@@ -15,7 +15,7 @@ import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
 import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
-import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
+import com.USWCicrcleLink.server.global.security.context.AuthContext;
 import com.USWCicrcleLink.server.profile.profile.domain.Profile;
 import com.USWCicrcleLink.server.profile.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.User;
@@ -24,8 +24,6 @@ import com.USWCicrcleLink.server.user.dto.MyAplictResponse;
 import com.USWCicrcleLink.server.user.dto.MyClubResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,13 +42,7 @@ public class MypageService {
     private final S3FileUploadService s3FileUploadService;
     private final ClubMainPhotoRepository clubMainPhotoRepository;
     private final FloorPhotoRepository floorPhotoRepository;
-
-    //어세스토큰에서 유저정보 가져오기
-    private User getUserByAuth() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.user();
-    }
+    private final AuthContext authContext;
 
     //클럽멤버를 통해 클럽아이디 조회
     private List<MyClubResponse> getMyClubs(List<ClubMembers> clubMembers) {
@@ -70,7 +62,7 @@ public class MypageService {
 
     //소속된 동아리 조회
     public List<MyClubResponse> getMyClubById(){
-        User user = getUserByAuth();
+        User user = authContext.getUserByAuth();
         Profile profile = getProfileByUserId((user.getUserId()));
         List<ClubMembers> clubMembers = getClubMembersByProfileId(profile.getProfileId());
         log.info("소속 동아리 조회 완료 {}", user.getUserId());
@@ -79,7 +71,7 @@ public class MypageService {
 
     // 지원한 동아리 조회
     public List<MyAplictResponse> getAplictClubById() {
-        User user = getUserByAuth();
+        User user = authContext.getUserByAuth();
         Profile profile = getProfileByUserId(user.getUserId());
 
         // Profile ID를 기반으로 지원 내역 조회

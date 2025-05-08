@@ -9,7 +9,7 @@ import com.USWCicrcleLink.server.global.bucket4j.RateLimite;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.*;
 import com.USWCicrcleLink.server.global.security.Integration.service.IntegrationAuthService;
-import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
+import com.USWCicrcleLink.server.global.security.context.AuthContext;
 import com.USWCicrcleLink.server.global.security.jwt.JwtProvider;
 import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
 import com.USWCicrcleLink.server.profile.profile.domain.Profile;
@@ -28,8 +28,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,28 +55,21 @@ public class UserService {
     private final PasswordService passwordService;
     private final IntegrationAuthService integrationAuthService;
     private final SignupTokenService signupTokenService;
+    private final AuthContext authContext;
 
 
     private static final int FCM_TOKEN_CERTIFICATION_TIME = 60;
 
-
-    // 어세스토큰에서 유저정보 가져오기
-    public User getUserByAuth() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.user();
-    }
-
     //현재 비밀번호 확인
     private boolean confirmPW(String userpw) {
-        User user = getUserByAuth();
+        User user = authContext.getUserByAuth();
         return passwordEncoder.matches(userpw, user.getUserPw());
     }
 
     //비밀번호 변경
     public void updateNewPW(UpdatePwRequest updatePwRequest) {
 
-        User user = getUserByAuth();
+        User user = authContext.getUserByAuth();
 
         if (!confirmPW(updatePwRequest.getUserPw())) {
             throw new UserException(ExceptionType.USER_PASSWORD_NOT_MATCH);
@@ -323,7 +314,7 @@ public class UserService {
     // 회원 탈퇴 메일 전송
     public void sendWithdrawalCodeMail(WithdrawalToken token) {
         log.debug("회원 탈퇴 메일 생성 요청");
-        User findUser = getUserByAuth();
+        User findUser = authContext.getUserByAuth();
         MimeMessage message = emailService.createWithdrawalCodeMail(findUser, token);
         emailService.sendEmail(message);
         log.debug("회원 탈퇴 메일 전송 완료 email=  {} ", findUser.getEmail());

@@ -57,19 +57,22 @@ public class UserService {
     private final SignupTokenService signupTokenService;
     private final AuthContext authContext;
 
-
     private static final int FCM_TOKEN_CERTIFICATION_TIME = 60;
+
+    public User getUserByAuth(){
+        return authContext.getUserByAuth();
+    }
 
     //현재 비밀번호 확인
     private boolean confirmPW(String userpw) {
-        User user = authContext.getUserByAuth();
+        User user = getUserByAuth();
         return passwordEncoder.matches(userpw, user.getUserPw());
     }
 
     //비밀번호 변경
     public void updateNewPW(UpdatePwRequest updatePwRequest) {
 
-        User user = authContext.getUserByAuth();
+        User user = getUserByAuth();
 
         if (!confirmPW(updatePwRequest.getUserPw())) {
             throw new UserException(ExceptionType.USER_PASSWORD_NOT_MATCH);
@@ -314,7 +317,7 @@ public class UserService {
     // 회원 탈퇴 메일 전송
     public void sendWithdrawalCodeMail(WithdrawalToken token) {
         log.debug("회원 탈퇴 메일 생성 요청");
-        User findUser = authContext.getUserByAuth();
+        User findUser = getUserByAuth();
         MimeMessage message = emailService.createWithdrawalCodeMail(findUser, token);
         emailService.sendEmail(message);
         log.debug("회원 탈퇴 메일 전송 완료 email=  {} ", findUser.getEmail());

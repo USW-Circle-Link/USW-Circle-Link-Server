@@ -87,7 +87,7 @@ public class ClubMemberAccountStatusService {
         }
         else{
             log.error("사용자가 요청한 동아리 UUID 와 저장된 동아리 UUID 값이 일치하지않습니다");
-            throw new ClubMemberAccountStatusException(ExceptionType.CLUB_MEMBER_ACCOUNTSTATUS_REQEUST_NOT_MATCH);
+            throw new ClubMemberAccountStatusException(ExceptionType.CLUB_MEMBER_ACCOUNTSTATUS_REQUEST_NOT_MATCH);
         }
         log.debug("가입신청 검증 완료");
     }

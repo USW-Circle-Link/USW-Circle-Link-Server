@@ -13,12 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class EmailTokenService {
 
-    @Qualifier("emailTokenRedisTemplate")
     private final RedisTemplate<String, EmailToken> emailTokenRedisTemplate;
+
+    public EmailTokenService(@Qualifier("emailTokenRedisTemplate") RedisTemplate<String, EmailToken> emailTokenRedisTemplate
+    ) {
+        this.emailTokenRedisTemplate = emailTokenRedisTemplate;
+    }
 
     // 이메일 토큰 저장
     public EmailToken saveEmailToken(EmailToken emailToken) {
@@ -47,7 +50,7 @@ public class EmailTokenService {
             return savedToken;
         } catch (Exception e) {
             log.error("[createEmailToken] 이메일 토큰 생성 중 오류 발생, email: {}", email, e);
-            throw new EmailException(ExceptionType.EMAIL_TOKEN_CREATION_FALILED);
+            throw new EmailException(ExceptionType.EMAIL_TOKEN_CREATION_FAILED);
         }
     }
 

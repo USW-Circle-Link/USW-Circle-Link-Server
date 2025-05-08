@@ -4,6 +4,7 @@ import com.USWCicrcleLink.server.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.bucket4j.RateLimite;
 import com.USWCicrcleLink.server.global.exception.errortype.EmailTokenException;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
+import com.USWCicrcleLink.server.global.security.context.AuthContext;
 import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
@@ -38,6 +39,7 @@ public class UserController {
     private final AuthTokenService authTokenService;
     private final WithdrawalTokenService withdrawalTokenService;
     private final SignupTokenService signupTokenService;
+
     @PatchMapping("/userpw")
     public ApiResponse<String> updateUserPw(@Validated(ValidationSequence.class) @RequestBody UpdatePwRequest request) {
         userService.updateNewPW(request);

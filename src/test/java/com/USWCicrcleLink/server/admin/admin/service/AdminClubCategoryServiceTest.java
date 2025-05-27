@@ -35,7 +35,7 @@ class AdminClubCategoryServiceTest {
     private AdminClubCategoryService adminClubCategoryService;
 
     @Test
-    @DisplayName("addClubCategory - 카테고리 생성")
+    @DisplayName("카테고리 생성")
     void testAddClubCategorySuccess() {
         // given
         AdminClubCategoryCreationRequest request = new AdminClubCategoryCreationRequest("Art");
@@ -61,7 +61,7 @@ class AdminClubCategoryServiceTest {
     }
 
     @Test
-    @DisplayName("addClubCategory - 중복 예외 발생")
+    @DisplayName("카테고리 이름 중복 예외 발생")
     void testAddClubCategoryDuplicate() {
         AdminClubCategoryCreationRequest request = new AdminClubCategoryCreationRequest("Art");
         when(clubCategoryRepository.existsByClubCategoryName("art")).thenReturn(true);
@@ -72,7 +72,7 @@ class AdminClubCategoryServiceTest {
     }
 
     @Test
-    @DisplayName("deleteClubCategory - 카테고리 삭제")
+    @DisplayName("카테고리 삭제")
     void testDeleteClubCategorySuccess() {
         UUID uuid = UUID.randomUUID();
         ClubCategory entity = ClubCategory.builder()
@@ -96,7 +96,7 @@ class AdminClubCategoryServiceTest {
     }
 
     @Test
-    @DisplayName("deleteClubCategory - UUID 존재하지 않음 예외")
+    @DisplayName("UUID 존재하지 않음 예외")
     void testDeleteClubCategoryNotFound() {
         UUID uuid = UUID.randomUUID();
         when(clubCategoryRepository.findByClubCategoryUUID(uuid)).thenReturn(Optional.empty());

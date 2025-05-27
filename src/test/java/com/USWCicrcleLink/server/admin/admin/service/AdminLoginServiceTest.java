@@ -40,7 +40,7 @@ class AdminLoginServiceTest {
     private AdminLoginService adminLoginService;
 
     @Test
-    @DisplayName("adminLogin - 로그인 성공")
+    @DisplayName("로그인 성공")
     void testAdminLogin_success() {
         AdminLoginRequest request = new AdminLoginRequest("admin", "1234");
         UUID uuid = UUID.randomUUID();
@@ -59,7 +59,7 @@ class AdminLoginServiceTest {
     }
 
     @Test
-    @DisplayName("adminLogin - 존재하지 않는 admin 예외")
+    @DisplayName("존재하지 않는 admin 예외")
     void testAdminLogin_notFound() {
         AdminLoginRequest request = new AdminLoginRequest("admin", "1234");
         when(adminRepository.findByAdminAccount("admin")).thenReturn(Optional.empty());
@@ -70,7 +70,7 @@ class AdminLoginServiceTest {
     }
 
     @Test
-    @DisplayName("adminLogin - 비밀번호 불일치 예외")
+    @DisplayName("비밀번호 불일치 예외")
     void testAdminLogin_passwordMismatch() {
         AdminLoginRequest request = new AdminLoginRequest("admin", "12345");
         Admin admin = Admin.builder().adminAccount("admin").adminPw("hashed_pw").adminUUID(UUID.randomUUID()).build();

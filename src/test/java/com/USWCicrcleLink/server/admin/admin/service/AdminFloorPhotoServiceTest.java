@@ -37,7 +37,7 @@ class AdminFloorPhotoServiceTest {
     private AdminFloorPhotoService adminFloorPhotoService;
 
     @Test
-    @DisplayName("uploadPhoto - 사진 업로드 성공")
+    @DisplayName("사진 업로드 성공")
     void testUploadPhoto_success() {
         FloorPhotoEnum floor = FloorPhotoEnum.B1;
         S3FileResponse s3Response = new S3FileResponse("file.jpg", "https://s3.url/file.jpg");
@@ -54,7 +54,7 @@ class AdminFloorPhotoServiceTest {
     }
 
     @Test
-    @DisplayName("uploadPhoto - 빈 파일 예외")
+    @DisplayName("빈 파일 예외")
     void testUploadPhoto_emptyFile_throws() {
         FloorPhotoEnum floor = FloorPhotoEnum.B1;
         when(mockFile.isEmpty()).thenReturn(true);
@@ -65,7 +65,7 @@ class AdminFloorPhotoServiceTest {
     }
 
     @Test
-    @DisplayName("getPhotoByFloor - 사진 조회 성공")
+    @DisplayName("사진 조회 성공")
     void testGetPhotoByFloor_success() {
         FloorPhotoEnum floor = FloorPhotoEnum.F1;
         FloorPhoto photo = FloorPhoto.builder()
@@ -83,7 +83,7 @@ class AdminFloorPhotoServiceTest {
     }
 
     @Test
-    @DisplayName("getPhotoByFloor - 사진 없음 예외")
+    @DisplayName("사진 없음 예외")
     void testGetPhotoByFloor_notFound_throws() {
         FloorPhotoEnum floor = FloorPhotoEnum.F1;
         when(floorPhotoRepository.findByFloor(floor)).thenReturn(Optional.empty());
@@ -94,7 +94,7 @@ class AdminFloorPhotoServiceTest {
     }
 
     @Test
-    @DisplayName("deletePhotoByFloor - 삭제 성공")
+    @DisplayName("삭제 성공")
     void testDeletePhotoByFloor_success() {
         FloorPhotoEnum floor = FloorPhotoEnum.F2;
         FloorPhoto photo = FloorPhoto.builder()
@@ -111,7 +111,7 @@ class AdminFloorPhotoServiceTest {
     }
 
     @Test
-    @DisplayName("deletePhotoByFloor - 사진 없음 예외")
+    @DisplayName("사진 없음 예외")
     void testDeletePhotoByFloor_notFound_throws() {
         FloorPhotoEnum floor = FloorPhotoEnum.F2;
         when(floorPhotoRepository.findByFloor(floor)).thenReturn(Optional.empty());

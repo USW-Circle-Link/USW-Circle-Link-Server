@@ -69,7 +69,7 @@ class AdminClubServiceTest {
     }
 
     @Test
-    @DisplayName("getAllClubs - 동아리 목록 조회")
+    @DisplayName("동아리 목록 조회")
     void testGetAllClubs() {
         Pageable pageable = PageRequest.of(0, 10);
         AdminClubListResponse response = mock(AdminClubListResponse.class);
@@ -86,7 +86,7 @@ class AdminClubServiceTest {
     }
 
     @Test
-    @DisplayName("validateLeaderAccount - 중복 계정 예외")
+    @DisplayName("중복 계정 예외")
     void testValidateLeaderAccount_Duplicate() {
         when(leaderRepository.existsByLeaderAccount("leader1")).thenReturn(true);
 
@@ -96,7 +96,7 @@ class AdminClubServiceTest {
     }
 
     @Test
-    @DisplayName("validateClubName - 중복 이름 예외")
+    @DisplayName("중복 이름 예외")
     void testValidateClubName_Duplicate() {
         when(clubRepository.existsByClubName("TestClub")).thenReturn(true);
 
@@ -106,7 +106,7 @@ class AdminClubServiceTest {
     }
 
     @Test
-    @DisplayName("deleteClub - 비밀번호 불일치 예외")
+    @DisplayName("비밀번호 불일치 예외")
     void testDeleteClub_AdminPasswordMismatch() {
         UUID clubUUID = UUID.randomUUID();
         AdminPwRequest request = new AdminPwRequest("wrongPw");
@@ -121,7 +121,7 @@ class AdminClubServiceTest {
     }
 
     @Test
-    @DisplayName("deleteClub - 존재하지 않는 동아리 예외")
+    @DisplayName("존재하지 않는 동아리 예외")
     void testDeleteClub_ClubNotFound() {
         UUID clubUUID = UUID.randomUUID();
         AdminPwRequest request = new AdminPwRequest("adminPw");

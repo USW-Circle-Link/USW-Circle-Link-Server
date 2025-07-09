@@ -1,141 +1,132 @@
-//package com.USWCicrcleLink.server.aplict.service;
-//
-//import com.USWCicrcleLink.server.aplict.dto.AplictRequest;
-//import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
-//import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
-//import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
-//import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
-//import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
-//import com.USWCicrcleLink.server.global.exception.errortype.ClubIntroException;
-//import com.USWCicrcleLink.server.global.exception.errortype.UserException;
-//import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
-//import com.USWCicrcleLink.server.profile.domain.Profile;
-//import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
-//import com.USWCicrcleLink.server.user.domain.User;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContext;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//
-//import java.util.Optional;
-//
-//import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-//import static org.mockito.BDDMockito.given;
-//import static org.mockito.Mockito.mock;
-//
-//@ExtendWith(MockitoExtension.class)
-//class AplictServiceTest {
-//
-//    @Mock
-//    private AplictRepository aplictRepository;
-//
-//    @Mock
-//    private ProfileRepository profileRepository;
-//
-//    @Mock
-//    private ClubIntroRepository clubIntroRepository;
-//
-//    @Mock
-//    private ClubMembersRepository clubMembersRepository;
-//
-//    @InjectMocks
-//    private AplictService aplictService;
-//
-//    private User mockUser;
-//    private Profile mockProfile;
-//    private CustomUserDetails mockUserDetails;
-//
-//    @BeforeEach
-//    void setUp() {
-//        mockUser = User.builder().userAccount("user").userPw("pw").email("email@example.com").build();
-//        mockUserDetails = mock(CustomUserDetails.class);
-//        mockProfile = mock(Profile.class);
-//    }
-//
-//    //securityContext
-//    private void setUpSecurityContext() {
-//        Authentication authentication = mock(Authentication.class);
-//        SecurityContext securityContext = mock(SecurityContext.class);
-//
-//        given(mockUserDetails.user()).willReturn(mockUser);
-//        given(securityContext.getAuthentication()).willReturn(authentication);
-//        given(authentication.getPrincipal()).willReturn(mockUserDetails);
-//
-//        SecurityContextHolder.setContext(securityContext);
-//    }
-//
-//    @Test
-//    @DisplayName("사용자 프로필이 존재하지 않으면 USER_NOT_EXISTS 예외 발생")
-//    void ThrowUserExceptionWhenUserProfileDoesNotExist() {
-//        // given
-//        setUpSecurityContext();
-//        given(profileRepository.findByUser_UserUUID(mockUser.getUserUUID())).willReturn(Optional.empty());
-//
-//        // when, then
-//        assertThatThrownBy(() -> aplictService.checkIfCanApply(1L))
-//                .isInstanceOf(UserException.class)
-//                .hasMessageContaining("사용자가 존재하지 않습니다.");
-//    }
-//
-//    @Test
-//    @DisplayName("해당 동아리에 이미 지원했으면 ALREADY_APPLIED 예외 발생")
-//    void checkIfCanApply_AlreadyApplied_ThrowsClubException() {
-//        // given
-//        setUpSecurityContext();
-//        given(profileRepository.findByUser_UserUUID(mockUser.getUserUUID())).willReturn(Optional.of(mockProfile));
-//        given(aplictRepository.existsByProfileAndClub_ClubId(mockProfile, 1L)).willReturn(true);
-//
-//        // when, then
-//        assertThatThrownBy(() -> aplictService.checkIfCanApply(1L))
-//                .isInstanceOf(ClubException.class)
-//                .hasMessageContaining("이미 지원한 동아리입니다.");
-//    }
-//
-//    @Test
-//    @DisplayName("이미 해당 동아리 회원이면 ALREADY_MEMBER 예외 발생")
-//    void checkIfCanApply_AlreadyMember_ThrowsClubException() {
-//        // given
-//        setUpSecurityContext();
-//        given(profileRepository.findByUser_UserUUID(mockUser.getUserUUID())).willReturn(Optional.of(mockProfile));
-//        given(aplictRepository.existsByProfileAndClub_ClubId(mockProfile, 1L)).willReturn(false);
-//        given(clubMembersRepository.existsByProfileAndClub_ClubId(mockProfile, 1L)).willReturn(true);
-//
-//        // when, then
-//        assertThatThrownBy(() -> aplictService.checkIfCanApply(1L))
-//                .isInstanceOf(ClubException.class)
-//                .hasMessageContaining("이미 해당 동아리 회원입니다.");
-//    }
-//
-//    @Test
-//    @DisplayName("동아리의 구글 폼 URL 조회 시 URL이 없으면 GOOGLE_FORM_URL_NOT_EXISTS 예외 발생")
-//    void getGoogleFormUrlByClubId_ThrowsExceptionWhenUrlDoesNotExist() {
-//        // given
-//        ClubIntro clubIntro = ClubIntro.builder().clubIntroId(1L).googleFormUrl("").build();
-//        given(clubIntroRepository.findByClubClubId(1L)).willReturn(Optional.of(clubIntro));
-//
-//        // when, then
-//        assertThatThrownBy(() -> aplictService.getGoogleFormUrlByClubId(1L))
-//                .isInstanceOf(ClubIntroException.class)
-//                .hasMessageContaining("구글 폼 URL이 존재하지 않습니다.");
-//    }
-//
-//    @Test
-//    @DisplayName("동아리 지원서 제출 시 사용자가 존재하지 않으면 USER_NOT_EXISTS 예외 발생")
-//    void submitAplict_ThrowsUserExceptionWhenUserDoesNotExist() {
-//        // given
-//        setUpSecurityContext();
-//        given(profileRepository.findByUser_UserUUID(mockUser.getUserUUID())).willReturn(Optional.empty());
-//
-//        // when, then
-//        AplictRequest request = new AplictRequest();
-//        assertThatThrownBy(() -> aplictService.submitAplict(1L, request))
-//                .isInstanceOf(UserException.class)
-//                .hasMessageContaining("사용자가 존재하지 않습니다.");
-//    }
-//}
+package com.USWCicrcleLink.server.aplict.service;
+
+import com.USWCicrcleLink.server.aplict.domain.Aplict;
+import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
+import com.USWCicrcleLink.server.club.club.domain.Club;
+import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
+import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
+import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
+import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
+import com.USWCicrcleLink.server.global.exception.errortype.AplictException;
+import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
+import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
+import com.USWCicrcleLink.server.profile.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.user.domain.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class AplictServiceTest {
+
+    @Mock
+    private AplictRepository aplictRepository;
+    @Mock
+    private ClubRepository clubRepository;
+    @Mock
+    private ProfileRepository profileRepository;
+    @Mock
+    private ClubIntroRepository clubIntroRepository;
+    @Mock
+    private ClubMembersRepository clubMembersRepository;
+    @Mock
+    private SecurityContext securityContext;
+    @Mock
+    private Authentication authentication;
+
+    @InjectMocks
+    private AplictService aplictService;
+
+    private Profile profile;
+    private User user;
+    private UUID clubUUID;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        user = User.builder().userUUID(UUID.randomUUID()).build();
+        profile = Profile.builder().user(user).studentNumber("12345678").userHp("01012345678").build();
+        clubUUID = UUID.randomUUID();
+
+        CustomUserDetails userDetails = new CustomUserDetails(user, List.of());
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(profileRepository.findByUser_UserUUID(user.getUserUUID())).thenReturn(Optional.of(profile));
+    }
+
+    @Test
+    @DisplayName("지원 가능 체크 - 성공")
+    void checkIfCanApply_success() {
+        when(aplictRepository.existsByProfileAndClubUUID(profile, clubUUID)).thenReturn(false);
+        when(clubMembersRepository.existsByProfileAndClubUUID(profile, clubUUID)).thenReturn(false);
+        when(clubMembersRepository.findProfilesByClubUUID(clubUUID)).thenReturn(List.of());
+
+        assertThatCode(() -> aplictService.checkIfCanApply(clubUUID)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("지원 가능 체크 - 이미 지원")
+    void checkIfCanApply_alreadyApplied() {
+        when(aplictRepository.existsByProfileAndClubUUID(profile, clubUUID)).thenReturn(true);
+
+        assertThatThrownBy(() -> aplictService.checkIfCanApply(clubUUID))
+                .isInstanceOf(AplictException.class);
+    }
+
+    @Test
+    @DisplayName("구글 폼 URL 조회 성공")
+    void getGoogleFormUrl_success() {
+        ClubIntro intro = ClubIntro.builder().googleFormUrl("https://form.com").build();
+        when(clubIntroRepository.findByClubUUID(clubUUID)).thenReturn(Optional.of(intro));
+
+        String url = aplictService.getGoogleFormUrlByClubUUID(clubUUID);
+
+        assertThat(url).isEqualTo("https://form.com");
+    }
+
+    @Test
+    @DisplayName("구글 폼 URL 없음 예외")
+    void getGoogleFormUrl_notExists() {
+        ClubIntro intro = ClubIntro.builder().googleFormUrl(null).build();
+        when(clubIntroRepository.findByClubUUID(clubUUID)).thenReturn(Optional.of(intro));
+
+        assertThatThrownBy(() -> aplictService.getGoogleFormUrlByClubUUID(clubUUID))
+                .isInstanceOf(ClubException.class);
+    }
+
+    @Test
+    @DisplayName("지원서 제출 성공")
+    void submitAplict_success() {
+        Club club = Club.builder().clubUUID(clubUUID).build();
+        when(clubRepository.findByClubUUID(clubUUID)).thenReturn(Optional.of(club));
+
+        aplictService.submitAplict(clubUUID);
+
+        verify(aplictRepository, times(1)).save(any(Aplict.class));
+    }
+
+    @Test
+    @DisplayName("지원서 제출 실패 - 클럽 없음")
+    void submitAplict_clubNotFound() {
+        when(clubRepository.findByClubUUID(clubUUID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> aplictService.submitAplict(clubUUID))
+                .isInstanceOf(ClubException.class);
+    }
+}

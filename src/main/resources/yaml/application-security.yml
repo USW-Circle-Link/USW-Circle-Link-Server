@@ -32,7 +32,6 @@ spring:
       - /mypages/clubs/{floor}/photo
       - /clubs/filter/**
       - /images/logo.png
-      - /health-check
 
     logging-paths:
       - /admin/**

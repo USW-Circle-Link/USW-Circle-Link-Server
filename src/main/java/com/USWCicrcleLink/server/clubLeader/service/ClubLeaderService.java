@@ -81,6 +81,9 @@ public class ClubLeaderService {
     private final ClubMemberAccountStatusRepository clubMemberAccountStatusRepository;
     private final ClubMemberTempRepository clubMemberTempRepository;
     private final UserRepository userRepository;
+    private final com.USWCicrcleLink.server.global.security.jwt.JwtProvider jwtProvider;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final com.USWCicrcleLink.server.user.service.PasswordService passwordService;
 
     // 최대 사진 순서(업로드, 삭제)
     int PHOTO_LIMIT = 5;
@@ -101,17 +104,45 @@ public class ClubLeaderService {
     }
 
     // 약관 동의 여부 업데이트
-    public void updateAgreedTermsTrue() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	public void updateAgreedTermsTrue() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!(authentication.getPrincipal() instanceof CustomLeaderDetails leaderDetails)) {
-            throw new UserException(ExceptionType.USER_NOT_EXISTS);
-        }
+		if (!(authentication.getPrincipal() instanceof CustomLeaderDetails leaderDetails)) {
+			throw new UserException(ExceptionType.USER_NOT_EXISTS);
+		}
 
-        Leader leader = leaderDetails.leader();
-        leader.setAgreeTerms(true);
-        leaderRepository.save(leader);
-    }
+		Leader leader = leaderDetails.leader();
+		leader.setAgreeTerms(true);
+		leaderRepository.save(leader);
+	}
+
+	public ApiResponse<String> updatePassword(com.USWCicrcleLink.server.clubLeader.dto.LeaderUpdatePwRequest request, jakarta.servlet.http.HttpServletResponse response) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication.getPrincipal() instanceof CustomLeaderDetails leaderDetails)) {
+			throw new UserException(ExceptionType.USER_NOT_EXISTS);
+		}
+
+		Leader leader = leaderDetails.leader();
+
+		if (!passwordEncoder.matches(request.getLeaderPw(), leader.getLeaderPw())) {
+			throw new UserException(ExceptionType.USER_PASSWORD_NOT_MATCH);
+		}
+
+		if (passwordEncoder.matches(request.getNewPw(), leader.getLeaderPw())) {
+			throw new UserException(ExceptionType.USER_PASSWORD_NOT_REUSE);
+		}
+
+		passwordService.validatePassword(request.getNewPw(), request.getConfirmNewPw());
+
+		leader.updatePw(passwordEncoder.encode(request.getNewPw()));
+		leaderRepository.save(leader);
+
+		java.util.UUID leaderUUID = leader.getLeaderUUID();
+		jwtProvider.deleteRefreshToken(leaderUUID);
+		jwtProvider.deleteRefreshTokenCookie(response);
+
+		return new ApiResponse<>("비밀번호가 변경되었습니다.");
+	}
 
     // 동아리 기본 정보 조회
     @Transactional(readOnly = true)

@@ -52,4 +52,8 @@ public class Leader{
     public void setAgreeTerms(boolean isAgreed) {
         this.isAgreedTerms = isAgreed;
     }
+
+    public void updatePw(String encodedPw) {
+        this.leaderPw = encodedPw;
+    }
 }

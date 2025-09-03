@@ -72,6 +72,14 @@ public enum RateLimitAction {
         public Bandwidth getLimit() {
             return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
         }
+    },
+
+    // 리더 비밀번호 변경
+    LEADER_CHANGE_PW{
+        @Override
+        public Bandwidth getLimit() {
+            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(1)));
+        }
     };
 
     public abstract Bandwidth getLimit();

@@ -63,9 +63,15 @@ public class ClubLeaderController {
     @PutMapping("/{clubUUID}/info")
     public ResponseEntity<ApiResponse> updateClubInfo(@PathVariable("clubUUID") UUID clubUUID,
                                                       @RequestPart(value = "mainPhoto", required = false) MultipartFile mainPhoto,
-                                                      @RequestPart(value = "clubInfoRequest", required = false) @Validated(ValidationSequence.class) ClubInfoRequest clubInfoRequest) throws IOException {
+                                                      @RequestPart(value = "clubInfoRequest", required = false) @Validated(ValidationSequence.class) ClubInfoRequest clubInfoRequest,
+                                                      @RequestPart(value = "leaderUpdatePwRequest", required = false) @Validated(ValidationSequence.class) com.USWCicrcleLink.server.clubLeader.dto.LeaderUpdatePwRequest leaderUpdatePwRequest,
+                                                      HttpServletResponse response) throws IOException {
 
-        return new ResponseEntity<>(clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, mainPhoto), HttpStatus.OK);
+        ApiResponse result = clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, mainPhoto);
+        if (leaderUpdatePwRequest != null) {
+            clubLeaderService.updatePassword(leaderUpdatePwRequest, response);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // 동아리 요약 조회
@@ -210,5 +216,4 @@ public class ClubLeaderController {
     public ResponseEntity<ApiResponse> acceptSignUpRequest(@PathVariable("clubUUID") UUID clubUUID, @RequestBody @Validated(ValidationSequence.class) ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
         return new ResponseEntity<>(clubLeaderService.acceptSignUpRequest(clubUUID, clubMembersAcceptSignUpRequest), HttpStatus.OK);
     }
-
 }

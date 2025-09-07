@@ -45,6 +45,7 @@ jobs:
         run: |
           mkdir -p before-deploy
           cp ./build/libs/*.jar ./before-deploy/
+          cp ./.env ./before-deploy/
           cp -r ./scripts/ ./before-deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성

@@ -43,13 +43,15 @@ jobs:
 
       - name: 📦 jar, appspec, 배포 스크립트 복사
         run: |
-          mkdir -p before-deploy
+          mkdir -p before-deploy/scripts
           cp ./build/libs/*.jar ./before-deploy/
           cp ./.env ./before-deploy/
-          cp -r ./scripts/ ./before-deploy/scripts/
+          cp -r ./scripts/. ./before-deploy/scripts/
 
       - name: 🗜️ 배포 패키지 생성
-        run: zip -r -qq ./deploy.zip ./before-deploy/
+        run: |
+          cd before-deploy
+          zip -r -qq ../deploy.zip .
 
       - name: 🔑 SSH 키 설정
         uses: webfactory/ssh-agent@v0.7.0
@@ -63,11 +65,11 @@ jobs:
       - name: 🚀 LightSail 서버에 파일 업로드
         run: |
           scp ./deploy.zip ec2-user@${{ secrets.LIGHTSAIL_HOST }}:/home/ec2-user/deploy.zip
-          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "
-            unzip -o /home/ec2-user/deploy.zip -d /home/ec2-user &&
-            rm -rf /home/ec2-user/app/* &&
-            mv /home/ec2-user/before-deploy/. /home/ec2-user/app/ &&
-            chmod +x /home/ec2-user/app/scripts/*.sh"
+          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} 'bash -lc "
+            rm -rf ~/app &&
+            mkdir -p ~/app &&
+            unzip -o ~/deploy.zip -d ~/app &&
+            chmod +x ~/app/scripts/*.sh
 
       - name: 🎯 LightSail 서버에서 배포 실행 (AfterInstall)
         run: |
@@ -82,6 +84,4 @@ jobs:
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "/home/ec2-user/app/scripts/switch.sh"
 
       - name: 🧹 임시 파일 정리
-        run: |
-          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "
-            rm -rf /home/ec2-user/deploy.zip /home/ec2-user/before-deploy"
+        run: ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "rm -f ~/deploy.zip"

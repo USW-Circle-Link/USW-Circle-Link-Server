@@ -2,8 +2,16 @@
 
 REPOSITORY=/home/ec2-user/app
 
+ENV_FILE=$REPOSITORY/.env
 CURRENT_PORT=$(cat /etc/nginx/conf.d/service-url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0
+
+if [ -f $ENV_FILE ]; then
+    echo "> .env 파일의 환경 변수를 로드합니다."
+    export $(cat $ENV_FILE | grep -v '^#' | xargs)
+else
+    echo "> .env 파일이 존재하지 않습니다."
+fi
 
 echo "> Current port of running WAS is ${CURRENT_PORT}."
 

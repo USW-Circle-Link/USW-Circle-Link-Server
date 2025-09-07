@@ -66,7 +66,7 @@ jobs:
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "
             unzip -o /home/ec2-user/deploy.zip -d /home/ec2-user &&
             rm -rf /home/ec2-user/app/* &&
-            mv /home/ec2-user/before-deploy/* /home/ec2-user/app/ &&
+            mv /home/ec2-user/before-deploy/. /home/ec2-user/app/ &&
             chmod +x /home/ec2-user/app/scripts/*.sh"
 
       - name: 🎯 LightSail 서버에서 배포 실행 (AfterInstall)

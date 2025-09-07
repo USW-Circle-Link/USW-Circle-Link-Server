@@ -8,7 +8,9 @@ TARGET_PORT=0
 
 if [ -f $ENV_FILE ]; then
     echo "> .env 파일의 환경 변수를 로드합니다."
-    export $(cat $ENV_FILE | grep -v '^#' | xargs)
+    set -a
+    source $ENV_FILE
+    set +a
 else
     echo "> .env 파일이 존재하지 않습니다."
 fi

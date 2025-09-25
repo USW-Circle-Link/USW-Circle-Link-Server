@@ -1,54 +1,42 @@
 #!/bin/bash
+set -euo pipefail
 
 REPOSITORY=/home/ec2-user/app
+NGINX_INC=/etc/nginx/conf.d/service-url.inc
 
-ENV_FILE=$REPOSITORY/.env
-CURRENT_PORT=$(cat /etc/nginx/conf.d/service-url.inc | grep -Po '[0-9]+' | tail -1)
-TARGET_PORT=0
+# 현재 Nginx가 바라보는 포트 읽기
+CURRENT_PORT=$(grep -Po '[0-9]+' "$NGINX_INC" | tail -1 || echo 8081)
+TARGET_PORT=8082
+if [ "$CURRENT_PORT" -eq 8082 ]; then TARGET_PORT=8081; fi
 
-if [ -f $ENV_FILE ]; then
-    echo "> .env 파일의 환경 변수를 로드합니다."
-    set -a
-    source $ENV_FILE
-    set +a
+echo "> CURRENT_PORT=$CURRENT_PORT, TARGET_PORT=$TARGET_PORT"
+
+# 최신 JAR 선택 후 고정 경로로 심볼릭 링크
+LATEST_JAR=$(ls -t "$REPOSITORY"/*.jar | head -1)
+mkdir -p "$REPOSITORY/current"
+ln -sf "$LATEST_JAR" "$REPOSITORY/current/app.jar"
+chmod +x "$REPOSITORY/current/app.jar"
+echo "> Linked $(basename "$LATEST_JAR") -> current/app.jar"
+
+# 템플릿 유닛 설치 여부 확인 (없으면 오류)
+if [ ! -f /etc/systemd/system/donggurami@.service ]; then
+  echo "ERROR: /etc/systemd/system/donggurami@.service not found."; exit 1
+fi
+
+# 데몬 리로드
+sudo systemctl daemon-reload
+
+# 대상 포트 인스턴스 시작(있으면 재시작)
+if systemctl is-active --quiet "donggurami@${TARGET_PORT}"; then
+  echo "> Restart donggurami@${TARGET_PORT}"
+  sudo systemctl restart "donggurami@${TARGET_PORT}"
 else
-    echo "> .env 파일이 존재하지 않습니다."
+  echo "> Start donggurami@${TARGET_PORT}"
+  sudo systemctl start "donggurami@${TARGET_PORT}"
 fi
 
-echo "> Current port of running WAS is ${CURRENT_PORT}."
+# 부팅 자동시작: 새 포트 enable, 이전 포트 disable
+sudo systemctl enable "donggurami@${TARGET_PORT}"
+sudo systemctl disable "donggurami@${CURRENT_PORT}" || true
 
-if [ ${CURRENT_PORT} -eq 8081 ]; then
-  TARGET_PORT=8082
-elif [ ${CURRENT_PORT} -eq 8082 ]; then
-  TARGET_PORT=8081
-else
-  echo "> No WAS is connected to nginx"
-fi
-
-TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
-
-if [ ! -z ${TARGET_PID} ]; then
-  echo "> Kill WAS running at ${TARGET_PORT}."
-  sudo kill ${TARGET_PID}
-fi
-
-JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
-echo "> JAR Name: $JAR_NAME"
-
-echo "> $JAR_NAME에 실행권한 추가"
-chmod +x $JAR_NAME
-
-LOG_FILE="$REPOSITORY/nohup.out"
-
-echo "> 로그 파일이 존재하지 않으면 생성하고, 존재하면 내용을 유지 (쓰기 권한 확인)"
-touch $LOG_FILE
-
-echo "> $JAR_NAME 실행"
-nohup java \
-      -jar \
-      -Dserver.port=${TARGET_PORT} \
-      -Dspring.profiles.active=prod \
-      $JAR_NAME > $LOG_FILE 2>&1 &
-
-echo "> Now new WAS runs at ${TARGET_PORT}."
-exit 0
+echo "> Started donggurami@${TARGET_PORT} (jar: $(basename "$LATEST_JAR"))"

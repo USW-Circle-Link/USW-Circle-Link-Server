@@ -11,7 +11,8 @@ public enum RateLimitAction {
     APP_LOGIN{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
     },
 
@@ -19,7 +20,8 @@ public enum RateLimitAction {
     WEB_LOGIN{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
 
     },
@@ -28,7 +30,8 @@ public enum RateLimitAction {
     EMAIL_VERIFICATION{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
     },
 
@@ -36,7 +39,8 @@ public enum RateLimitAction {
     ID_FOUND_EMAIL{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
     },
 
@@ -44,7 +48,8 @@ public enum RateLimitAction {
     PW_FOUND_EMAIL{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
 
     },
@@ -53,7 +58,8 @@ public enum RateLimitAction {
     WITHDRAWAL_EMAIL{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
 
     },
@@ -62,7 +68,8 @@ public enum RateLimitAction {
     VALIDATE_CODE{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
     },
 
@@ -70,7 +77,8 @@ public enum RateLimitAction {
     WITHDRAWAL_CODE{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+            return NO_LIMIT;
         }
     },
 
@@ -78,9 +86,12 @@ public enum RateLimitAction {
     LEADER_CHANGE_PW{
         @Override
         public Bandwidth getLimit() {
-            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(1)));
+            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(1)));
+            return NO_LIMIT;
         }
     };
+
+    private static final Bandwidth NO_LIMIT = Bandwidth.classic(Long.MAX_VALUE, Refill.intervally(Long.MAX_VALUE, Duration.ofSeconds(1)));
 
     public abstract Bandwidth getLimit();
 

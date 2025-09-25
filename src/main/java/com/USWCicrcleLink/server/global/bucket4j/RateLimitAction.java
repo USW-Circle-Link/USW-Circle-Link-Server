@@ -8,91 +8,80 @@ import java.time.Duration;
 public enum RateLimitAction {
 
     // 앱 로그인
-    APP_LOGIN{
+    APP_LOGIN {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
     },
 
     // 웹 로그인
-    WEB_LOGIN{
+    WEB_LOGIN {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
 
     },
 
     // 회원 가입 요청
-    EMAIL_VERIFICATION{
+    EMAIL_VERIFICATION {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
     },
 
     // 아이디 찾기
-    ID_FOUND_EMAIL{
+    ID_FOUND_EMAIL {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
     },
 
     // 비밀번호 찾기
-    PW_FOUND_EMAIL{
+    PW_FOUND_EMAIL {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
 
     },
 
     // 회원 탈퇴
-    WITHDRAWAL_EMAIL{
+    WITHDRAWAL_EMAIL {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
 
     },
 
     // 비밀번호 변경 인증 코드번호 일치 확인
-    VALIDATE_CODE{
+    VALIDATE_CODE {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
     },
 
     // 회원 탈퇴 코드번호 일치 확인
-    WITHDRAWAL_CODE{
+    WITHDRAWAL_CODE {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(5)));
         }
     },
 
     // 리더 비밀번호 변경
-    LEADER_CHANGE_PW{
+    LEADER_CHANGE_PW {
         @Override
         public Bandwidth getLimit() {
-            // return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(1)));
-            return NO_LIMIT;
+            return Bandwidth.classic(9_223_372_036_854_775_807L, Refill.intervally(9_223_372_036_854_775_807L, Duration.ofMinutes(1)));
         }
     };
 
-    private static final Bandwidth NO_LIMIT = Bandwidth.classic(Long.MAX_VALUE, Refill.intervally(Long.MAX_VALUE, Duration.ofSeconds(1)));
-
     public abstract Bandwidth getLimit();
 
-    }
+}

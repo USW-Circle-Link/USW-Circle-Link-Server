@@ -1,0 +1,20 @@
+# scripts/donggurami@.service
+[Unit]
+Description=Donggurami Spring Boot Server on port %i
+After=network-online.target nginx.service mysqld.service redis6.service
+Wants=network-online.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/app/current
+EnvironmentFile=-/home/ec2-user/app/.env
+# JAVA_OPTS가 .env에 있다면 자동 반영됨 (예: -Xms256m -Xmx1024m 등)
+ExecStart=/usr/bin/java $JAVA_OPTS -jar -Dserver.port=%i -Dspring.profiles.active=prod /home/ec2-user/app/current/app.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+# 로그는 journald 로 수집됨: journalctl -u donggurami@8081 -f
+
+[Install]
+WantedBy=multi-user.target

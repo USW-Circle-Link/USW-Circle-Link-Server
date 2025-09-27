@@ -51,7 +51,7 @@ spring:
 
 # CORS 설정 추가
 cors:
-  allowed-origins: ${PROD_SERVER_ALLOWED_ORIGINS}
+  allowed-origins: "https://admin.donggurami.net"
 
 # 쿠키 설정 추가
 security:

@@ -37,6 +37,13 @@ spring:
     username: ${PROD_MYSQL_USER}
     password: ${PROD_MYSQL_PASS}
 
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: none

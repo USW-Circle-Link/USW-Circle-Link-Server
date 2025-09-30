@@ -100,7 +100,7 @@ public class UserController {
     }
 
     // 인증 확인 버튼
-    @GetMapping("/email/verification")
+    @PostMapping("/email/verification")
     public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated @RequestBody EmailDTO request){
 
         EmailToken emailToken = emailTokenService.checkEmailIsVerified(request.getEmail());

@@ -69,7 +69,7 @@ cloud:
   aws:
     s3:
       region: ap-northeast-2
-      credentials: instance-profile
+      credentials: default
       bucket: ${SERVER_AWS_S3_BUCKET}
     stack:
       auto: false

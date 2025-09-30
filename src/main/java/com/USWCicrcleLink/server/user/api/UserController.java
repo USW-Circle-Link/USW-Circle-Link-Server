@@ -46,7 +46,7 @@ public class UserController {
     }
 
     // 기존회원 가입시 이메일 중복 확인
-    @GetMapping("/check/{email}/duplicate")
+    @PostMapping("/check/{email}/duplicate")
     public ResponseEntity<ApiResponse<String>> verifyEmailDuplicate(@PathVariable("email") String email) {
         userService.verifyEmailDuplicate(email);
         ApiResponse<String> response = new ApiResponse<>("이메일 중복 확인에 성공하였습니다.");

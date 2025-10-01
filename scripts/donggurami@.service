@@ -8,10 +8,17 @@ Wants=network-online.target
 User=ec2-user
 WorkingDirectory=/home/ec2-user/app/current
 EnvironmentFile=-/home/ec2-user/app/.env
-Environment="PINPOINT=/home/ec2-user/pinpoint"
+
 # JAVA_OPTS가 .env에 있다면 자동 반영됨 (예: -Xms256m -Xmx1024m 등)
-ExecStart=/usr/bin/java ${JAVA_OPTS} -javaagent:${PINPOINT}/pinpoint-agent-3.0.1/pinpoint-bootstrap-3.0.1.jar -Dpinpoint.agentId=circle-link-server -Dpinpoint.applicationName=app01 -Dpinpoint.config=${PINPOINT}/pinpoint-agent-3.0.1/pinpoint-root.config -Dserver.port=%i -Dspring.profiles.active=prod -jar /home/ec2-user/app/current/app.jar
-SuccessExitStatus=143
+ExecStart=/usr/bin/java \
+  $JAVA_OPTS \
+  -javaagent:/home/ec2-user/pinpoint/pinpoint-agent-3.0.1/pinpoint-bootstrap-3.0.1.jar \
+  -Dpinpoint.agentId=circle-link-server \
+  -Dpinpoint.applicationName=app01 \
+  -Dpinpoint.config=/home/ec2-user/pinpoint/pinpoint-agent-3.0.1/pinpoint-root.config \
+  -Dserver.port=%i \
+  -Dspring.profiles.active=prod \
+  -jar /home/ec2-user/app/current/app.jar
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65535

@@ -66,7 +66,8 @@ cors:
 security:
   cookie:
     secure: false
-    same-site: Lax
+    # 안전한 요청(GET, 링크 클릭)에는 쿠키 전송
+    same-site: Lax 
 
 cloud:
   aws:

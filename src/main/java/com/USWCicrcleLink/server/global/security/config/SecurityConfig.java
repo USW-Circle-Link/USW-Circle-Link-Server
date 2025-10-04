@@ -109,6 +109,9 @@ public class SecurityConfig {
         configuration.addAllowedHeader("Origin");
         configuration.addAllowedHeader("emailToken_uuid");
         configuration.addAllowedHeader("uuid");
+        // 회원가입 시 요청 헤더로 사용됨
+        configuration.addAllowedHeader("emailTokenUUID");
+        configuration.addAllowedHeader("signupUUID");
 
         configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);

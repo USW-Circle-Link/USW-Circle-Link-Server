@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1800000L; // 30분
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 604800000L; // 7일
     private final UserDetailsServiceManager userDetailsServiceManager;
@@ -53,6 +52,12 @@ public class JwtProvider {
     @Value("${jwt.secret.key}")
     private String secretKeyString;
     private Key secretKey;
+
+    @Value("${security.cookie.secure:true}")
+    private boolean cookieSecure;
+
+    @Value("${security.cookie.same-site:Lax}")
+    private String cookieSameSite;
 
     @PostConstruct
     protected void init() {
@@ -249,21 +254,25 @@ public class JwtProvider {
     }
 
     /**
-     * 리프레시 토큰을 HttpOnly 쿠키로 설정 (SameSite=Strict 적용)
+     * 리프레시 토큰을 HttpOnly 쿠키로 설정 (SameSite/ Secure 프로퍼티 반영)
      */
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         int maxAge = (int) (REFRESH_TOKEN_EXPIRATION_TIME / 1000);
-        String secureFlag = "; Secure";
-        String cookieValue = String.format("refreshToken=%s; Path=/; HttpOnly; Max-Age=%d; SameSite=Strict%s",
-                refreshToken, maxAge, secureFlag);
+        String sameSite = (cookieSameSite == null || cookieSameSite.isBlank()) ? "Lax" : cookieSameSite;
+        String securePart = cookieSecure ? "; Secure" : "";
+        String cookieValue = String.format("refreshToken=%s; Path=/; HttpOnly; Max-Age=%d; SameSite=%s%s",
+                refreshToken, maxAge, sameSite, securePart);
         response.setHeader("Set-Cookie", cookieValue);
     }
 
     /**
-     * 쿠키에서 리프레시 토큰 삭제 (SameSite=Strict 적용)
+     * 쿠키에서 리프레시 토큰 삭제 (SameSite/ Secure 프로퍼티 반영)
      */
     public void deleteRefreshTokenCookie(HttpServletResponse response) {
-        String cookieValue = "refreshToken=; Path=/; HttpOnly; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict";
+        String sameSite = (cookieSameSite == null || cookieSameSite.isBlank()) ? "Lax" : cookieSameSite;
+        String securePart = cookieSecure ? "; Secure" : "";
+        String cookieValue = String.format("refreshToken=; Path=/; HttpOnly; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=%s%s",
+                sameSite, securePart);
         response.setHeader("Set-Cookie", cookieValue);
         log.debug("클라이언트 쿠키에서 리프레시 토큰 삭제 완료");
     }

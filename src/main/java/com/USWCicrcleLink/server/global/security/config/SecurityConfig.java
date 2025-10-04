@@ -110,6 +110,7 @@ public class SecurityConfig {
         configuration.addAllowedHeader("emailToken_uuid");
         configuration.addAllowedHeader("uuid");
 
+        configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

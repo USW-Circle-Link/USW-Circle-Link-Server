@@ -66,6 +66,7 @@ cors:
 security:
   cookie:
     secure: false
+    same-site: Lax
 
 cloud:
   aws:

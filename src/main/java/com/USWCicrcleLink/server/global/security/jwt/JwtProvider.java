@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1800000L; // 30분
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 604800000L; // 7일
     private final UserDetailsServiceManager userDetailsServiceManager;

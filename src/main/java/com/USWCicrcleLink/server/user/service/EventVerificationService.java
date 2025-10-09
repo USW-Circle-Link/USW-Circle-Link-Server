@@ -21,8 +21,8 @@ public class EventVerificationService {
 
     private final EventVerificationRepository eventVerificationRepository;
 
-    // 이벤트 코드: 반드시 환경 변수/프로퍼티에서만 주입
-    @Value("${event.code}")
+    // 이벤트 코드: 환경 변수/프로퍼티 없을 경우 기본값 1115 사용
+    @Value("${event.code:1115}")
     private String expectedEventCode;
 
     @Transactional(readOnly = true)

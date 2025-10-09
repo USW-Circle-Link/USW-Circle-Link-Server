@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.user.dto;
+package com.USWCicrcleLink.server.club.event.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -48,9 +48,6 @@ public class User implements ClientIdentifier {
     @Column(name = "role",nullable = false)
     private Role role;
 
-    @Column(name = "is_verified", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isVerified = false;
-
 
     public static User createUser(SignUpRequest request,String encodedPw,String email){
         return User.builder()
@@ -79,12 +76,9 @@ public class User implements ClientIdentifier {
         this.userPw = userPw;
     }
 
-    public void setVerified(boolean verified) {
-        this.isVerified = verified;
-    }
-
     @Override
     public String getClientId() {
         return this.email;
     }
 }
+

@@ -72,6 +72,8 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
 
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/**").hasRole("LEADER");
                     auth.requestMatchers(HttpMethod.GET, "/club-leader/**").hasRole("LEADER");

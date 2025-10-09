@@ -80,6 +80,14 @@ public enum RateLimitAction {
         public Bandwidth getLimit() {
             return Bandwidth.classic(2147483647, Refill.intervally(2147483647, Duration.ofMinutes(1)));
         }
+    },
+
+    // 이벤트 코드 검증
+    EVENT_VERIFY {
+        @Override
+        public Bandwidth getLimit() {
+            return Bandwidth.classic(2147483647, Refill.intervally(2147483647, Duration.ofMinutes(5)));
+        }
     };
 
     public abstract Bandwidth getLimit();

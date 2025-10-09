@@ -36,7 +36,7 @@ public class EventVerificationService {
         return eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
                 .map(existing -> {
                     log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-                    return new EventVerifyResponse(clubUUID, true, existing.getVerifiedAt());
+                    return new EventVerifyResponse(clubUUID, false, existing.getVerifiedAt());
                 })
                 .orElseGet(() -> {
                     // 코드 검증 (첫 인증만 코드 검사)
@@ -48,7 +48,7 @@ public class EventVerificationService {
                     EventVerification saved = eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
                     log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
                     // 첫 인증: isFirstVerify=false
-                    return new EventVerifyResponse(clubUUID, false, saved.getVerifiedAt());
+                    return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
                 });
     }
 }

@@ -31,7 +31,7 @@ public class RateLimiterAspect {
         String clientId="";
 
         // 로그인 이후의 요청인 경우
-        if(action.equals("WITHDRAWAL_EMAIL") || action.equals("WITHDRAWAL_CODE")){
+        if(action.equals("WITHDRAWAL_EMAIL") || action.equals("WITHDRAWAL_CODE") || action.equals("EVENT_VERIFY")){
             User user = userService.getUserByAuth();
             clientId = String.valueOf(user.getUserUUID());
         }

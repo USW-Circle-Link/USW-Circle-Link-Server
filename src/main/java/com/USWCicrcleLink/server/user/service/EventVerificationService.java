@@ -6,6 +6,8 @@ import com.USWCicrcleLink.server.user.domain.EventVerification;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.dto.EventVerifyResponse;
 import com.USWCicrcleLink.server.user.repository.EventVerificationRepository;
+import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.profile.domain.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class EventVerificationService {
 
     private final EventVerificationRepository eventVerificationRepository;
+    private final ProfileRepository profileRepository;
 
     // 이벤트 코드: 환경 변수/프로퍼티 없을 경우 기본값 1115 사용
     @Value("${event.code:1115}")
@@ -43,11 +46,18 @@ public class EventVerificationService {
             throw new UserException(ExceptionType.INVALID_EVENT_CODE);
         }
 
+        // 프로필 여부 조회 (있으면 profileId, 없으면 null)
+        Long profileId = profileRepository.findByUserUserId(user.getUserId())
+                .map(Profile::getProfileId)
+                .orElse(null);
+
         // 인증 성공 처리 (MYSQL 저장)
         EventVerification saved = eventVerificationRepository.save(
                 EventVerification.create(
                         user.getUserUUID(),
                         clubUUID,
+                        user.getUserId(),
+                        profileId,
                         user.getUserAccount(),
                         user.getEmail()
                 )

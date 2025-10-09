@@ -67,23 +67,45 @@ jobs:
           scp ./deploy.zip ec2-user@${{ secrets.LIGHTSAIL_HOST }}:/home/ec2-user/deploy.zip
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} << 'EOSSH'
             set -euo pipefail
-            rm -rf /home/ec2-user/app
             mkdir -p /home/ec2-user/app
             unzip -o /home/ec2-user/deploy.zip -d /home/ec2-user/app
             chmod +x /home/ec2-user/app/scripts/*.sh
           EOSSH
 
-      - name: 🎯 LightSail 서버에서 배포 실행 (AfterInstall)
+      - name: LightSail 서버에서 배포 실행 (AfterInstall)
         run: |
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "/home/ec2-user/app/scripts/run_new_was.sh"
 
-      - name: 🎯 LightSail 서버에서 배포 실행 (ApplicationStart)
+      - name: LightSail 서버에서 배포 실행 (ApplicationStart & Self-Heal)
         run: |
-          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "/home/ec2-user/app/scripts/health.sh"
+          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} << 'EOSSH'
+            set -euo pipefail
+            # Ensure nginx upstream config exists for blue/green
+            if [ ! -f /etc/nginx/conf.d/service-url.inc ]; then
+              echo "set \$service_url http://127.0.0.1:8082;" | sudo tee /etc/nginx/conf.d/service-url.inc
+              sudo service nginx reload || true
+            fi
+            # Initial health check; if fails, try cold restart automatically
+            if ! /home/ec2-user/app/scripts/health.sh; then
+              echo "[WARN] Health check failed. Attempting self-heal restart..."
+              # Kill any stale WAS on both candidate ports
+              for PORT in 8081 8082; do
+                PID=$(lsof -Fp -i TCP:${PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+') || true
+                if [ -n "$PID" ]; then sudo kill "$PID" || true; fi
+              done
+              # Force a cold-start baseline for nginx mapping
+              echo "set \$service_url http://127.0.0.1:8082;" | sudo tee /etc/nginx/conf.d/service-url.inc
+              sudo service nginx reload || true
+              # Start new WAS and re-check health
+              /home/ec2-user/app/scripts/run_new_was.sh
+              /home/ec2-user/app/scripts/health.sh
+            fi
+          EOSSH
 
-      - name: 🎯 LightSail 서버에서 배포 실행 (ValidateService)
+      - name: LightSail 서버에서 배포 실행 (ValidateService)
         run: |
           ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "/home/ec2-user/app/scripts/switch.sh"
 
-      - name: 🧹 임시 파일 정리
-        run: ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "rm -f ~/deploy.zip"
+      - name: 임시 파일 정리
+        run: |
+          ssh ec2-user@${{ secrets.LIGHTSAIL_HOST }} "rm -f ~/deploy.zip"

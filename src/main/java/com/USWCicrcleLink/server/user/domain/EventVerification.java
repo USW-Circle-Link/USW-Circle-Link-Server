@@ -30,16 +30,24 @@ public class EventVerification {
     @Column(name = "club_uuid", nullable = false, columnDefinition = "BINARY(16)")
     private UUID clubUUID;
 
+    @Column(name = "user_account", nullable = false, length = 20)
+    private String userAccount;
+
+    @Column(name = "email", nullable = false, length = 30)
+    private String email;
+
     @Column(name = "verified", nullable = false, columnDefinition = "bit(1)")
     private boolean verified;
 
     @Column(name = "verified_at", nullable = false)
     private LocalDateTime verifiedAt;
 
-    public static EventVerification create(UUID userUUID, UUID clubUUID) {
+    public static EventVerification create(UUID userUUID, UUID clubUUID, String userAccount, String email) {
         return EventVerification.builder()
                 .userUUID(userUUID)
                 .clubUUID(clubUUID)
+                .userAccount(userAccount)
+                .email(email)
                 .verified(true)
                 .verifiedAt(LocalDateTime.now())
                 .build();

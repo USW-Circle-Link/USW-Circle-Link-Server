@@ -44,7 +44,14 @@ public class EventVerificationService {
         }
 
         // 인증 성공 처리 (MYSQL 저장)
-        EventVerification saved = eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
+        EventVerification saved = eventVerificationRepository.save(
+                EventVerification.create(
+                        user.getUserUUID(),
+                        clubUUID,
+                        user.getUserAccount(),
+                        user.getEmail()
+                )
+        );
         log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
         // 첫 인증 성공: isFirstVerify=true
         return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());

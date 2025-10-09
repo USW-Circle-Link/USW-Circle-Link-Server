@@ -1,7 +1,6 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app
-export PINPOINT=/home/ec2-user/pinpoint
 
 ENV_FILE=$REPOSITORY/.env
 CURRENT_PORT=$(cat /etc/nginx/conf.d/service-url.inc | grep -Po '[0-9]+' | tail -1)
@@ -15,9 +14,6 @@ if [ -f $ENV_FILE ]; then
 else
     echo "> .env 파일이 존재하지 않습니다."
 fi
-
-#PINPOINT 경로 설정
-export PINPOINT=${PINPOINT:-/home/ec2-user/pinpoint}
 
 echo "> Current port of running WAS is ${CURRENT_PORT}."
 
@@ -51,10 +47,10 @@ echo "> 로그 파일이 존재하지 않으면 생성하고, 존재하면 내�
 touch $LOG_FILE
 
 echo "> $JAR_NAME 실행"
-nohup java -javaagent:$PINPOINT/pinpoint-agent-3.0.1/pinpoint-bootstrap.jar \
+nohup java -javaagent:/home/ec2-user/pinpoint/pinpoint-agent-3.0.1/pinpoint-bootstrap.jar \
       -Dpinpoint.agentId=circle-link-server \
       -Dpinpoint.applicationName=app01 \
-      -Dpinpoint.config=$PINPOINT/pinpoint-agent-3.0.1/pinpoint-root.config \
+      -Dpinpoint.config=/home/ec2-user/pinpoint/pinpoint-agent-3.0.1/pinpoint-root.config \
       -Dserver.port=${TARGET_PORT} \
       -Dspring.profiles.active=prod \
       -jar $JAR_NAME > $LOG_FILE 2>&1 &

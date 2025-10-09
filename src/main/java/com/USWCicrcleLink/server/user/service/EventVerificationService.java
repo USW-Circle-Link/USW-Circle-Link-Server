@@ -21,8 +21,8 @@ public class EventVerificationService {
 
     private final EventVerificationRepository eventVerificationRepository;
 
-    // 이벤트 코드(기본값 1115). 필요 시 프로필별 yml에서 event.code 로 오버라이드
-    @Value("${event.code:1115}")
+    // 이벤트 코드: 반드시 환경 변수/프로퍼티에서만 주입
+    @Value("${event.code}")
     private String expectedEventCode;
 
     @Transactional(readOnly = true)

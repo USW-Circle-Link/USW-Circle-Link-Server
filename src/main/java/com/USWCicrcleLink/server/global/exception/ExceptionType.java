@@ -52,7 +52,7 @@ public enum ExceptionType {
     USER_CREATION_FAILED("USR-218","회원 생성중 오류 발생",INTERNAL_SERVER_ERROR),
     USER_UUID_IS_NOT_VALID("USR-219","요청 받은 SIGNUPUUID가 일치하지 않습니다",UNAUTHORIZED),
     THIRD_PARTY_LOGIN_ATTEMPT("USR-220","제3자의 로그인 요청 시도 입니다",UNAUTHORIZED),
-    USER_ALREADY_VERIFIED("USR-221", "이미 인증된 사용자입니다.", BAD_REQUEST),
+
 
     /**
      * Domain: ClubMemberTemp

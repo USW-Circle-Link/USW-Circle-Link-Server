@@ -32,23 +32,21 @@ public class EventVerificationService {
 
     @Transactional
     public EventVerifyResponse verify(User user, UUID clubUUID, String code) {
-        // 이미 인증된 경우: 기존 verifiedAt 반환, isFirstVerify=true
-        return eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
-                .map(existing -> {
-                    log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-                    return new EventVerifyResponse(clubUUID, false, existing.getVerifiedAt());
-                })
-                .orElseGet(() -> {
-                    // 코드 검증 (첫 인증만 코드 검사)
-                    if (code == null || !code.equals(expectedEventCode)) {
-                        throw new UserException(ExceptionType.INVALID_EVENT_CODE);
-                    }
+        // 이미 인증된 경우: 오류 반환
+        if (eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)) {
+            log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+            throw new UserException(ExceptionType.EVENT_ALREADY_VERIFIED);
+        }
 
-                    // 인증 성공 처리 (MYSQL 저장)
-                    EventVerification saved = eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
-                    log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-                    // 첫 인증: isFirstVerify=false
-                    return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
-                });
+        // 코드 검증 (첫 인증만 코드 검사)
+        if (code == null || !code.equals(expectedEventCode)) {
+            throw new UserException(ExceptionType.INVALID_EVENT_CODE);
+        }
+
+        // 인증 성공 처리 (MYSQL 저장)
+        EventVerification saved = eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
+        log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+        // 첫 인증 성공: isFirstVerify=true
+        return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
     }
 }

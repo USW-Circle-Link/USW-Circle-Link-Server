@@ -32,20 +32,23 @@ public class EventVerificationService {
 
     @Transactional
     public EventVerifyResponse verify(User user, UUID clubUUID, String code) {
-        // 이미 인증된 경우 idempotent 처리
-        if (eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)) {
-            log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-            return new EventVerifyResponse(clubUUID, true);
-        }
+        // 이미 인증된 경우: 기존 verifiedAt 반환, isFirstVerify=true
+        return eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
+                .map(existing -> {
+                    log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+                    return new EventVerifyResponse(clubUUID, true, existing.getVerifiedAt());
+                })
+                .orElseGet(() -> {
+                    // 코드 검증 (첫 인증만 코드 검사)
+                    if (code == null || !code.equals(expectedEventCode)) {
+                        throw new UserException(ExceptionType.INVALID_EVENT_CODE);
+                    }
 
-        // 코드 검증
-        if (code == null || !code.equals(expectedEventCode)) {
-            throw new UserException(ExceptionType.INVALID_EVENT_CODE);
-        }
-
-        // 인증 성공 처리 (MYSQL 저장)
-        eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
-        log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-        return new EventVerifyResponse(clubUUID, true);
+                    // 인증 성공 처리 (MYSQL 저장)
+                    EventVerification saved = eventVerificationRepository.save(EventVerification.create(user.getUserUUID(), clubUUID));
+                    log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+                    // 첫 인증: isFirstVerify=false
+                    return new EventVerifyResponse(clubUUID, false, saved.getVerifiedAt());
+                });
     }
 }

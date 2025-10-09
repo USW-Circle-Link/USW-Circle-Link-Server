@@ -42,7 +42,7 @@ public class EventVerificationController {
     ) {
         User user = userDetails.user();
         EventVerifyResponse response = eventVerificationService.verify(user, request.getClubUUID(), request.getCode());
-        String message = response.isFirstVerify() ? "이미 인증된 사용자입니다" : "이벤트 인증 완료";
+        String message = response.isFirstVerify() ? "이벤트 인증 완료" : "이미 인증된 사용자입니다";
         return new ApiResponse<EventVerifyResponse>(message, response);
     }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app
-PINPOINT=/home/ec2-user/pinpoint
+export PINPOINT=/home/ec2-user/pinpoint
 
 ENV_FILE=$REPOSITORY/.env
 CURRENT_PORT=$(cat /etc/nginx/conf.d/service-url.inc | grep -Po '[0-9]+' | tail -1)
@@ -15,6 +15,9 @@ if [ -f $ENV_FILE ]; then
 else
     echo "> .env 파일이 존재하지 않습니다."
 fi
+
+#PINPOINT 경로 설정
+export PINPOINT=${PINPOINT:-/home/ec2-user/pinpoint}
 
 echo "> Current port of running WAS is ${CURRENT_PORT}."
 

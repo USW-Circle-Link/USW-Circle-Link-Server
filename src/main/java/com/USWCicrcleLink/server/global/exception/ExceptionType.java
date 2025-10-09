@@ -47,6 +47,7 @@ public enum ExceptionType {
     USER_UUID_NOT_FOUND("USR-210","회원의 uuid를 찾을 수 없습니다.", BAD_REQUEST),
     USER_AUTHENTICATION_FAILED("USR-211","아이디 혹은 비밀번호가 일치하지 않습니다",UNAUTHORIZED),
     INVALID_EVENT_CODE("EVT-101","유효하지 않은 이벤트 코드입니다.", BAD_REQUEST),
+    EVENT_ALREADY_VERIFIED("EVT-102","이미 인증된 사용자입니다.", BAD_REQUEST),
     USER_PASSWORD_CONDITION_FAILED("USR-214","영문자,숫자,특수문자는 적어도 1개 이상씩 포함되어야합니다",BAD_REQUEST),
     USER_NONMEMBER("USR-216","비회원 사용자입니다.인증을 완료해주세요",UNAUTHORIZED),
     USER_PASSWORD_NOT_REUSE("USR-217", "현재 비밀번호와 같은 비밀번호로 변경할 수 없습니다.", BAD_REQUEST),

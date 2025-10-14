@@ -24,6 +24,9 @@ spring:
         - secret
         - file
         - security
+springdoc:
+  api-docs:
+    version: OPENAPI_3_1
 ---
 spring:
   config:

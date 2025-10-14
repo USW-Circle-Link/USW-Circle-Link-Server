@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -96,31 +97,16 @@ public class SecurityConfig {
                 .filter(origin -> !origin.isEmpty())
                 .forEach(configuration::addAllowedOriginPattern);
 
-        configuration.addAllowedMethod(HttpMethod.GET);
-        configuration.addAllowedMethod(HttpMethod.POST);
-        configuration.addAllowedMethod(HttpMethod.PUT);
-        configuration.addAllowedMethod(HttpMethod.PATCH);
-        configuration.addAllowedMethod(HttpMethod.DELETE);
-        configuration.addAllowedMethod(HttpMethod.OPTIONS);
-
-        configuration.addAllowedHeader("Authorization");
-        configuration.addAllowedHeader("Content-Type");
-        configuration.addAllowedHeader("X-Requested-With");
-        configuration.addAllowedHeader("Accept");
-        configuration.addAllowedHeader("Origin");
-        configuration.addAllowedHeader("emailToken_uuid");
-        configuration.addAllowedHeader("uuid");
-        // 회원가입 시 요청 헤더로 사용됨
-        configuration.addAllowedHeader("emailTokenUUID");
-        configuration.addAllowedHeader("signupUUID");
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
 
         configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
-
 }

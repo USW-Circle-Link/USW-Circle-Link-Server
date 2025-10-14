@@ -23,7 +23,7 @@ public class OpenApiConfig {
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")))
-                .addServersItem(new Server().url("/"))
+                .addServersItem(new Server().url("https://api.donggurami.net"))
                 .addSecurityItem(new SecurityRequirement().addList(BEARER_SCHEME_NAME));
     }
 }

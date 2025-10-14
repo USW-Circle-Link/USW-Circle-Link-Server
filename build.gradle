@@ -90,6 +90,9 @@ dependencies {
 	implementation 'com.bucket4j:bucket4j-core:8.7.0'
 	implementation 'com.bucket4j:bucket4j-redis:8.7.0'
 	implementation 'io.lettuce:lettuce-core:6.2.6.RELEASE'
+
+	// OpenAPI (Swagger UI)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }
 
 tasks.named('test') {

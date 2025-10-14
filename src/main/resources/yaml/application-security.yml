@@ -40,6 +40,7 @@ spring:
       - /api
       - /api/**
       - /docs
+      - /
 
     logging-paths:
       - /admin/**
@@ -54,7 +55,7 @@ spring:
 
 springdoc:
   swagger-ui:
-    path: /api
+    path: /
     disable-swagger-default-url: true
   api-docs:
     path: /v3/api-docs

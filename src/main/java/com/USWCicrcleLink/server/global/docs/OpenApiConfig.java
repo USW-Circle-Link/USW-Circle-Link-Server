@@ -17,7 +17,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .info(new Info().title("USW Circle Link API").version("v1"))
+                .info(new Info().title("USW Circle Link Server API").version("v1"))
                 .components(new Components()
                         .addSecuritySchemes(BEARER_SCHEME_NAME, new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)

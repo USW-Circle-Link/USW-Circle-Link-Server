@@ -1,5 +1,6 @@
 server:
   port: ${BASIC_PORT}
+  forward-headers-strategy: framework
 
   error:
     include-exception: false

@@ -27,8 +27,6 @@ spring:
 springdoc:
   api-docs:
     version: OPENAPI_3_1
-server:
-  forward-headers-strategy: framework
 ---
 spring:
   config:

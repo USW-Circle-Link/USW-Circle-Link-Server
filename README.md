@@ -1,2 +1,5 @@
-# NOTE : 현재 RATE LIMIT 제한 제거, 로그인 스트레스 테스트하는중
-스트레스 테스트 모두 완료한후 다시 되돌려놓기
+<p>
+  <img width="1024" height="500" alt="image" src="https://github.com/user-attachments/assets/5e9f9dcd-717a-4f33-843b-4a1d985e53b4" />
+</p>
+
+> 대학교 학생들을 위한 동아리 지원 플랫폼

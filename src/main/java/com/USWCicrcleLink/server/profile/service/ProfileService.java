@@ -10,7 +10,10 @@ import com.USWCicrcleLink.server.profile.domain.Profile;
 import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.profile.dto.ProfileRequest;
 import com.USWCicrcleLink.server.profile.dto.ProfileResponse;
+import com.USWCicrcleLink.server.profile.dto.DuplicationProfileRequest;
 import com.USWCicrcleLink.server.user.domain.User;
+import com.USWCicrcleLink.server.user.repository.UserRepository;
+import com.USWCicrcleLink.server.user.service.PasswordService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,8 @@ public class ProfileService {
     private final AplictRepository aplictRepository;
     private final ClubMembersRepository clubMembersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordService passwordService;
 
 
     //프로필 업데이트
@@ -129,6 +134,33 @@ public class ProfileService {
                     throw new ProfileException(ExceptionType.PROFILE_ALREADY_EXISTS);
                 });
         log.debug("프로필 중복 확인 완료- 중복없음");
+    }
+
+    // 이름/학번/전화번호 모두 일치 시 기존 회원 비밀번호 덮어쓰기
+    @Transactional
+    public void checkAndOverwrite(DuplicationProfileRequest request) {
+        log.debug("기존 회원 확인 및 덮어쓰기 요청 - 이름: {}, 학번: {}, 전화번호: {}",
+                request.getUserName(), request.getStudentNumber(), request.getUserHp());
+
+        // 비밀번호 유효성 검증 및 일치 확인
+        passwordService.validatePassword(request.getPassword(), request.getConfirmPassword());
+
+        // 기존 프로필 조회 (이름+학번+전화번호)
+        Profile profile = profileRepository
+                .findByUserNameAndStudentNumberAndUserHp(request.getUserName(), request.getStudentNumber(), request.getUserHp())
+                .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
+
+        User user = profile.getUser();
+        if (user == null) {
+            log.error("프로필은 존재하지만 연결된 사용자 계정이 없습니다. profileId={}", profile.getProfileId());
+            throw new UserException(ExceptionType.USER_NOT_EXISTS);
+        }
+
+        // 기존 사용자 비밀번호 덮어쓰기
+        user.updateUserPw(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        log.debug("기존 회원 비밀번호 업데이트 완료 - userUUID: {}", user.getUserUUID());
     }
 
 }

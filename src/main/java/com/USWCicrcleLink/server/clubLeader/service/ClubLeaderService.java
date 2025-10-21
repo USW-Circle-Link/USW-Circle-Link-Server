@@ -955,57 +955,51 @@ public class ClubLeaderService {
         return true;
     }
 
-    // 기존 동아리원 추가(엑셀)
+    // 기존 동아리원 추가(엑셀) - 이름/학번/전화번호 중복 시 기존 회원 덮어쓰기(+멤버십 보장)
     public void addClubMembersFromExcel(UUID clubUUID, List<ClubMembersAddFromExcelRequest> clubMembersAddFromExcelRequests) {
         Club club = validateLeaderAccess(clubUUID);
 
-        // 중복 확인 데이터 수집
+        // 요청 데이터를 (이름_학번_전화번호) 키로 매핑
         Map<String, ClubMembersAddFromExcelRequest> requestDataMap = new HashMap<>();
-        List<Map<String, String>> duplicateUsers = new ArrayList<>();
-
-        // 요청 데이터를 키로 매핑 (이름_학번_전화번호_전공)
         for (ClubMembersAddFromExcelRequest request : clubMembersAddFromExcelRequests) {
             if (request.getMajor() == null || request.getMajor().trim().isEmpty()) {
                 throw new ProfileException(ExceptionType.DEPARTMENT_NOT_INPUT);
             }
-
-            String clubMemberKey = request.getUserName() + "_"
-                    + request.getStudentNumber() + "_"
-                    + request.getUserHp() + "_"
-                    + request.getMajor();
-            requestDataMap.put(clubMemberKey, request);
+            String key = request.getUserName() + "_" + request.getStudentNumber() + "_" + request.getUserHp();
+            requestDataMap.put(key, request);
         }
 
-        // DB에서 중복 데이터 확인 (이름, 학번, 전화번호, 전공을 모두 포함)
-        List<Profile> duplicateProfiles = profileRepository.findByUserNameInAndStudentNumberInAndUserHpInAndMajorIn(
+        // DB에서 (이름, 학번, 전화번호) 기준으로 기존 프로필 조회
+        List<Profile> existingProfiles = profileRepository.findByUserNameInAndStudentNumberInAndUserHpIn(
                 requestDataMap.values().stream().map(ClubMembersAddFromExcelRequest::getUserName).collect(Collectors.toSet()),
                 requestDataMap.values().stream().map(ClubMembersAddFromExcelRequest::getStudentNumber).collect(Collectors.toSet()),
-                requestDataMap.values().stream().map(ClubMembersAddFromExcelRequest::getUserHp).collect(Collectors.toSet()),
-                requestDataMap.values().stream().map(ClubMembersAddFromExcelRequest::getMajor).collect(Collectors.toSet())
+                requestDataMap.values().stream().map(ClubMembersAddFromExcelRequest::getUserHp).collect(Collectors.toSet())
         );
 
-        // 중복 확인 및 매핑
-        for (Profile profile : duplicateProfiles) {
-            String uniqueKey = profile.getUserName() + "_" + profile.getStudentNumber() + "_" + profile.getUserHp() + "_" + profile.getMajor();
+        // 1) 기존 프로필 덮어쓰기 및 멤버십 보장
+        for (Profile profile : existingProfiles) {
+            String key = profile.getUserName() + "_" + profile.getStudentNumber() + "_" + profile.getUserHp();
+            ClubMembersAddFromExcelRequest req = requestDataMap.get(key);
+            if (req == null) continue; // 교차 조합으로 인해 매칭 안 되는 경우 스킵
 
-            ClubMembersAddFromExcelRequest duplicateRequest = requestDataMap.get(uniqueKey);
-            if (duplicateRequest != null) {
-                duplicateUsers.add(Map.of(
-                        "이름", profile.getUserName(),
-                        "학번", profile.getStudentNumber(),
-                        "전화번호", profile.getUserHp(),
-                        "전공", profile.getMajor()
-                ));
-                requestDataMap.remove(uniqueKey); // 중복 데이터는 저장 대상에서 제거
+            // 프로필 정보 덮어쓰기(이름/학번/전화/전공)
+            profile.updateProfile(req.getUserName(), req.getStudentNumber(), req.getMajor(), req.getUserHp());
+            profileRepository.save(profile);
+
+            // 클럽 멤버십 존재 보장 (없으면 생성)
+            if (clubMembersRepository.findByProfileProfileIdAndClubClubId(profile.getProfileId(), club.getClubId()).isEmpty()) {
+                ClubMembers clubMember = ClubMembers.builder()
+                        .club(club)
+                        .profile(profile)
+                        .build();
+                clubMembersRepository.save(clubMember);
             }
+
+            // 처리된 요청 제거 → 남은 항목만 신규 생성
+            requestDataMap.remove(key);
         }
 
-        // 중복된 데이터가 있으면 예외 처리
-        if (!duplicateUsers.isEmpty()) {
-            throw new ProfileException(ExceptionType.DUPLICATE_PROFILE, duplicateUsers);
-        }
-
-        // 중복되지 않은 데이터만 저장
+        // 2) 남은 신규 데이터만 생성
         for (ClubMembersAddFromExcelRequest validRequest : requestDataMap.values()) {
             Profile profile = Profile.builder()
                     .userName(validRequest.getUserName())

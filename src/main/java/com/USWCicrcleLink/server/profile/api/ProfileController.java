@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,27 @@ public class ProfileController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
                     description = "중복 확인 결과",
-                    content = @Content(schema = @Schema(implementation = ProfileDuplicationCheckResponse.class))
+                    content = @Content(
+                            schema = @Schema(implementation = ProfileDuplicationCheckResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "NOT_FOUND",
+                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":false,\"classification\":\"NOT_FOUND\",\"inTargetClub\":false,\"clubUUIDs\":[],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":null}}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "NO_CLUB",
+                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"NO_CLUB\",\"inTargetClub\":false,\"clubUUIDs\":[],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "SAME_CLUB",
+                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"SAME_CLUB\",\"inTargetClub\":true,\"clubUUIDs\":[\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\"],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "OTHER_CLUB",
+                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"OTHER_CLUB\",\"inTargetClub\":false,\"clubUUIDs\":[\"11111111-2222-3333-4444-555555555555\"],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
+                                    )
+                            }
+                    )
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "유효성 검증 실패")
     })

@@ -22,6 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameter;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +37,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/club-leader")
 @Slf4j
+@Tag(name = "Club Leader", description = "동아리 회장 기능 API")
 public class ClubLeaderController {
 
     private final ClubLeaderService clubLeaderService;
@@ -173,13 +180,21 @@ public class ClubLeaderController {
     }
 
     // 기존 동아리 회원 엑셀 파일 업로드
-    @PostMapping("/{clubUUID}/members/import")
+    @PostMapping(value = "/{clubUUID}/members/import", consumes = {"multipart/form-data"})
+    @Operation(
+            summary = "동아리 회원 엑셀 업로드 사전 검증",
+            description = "엑셀(.xlsx)을 업로드하면 추가 가능 회원 목록과 중복 프로필 목록을 분류하여 반환합니다."
+    )
     public ResponseEntity<ApiResponse<ClubMembersImportExcelResponse>> importClubMembers(@PathVariable("clubUUID") UUID clubUUID, @RequestPart(value = "clubMembersFile", required = true) MultipartFile clubMembersFile) throws IOException {
         return new ResponseEntity<>(clubLeaderService.uploadExcel(clubUUID, clubMembersFile), HttpStatus.OK);
     }
 
     // 기존 동아리 회원 엑셀 파일로 추가
     @PostMapping("/{clubUUID}/members")
+    @Operation(
+            summary = "엑셀 검증 결과 저장",
+            description = "사전 검증 단계에서 분류된 추가 대상 회원 목록을 저장합니다(중복 예외 처리 포함)."
+    )
     public ResponseEntity<ApiResponse> addClubMembersFromExcel(@PathVariable("clubUUID") UUID clubUUID, @RequestBody @Validated(ValidationSequence.class) ClubMembersAddFromExcelRequestList clubMembersAddFromExcelRequestList) {
         clubLeaderService.addClubMembersFromExcel(clubUUID, clubMembersAddFromExcelRequestList.getClubMembersAddFromExcelRequestList());
         return new ResponseEntity<>(new ApiResponse<>("엑셀로 추가된 기존 동아리 회원 저장 완료"), HttpStatus.OK);
@@ -187,6 +202,10 @@ public class ClubLeaderController {
 
     // 프로필 중복 동아리 회원 추가
     @PostMapping("/{clubUUID}/members/duplicate-profiles")
+    @Operation(
+            summary = "중복 프로필 회원 추가",
+            description = "이름/학번/전화번호로 조회된 기존 프로필을 현재 동아리에 회원으로 추가합니다."
+    )
     public ResponseEntity<ApiResponse> getDuplicateProfileMember(@PathVariable("clubUUID") UUID clubUUID, @RequestBody @Validated(ValidationSequence.class) DuplicateProfileMemberRequest duplicateProfileMemberRequest) {
         return new ResponseEntity<>(clubLeaderService.addDuplicateProfileMember(clubUUID, duplicateProfileMemberRequest), HttpStatus.OK);
     }

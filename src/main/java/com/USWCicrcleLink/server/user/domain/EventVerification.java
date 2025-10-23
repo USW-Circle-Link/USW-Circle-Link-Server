@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table(
         name = "event_verification_table",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UK_event_user", columnNames = {"user_uuid"})
+                @UniqueConstraint(name = "UK_event_user_club", columnNames = {"user_uuid", "club_uuid"})
         }
 )
 @Getter
@@ -26,6 +26,9 @@ public class EventVerification {
 
     @Column(name = "user_uuid", nullable = false, columnDefinition = "BINARY(16)")
     private UUID userUUID;
+
+    @Column(name = "club_uuid", nullable = false, columnDefinition = "BINARY(16)")
+    private UUID clubUUID;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
@@ -45,9 +48,10 @@ public class EventVerification {
     @Column(name = "verified_at", nullable = false)
     private LocalDateTime verifiedAt;
 
-    public static EventVerification create(UUID userUUID, Long userId, Long profileId, String userAccount, String email) {
+    public static EventVerification create(UUID userUUID, UUID clubUUID, Long userId, Long profileId, String userAccount, String email) {
         return EventVerification.builder()
                 .userUUID(userUUID)
+                .clubUUID(clubUUID)
                 .userId(userId)
                 .profileId(profileId)
                 .userAccount(userAccount)

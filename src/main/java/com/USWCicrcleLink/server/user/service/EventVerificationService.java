@@ -29,15 +29,15 @@ public class EventVerificationService {
     private String expectedEventCode;
 
     @Transactional(readOnly = true)
-    public boolean checkStatus(User user, UUID clubUUID) {
-        return eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID);
+    public boolean checkStatus(User user) {
+        return eventVerificationRepository.existsByUserUUID(user.getUserUUID());
     }
 
     @Transactional
-    public EventVerifyResponse verify(User user, UUID clubUUID, String code) {
+    public EventVerifyResponse verify(User user, String code) {
         // 이미 인증된 경우: 오류 반환
-        if (eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)) {
-            log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+        if (eventVerificationRepository.existsByUserUUID(user.getUserUUID())) {
+            log.debug("이미 인증된 상태 - userUUID={}", user.getUserUUID());
             throw new UserException(ExceptionType.EVENT_ALREADY_VERIFIED);
         }
 
@@ -55,15 +55,14 @@ public class EventVerificationService {
         EventVerification saved = eventVerificationRepository.save(
                 EventVerification.create(
                         user.getUserUUID(),
-                        clubUUID,
                         user.getUserId(),
                         profileId,
                         user.getUserAccount(),
                         user.getEmail()
                 )
         );
-        log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+        log.info("이벤트 인증 완료 - userUUID={}", user.getUserUUID());
         // 첫 인증 성공: isFirstVerify=true
-        return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
+        return new EventVerifyResponse(true, saved.getVerifiedAt());
     }
 }

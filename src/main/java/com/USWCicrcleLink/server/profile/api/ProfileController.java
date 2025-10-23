@@ -44,7 +44,13 @@ public class ProfileController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "프로필 중복 확인 요청 본문",
-                    content = @Content(schema = @Schema(implementation = ProfileDuplicationCheckRequest.class))
+                    content = @Content(
+                            schema = @Schema(implementation = ProfileDuplicationCheckRequest.class),
+                            examples = @ExampleObject(
+                                    name = "Sample Request",
+                                    value = "{\n  \"userName\": \"홍길동\",\n  \"studentNumber\": \"20231234\",\n  \"userHp\": \"01012345678\",\n  \"clubUUID\": \"29eca3fa-4b8b-40c3-b4c3-50b25a80ee0c\"\n}"
+                            )
+                    )
             )
     )
     @ApiResponses({

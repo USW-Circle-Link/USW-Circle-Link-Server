@@ -140,6 +140,20 @@ public class JwtProvider {
         return UUID.fromString(uuidStr);
     }
 
+    //액세스 토큰에서 clubUUID 추출 (없으면 null 반환
+    public UUID getClubUUIDFromAccessToken(String accessToken) {
+        Claims claims = getClaims(accessToken);
+        Object val = claims.get("clubUUID");
+        if (val == null) {
+            return null;
+        }
+        try {
+            return UUID.fromString(val.toString());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     // JWT Claims 파싱 및 반환
     private Claims getClaims(String jwtToken) {
         return Jwts.parserBuilder()

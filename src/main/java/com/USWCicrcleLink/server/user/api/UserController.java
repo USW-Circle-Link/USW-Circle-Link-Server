@@ -27,15 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
-import io.swagger.v3.oas.annotations.Operation;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @Slf4j
@@ -49,16 +42,6 @@ public class UserController {
     private final WithdrawalTokenService withdrawalTokenService;
     private final EmailTokenService emailTokenService;
 
-    @Operation(
-            summary = "비밀번호 변경",
-            description = "현재 비밀번호 확인 후 새 비밀번호로 변경합니다. JWT 인증 필요."
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "비밀번호 변경 성공", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "요청 유효성 오류 또는 비밀번호 정책 위반"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패")
-    })
-    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/userpw")
     public ApiResponse<String> updateUserPw(@Validated(ValidationSequence.class) @RequestBody UpdatePwRequest request) {
         userService.updateNewPW(request);
@@ -66,11 +49,6 @@ public class UserController {
     }
 
     // 기존회원 가입시 이메일 중복 확인
-    @Operation(summary = "이메일 중복 체크", description = "입력 이메일이 사용자 또는 기존 회원가입 대기자에 중복되는지 확인합니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "중복 아님"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "중복됨")
-    })
     @PostMapping("/check/{email}/duplicate")
     public ResponseEntity<ApiResponse<String>> verifyEmailDuplicate(@PathVariable("email") String email) {
         userService.verifyEmailDuplicate(email);
@@ -79,11 +57,6 @@ public class UserController {
     }
 
     // 아이디 중복 체크
-    @Operation(summary = "아이디 중복 체크", description = "계정(account)의 사용 가능 여부를 확인합니다.")
-    @ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "사용 가능"),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "중복됨")
-    })
     @GetMapping("/verify-duplicate/{account}")
     public ResponseEntity<ApiResponse<String>> verifyAccountDuplicate(@PathVariable("account") String account) {
 
@@ -94,20 +67,6 @@ public class UserController {
     }
 
     // 신규회원가입 요청 - 인증 메일 전송
-    @Operation(
-            summary = "신규회원가입: 인증 메일 전송",
-            description = "이메일 중복 검사 후 회원가입 인증 메일을 전송합니다. 레이트 리미트 적용.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    required = true,
-                    content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(name = "이메일 예시", value = "{\n  \"email\": \"user@example.com\"\n}"))
-            )
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인증 메일 전송 완료"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이메일 중복"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "429", description = "과도한 요청")
-    })
     @PostMapping("/temporary/register")
     public ResponseEntity<ApiResponse<VerifyEmailResponse>> registerTemporaryUser(@Validated @RequestBody EmailDTO request)  {
 
@@ -124,7 +83,6 @@ public class UserController {
     }
 
     // 이메일 인증 여부 검증하기
-    @Operation(summary = "신규회원가입: 이메일 인증 링크 검증", description = "메일의 인증 링크를 통해 토큰을 검증하고 결과 페이지를 렌더링합니다.")
     @GetMapping("/email/verify-token")
     public ModelAndView verifySignUpMail (@RequestParam("emailTokenUUID") UUID emailTokenUUID) {
 
@@ -145,7 +103,6 @@ public class UserController {
     }
 
     // 인증 확인 버튼
-    @Operation(summary = "신규회원가입: 인증 확인 버튼", description = "사용자가 인증 확인 버튼을 눌러 인증 완료 상태를 확인합니다.")
     @PostMapping("/email/verification")
     public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated @RequestBody EmailDTO request){
 
@@ -158,20 +115,6 @@ public class UserController {
     }
 
     // 회원 가입 정보 등록하기 -- 다음 버튼 누른 후
-    @Operation(
-            summary = "신규회원가입: 회원 정보 등록",
-            description = "인증 완료된 사용자가 회원 정보를 제출하여 가입을 완료합니다.",
-            parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "emailTokenUUID", required = true, description = "인증 토큰 UUID"),
-                    @Parameter(in = ParameterIn.HEADER, name = "signupUUID", required = true, description = "회원가입 요청 UUID")
-            },
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json"))
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "회원가입 성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "유효성 오류"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "중복 또는 정책 위반")
-    })
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> signUp(@Validated(ValidationSequence.class) @RequestBody  SignUpRequest request,@RequestHeader("emailTokenUUID") UUID emailTokenUUID,@RequestHeader("signupUUID") UUID signupUUID) {
 
@@ -187,11 +130,6 @@ public class UserController {
     }
 
     // 기존 동아리원 회원가입
-    @Operation(
-            summary = "기존 동아리원 회원가입",
-            description = "기존 동아리원 정보로 임시 회원을 등록하고 각 동아리장에게 가입 신청을 전송합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json"))
-    )
     @PostMapping("/existing/register")
     public ResponseEntity<ApiResponse<Void>> ExistingMemberSignUp(@RequestBody @Validated(ValidationSequence.class) ExistingMemberSignUpRequest request)  {
 
@@ -205,11 +143,6 @@ public class UserController {
     }
 
     // 아이디 찾기
-    @Operation(summary = "아이디 찾기", description = "이메일로 계정을 조회하고 아이디 정보를 메일로 전송합니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "전송 완료"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "사용자 없음")
-    })
     @GetMapping ("/find-account/{email}")
     ResponseEntity<ApiResponse<String>> findUserAccount(@PathVariable("email") String email) {
 
@@ -221,12 +154,6 @@ public class UserController {
     }
 
     // 비밀번호 찾기 - 인증 코드 전송
-    @Operation(
-            summary = "비밀번호 찾기: 인증 코드 전송",
-            description = "아이디/이메일 검증 후 비밀번호 재설정을 위한 인증 코드를 메일로 전송합니다. 레이트 리미트 적용.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json",
-                    examples = @ExampleObject(name = "계정/이메일 예시", value = "{\n  \"userAccount\": \"user1\",\n  \"email\": \"user@example.com\"\n}")))
-    )
     @PostMapping("/auth/send-code")
     @RateLimite(action = "PW_FOUND_EMAIL")
     ResponseEntity<ApiResponse<UUID>> sendAuthCode (@Valid @RequestBody UserInfoDto request) {
@@ -240,12 +167,6 @@ public class UserController {
     }
 
     // 인증 코드 검증
-    @Operation(
-            summary = "비밀번호 찾기: 인증 코드 검증",
-            description = "인증 코드를 검증하고 사용된 토큰을 제거합니다.",
-            parameters = {@Parameter(in = ParameterIn.HEADER, name = "uuid", required = true, description = "사용자 UUID")},
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json"))
-    )
     @PostMapping("/auth/verify-token")
     @RateLimite(action = "VALIDATE_CODE")
     public ApiResponse<String> verifyAuthToken(@RequestHeader("uuid") UUID uuid,@Valid @RequestBody AuthCodeRequest request) {
@@ -257,12 +178,6 @@ public class UserController {
     }
 
     // 비밀번호 재설정
-    @Operation(
-            summary = "비밀번호 재설정",
-            description = "인증 완료 후 새 비밀번호로 재설정합니다.",
-            parameters = {@Parameter(in = ParameterIn.HEADER, name = "uuid", required = true, description = "사용자 UUID")},
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json"))
-    )
     @PatchMapping("/reset-password")
     public ApiResponse<String> resetUserPw(@RequestHeader("uuid") UUID uuid, @RequestBody PasswordRequest request) {
 
@@ -274,17 +189,6 @@ public class UserController {
     /**
      * User 로그인
      */
-    @Operation(
-            summary = "로그인",
-            description = "아이디와 비밀번호를 검증하여 Access/Refresh 토큰을 발급합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json",
-                    examples = @ExampleObject(name = "로그인 예시", value = "{\n  \"account\": \"user1\",\n  \"password\": \"P@ssw0rd!\",\n  \"fcmToken\": \"optional-token\"\n}")))
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = TokenDto.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "429", description = "과도한 요청")
-    })
     @PostMapping("/login")
     @RateLimite(action = "APP_LOGIN")
     public ResponseEntity<ApiResponse<TokenDto>> userLogin(@RequestBody @Validated(ValidationSequence.class) LogInRequest request, HttpServletResponse response) {
@@ -294,8 +198,6 @@ public class UserController {
     }
 
     // 회원 탈퇴 요청 및 메일 전송
-    @Operation(summary = "회원 탈퇴: 인증 메일 전송", description = "탈퇴 인증 코드를 메일로 전송합니다. JWT 인증 필요.")
-    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/exit/send-code")
     @RateLimite(action = "WITHDRAWAL_EMAIL")
     public ApiResponse<String> sendWithdrawalCode () {
@@ -309,12 +211,6 @@ public class UserController {
     }
 
     // 회원 탈퇴 인증 번호 확인
-    @Operation(
-            summary = "회원 탈퇴: 인증 코드 검증 및 탈퇴",
-            description = "탈퇴 인증 코드를 검증 후 회원 정보를 삭제하고 로그아웃합니다. JWT 인증 필요.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = "application/json"))
-    )
-    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/exit")
     @RateLimite(action ="WITHDRAWAL_CODE")
     public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,@Valid @RequestBody AuthCodeRequest authCodeRequest){

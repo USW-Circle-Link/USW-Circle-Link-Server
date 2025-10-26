@@ -8,12 +8,7 @@ import com.USWCicrcleLink.server.profile.dto.ProfileRequest;
 import com.USWCicrcleLink.server.profile.dto.ProfileResponse;
 import com.USWCicrcleLink.server.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,49 +33,6 @@ public class ProfileController {
     }
 
     @PostMapping("/duplication-check")
-    @Operation(
-            summary = "프로필 중복 확인",
-            description = "이름(userName), 학번(studentNumber), 전화번호(userHp)로 기존 프로필의 존재 여부를 확인합니다. 선택적으로 clubUUID를 전달하면 대상 동아리 소속 여부 및 분류(SAME_CLUB/OTHER_CLUB/NO_CLUB)를 함께 반환합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    required = true,
-                    description = "프로필 중복 확인 요청 본문",
-                    content = @Content(
-                            schema = @Schema(implementation = ProfileDuplicationCheckRequest.class),
-                            examples = @ExampleObject(
-                                    name = "Sample Request",
-                                    value = "{\n  \"userName\": \"홍길동\",\n  \"studentNumber\": \"20231234\",\n  \"userHp\": \"01012345678\",\n  \"clubUUID\": \"29eca3fa-4b8b-40c3-b4c3-50b25a80ee0c\"\n}"
-                            )
-                    )
-            )
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "200",
-                    description = "중복 확인 결과",
-                    content = @Content(
-                            schema = @Schema(implementation = ProfileDuplicationCheckResponse.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "NOT_FOUND",
-                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":false,\"classification\":\"NOT_FOUND\",\"inTargetClub\":false,\"clubUUIDs\":[],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":null}}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "NO_CLUB",
-                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"NO_CLUB\",\"inTargetClub\":false,\"clubUUIDs\":[],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "SAME_CLUB",
-                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"SAME_CLUB\",\"inTargetClub\":true,\"clubUUIDs\":[\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\"],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "OTHER_CLUB",
-                                            value = "{\"message\":\"프로필 중복 확인 결과\",\"data\":{\"exists\":true,\"classification\":\"OTHER_CLUB\",\"inTargetClub\":false,\"clubUUIDs\":[\"11111111-2222-3333-4444-555555555555\"],\"targetClubUUID\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\"profileId\":123}}"
-                                    )
-                            }
-                    )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "유효성 검증 실패")
-    })
     public ApiResponse<ProfileDuplicationCheckResponse> checkDuplication(@RequestBody @Validated(ValidationSequence.class) ProfileDuplicationCheckRequest request) {
         ProfileDuplicationCheckResponse response = profileService.checkProfileDuplication(
                 request.getUserName(),

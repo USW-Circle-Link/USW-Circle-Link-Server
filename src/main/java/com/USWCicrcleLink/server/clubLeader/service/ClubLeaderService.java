@@ -760,7 +760,7 @@ public class ClubLeaderService {
         }
     }
 
-    // 선택된 지원자 수와 전체 지원자 수 비교
+    // 선택된 지원자 수와 전체 지원자 수 비교 
     private void validateTotalApplicants(List<Aplict> applicants, List<ApplicantResultsRequest> results) {
         Set<UUID> applicantUUIDs = applicants.stream()
                 .map(Aplict::getAplictUUID)

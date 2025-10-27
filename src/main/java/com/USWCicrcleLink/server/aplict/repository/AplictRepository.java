@@ -28,7 +28,7 @@ public interface AplictRepository extends JpaRepository<Aplict, Long> ,AplictRep
 
     void deleteAllByProfile(Profile profile);
 
-    @Query("SELECT COUNT(a) > 0 FROM Aplict a WHERE a.profile = :profile AND a.club.clubUUID = :clubUUID")
+    @Query("SELECT COUNT(a) > 0 FROM Aplict a WHERE a.profile = :profile AND a.club.clubUUID = :clubUUID AND a.checked = false")
     boolean existsByProfileAndClubUUID(Profile profile, UUID clubUUID);
 
     @Query("SELECT a.club FROM Aplict a WHERE a.aplictId = :aplictId")

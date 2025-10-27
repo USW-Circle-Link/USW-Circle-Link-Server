@@ -129,6 +129,11 @@ public class UserController {
     // 기존 동아리원 회원가입
     @PostMapping("/existing/register")
     public ResponseEntity<ApiResponse<Void>> ExistingMemberSignUp(@RequestBody @Validated(ValidationSequence.class) ExistingMemberSignUpRequest request)  {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>("현재 기존 동아리원 회원가입이 불가능합니다."));
+
+        /*
         // 기존 회원 가입을 위한 조건 검사
         userService.checkExistingSignupCondition(request);
         // 임시 동아리 회원 생성
@@ -136,6 +141,7 @@ public class UserController {
         // 입력받은 동아리의 회장들에게 가입신청서 보내기
         userService.sendRequest(request, clubMemberTemp);
         return ResponseEntity.ok(new ApiResponse<>("가입 요청에 성공했습니다"));
+        */
     }
 
     // 아이디 찾기

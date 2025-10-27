@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/club-leader")
 @Slf4j
+@Tag(name = "Club Leader", description = "동아리 회장 기능 API")
 public class ClubLeaderController {
 
     private final ClubLeaderService clubLeaderService;
@@ -173,7 +175,7 @@ public class ClubLeaderController {
     }
 
     // 기존 동아리 회원 엑셀 파일 업로드
-    @PostMapping("/{clubUUID}/members/import")
+    @PostMapping(value = "/{clubUUID}/members/import", consumes = {"multipart/form-data"})
     public ResponseEntity<ApiResponse<ClubMembersImportExcelResponse>> importClubMembers(@PathVariable("clubUUID") UUID clubUUID, @RequestPart(value = "clubMembersFile", required = true) MultipartFile clubMembersFile) throws IOException {
         return new ResponseEntity<>(clubLeaderService.uploadExcel(clubUUID, clubMembersFile), HttpStatus.OK);
     }

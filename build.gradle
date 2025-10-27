@@ -33,6 +33,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
 
+	// generate metadata for @ConfigurationProperties
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 	// db
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -90,6 +93,11 @@ dependencies {
 	implementation 'com.bucket4j:bucket4j-core:8.7.0'
 	implementation 'com.bucket4j:bucket4j-redis:8.7.0'
 	implementation 'io.lettuce:lettuce-core:6.2.6.RELEASE'
+
+	// OpenAPI (Swagger UI)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	// Explicit swagger annotations (helps IDE resolve types)
+	implementation 'io.swagger.core.v3:swagger-annotations:2.2.22'
 }
 
 tasks.named('test') {

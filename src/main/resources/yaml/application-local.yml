@@ -2,6 +2,7 @@ server:
   port: 8080
   base:
     url: "http://localhost:8080"
+  forward-headers-strategy: none
 
   error:
     include-exception: true
@@ -66,6 +67,8 @@ cors:
 security:
   cookie:
     secure: false
+    # 안전한 요청(GET, 링크 클릭)에는 쿠키 전송
+    same-site: Lax 
 
 cloud:
   aws:

@@ -1,5 +1,6 @@
 server:
   port: ${BASIC_PORT}
+  forward-headers-strategy: framework
 
   error:
     include-exception: false
@@ -37,6 +38,13 @@ spring:
     username: ${PROD_MYSQL_USER}
     password: ${PROD_MYSQL_PASS}
 
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -51,18 +59,20 @@ spring:
 
 # CORS 설정 추가
 cors:
-  allowed-origins: "https://admin.donggurami.net,https://donggurami.net"
+  allowed-origins: "https://donggurami.net,https://*.donggurami.net"
 
 # 쿠키 설정 추가
 security:
   cookie:
     secure: true
+    # 모든 요청(크로스사이트 포함)에 쿠키 전송
+    same-site: None
 
 cloud:
   aws:
     s3:
       region: ap-northeast-2
-      credentials: instance-profile
+      credentials: default
       bucket: ${SERVER_AWS_S3_BUCKET}
     stack:
       auto: false

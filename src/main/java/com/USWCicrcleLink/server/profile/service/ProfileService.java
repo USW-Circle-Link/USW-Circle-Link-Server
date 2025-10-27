@@ -7,6 +7,7 @@ import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.profile.domain.Profile;
+import com.USWCicrcleLink.server.profile.dto.ProfileDuplicationCheckResponse;
 import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.profile.dto.ProfileRequest;
 import com.USWCicrcleLink.server.profile.dto.ProfileResponse;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -131,4 +133,21 @@ public class ProfileService {
         log.debug("프로필 중복 확인 완료- 중복없음");
     }
 
+    public ProfileDuplicationCheckResponse checkProfileDuplication(String userName, String studentNumber, String userHp, UUID clubUUID) {
+        var optionalProfile = profileRepository.findByUserNameAndStudentNumberAndUserHp(userName, studentNumber, userHp);
+
+        if (optionalProfile.isEmpty()) {
+            return new ProfileDuplicationCheckResponse(false, "NOT_FOUND", false, List.of(), clubUUID, null);
+        }
+
+        Profile profile = optionalProfile.get();
+        List<UUID> clubUUIDs = clubMembersRepository.findClubUUIDsByProfileId(profile.getProfileId());
+
+        boolean inTargetClub = clubUUID != null && clubUUIDs.stream().anyMatch(u -> u.equals(clubUUID));
+        String classification = inTargetClub
+                ? "SAME_CLUB"
+                : (clubUUIDs.isEmpty() ? "NO_CLUB" : "OTHER_CLUB");
+
+        return new ProfileDuplicationCheckResponse(true, classification, inTargetClub, clubUUIDs, clubUUID, profile.getProfileId());
+    }
 }

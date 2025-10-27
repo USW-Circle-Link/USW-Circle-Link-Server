@@ -28,10 +28,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @Slf4j
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "일반 사용자 관련 API")
 public class UserController {
 
     private final UserService userService;
@@ -46,7 +49,7 @@ public class UserController {
     }
 
     // 기존회원 가입시 이메일 중복 확인
-    @GetMapping("/check/{email}/duplicate")
+    @PostMapping("/check/{email}/duplicate")
     public ResponseEntity<ApiResponse<String>> verifyEmailDuplicate(@PathVariable("email") String email) {
         userService.verifyEmailDuplicate(email);
         ApiResponse<String> response = new ApiResponse<>("이메일 중복 확인에 성공하였습니다.");
@@ -100,7 +103,7 @@ public class UserController {
     }
 
     // 인증 확인 버튼
-    @GetMapping("/email/verification")
+    @PostMapping("/email/verification")
     public ResponseEntity<ApiResponse<SignUpuuidResponse>> emailVerification(@Validated @RequestBody EmailDTO request){
 
         EmailToken emailToken = emailTokenService.checkEmailIsVerified(request.getEmail());
@@ -194,6 +197,7 @@ public class UserController {
     @PostMapping("/login")
     @RateLimite(action = "APP_LOGIN")
     public ResponseEntity<ApiResponse<TokenDto>> userLogin(@RequestBody @Validated(ValidationSequence.class) LogInRequest request, HttpServletResponse response) {
+
         TokenDto tokenDto = userService.userLogin(request, response);
         return ResponseEntity.ok(new ApiResponse<>("로그인 성공", tokenDto));
     }

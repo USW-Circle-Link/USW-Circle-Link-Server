@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -59,7 +60,6 @@ public class SecurityConfig {
 
                     auth.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.PATCH, "/admin/**").hasRole("LEADER");
                     auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
 
@@ -72,6 +72,8 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
 
                     auth.requestMatchers(HttpMethod.POST, "/club-leader/**").hasRole("LEADER");
                     auth.requestMatchers(HttpMethod.GET, "/club-leader/**").hasRole("LEADER");
@@ -95,27 +97,16 @@ public class SecurityConfig {
                 .filter(origin -> !origin.isEmpty())
                 .forEach(configuration::addAllowedOriginPattern);
 
-        configuration.addAllowedMethod(HttpMethod.GET);
-        configuration.addAllowedMethod(HttpMethod.POST);
-        configuration.addAllowedMethod(HttpMethod.PUT);
-        configuration.addAllowedMethod(HttpMethod.PATCH);
-        configuration.addAllowedMethod(HttpMethod.DELETE);
-        configuration.addAllowedMethod(HttpMethod.OPTIONS);
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
 
-        configuration.addAllowedHeader("Authorization");
-        configuration.addAllowedHeader("Content-Type");
-        configuration.addAllowedHeader("X-Requested-With");
-        configuration.addAllowedHeader("Accept");
-        configuration.addAllowedHeader("Origin");
-        configuration.addAllowedHeader("emailToken_uuid");
-        configuration.addAllowedHeader("uuid");
-
+        configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
-
 }

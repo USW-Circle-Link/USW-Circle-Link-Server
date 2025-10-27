@@ -719,6 +719,9 @@ public class ClubLeaderService {
 
         // 지원자 검증(지원한 동아리 + 지원서 + check안된 상태)
         for (ApplicantResultsRequest result : results) {
+            if (result.getAplictStatus() == null || result.getAplictStatus() == AplictStatus.WAIT) {
+                throw new AplictException(ExceptionType.INVALID_INPUT);
+            }
             Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndChecked(
                             club.getClubId(),
                             result.getAplictUUID(),
@@ -762,6 +765,11 @@ public class ClubLeaderService {
 
     // 선택된 지원자 수와 전체 지원자 수 비교 
     private void validateTotalApplicants(List<Aplict> applicants, List<ApplicantResultsRequest> results) {
+        // 요청이 비어있는 경우는 허용하지 않음
+        if (results == null || results.isEmpty()) {
+            throw new AplictException(ExceptionType.INVALID_INPUT);
+        }
+
         Set<UUID> applicantUUIDs = applicants.stream()
                 .map(Aplict::getAplictUUID)
                 .collect(Collectors.toSet());
@@ -770,7 +778,7 @@ public class ClubLeaderService {
                 .map(ApplicantResultsRequest::getAplictUUID)
                 .collect(Collectors.toSet());
 
-        if (!requestedApplicantUUIDs.equals(applicantUUIDs)) {
+        if (!applicantUUIDs.containsAll(requestedApplicantUUIDs)) {
             throw new AplictException(ExceptionType.APPLICANT_COUNT_MISMATCH);
         }
     }
@@ -798,6 +806,9 @@ public class ClubLeaderService {
 
         // 지원자 검증(지원한 동아리 + 지원서 + check된 상태 + 불합)
         for (ApplicantResultsRequest result : results) {
+            if (result.getAplictStatus() != AplictStatus.PASS) {
+                throw new AplictException(ExceptionType.INVALID_INPUT);
+            }
             Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndCheckedAndAplictStatus(
                             club.getClubId(),
                             result.getAplictUUID(),

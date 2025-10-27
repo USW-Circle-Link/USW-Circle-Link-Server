@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -97,6 +98,8 @@ public class AplictService {
     public void submitAplict(UUID clubUUID) {
         Profile profile = getAuthenticatedProfile();
 
+        checkIfCanApply(clubUUID);
+
         Club club = clubRepository.findByClubUUID(clubUUID)
                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
 
@@ -107,7 +110,11 @@ public class AplictService {
                 .aplictStatus(AplictStatus.WAIT)
                 .build();
 
-        aplictRepository.save(aplict);
+        try {
+            aplictRepository.save(aplict);
+        } catch (DataIntegrityViolationException e) {
+            throw new AplictException(ExceptionType.ALREADY_APPLIED);
+        }
         log.debug("동아리 지원서 제출 성공 - ClubUUID: {}, Status: {}", clubUUID, AplictStatus.WAIT);
     }
 

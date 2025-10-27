@@ -13,7 +13,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "APLICT_TABLE")
+@Table(name = "APLICT_TABLE",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_aplict_active", columnNames = {"club_id", "profile_id", "aplict_checked"})
+        }
+)
 public class Aplict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

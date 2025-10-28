@@ -73,7 +73,6 @@ public class AplictService {
         }
 
         log.debug("동아리 지원 가능 - ClubUUID: {}", clubUUID);
-        return true;
     }
 
     /**

@@ -16,10 +16,11 @@ public class AplictController {
 
     // 지원 가능 여부 확인 (ANYONE)
     @GetMapping("/can-apply/{clubUUID}")
-    public ResponseEntity<ApiResponse<Boolean>> canApply(@PathVariable("clubUUID") UUID clubUUID) {
-        aplictService.checkIfCanApply(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("지원 가능"));
+    public ResponseEntity<Boolean> canApply(@PathVariable("clubUUID") UUID clubUUID) {
+        boolean canApply = aplictService.checkIfCanApply(clubUUID);
+        return ResponseEntity.ok(canApply);
     }
+
 
     //구글 폼 URL 조회 (USER)
     @GetMapping("/{clubUUID}")

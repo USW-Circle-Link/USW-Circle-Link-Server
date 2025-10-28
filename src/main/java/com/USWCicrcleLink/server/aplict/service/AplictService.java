@@ -76,6 +76,38 @@ public class AplictService {
     }
 
     /**
+     * 동아리 지원 가능 여부(불리언) 반환 (USER)
+     */
+    @Transactional(readOnly = true)
+    public boolean canApply(UUID clubUUID) {
+        Profile profile = getAuthenticatedProfile();
+
+        if (aplictRepository.existsByProfileAndClubUUID(profile, clubUUID)) {
+            return false;
+        }
+
+        if (clubMembersRepository.existsByProfileAndClubUUID(profile, clubUUID)) {
+            return false;
+        }
+
+        List<Profile> clubMembers = clubMembersRepository.findProfilesByClubUUID(clubUUID);
+
+        for (Profile member : clubMembers) {
+            if (profile.getUserHp().equals(member.getUserHp())) {
+                return false;
+            }
+        }
+
+        for (Profile member : clubMembers) {
+            if (profile.getStudentNumber().equals(member.getStudentNumber())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 지원서 작성하기 버튼 (USER)
      */
     @Transactional(readOnly = true)

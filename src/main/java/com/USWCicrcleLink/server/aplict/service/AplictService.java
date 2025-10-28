@@ -43,7 +43,7 @@ public class AplictService {
      * 동아리 지원 가능 여부 확인 (ANYONE)
      */
     @Transactional(readOnly = true)
-    public void checkIfCanApply(UUID clubUUID) {
+    public boolean checkIfCanApply(UUID clubUUID) {
         Profile profile = getAuthenticatedProfile();
 
         // 이미 지원한 경우 예외 처리

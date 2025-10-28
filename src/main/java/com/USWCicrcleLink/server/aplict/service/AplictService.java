@@ -116,7 +116,6 @@ public class AplictService {
             throw new AplictException(ExceptionType.ALREADY_APPLIED);
         }
         log.debug("동아리 지원서 제출 성공 - ClubUUID: {}, Status: {}", clubUUID, AplictStatus.WAIT);
-        return boolean
     }
 
     /**

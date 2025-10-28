@@ -66,4 +66,11 @@ public class EventVerificationService {
         // 첫 인증 성공: isFirstVerify=true
         return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
     }
+
+    @Transactional
+    public void delete(User user, UUID clubUUID) {
+        eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
+                .ifPresent(eventVerificationRepository::delete);
+        log.info("이벤트 인증 삭제 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+    }
 }

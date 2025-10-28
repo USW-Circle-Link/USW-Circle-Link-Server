@@ -60,4 +60,19 @@ public class EventVerificationController {
         String message = response.isFirstVerify() ? "이벤트 인증 완료" : "이미 인증된 사용자입니다";
         return new ApiResponse<EventVerifyResponse>(message, response);
     }
+
+    @DeleteMapping("/delete")
+    public ApiResponse<String> delete(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpServletRequest httpRequest
+    ) {
+        User user = userDetails.user();
+        String accessToken = jwtProvider.resolveAccessToken(httpRequest);
+        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
+        if (clubUUID == null) {
+            throw new UserException(ExceptionType.INVALID_INPUT);
+        }
+        eventVerificationService.delete(user, clubUUID);
+        return new ApiResponse<>("이벤트 인증 삭제가 완료되었습니다.");
+    }
 }

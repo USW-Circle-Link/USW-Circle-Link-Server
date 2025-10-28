@@ -17,8 +17,8 @@ public class AplictController {
     // 지원 가능 여부 확인 (ANYONE)
     @GetMapping("/can-apply/{clubUUID}")
     public ResponseEntity<ApiResponse<Boolean>> canApply(@PathVariable("clubUUID") UUID clubUUID) {
-        aplictService.checkIfCanApply(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("지원 가능"));
+        boolean canApply = aplictService.canApply(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("지원 가능", canApply));
     }
 
     //구글 폼 URL 조회 (USER)

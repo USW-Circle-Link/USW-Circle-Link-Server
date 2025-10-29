@@ -24,21 +24,21 @@ import java.util.UUID;
 public class EventVerificationController {
 
     private final EventVerificationService eventVerificationService;
-    private final JwtProvider jwtProvider;
+//    private final JwtProvider jwtProvider;
 
     // 상태 조회: 특정 clubUUID에 대해 현재 사용자 인증 여부 확인
     @GetMapping("/status")
     public ApiResponse<EventStatusResponse> status(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpServletRequest request
+            @AuthenticationPrincipal CustomUserDetails userDetails
+//            HttpServletRequest request
     ) {
         User user = userDetails.user();
-        String accessToken = jwtProvider.resolveAccessToken(request);
-        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
-        if (clubUUID == null) {
-            throw new UserException(ExceptionType.INVALID_INPUT);
-        }
-        boolean verified = eventVerificationService.checkStatus(user, clubUUID);
+//        String accessToken = jwtProvider.resolveAccessToken(request);
+//        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
+//        if (clubUUID == null) {
+//            throw new UserException(ExceptionType.INVALID_INPUT);
+//        }
+        boolean verified = eventVerificationService.checkStatus(user);
         return new ApiResponse<EventStatusResponse>("이벤트 인증 상태 조회", new EventStatusResponse(verified));
     }
 
@@ -47,32 +47,32 @@ public class EventVerificationController {
     @RateLimite(action = "EVENT_VERIFY")
     public ApiResponse<EventVerifyResponse> verify(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @Valid @RequestBody EventVerifyRequest request,
-            HttpServletRequest httpRequest
+            @Valid @RequestBody EventVerifyRequest request
+//            HttpServletRequest httpRequest
     ) {
         User user = userDetails.user();
-        String accessToken = jwtProvider.resolveAccessToken(httpRequest);
-        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
-        if (clubUUID == null) {
-            throw new UserException(ExceptionType.INVALID_INPUT);
-        }
-        EventVerifyResponse response = eventVerificationService.verify(user, clubUUID, request.getCode());
+//        String accessToken = jwtProvider.resolveAccessToken(httpRequest);
+//        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
+//        if (clubUUID == null) {
+//            throw new UserException(ExceptionType.INVALID_INPUT);
+//        }
+        EventVerifyResponse response = eventVerificationService.verify(user, request.getCode());
         String message = response.isFirstVerify() ? "이벤트 인증 완료" : "이미 인증된 사용자입니다";
         return new ApiResponse<EventVerifyResponse>(message, response);
     }
 
     @DeleteMapping("/delete")
     public ApiResponse<String> delete(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpServletRequest httpRequest
+            @AuthenticationPrincipal CustomUserDetails userDetails
+//            HttpServletRequest httpRequest
     ) {
         User user = userDetails.user();
-        String accessToken = jwtProvider.resolveAccessToken(httpRequest);
-        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
-        if (clubUUID == null) {
-            throw new UserException(ExceptionType.INVALID_INPUT);
-        }
-        eventVerificationService.delete(user, clubUUID);
+//        String accessToken = jwtProvider.resolveAccessToken(httpRequest);
+//        UUID clubUUID = jwtProvider.getClubUUIDFromAccessToken(accessToken);
+//        if (clubUUID == null) {
+//            throw new UserException(ExceptionType.INVALID_INPUT);
+//        }
+        eventVerificationService.delete(user);
         return new ApiResponse<>("이벤트 인증 삭제가 완료되었습니다.");
     }
 }

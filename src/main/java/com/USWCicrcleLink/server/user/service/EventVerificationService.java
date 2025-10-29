@@ -90,6 +90,15 @@ public class EventVerificationService {
         return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
     }
 
+    @Transactional
+    public void delete(User user) {
+        UUID clubUUID = getClubUUIDByUserId(user.getUserId());
+
+        eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
+                .ifPresent(eventVerificationRepository::delete);
+        log.info("이벤트 인증 삭제 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+    }
+
     private UUID getClubUUIDByUserId(Long userId) {
         Long profileId = profileRepository.findByUserUserId(userId)
                 .map(Profile::getProfileId)

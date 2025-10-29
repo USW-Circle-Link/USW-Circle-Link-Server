@@ -16,6 +16,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI openAPI() {
+        // These operation-level options override the global server options.
         return new OpenAPI()
                 .info(new Info().title("USW Circle Link Server API").version("v1"))
                 .components(new Components()
@@ -24,6 +25,7 @@ public class OpenApiConfig {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")))
                 .addServersItem(new Server().url("https://api.donggurami.net"))
+                .addServersItem(new Server().url("http://localhost:8080"))
                 .addSecurityItem(new SecurityRequirement().addList(BEARER_SCHEME_NAME));
     }
 }

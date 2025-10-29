@@ -24,7 +24,7 @@ import java.util.UUID;
 public class EventVerificationController {
 
     private final EventVerificationService eventVerificationService;
-    private final JwtProvider jwtProvider;
+//    private final JwtProvider jwtProvider;
 
     // 상태 조회: 특정 clubUUID에 대해 현재 사용자 인증 여부 확인
     @GetMapping("/status")

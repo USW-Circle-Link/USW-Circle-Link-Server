@@ -34,21 +34,20 @@ public class EventVerificationService {
     @Transactional(readOnly = true)
     public boolean checkStatus(User user) {
         // profileId로 clubUUID 조회
-        UUID clubUUID = getClubUUIDByUserId(user.getUserId());
+        UUID clubUUID = getClubUUIDByUserUUID(user.getUserUUID());
         return eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID);
     }
 
     @Transactional
     public EventVerifyResponse verify(User user, String code) {
 
-        Long profileId = profileRepository.findByUserUserId(user.getUserId())
-                .map(Profile::getProfileId)
-                .orElse(null);
+        Profile profile = profileRepository.findByUser_UserUUID(user.getUserUUID())
+                .orElseThrow(() -> {
+                    log.warn("이벤트 인증 시도 - 프로필 없음. userUUID={}", user.getUserUUID());
+                    return new UserException(ExceptionType.INVALID_INPUT); // 프로필이 없으므로 진행 불가
+                });
 
-        if (profileId == null) {
-            log.warn("이벤트 인증 시도 - 프로필 없음. userUUID={}", user.getUserUUID());
-            throw new UserException(ExceptionType.INVALID_INPUT); // 프로필이 없으므로 진행 불가
-        }
+        Long profileId = profile.getProfileId();
 
         List<UUID> clubUUIDs = clubMembersRepository.findClubUUIDsByProfileId(profileId);
         if (clubUUIDs.isEmpty()) {
@@ -92,17 +91,18 @@ public class EventVerificationService {
 
     @Transactional
     public void delete(User user) {
-        UUID clubUUID = getClubUUIDByUserId(user.getUserId());
+        UUID clubUUID = getClubUUIDByUserUUID(user.getUserUUID());
 
         eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
                 .ifPresent(eventVerificationRepository::delete);
         log.info("이벤트 인증 삭제 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
     }
 
-    private UUID getClubUUIDByUserId(Long userId) {
-        Long profileId = profileRepository.findByUserUserId(userId)
-                .map(Profile::getProfileId)
+    private UUID getClubUUIDByUserUUID(UUID userUUID) {
+        Profile profile = profileRepository.findByUser_UserUUID(userUUID)
                 .orElseThrow(() -> new UserException(ExceptionType.INVALID_INPUT)); // 프로필이 없음
+
+        Long profileId = profile.getProfileId();
 
         List<UUID> clubUUIDs = clubMembersRepository.findClubUUIDsByProfileId(profileId);
         if (clubUUIDs.isEmpty()) {

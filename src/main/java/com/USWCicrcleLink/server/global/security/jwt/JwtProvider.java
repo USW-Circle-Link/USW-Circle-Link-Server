@@ -135,7 +135,7 @@ public class JwtProvider {
     /**
      * 엑세스 토큰에서 UUID 추출
      */
-    private UUID getUUIDFromAccessToken(String accessToken) {
+    public UUID getUUIDFromAccessToken(String accessToken) {
         String uuidStr = getClaims(accessToken).getSubject();
         return UUID.fromString(uuidStr);
     }

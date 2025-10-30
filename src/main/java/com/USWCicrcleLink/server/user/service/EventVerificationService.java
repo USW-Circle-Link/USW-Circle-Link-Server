@@ -89,15 +89,6 @@ public class EventVerificationService {
         return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
     }
 
-    @Transactional
-    public void delete(User user) {
-        UUID clubUUID = getClubUUIDByUserUUID(user.getUserUUID());
-
-        eventVerificationRepository.findByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)
-                .ifPresent(eventVerificationRepository::delete);
-        log.info("이벤트 인증 삭제 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
-    }
-
     private UUID getClubUUIDByUserUUID(UUID userUUID) {
         Profile profile = profileRepository.findByUser_UserUUID(userUUID)
                 .orElseThrow(() -> new UserException(ExceptionType.INVALID_INPUT)); // 프로필이 없음

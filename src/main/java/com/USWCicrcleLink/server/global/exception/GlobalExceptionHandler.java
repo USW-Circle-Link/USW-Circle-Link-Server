@@ -21,7 +21,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
+import jakarta.persistence.EntityNotFoundException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -276,4 +276,45 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * [추가 1] DB에서 엔티티를 찾지 못했을 때 - 404 에러
+     * 예: formRepository.findById(999) -> 없으면 EntityNotFoundException 발생
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        logByHttpStatus(status, e.getMessage(), e, request);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                e.getClass().getSimpleName(),
+                "ENTITY_NOT_FOUND",
+                e.getMessage(), // Service에서 적은 "해당 동아리를 찾을 수 없습니다." 메시지가 여기 들어감
+                status,
+                null
+        );
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    /**
+     * [추가 2] 잘못된 비즈니스 로직 요청 - 400 에러
+     * 예: 마감일이 시작일보다 빠름 -> IllegalArgumentException 발생
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        logByHttpStatus(status, e.getMessage(), e, request);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                e.getClass().getSimpleName(),
+                "INVALID_INPUT_VALUE",
+                e.getMessage(), // Service에서 적은 "마감일은 시작일보다 빠를 수 없습니다." 메시지가 여기 들어감
+                status,
+                null
+        );
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 }
+

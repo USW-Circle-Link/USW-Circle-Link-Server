@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FormRepository extends JpaRepository<ClubForm, Long> {
-    // 기본적인 CRUD(저장, 조회, 삭제) 기능이 자동으로 제공됩니다.
+public interface ClubFormRepository extends JpaRepository<ClubForm, Long> {
+
 }

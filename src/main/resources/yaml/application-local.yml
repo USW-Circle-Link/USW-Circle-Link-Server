@@ -1,0 +1,80 @@
+server:
+  port: 8080
+  base:
+    url: "http://localhost:8080"
+  forward-headers-strategy: none
+
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-message: always
+
+logging:
+  level:
+    root: info
+    # 서비스
+    com.USWCicrcleLink.server: debug
+    # 스프링 프레임워크
+    org.springframework: info
+    org.springframework.web: debug
+    org.springframework.security: info
+    # JPA
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace  # 바인딩된 SQL 파라미터
+    org.hibernate.type: info  # Hibernate 데이터 타입 변환 로그
+    # tomcat, 웹 서버
+    org.apache.catalina.core: info
+    # DB 쿼리
+    p6spy: debug
+
+email:
+  config:
+    baseUrl: "http://localhost:8080"
+
+firebase:
+  config-path: ${LOCAL_FIREBASE_CONFIG_PATH}
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${TEST_MYSQL_USER}
+    password: ${TEST_MYSQL_PASS}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+
+# CORS 설정 추가
+cors:
+  allowed-origins: ${LOCAL_SERVER_ALLOWED_ORIGINS}
+
+  # 쿠키 설정 추가
+security:
+  cookie:
+    secure: false
+    # 안전한 요청(GET, 링크 클릭)에는 쿠키 전송
+    same-site: Lax 
+
+cloud:
+  aws:
+    s3:
+      region: ap-northeast-2
+      credentials: default
+      bucket: ${LOCAL_AWS_S3_BUCKET}
+    stack:
+      auto: false

@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.0.35
+    container_name: circle-link-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TEST_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${TEST_MYSQL_NAME}
+      MYSQL_USER: ${TEST_MYSQL_USER}
+      MYSQL_PASSWORD: ${TEST_MYSQL_PASS}
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:7.0.15
+    container_name: circle-link-redis
+    restart: always
+    ports:
+      - "6379:6379"

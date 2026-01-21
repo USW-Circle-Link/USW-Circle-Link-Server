@@ -1,0 +1,78 @@
+server:
+  port: ${BASIC_PORT}
+  forward-headers-strategy: framework
+
+  error:
+    include-exception: false
+    include-stacktrace: never
+    include-message: never
+
+logging:
+  level:
+    root: warn
+    com.USWCicrcleLink.server: info  # 프로젝트 관련 로그
+    org.springframework.security: error  # Spring Security 로그
+    org.springframework.web: error  # 서블릿 로그
+    org.apache.catalina.core: error  # Tomcat 로그
+    org.springframework: error  # Spring 내부 로그
+    org.hibernate.SQL: off  # Hibernate SQL 쿼리 로그
+    org.hibernate.type: off  # Hibernate 바인딩 로그
+    p6spy: off
+
+#email url
+email:
+  config:
+    baseUrl: ${PROD_SERVER_URL}
+
+firebase:
+  config-path: ${SERVER_FIREBASE_CONFIG_PATH}
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${PROD_MYSQL_HOST}:${PROD_MYSQL_PORT}/${PROD_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${PROD_MYSQL_USER}
+    password: ${PROD_MYSQL_PASS}
+
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+# CORS 설정 추가
+cors:
+  allowed-origins: "https://donggurami.net,https://*.donggurami.net"
+
+# 쿠키 설정 추가
+security:
+  cookie:
+    secure: true
+    # 모든 요청(크로스사이트 포함)에 쿠키 전송
+    same-site: None
+
+cloud:
+  aws:
+    s3:
+      region: ap-northeast-2
+      credentials: default
+      bucket: ${SERVER_AWS_S3_BUCKET}
+    stack:
+      auto: false

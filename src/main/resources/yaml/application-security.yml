@@ -1,0 +1,61 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+    activate:
+      on-profile: security
+
+  security:
+    permit-all-paths:
+      - /users/temporary/register
+      - /users/email/verify-token
+      - /users/email/verification
+      - /users/signup
+      - /users/existing/register
+      - /users/verify-duplicate/{account}
+      - /users/validate-passwords-match
+      - /users/find-account/{email}
+      - /users/auth/send-code
+      - /users/auth/verify-token
+      - /users/reset-password
+      - /users/email/resend-confirmation
+      - /users/login
+      - /users/check/{email}/duplicate
+      - /club-leader/login
+      - /admin/login
+      - /integration/**
+      - /mainPhoto/**
+      - /introPhoto/**
+      - /notice/Photo/**
+      - /my-notices/**
+      - /clubs/**
+      - /profiles/duplication-check
+      - /mypages/clubs/{floor}/photo
+      - /clubs/filter/**
+      - /images/logo.png
+      - /health-check
+      - /swagger-ui.html
+      - /swagger-ui/**
+      - /v3/api-docs
+      - /v3/api-docs/**
+      - /api
+      - /api/**
+      - /docs
+      - /
+
+    logging-paths:
+      - /admin/**
+      - /notices/**
+      - /club-leader/**
+
+    methods:
+      - POST
+      - DELETE
+      - PUT
+      - PATCH
+
+springdoc:
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs

@@ -1,0 +1,68 @@
+server:
+  port: ${BASIC_PORT}
+
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-message: always
+
+logging:
+  level:
+    root: info
+    com.USWCicrcleLink.server: debug
+    org.springframework.security: warn
+    org.springframework.web: warn
+    org.apache.catalina.core: warn
+    org.springframework: error
+    org.hibernate.SQL: info
+    org.hibernate.type: info
+    p6spy: info
+
+# email url
+email:
+  config:
+    baseUrl: ${TEST_SERVER_URL}
+
+firebase:
+  config-path: ${LOCAL_FIREBASE_CONFIG_PATH}
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${TEST_MYSQL_HOST}:${TEST_MYSQL_PORT}/${TEST_MYSQL_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${TEST_MYSQL_USER}
+    password: ${TEST_MYSQL_PASS}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+# CORS 설정 추가
+cors:
+  allowed-origins: ${TEST_SERVER_ALLOWED_ORIGINS}
+
+ # 쿠키 설정 추가
+security:
+  cookie:
+    secure: false
+
+cloud:
+  aws:
+    s3:
+      region: ap-northeast-2
+      credentials: instance-profile
+      bucket: ${LOCAL_AWS_S3_BUCKET}
+    stack:
+      auto: false

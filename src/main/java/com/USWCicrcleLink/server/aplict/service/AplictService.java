@@ -5,7 +5,9 @@ import com.USWCicrcleLink.server.aplict.domain.AplictStatus;
 import com.USWCicrcleLink.server.aplict.domain.ApplicationAnswer;
 import com.USWCicrcleLink.server.aplict.dto.AplictDetailResponse;
 import com.USWCicrcleLink.server.aplict.dto.SubmitAplictRequest;
+import com.USWCicrcleLink.server.aplict.dto.UserApplicationResponse;
 import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
+import com.USWCicrcleLink.server.aplict.repository.ApplicationAnswerRepository;
 import com.USWCicrcleLink.server.club.club.domain.Club;
 import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
 import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
@@ -195,5 +197,18 @@ public class AplictService {
 
         return profileRepository.findByUser_UserUUID(user.getUserUUID())
                 .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+    }
+    private final ApplicationAnswerRepository answerRepository;
+
+    @Transactional(readOnly = true)
+    public List<UserApplicationResponse> getMyApplicationAnswers(Long profileId, Long aplictId) {
+        Aplict aplict = aplictRepository.findById(aplictId)
+                .orElseThrow(() -> new IllegalArgumentException("APPLICATION_NOT_FOUND"));
+
+        if (!aplict.getProfile().getProfileId().equals(profileId)) {
+            throw new IllegalArgumentException("ACCESS_DENIED");
+        }
+
+        return answerRepository.findMyApplicationAnswers(aplictId);
     }
 }

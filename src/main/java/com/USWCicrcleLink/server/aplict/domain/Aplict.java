@@ -58,7 +58,7 @@ public class Aplict {
     private AplictStatus aplictStatus = AplictStatus.WAIT;
 
     @Column(name = "aplict_checked")
-    private boolean checked;
+    private boolean checked = false;
 
     @Column(name = "aplict_delete_date")
     private LocalDateTime deleteDate;

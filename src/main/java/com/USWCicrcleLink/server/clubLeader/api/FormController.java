@@ -28,7 +28,7 @@ public class FormController {
     }
 
     // 2 지원서 상태 변경
-    @PatchMapping("/{clubId}/forms/{formId}/status")
+    @PatchMapping("/{clubUUID}/forms/{formId}/status")
     public ResponseEntity<Void> updateStatus(
             @PathVariable UUID clubUUID,
             @PathVariable Long formId,

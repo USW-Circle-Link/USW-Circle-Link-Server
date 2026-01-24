@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
+import java.sql.Types;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +24,8 @@ public class Club {
     private Long clubId;
 
     @Builder.Default
-    @Column(name = "club_uuid", unique = true, nullable = false, updatable = false)
+    @JdbcTypeCode(Types.BINARY)
+    @Column(name = "club_uuid", unique = true, nullable = false, updatable = false, columnDefinition = "BINARY(16)")
     private UUID clubUUID = UUID.randomUUID();
 
     @Column(name = "club_name", nullable = false, unique = true, length = 10)
@@ -50,6 +53,7 @@ public class Club {
             this.clubUUID = UUID.randomUUID();
         }
     }
+
 
     public void updateClubInfo(String leaderName, String leaderHp, String clubInsta, String clubRoomNumber) {
         this.leaderName = leaderName;

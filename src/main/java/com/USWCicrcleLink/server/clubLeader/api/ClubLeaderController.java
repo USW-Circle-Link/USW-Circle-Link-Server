@@ -218,4 +218,7 @@ public class ClubLeaderController {
     public ResponseEntity<ApiResponse> acceptSignUpRequest(@PathVariable("clubUUID") UUID clubUUID, @RequestBody @Validated(ValidationSequence.class) ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
         return new ResponseEntity<>(clubLeaderService.acceptSignUpRequest(clubUUID, clubMembersAcceptSignUpRequest), HttpStatus.OK);
     }
+
+    //지원서 작성
+
 }

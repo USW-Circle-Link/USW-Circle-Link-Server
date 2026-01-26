@@ -13,11 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "APLICT_TABLE",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_aplict_active", columnNames = {"club_id", "profile_id", "aplict_checked"})
-        }
-)
+@Table(name = "APLICT_TABLE", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_aplict_active", columnNames = { "club_id", "profile_id", "aplict_checked" })
+})
 public class Aplict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +43,7 @@ public class Aplict {
     private AplictStatus aplictStatus = AplictStatus.WAIT;
 
     @Column(name = "aplict_checked")
+    private boolean checked;
 
     @Column(name = "aplict_delete_date")
     private LocalDateTime deleteDate;

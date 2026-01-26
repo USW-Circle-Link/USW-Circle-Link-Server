@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -55,21 +54,22 @@ public class AplictDetailResponse {
                 .phone(profile.getUserHp())
                 .build();
 
-        List<QnA> qnaList = aplict.getAnswers().stream()
-                .map(ans -> {
-                    // 객관식은 옵션 내용, 주관식은 텍스트
-                    String answerContent = (ans.getOption() != null)
-                            ? ans.getOption().getContent()
-                            : ans.getAnswerText();
-
-                    return QnA.builder()
-                            .questionId(ans.getQuestion().getQuestionId())
-                            .question(ans.getQuestion().getContent())
-                            .type(ans.getQuestion().getType().name())
-                            .answer(answerContent)
-                            .build();
-                })
-                .collect(Collectors.toList());
+        // TODO: Aplict 엔티티에 answers 관계 추가 필요
+        // List<QnA> qnaList = aplict.getAnswers().stream()
+        // .map(ans -> {
+        // String answerContent = (ans.getOption() != null)
+        // ? ans.getOption().getContent()
+        // : ans.getAnswerText();
+        //
+        // return QnA.builder()
+        // .questionId(ans.getQuestion().getQuestionId())
+        // .question(ans.getQuestion().getContent())
+        // .type(ans.getQuestion().getType().name())
+        // .answer(answerContent)
+        // .build();
+        // })
+        // .collect(Collectors.toList());
+        List<QnA> qnaList = List.of(); // 임시로 빈 리스트 반환
 
         return AplictDetailResponse.builder()
                 .aplictId(aplict.getAplictId())

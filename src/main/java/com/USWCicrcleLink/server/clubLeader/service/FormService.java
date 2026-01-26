@@ -1,11 +1,12 @@
 package com.USWCicrcleLink.server.clubLeader.service;
 
-import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
-import com.USWCicrcleLink.server.clubLeader.domain.*;
 import com.USWCicrcleLink.server.club.club.domain.Club;
+import com.USWCicrcleLink.server.club.club.repository.ClubRepository;
+import com.USWCicrcleLink.server.clubLeader.domain.ClubForm;
+import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
+import com.USWCicrcleLink.server.clubLeader.domain.FormQuestion;
+import com.USWCicrcleLink.server.clubLeader.domain.FormQuestionOption;
 import com.USWCicrcleLink.server.clubLeader.dto.FormDto;
-import com.USWCicrcleLink.server.clubLeader.repository.ClubFormRepository;
-import com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ public class FormService {
 
     // 폼 생성 (통합)
     public Long createForm(UUID clubUUID, FormDto.CreateRequest request) {
-
 
         Club club = clubRepository.findByClubUUID(clubUUID)
                 .orElseThrow(() -> new EntityNotFoundException("해당 동아리를 찾을 수 없습니다."));
@@ -68,13 +68,22 @@ public class FormService {
         return formRepository.save(form).getFormId();
     }
 
+    @Transactional(readOnly = true)
+    public ClubForm getForm(Long formId) {
+        return formRepository.findById(formId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 지원서를 찾을 수 없습니다. ID=" + formId));
+    }
+
     public void updateStatus(UUID clubUUID, Long formId, FormDto.UpdateStatusRequest request) {
 
         ClubForm form = formRepository.findById(formId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 지원서를 찾을 수 없습니다. ID=" + formId));
 
-        // uuid 다를 시 변경 불가
-        if (!form.getClub().getClubUUID().equals(clubUUID)) {
+        // uuid 다를 시 변경 불가 - Club 조회하여 검증
+        Club club = clubRepository.findById(form.getClub().getClubId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 동아리를 찾을 수 없습니다."));
+
+        if (!club.getClubUUID().equals(clubUUID)) {
             throw new IllegalArgumentException("해당 동아리의 지원서가 아니므로 수정할 수 없습니다.");
         }
 

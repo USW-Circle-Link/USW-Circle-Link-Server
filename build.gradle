@@ -13,9 +13,10 @@ java {
 	}
 }
 
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
-	options.compilerArgs += ['-parameters']
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
@@ -23,16 +24,14 @@ repositories {
 }
 
 dependencies {
-	// lombok - MUST be before other annotation processors  
-	compileOnly 'org.projectlombok:lombok:1.18.32'
-	annotationProcessor 'org.projectlombok:lombok:1.18.32'
-	testCompileOnly 'org.projectlombok:lombok:1.18.32'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework:spring-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// lombok
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
 
 	// generate metadata for @ConfigurationProperties
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

@@ -18,11 +18,11 @@ import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException; // 추가됨
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,22 +46,26 @@ public class AplictService {
     public void checkIfCanApply(UUID clubUUID) {
         Profile profile = getAuthenticatedProfile();
 
+        // 이미 지원한 경우 예외 처리
         if (aplictRepository.existsByProfileAndClubUUID(profile, clubUUID)) {
             throw new AplictException(ExceptionType.ALREADY_APPLIED);
         }
 
+        // 이미 동아리 멤버인 경우 예외 처리
         if (clubMembersRepository.existsByProfileAndClubUUID(profile, clubUUID)) {
             throw new AplictException(ExceptionType.ALREADY_MEMBER);
         }
 
         List<Profile> clubMembers = clubMembersRepository.findProfilesByClubUUID(clubUUID);
 
+        // 등록된 전화번호
         for (Profile member : clubMembers) {
             if (profile.getUserHp().equals(member.getUserHp())) {
                 throw new AplictException(ExceptionType.PHONE_NUMBER_ALREADY_REGISTERED);
             }
         }
 
+        // 등록된 학번
         for (Profile member : clubMembers) {
             if (profile.getStudentNumber().equals(member.getStudentNumber())) {
                 throw new AplictException(ExceptionType.STUDENT_NUMBER_ALREADY_REGISTERED);
@@ -104,7 +108,7 @@ public class AplictService {
     }
 
     /**
-     * 구글 폼 URL 조회
+     * 지원서 작성하기 버튼 (USER)
      */
     @Transactional(readOnly = true)
     public String getGoogleFormUrlByClubUUID(UUID clubUUID) {
@@ -121,10 +125,11 @@ public class AplictService {
     }
 
     /**
-     * 지원서 제출
+     * 동아리 지원서 제출 (USER)
      */
-    public void submitAplict(UUID clubUUID) { // 사라졌던 선언부 복구
+    public void submitAplict(UUID clubUUID) {
         Profile profile = getAuthenticatedProfile();
+
         checkIfCanApply(clubUUID);
 
         Club club = clubRepository.findByClubUUID(clubUUID)
@@ -142,8 +147,12 @@ public class AplictService {
         } catch (DataIntegrityViolationException e) {
             throw new AplictException(ExceptionType.ALREADY_APPLIED);
         }
+        log.debug("동아리 지원서 제출 성공 - ClubUUID: {}, Status: {}", clubUUID, AplictStatus.WAIT);
     }
 
+    /**
+     * 인증된 USER 프로필 가져오기
+     */
     private Profile getAuthenticatedProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

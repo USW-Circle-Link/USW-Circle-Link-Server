@@ -54,6 +54,7 @@ public class Club {
         }
     }
 
+
     public void updateClubInfo(String leaderName, String leaderHp, String clubInsta, String clubRoomNumber) {
         this.leaderName = leaderName;
         this.leaderHp = leaderHp;

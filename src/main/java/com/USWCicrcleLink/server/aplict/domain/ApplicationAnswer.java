@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.aplict.domain;
 
-import com.USWCicrcleLink.server.club.form.domain.FormQuestion;
-import com.USWCicrcleLink.server.club.form.domain.FormQuestionOption;
+import com.USWCicrcleLink.server.clubLeader.domain.FormQuestion;
+import com.USWCicrcleLink.server.clubLeader.domain.FormQuestionOption;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +11,8 @@ import lombok.*;
 @Table(name = "APPLICATION_ANSWER")
 public class ApplicationAnswer {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
     @ManyToOne(fetch = FetchType.LAZY)

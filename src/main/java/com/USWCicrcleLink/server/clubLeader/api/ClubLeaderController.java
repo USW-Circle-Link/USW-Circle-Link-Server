@@ -13,8 +13,6 @@ import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
 import com.USWCicrcleLink.server.profile.domain.MemberType;
-import com.USWCicrcleLink.server.aplict.dto.AplictDetailResponse;
-import com.USWCicrcleLink.server.aplict.dto.AplictStatusUpdateRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -221,24 +219,6 @@ public class ClubLeaderController {
         return new ResponseEntity<>(clubLeaderService.acceptSignUpRequest(clubUUID, clubMembersAcceptSignUpRequest), HttpStatus.OK);
     }
 
-    // 지원서 상세 조회
-    @GetMapping("/{clubUUID}/applications/{aplictId}")
-    public ResponseEntity<ApiResponse<AplictDetailResponse>> getAplictDetail(
-            @PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("aplictId") Long aplictId) {
+    //지원서 작성
 
-        AplictDetailResponse response = clubLeaderService.getAplictDetail(clubUUID, aplictId);
-        return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 성공", response));
-    }
-
-    //지원서 상태 변경
-    @PatchMapping("/{clubUUID}/applications/{aplictId}")
-    public ResponseEntity<ApiResponse<Void>> updateAplictStatus(
-            @PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("aplictId") Long aplictId,
-            @RequestBody @Valid AplictStatusUpdateRequest request) {
-
-        clubLeaderService.updateAplictStatus(clubUUID, aplictId, request.getStatus());
-        return ResponseEntity.ok(new ApiResponse<>("지원서 상태 변경 성공"));
-    }
 }

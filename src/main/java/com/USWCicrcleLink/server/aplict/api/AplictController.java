@@ -32,7 +32,7 @@ public class AplictController {
         return ResponseEntity.ok(new ApiResponse<>("지원 가능 여부 확인 성공", canApply));
     }
 
-    // (Legacy) 구글 폼 URL 조회 (USER)
+    // 구글 폼 URL 조회 (USER)
     @GetMapping("/{clubUUID}")
     public ResponseEntity<ApiResponse<String>> getGoogleFormUrl(@PathVariable("clubUUID") UUID clubUUID) {
         String googleFormUrl = aplictService.getGoogleFormUrlByClubUUID(clubUUID);
@@ -50,7 +50,7 @@ public class AplictController {
         return ResponseEntity.ok(new ApiResponse<>("지원서 제출 성공"));
     }
 
-
+    // 내 지원서 상세 조회 (USER)
     @GetMapping("/applications/{aplictId}")
     public ResponseEntity<ApiResponse<List<UserApplicationResponse>>> getMyApplication(
             @AuthenticationPrincipal CustomUserDetails userDetails,

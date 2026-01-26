@@ -55,14 +55,14 @@ public class DummyData {
     private final ClubMemberTempRepository clubMemberTempRepository;
     private final ClubMemberAccountStatusRepository clubMemberAccountStatusRepository;
 
-    /*@PostConstruct
+    @PostConstruct
     public void init() {
         initAdmin();
         initUser1();
         initUser2();
         initUser3();
         initclub();
-    }*/
+    }
 
     //관리자 동연회 데이터
     public void initAdmin() {

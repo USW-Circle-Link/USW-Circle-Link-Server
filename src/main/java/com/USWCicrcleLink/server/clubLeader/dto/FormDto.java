@@ -23,7 +23,6 @@ public class FormDto {
         @Size(max = 50, message = "제목은 50자 이내여야 합니다.")
         private String title;
 
-
         @Size(max = 500, message = "설명은 500자 이내여야 합니다.")
         private String description;
 
@@ -31,7 +30,7 @@ public class FormDto {
         private LocalDateTime startDate;
 
         @NotNull(message = "마감일은 필수입니다.")
-        @Future(message = "마감일은 현재 시간보다 미래여야 합니다.") //과거 날짜 입력 방지
+        @Future(message = "마감일은 현재 시간보다 미래여야 합니다.") // 과거 날짜 입력 방지
         private LocalDateTime endDate;
 
         @Valid // 질문 리스트 내부 객체까지 검사

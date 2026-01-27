@@ -94,10 +94,9 @@ public class S3FileUploadService {
         return url != null ? url.toString() : "";
     }
 
-    // 파일 조회 URL 생성 (GET 메서드)
+    // 파일 조회 URL 생성 (GET 메서드) -> 영구 Public URL 반환으로 변경
     public String generatePresignedGetUrl(String fileName) {
-        URL url = generatePresignedUrl(fileName, HttpMethod.GET);
-        return url != null ? url.toString() : "";
+        return amazonS3.getUrl(bucket, fileName).toString();
     }
 
     // PresignedUrl 생성

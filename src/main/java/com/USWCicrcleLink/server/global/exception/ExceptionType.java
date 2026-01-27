@@ -170,6 +170,13 @@ public enum ExceptionType {
     ALREADY_MEMBER("APT-206", "이미 해당 동아리 회원입니다.", BAD_REQUEST),
     PHONE_NUMBER_ALREADY_REGISTERED("APT-207", "이미 등록된 전화번호입니다.", BAD_REQUEST),
     STUDENT_NUMBER_ALREADY_REGISTERED("APT-208", "이미 등록된 학번입니다.", BAD_REQUEST),
+    LACK_OF_INFORMATION("APT-209", "필수 항목이 누락되었습니다.", BAD_REQUEST),
+    INVALID_QUESTION("APT-210", "유효하지 않은 질문입니다.", BAD_REQUEST),
+
+    /**
+     * Domain: ClubForm
+     */
+    CLUB_FORM_NOT_EXISTS("FORM-201", "지원서 양식이 존재하지 않습니다.", NOT_FOUND),
 
     /**
      * Domain: AuthCodeToken

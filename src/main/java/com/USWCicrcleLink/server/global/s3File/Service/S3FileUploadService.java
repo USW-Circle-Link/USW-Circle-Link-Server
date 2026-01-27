@@ -94,9 +94,10 @@ public class S3FileUploadService {
         return url != null ? url.toString() : "";
     }
 
-    // 파일 조회 URL 생성 (GET 메서드) -> 영구 Public URL 반환으로 변경
+    // 파일 조회 URL 생성 (GET 메서드)
     public String generatePresignedGetUrl(String fileName) {
-        return amazonS3.getUrl(bucket, fileName).toString();
+        URL url = generatePresignedUrl(fileName, HttpMethod.GET);
+        return url != null ? url.toString() : "";
     }
 
     // PresignedUrl 생성
@@ -146,10 +147,10 @@ public class S3FileUploadService {
         }
 
         try {
-            DeleteObjectsRequest deleteRequest = new DeleteObjectsRequest(bucket)
-                    .withKeys(fileNames.toArray(new String[0]));
+            amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
 
-            DeleteObjectsResult result = amazonS3.deleteObjects(deleteRequest);
+            DeleteObjectsResult result = amazonS3.deleteObjects(new DeleteObjectsRequest(bucket)
+                    .withKeys(fileNames.toArray(new String[0])));
             log.info("S3 파일 일괄 삭제 완료: {}개 파일 삭제됨", result.getDeletedObjects().size());
 
         } catch (MultiObjectDeleteException e) {

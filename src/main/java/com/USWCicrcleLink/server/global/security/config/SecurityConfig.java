@@ -71,10 +71,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/clubs/{clubId}/forms/{formId}/applications").hasRole("USER"); // 추가된 엔드포인트
                     auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
                     auth.requestMatchers(HttpMethod.DELETE, "/users/event/**").hasRole("USER");

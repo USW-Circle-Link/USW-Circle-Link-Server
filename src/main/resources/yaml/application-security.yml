@@ -27,12 +27,7 @@ spring:
       - /introPhoto/**
       - /notice/Photo/**
       - /my-notices/**
-      - /clubs
-      - /clubs/list
-      - /clubs/open
-      - /clubs/open/**
-      - /clubs/categories
-      - /clubs/intro/**
+      - /clubs/**
       - /profiles/duplication-check
       - /mypages/clubs/{floor}/photo
       - /clubs/filter/**

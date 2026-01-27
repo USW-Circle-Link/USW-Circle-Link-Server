@@ -1,14 +1,11 @@
 package com.USWCicrcleLink.server.aplict.domain;
 
 import com.USWCicrcleLink.server.club.club.domain.Club;
-import com.USWCicrcleLink.server.clubLeader.domain.ClubForm;
 import com.USWCicrcleLink.server.profile.domain.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,14 +31,6 @@ public class Aplict {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "form_id")
-    private ClubForm clubForm;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "aplict", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AplictAnswer> answers = new ArrayList<>();
 
     @Builder.Default
     @Column(name = "aplict_uuid", nullable = false, unique = true, updatable = false)

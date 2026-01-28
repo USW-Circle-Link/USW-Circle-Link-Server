@@ -88,13 +88,23 @@ public class S3FileUploadService {
         return fileExtension;
     }
 
-    // 파일 업로드 URL 생성 (PUT 메서드)
+    /**
+     * Create a presigned PUT URL for uploading the specified S3 object key.
+     *
+     * @param fileName the S3 object key to generate the presigned URL for
+     * @return the presigned PUT URL as a string, or an empty string if a URL could not be generated
+     */
     private String generatePresignedPutUrl(String fileName) {
         URL url = generatePresignedUrl(fileName, HttpMethod.PUT);
         return url != null ? url.toString() : "";
     }
 
-    // 파일 조회 URL 생성 (GET 메서드)
+    /**
+     * Generates a presigned GET URL for the specified S3 object.
+     *
+     * @param fileName the S3 object key (path/filename) for which to create the presigned URL
+     * @return the presigned GET URL as a string, or an empty string if a URL could not be generated
+     */
     public String generatePresignedGetUrl(String fileName) {
         URL url = generatePresignedUrl(fileName, HttpMethod.GET);
         return url != null ? url.toString() : "";

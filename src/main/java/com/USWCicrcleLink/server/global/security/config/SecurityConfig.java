@@ -45,6 +45,16 @@ public class SecurityConfig {
         return new LoggingFilter(securityProperties.getLoggingPaths(), securityProperties.getMethods());
     }
 
+    /**
+     * Configure HTTP security for the application and build the SecurityFilterChain.
+     *
+     * Configures CSRF, CORS, stateless session management, exception handling, a comprehensive set of
+     * request authorization rules mapping paths and HTTP methods to roles, and registers the JWT and
+     * logging filters in the filter chain.
+     *
+     * @param http the HttpSecurity to configure
+     * @return the configured SecurityFilterChain enforcing the defined security rules and filters
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

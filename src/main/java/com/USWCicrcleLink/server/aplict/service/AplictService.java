@@ -125,7 +125,11 @@ public class AplictService {
     }
 
     /**
-     * 동아리 지원서 제출 (USER)
+     * Submit an application for the authenticated user to join the specified club.
+     *
+     * @param clubUUID the UUID of the target club
+     * @throws ClubException   if the club identified by {@code clubUUID} does not exist
+     * @throws AplictException if an application already exists (type `ALREADY_APPLIED`), or if eligibility checks fail (for example: already a member, phone number already registered, or student number already registered)
      */
     public void submitAplict(UUID clubUUID) {
         Profile profile = getAuthenticatedProfile();
@@ -151,7 +155,10 @@ public class AplictService {
     }
 
     /**
-     * 인증된 USER 프로필 가져오기
+     * Retrieve the Profile of the currently authenticated user.
+     *
+     * @return the authenticated user's Profile
+     * @throws UserException if no Profile exists for the authenticated user
      */
     private Profile getAuthenticatedProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

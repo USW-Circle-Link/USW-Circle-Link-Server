@@ -147,8 +147,6 @@ public class S3FileUploadService {
         }
 
         try {
-            amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-
             DeleteObjectsResult result = amazonS3.deleteObjects(new DeleteObjectsRequest(bucket)
                     .withKeys(fileNames.toArray(new String[0])));
             log.info("S3 파일 일괄 삭제 완료: {}개 파일 삭제됨", result.getDeletedObjects().size());

@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.club.clubIntro.repository;
 
-import com.USWCicrcleLink.server.club.club.domain.Club;
+import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +19,6 @@ public interface ClubIntroRepository extends JpaRepository<ClubIntro, Long> {
     @Query("SELECT ci.club.clubId FROM ClubIntro ci WHERE ci.recruitmentStatus = 'OPEN'")
     List<Long> findOpenClubIds();
 
-    @Query("SELECT ci FROM ClubIntro ci WHERE ci.club.clubUUID = :clubUUID")
-    Optional<ClubIntro> findByClubUUID(@Param("clubUUID") UUID clubUUID);
+    @Query("SELECT ci FROM ClubIntro ci WHERE ci.club.clubuuid = :clubuuid")
+    Optional<ClubIntro> findByClubuuid(@Param("clubuuid") UUID clubuuid);
 }

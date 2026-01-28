@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.global.security.details.service;
 
-import com.USWCicrcleLink.server.clubLeader.domain.Leader;
-import com.USWCicrcleLink.server.clubLeader.repository.LeaderRepository;
+import com.USWCicrcleLink.server.club.leader.domain.Leader;
+import com.USWCicrcleLink.server.club.leader.repository.LeaderRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
@@ -24,9 +24,9 @@ public class CustomLeaderDetailsService implements RoleBasedUserDetailsService {
         Leader leader = leaderRepository.findByLeaderUUID(uuid)
                 .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
 
-        UUID clubUUID = leaderRepository.findClubUUIDByLeaderUUID(leader.getLeaderUUID())
+        UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leader.getLeaderUUID())
                 .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
 
-        return new CustomLeaderDetails(leader, clubUUID);
+        return new CustomLeaderDetails(leader, clubuuid);
     }
 }

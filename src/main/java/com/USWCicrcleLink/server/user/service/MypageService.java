@@ -1,23 +1,23 @@
 package com.USWCicrcleLink.server.user.service;
 
-import com.USWCicrcleLink.server.aplict.domain.Aplict;
-import com.USWCicrcleLink.server.aplict.domain.AplictStatus;
-import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
-import com.USWCicrcleLink.server.club.club.domain.Club;
-import com.USWCicrcleLink.server.club.club.domain.ClubMembers;
-import com.USWCicrcleLink.server.club.club.domain.FloorPhoto;
-import com.USWCicrcleLink.server.club.club.domain.FloorPhotoEnum;
-import com.USWCicrcleLink.server.club.club.repository.ClubMainPhotoRepository;
-import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
-import com.USWCicrcleLink.server.club.club.repository.FloorPhotoRepository;
+import com.USWCicrcleLink.server.club.application.domain.Aplict;
+import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
+import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
+import com.USWCicrcleLink.server.club.domain.Club;
+import com.USWCicrcleLink.server.club.domain.ClubMembers;
+import com.USWCicrcleLink.server.club.domain.FloorPhoto;
+import com.USWCicrcleLink.server.club.domain.FloorPhotoEnum;
+import com.USWCicrcleLink.server.club.repository.ClubMainPhotoRepository;
+import com.USWCicrcleLink.server.club.repository.ClubMembersRepository;
+import com.USWCicrcleLink.server.club.repository.FloorPhotoRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
 import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.user.profile.domain.Profile;
+import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.dto.ClubFloorPhotoResponse;
 import com.USWCicrcleLink.server.user.dto.MyAplictResponse;
@@ -45,14 +45,14 @@ public class MypageService {
     private final ClubMainPhotoRepository clubMainPhotoRepository;
     private final FloorPhotoRepository floorPhotoRepository;
 
-    //어세스토큰에서 유저정보 가져오기
+    // 어세스토큰에서 유저정보 가져오기
     private User getUserByAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails.user();
     }
 
-    //클럽멤버를 통해 클럽아이디 조회
+    // 클럽멤버를 통해 클럽아이디 조회
     private List<MyClubResponse> getMyClubs(List<ClubMembers> clubMembers) {
         return clubMembers.stream()
                 .map(ClubMembers::getClub)
@@ -60,16 +60,17 @@ public class MypageService {
                 .collect(Collectors.toList());
     }
 
-    //프로필을 통해 클럽 멤버 조회
-    private List<ClubMembers>getClubMembersByProfileId(Long profileId){
+    // 프로필을 통해 클럽 멤버 조회
+    private List<ClubMembers> getClubMembersByProfileId(Long profileId) {
         List<ClubMembers> clubMembers = clubMembersRepository.findByProfileProfileId(profileId);
         if (clubMembers.isEmpty()) {
-            return List.of();}
+            return List.of();
+        }
         return clubMembers;
     }
 
-    //소속된 동아리 조회
-    public List<MyClubResponse> getMyClubById(){
+    // 소속된 동아리 조회
+    public List<MyClubResponse> getMyClubById() {
         User user = getUserByAuth();
         Profile profile = getProfileByUserId((user.getUserId()));
         List<ClubMembers> clubMembers = getClubMembersByProfileId(profile.getProfileId());
@@ -88,24 +89,25 @@ public class MypageService {
 
         return aplicts.stream()
                 .map(aplict -> {
-                    Club club = getClubByAplictId(aplict.getAplictId());  // ID 기반 조회로 변경
+                    Club club = getClubByAplictId(aplict.getAplictId()); // ID 기반 조회로 변경
                     AplictStatus aplictStatus = aplict.getAplictStatus();
                     return myAplictResponse(club, aplictStatus);
                 })
                 .collect(Collectors.toList());
     }
 
-    //유저아이디를 통해 프로필아이디 조회
+    // 유저아이디를 통해 프로필아이디 조회
     private Profile getProfileByUserId(Long userId) {
         return profileRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
     }
 
-    //프로필아이디를 통해 어플릭트 아이디 조회
+    // 프로필아이디를 통해 어플릭트 아이디 조회
     private List<Aplict> getAplictsByProfileId(Long profileId) {
         List<Aplict> aplicts = aplictRepository.findByProfileProfileId(profileId);
         if (aplicts.isEmpty()) {
-            return List.of();}
+            return List.of();
+        }
         return aplicts;
     }
 
@@ -115,48 +117,48 @@ public class MypageService {
                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
     }
 
-    //사진 조회 url
+    // 사진 조회 url
     private String getClubMainPhotoUrl(Club club) {
         return Optional.ofNullable(clubMainPhotoRepository.findByClub_ClubId(club.getClubId()))
-                .map(clubMainPhoto -> s3FileUploadService.generatePresignedGetUrl(clubMainPhoto.getClubMainPhotoS3Key()))
+                .map(clubMainPhoto -> s3FileUploadService
+                        .generatePresignedGetUrl(clubMainPhoto.getClubMainPhotoS3Key()))
                 .orElse(null);
     }
 
-    //동아리 정보 + 지원현황 가져오기
-    private MyAplictResponse myAplictResponse(Club club, AplictStatus aplictStatus){
+    // 동아리 정보 + 지원현황 가져오기
+    private MyAplictResponse myAplictResponse(Club club, AplictStatus aplictStatus) {
 
         String mainPhotoUrl = getClubMainPhotoUrl(club);
 
         MyAplictResponse myAplictResponse = new MyAplictResponse(
-                club.getClubUUID(),
+                club.getClubuuid(),
                 mainPhotoUrl,
                 club.getClubName(),
                 club.getLeaderName(),
                 club.getLeaderHp(),
                 club.getClubInsta(),
                 club.getClubRoomNumber(),
-                aplictStatus
-        );
+                aplictStatus);
         return myAplictResponse;
     }
-    //동아리 정보 가져오기
-    private MyClubResponse myClubResponse(Club club){
+
+    // 동아리 정보 가져오기
+    private MyClubResponse myClubResponse(Club club) {
 
         String mainPhotoUrl = getClubMainPhotoUrl(club);
 
         MyClubResponse myClubResponse = new MyClubResponse(
-                club.getClubUUID(),
+                club.getClubuuid(),
                 mainPhotoUrl,
                 club.getClubName(),
                 club.getLeaderName(),
                 club.getLeaderHp(),
                 club.getClubInsta(),
-                club.getClubRoomNumber()
-        );
-        return  myClubResponse;
+                club.getClubRoomNumber());
+        return myClubResponse;
     }
 
-    //동아리 방 사진 조회
+    // 동아리 방 사진 조회
     public ClubFloorPhotoResponse getClubFloorPhoto(String floor) {
 
         FloorPhotoEnum floorEnum;
@@ -172,7 +174,7 @@ public class MypageService {
 
         String presignedUrl = s3FileUploadService.generatePresignedGetUrl(floorPhoto.getFloorPhotoS3key());
 
-        return new ClubFloorPhotoResponse(floorPhoto.getFloor(),presignedUrl);
+        return new ClubFloorPhotoResponse(floorPhoto.getFloor(), presignedUrl);
     }
 
 }

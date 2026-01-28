@@ -1,12 +1,12 @@
 package com.USWCicrcleLink.server.global.security.details.service;
 
-import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
+import com.USWCicrcleLink.server.club.repository.ClubMembersRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.ProfileException;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.user.profile.domain.Profile;
+import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +34,7 @@ public class CustomUserDetailsService implements RoleBasedUserDetailsService {
         Profile profile = profileRepository.findByUser_UserUUID(user.getUserUUID())
                 .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
 
-        List<UUID> clubUUIDs = getUserClubUUIDs(profile.getProfileId());
-        return new CustomUserDetails(user, clubUUIDs);
-    }
-
-    private List<UUID> getUserClubUUIDs(Long profileId) {
-        return clubMembersRepository.findClubUUIDsByProfileId(profileId);
+        List<UUID> clubuuids = clubMembersRepository.findClubuuidByProfileId(profile.getProfileId());
+        return new CustomUserDetails(user, clubuuids);
     }
 }

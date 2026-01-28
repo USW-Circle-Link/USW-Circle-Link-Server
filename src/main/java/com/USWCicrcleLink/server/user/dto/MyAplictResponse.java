@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.user.dto;
 
-import com.USWCicrcleLink.server.aplict.domain.AplictStatus;
+import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import lombok.*;
 
 import java.util.UUID;
@@ -27,3 +27,4 @@ public class MyAplictResponse {
     private AplictStatus aplictStatus;
 
 }
+

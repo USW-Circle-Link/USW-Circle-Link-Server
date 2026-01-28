@@ -1,14 +1,14 @@
 package com.USWCicrcleLink.server.user.service;
 
-import com.USWCicrcleLink.server.club.club.repository.ClubMembersRepository;
+import com.USWCicrcleLink.server.club.repository.ClubMembersRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.user.domain.EventVerification;
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.dto.EventVerifyResponse;
 import com.USWCicrcleLink.server.user.repository.EventVerificationRepository;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
-import com.USWCicrcleLink.server.profile.domain.Profile;
+import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.user.profile.domain.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +34,8 @@ public class EventVerificationService {
     @Transactional(readOnly = true)
     public boolean checkStatus(User user) {
         // profileId로 clubUUID 조회
-        UUID clubUUID = getClubUUIDByUserUUID(user.getUserUUID());
-        return eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID);
+        UUID clubuuid = getClubuuidByUserUUID(user.getUserUUID());
+        return eventVerificationRepository.existsByUserUUIDAndClubuuid(user.getUserUUID(), clubuuid);
     }
 
     @Transactional
@@ -49,17 +49,16 @@ public class EventVerificationService {
 
         Long profileId = profile.getProfileId();
 
-        List<UUID> clubUUIDs = clubMembersRepository.findClubUUIDsByProfileId(profileId);
-        if (clubUUIDs.isEmpty()) {
+        List<UUID> clubuuids = clubMembersRepository.findClubuuidByProfileId(profileId);
+        if (clubuuids.isEmpty()) {
             log.warn("이벤트 인증 시도 - 연결된 동아리 없음. userUUID={}, profileId={}", user.getUserUUID(), profileId);
             throw new UserException(ExceptionType.INVALID_INPUT); // 동아리가 없으므로 진행 불가
         }
-        UUID clubUUID = clubUUIDs.get(0); // 첫 번째 동아리 UUID 사용 (기존 JWT 로직과 동일하게)
-
+        UUID clubuuid = clubuuids.get(0); // 첫 번째 동아리 UUID 사용 (기존 JWT 로직과 동일하게)
 
         // 이미 인증된 경우: 오류 반환
-        if (eventVerificationRepository.existsByUserUUIDAndClubUUID(user.getUserUUID(), clubUUID)) {
-            log.debug("이미 인증된 상태 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+        if (eventVerificationRepository.existsByUserUUIDAndClubuuid(user.getUserUUID(), clubuuid)) {
+            log.debug("이미 인증된 상태 - userUUID={}, clubuuid={}", user.getUserUUID(), clubuuid);
             throw new UserException(ExceptionType.EVENT_ALREADY_VERIFIED);
         }
 
@@ -70,35 +69,33 @@ public class EventVerificationService {
 
         // [수정] 프로필 여부 조회 (위에서 이미 조회함)
         // Long profileId = profileRepository.findByUserUserId(user.getUserId())
-        //         .map(Profile::getProfileId)
-        //         .orElse(null);
+        // .map(Profile::getProfileId)
+        // .orElse(null);
 
         // 인증 성공 처리 (MYSQL 저장)
         EventVerification saved = eventVerificationRepository.save(
                 EventVerification.create(
                         user.getUserUUID(),
-                        clubUUID, // 내부에서 조회한 clubUUID
+                        clubuuid, // 내부에서 조회한 clubuuid
                         user.getUserId(),
                         profileId, // 내부에서 조회한 profileId
                         user.getUserAccount(),
-                        user.getEmail()
-                )
-        );
-        log.info("이벤트 인증 완료 - userUUID={}, clubUUID={}", user.getUserUUID(), clubUUID);
+                        user.getEmail()));
+        log.info("이벤트 인증 완료 - userUUID={}, clubuuid={}", user.getUserUUID(), clubuuid);
         // 첫 인증 성공: isFirstVerify=true
-        return new EventVerifyResponse(clubUUID, true, saved.getVerifiedAt());
+        return new EventVerifyResponse(clubuuid, true, saved.getVerifiedAt());
     }
 
-    private UUID getClubUUIDByUserUUID(UUID userUUID) {
+    private UUID getClubuuidByUserUUID(UUID userUUID) {
         Profile profile = profileRepository.findByUser_UserUUID(userUUID)
                 .orElseThrow(() -> new UserException(ExceptionType.INVALID_INPUT)); // 프로필이 없음
 
         Long profileId = profile.getProfileId();
 
-        List<UUID> clubUUIDs = clubMembersRepository.findClubUUIDsByProfileId(profileId);
-        if (clubUUIDs.isEmpty()) {
+        List<UUID> clubuuids = clubMembersRepository.findClubuuidByProfileId(profileId);
+        if (clubuuids.isEmpty()) {
             throw new UserException(ExceptionType.INVALID_INPUT); // 연결된 동아리가 없음
         }
-        return clubUUIDs.get(0); // 첫 번째 UUID 반환
+        return clubuuids.get(0); // 첫 번째 UUID 반환
     }
 }

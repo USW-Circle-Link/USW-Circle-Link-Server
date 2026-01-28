@@ -9,10 +9,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ClubMemberAccountStatusRepository extends JpaRepository<ClubMemberAccountStatus,Long>, ClubMemberAccountStatusCustomRepository {
+public interface ClubMemberAccountStatusRepository
+        extends JpaRepository<ClubMemberAccountStatus, Long>, ClubMemberAccountStatusCustomRepository {
     Long countByClubMemberTemp_ClubMemberTempId(Long clubMemberTempId);
+
     List<ClubMemberAccountStatus> findAllByClubMemberTemp_ClubMemberTempId(Long clubMemberTempId);
-    Optional<ClubMemberAccountStatus> findByClubMemberAccountStatusUUIDAndClub_ClubId(UUID clubMemberAccountStatusUUID, Long clubId);
-    Optional<ClubMemberAccountStatus> findByClubMemberAccountStatusUUIDAndClub_ClubUUID(UUID clubMemberAccountStatusUUID, UUID clubUUID);
+
+    Optional<ClubMemberAccountStatus> findByClubMemberAccountStatusUUIDAndClub_ClubId(UUID clubMemberAccountStatusUUID,
+            Long clubId);
+
+    Optional<ClubMemberAccountStatus> findByClubMemberAccountStatusUUIDAndClub_Clubuuid(
+            UUID clubMemberAccountStatusUUID, UUID clubuuid);
 
 }

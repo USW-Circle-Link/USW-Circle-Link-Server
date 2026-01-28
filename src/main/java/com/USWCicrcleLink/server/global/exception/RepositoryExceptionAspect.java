@@ -23,11 +23,11 @@ public class RepositoryExceptionAspect {
     }
     @AfterThrowing(
             pointcut = "execution(* com.USWCicrcleLink.server.user.repository.*.*(..)) || " +
-                       "execution(* com.USWCicrcleLink.server.profile.repository.*.*(..)) || " +
-                       "execution(* com.USWCicrcleLink.server.email.repository.*.*(..)) || " +
-                       "execution(* com.USWCicrcleLink.server.aplict.repository.*.*(..))"+
+                       "execution(* com.USWCicrcleLink.server.user.profile.repository.*.*(..)) || " +
+                       "execution(* com.USWCicrcleLink.server.global.email.repository.*.*(..)) || " +
+                       "execution(* com.USWCicrcleLink.server.club.application.repository.*.*(..))"+
                         "execution(* com.USWCicrcleLink.server.club.repository.*.*(..)) || "+
-                        "execution(* com.USWCicrcleLink.server.clubLeader.repository.*.*(..)) || "+
+                        "execution(* com.USWCicrcleLink.server.club.leader.repository.*.*(..)) || "+
                         "execution(* com.USWCicrcleLink.server.admin.repository.*.*(..)) || ",
             throwing = "ex"
     )
@@ -43,3 +43,5 @@ public class RepositoryExceptionAspect {
         }
     }
 }
+
+

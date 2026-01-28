@@ -1,10 +1,10 @@
 package com.USWCicrcleLink.server.global.config;
-import com.USWCicrcleLink.server.aplict.domain.Aplict;
-import com.USWCicrcleLink.server.aplict.repository.AplictRepository;
-import com.USWCicrcleLink.server.email.domain.EmailToken;
-import com.USWCicrcleLink.server.email.repository.EmailTokenRepository;
-import com.USWCicrcleLink.server.profile.domain.Profile;
-import com.USWCicrcleLink.server.profile.repository.ProfileRepository;
+import com.USWCicrcleLink.server.club.application.domain.Aplict;
+import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
+import com.USWCicrcleLink.server.global.email.domain.EmailToken;
+import com.USWCicrcleLink.server.global.email.repository.EmailTokenRepository;
+import com.USWCicrcleLink.server.user.profile.domain.Profile;
+import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
 import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
 import com.USWCicrcleLink.server.user.service.ClubMemberAccountStatusService;
@@ -105,3 +105,5 @@ public class SchedulerConfig {
 
 
 }
+
+

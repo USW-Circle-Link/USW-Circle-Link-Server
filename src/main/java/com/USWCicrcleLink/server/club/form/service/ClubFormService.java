@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.club.form.service;
 
-import com.USWCicrcleLink.server.clubLeader.domain.FormQuestion;
+import com.USWCicrcleLink.server.club.leader.domain.FormQuestion;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.global.security.details;
 
-import com.USWCicrcleLink.server.admin.admin.domain.Admin;
+import com.USWCicrcleLink.server.admin.domain.Admin;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

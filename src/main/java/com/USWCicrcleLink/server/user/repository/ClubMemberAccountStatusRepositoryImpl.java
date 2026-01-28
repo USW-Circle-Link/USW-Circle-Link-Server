@@ -17,7 +17,7 @@ public class ClubMemberAccountStatusRepositoryImpl implements ClubMemberAccountS
         return em.createQuery(
                         "select cmas from ClubMemberAccountStatus cmas" +
                                 " join fetch cmas.clubMemberTemp cmt" +
-                                " where cmas.club.clubId = :clubId",
+                                " where cmas.clubId = :clubId",
                         ClubMemberAccountStatus.class
                 ).setParameter("clubId", clubId)
                 .getResultList();

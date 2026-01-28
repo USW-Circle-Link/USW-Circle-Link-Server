@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public record CustomUserDetails(User user, List<UUID> clubUUIDs) implements UserDetails {
+public record CustomUserDetails(User user, List<UUID> clubuuids) implements UserDetails {
 
-    public List<UUID> getClubUUIDs() {
-        return clubUUIDs;
+    public List<UUID> getClubuuids() {
+        return clubuuids;
     }
 
-    public UUID getUserUUID(){
+    public UUID getUserUUID() {
         return user.getUserUUID();
     }
 

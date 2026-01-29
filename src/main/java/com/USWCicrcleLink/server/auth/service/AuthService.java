@@ -11,10 +11,9 @@ import com.USWCicrcleLink.server.global.security.jwt.JwtProvider;
 import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
 import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import com.USWCicrcleLink.server.user.domain.User;
-import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
 import com.USWCicrcleLink.server.user.profile.domain.Profile;
 import com.USWCicrcleLink.server.user.repository.UserRepository;
-import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
+
 import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.club.leader.domain.Leader;
 import com.USWCicrcleLink.server.club.leader.repository.LeaderRepository;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,7 +39,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
-    private final ClubMemberTempRepository clubMemberTempRepository;
+
     private final LeaderRepository leaderRepository;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
@@ -58,15 +56,7 @@ public class AuthService {
         // 유저 객체가 존재하는지 확인
         if (user == null) {
             log.warn("Login Failed: User not found with account: {}", request.getAccount()); // 로그 추가
-            // 기존 회원 가입 요청을 보낸 사람인지 확인(비회원 확인)
-            Optional<ClubMemberTemp> clubMemberTemp = clubMemberTempRepository
-                    .findByProfileTempAccount(request.getAccount());
-            if (clubMemberTemp.isPresent()
-                    && passwordEncoder.matches(request.getPassword(), clubMemberTemp.get().getProfileTempPw())) {
-                throw new UserException(ExceptionType.USER_NONMEMBER);
-            } else { // 제3자의 요청인 경우
-                throw new UserException(ExceptionType.THIRD_PARTY_LOGIN_ATTEMPT);
-            }
+            throw new UserException(ExceptionType.THIRD_PARTY_LOGIN_ATTEMPT);
         }
 
         // 아이디 비밀번호 일치 불일치 여부 확인

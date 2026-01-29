@@ -49,50 +49,50 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
         @Override
         public void deleteClubAndDependencies(Long clubId) {
 
-                em.createQuery("DELETE FROM ClubMemberAccountStatus cmas WHERE cmas.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubMemberAccountStatus cmas WHERE cmas.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubHashtag ch WHERE ch.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubHashtag ch WHERE ch.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubCategoryMapping cm WHERE cm.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubCategoryMapping cm WHERE cm.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubMembers cm WHERE cm.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubMembers cm WHERE cm.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM Aplict a WHERE a.clubId = :clubId")
+                em.createQuery("DELETE FROM Aplict a WHERE a.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubIntroPhoto cip WHERE cip.clubIntro.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubIntroPhoto cip WHERE cip.clubIntro.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubMainPhoto cmp WHERE cmp.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubMainPhoto cmp WHERE cmp.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubIntro ci WHERE ci.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubIntro ci WHERE ci.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM Leader l WHERE l.clubId = :clubId")
+                em.createQuery("DELETE FROM Leader l WHERE l.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
                 List<String> clubIntroPhotoKeys = em.createQuery(
-                                "SELECT cip.clubIntroPhotoS3Key FROM ClubIntroPhoto cip WHERE cip.clubIntro.clubId = :clubId",
+                                "SELECT cip.clubIntroPhotoS3Key FROM ClubIntroPhoto cip WHERE cip.clubIntro.club.clubId = :clubId",
                                 String.class)
                                 .setParameter("clubId", clubId)
                                 .getResultList();
 
                 List<String> clubMainPhotoKeys = em.createQuery(
-                                "SELECT cmp.clubMainPhotoS3Key FROM ClubMainPhoto cmp WHERE cmp.clubId = :clubId",
+                                "SELECT cmp.clubMainPhotoS3Key FROM ClubMainPhoto cmp WHERE cmp.club.clubId = :clubId",
                                 String.class)
                                 .setParameter("clubId", clubId)
                                 .getResultList();

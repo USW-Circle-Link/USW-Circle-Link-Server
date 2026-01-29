@@ -186,7 +186,6 @@ public class ClubController {
 
         ApiResponse<List<ClubMembersResponse>> response = switch (sort.toLowerCase()) {
             case "regular-member" -> clubLeaderService.getClubMembersByMemberType(clubUUID, MemberType.REGULARMEMBER);
-            case "non-member" -> clubLeaderService.getClubMembersByMemberType(clubUUID, MemberType.NONMEMBER);
             case "default" -> clubLeaderService.getClubMembers(clubUUID);
             default -> throw new ProfileException(ExceptionType.INVALID_MEMBER_TYPE);
         };
@@ -272,16 +271,6 @@ public class ClubController {
     public ResponseEntity<ApiResponse> deleteSignUpRequest(@PathVariable("clubUUID") UUID clubUUID,
             @PathVariable("clubMemberAccountStatusUUID") UUID clubMemberAccountStatusUUID) {
         return new ResponseEntity<>(clubLeaderService.deleteSignUpRequest(clubUUID, clubMemberAccountStatusUUID),
-                HttpStatus.OK);
-    }
-
-    // 비회원 프로필 업데이트
-    @PatchMapping("/{clubUUID}/members/{clubMemberUUID}/non-member")
-    public ResponseEntity<ApiResponse> updateNonMemberProfile(@PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("clubMemberUUID") UUID clubMemberUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubNonMemberUpdateRequest clubNonMemberUpdateRequest) {
-        return new ResponseEntity<>(
-                clubLeaderService.updateNonMemberProfile(clubUUID, clubMemberUUID, clubNonMemberUpdateRequest),
                 HttpStatus.OK);
     }
 

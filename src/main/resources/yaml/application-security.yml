@@ -37,7 +37,7 @@ spring:
       - /introPhoto/**
       - /notice/Photo/**
       - /my-notices/**
-      - /clubs/**
+      - /my-notices/**
       - /profiles/duplication-check
       - /mypages/clubs/{floor}/photo
       - /clubs/filter/**

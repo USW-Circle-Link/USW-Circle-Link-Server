@@ -1,7 +1,5 @@
 package com.USWCicrcleLink.server.user.service;
 
-import com.USWCicrcleLink.server.club.domain.Club;
-import com.USWCicrcleLink.server.club.repository.ClubRepository;
 import com.USWCicrcleLink.server.global.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.email.repository.EmailTokenRepository;
 import com.USWCicrcleLink.server.global.email.service.EmailService;
@@ -16,13 +14,13 @@ import com.USWCicrcleLink.server.user.profile.domain.Profile;
 import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
 import com.USWCicrcleLink.server.user.profile.service.ProfileService;
 import com.USWCicrcleLink.server.user.domain.AuthToken;
-import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
+
 import com.USWCicrcleLink.server.user.domain.User;
 import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
 import com.USWCicrcleLink.server.user.dto.*;
-import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
+
 import com.USWCicrcleLink.server.user.repository.UserRepository;
-import com.USWCicrcleLink.server.user.repository.WithdrawalTokenRepository;
+
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,12 +45,10 @@ public class UserService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
-    private final ClubMemberTempRepository clubMemberTempRepository;
-    private final ClubRepository clubRepository;
+
     private final EmailTokenRepository emailTokenRepository;
     private final EmailService emailService;
     private final EmailTokenService emailTokenService;
-    private final ClubMemberAccountStatusService clubMemberAccountStatusService;
     private final PasswordService passwordService;
     private final AuthService authService;
 
@@ -154,57 +150,6 @@ public class UserService {
         }
     }
 
-    // 기존 회원가입 - 임시 동아리원 생성하기
-    public ClubMemberTemp registerClubMemberTemp(ExistingMemberSignUpRequest request) {
-        log.debug("임시 동아리원 등록 시작 - 이름: {}, 전화번호: {}, 지원한 동아리 개수: {}",
-                request.getUserName(), request.getTelephone(), request.getClubs().size());
-
-        // 지원한 동아리의 개수
-        int total = request.getClubs().size();
-
-        // 전화번호 - 제거
-        String telephone = removeHyphensFromPhoneNumber(request.getTelephone());
-        log.debug("전화번호 형식 변환 완료 - 원본: {}, 변환 후: {}", request.getTelephone(), telephone);
-
-        // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        log.debug("비밀번호 인코딩 완료 - 사용자 이름: {}", request.getUserName());
-
-        // 엔터티 저장
-        ClubMemberTemp savedEntity;
-        try {
-            savedEntity = clubMemberTempRepository.save(request.toEntity(encodedPassword, telephone, total));
-            log.debug("임시 동아리원 등록 완료 - 저장된 엔터티: {}", savedEntity);
-        } catch (Exception e) {
-            log.error("임시 동아리원 등록 실패 - 사용자 이름: {}", request.getUserName());
-            throw new ClubMemberTempException(ExceptionType.CLUB_MEMBERTEMP_CREATE_FAILED);
-        }
-
-        return savedEntity;
-    }
-
-    // 동아리 회장에게 가입신청 보내기
-    public void sendRequest(ExistingMemberSignUpRequest request, ClubMemberTemp clubMemberTemp) {
-        log.debug("가입신청 시작 - 사용자: {}, 요청 동아리 개수: {}",
-                clubMemberTemp.getProfileTempName(), clubMemberTemp.getTotalClubRequest());
-
-        // 동아리 정보 조회
-        for (ClubDTO clubDto : request.getClubs()) {
-            log.debug("동아리 정보 조회 중 - Club UUID: {}", clubDto.getClubuuid());
-            Club club = clubRepository.findByClubuuid(clubDto.getClubuuid())
-                    .orElseThrow(() -> {
-                        log.error("존재하지않는 동아리 UUID:{}", clubDto.getClubuuid());
-                        return new ClubException(ExceptionType.CLUB_NOT_EXISTS);
-                    });
-            log.debug("동아리 조회 성공 - Club ID: {}, 동아리 이름: {}", club.getClubId(), club.getClubName());
-
-            // accountStatus 객체 생성하기
-            clubMemberAccountStatusService.createAccountStatus(club, clubMemberTemp);
-        }
-        // 요청이 전부 제대로 갔는지 검증
-        clubMemberAccountStatusService.checkRequest(request, clubMemberTemp);
-    }
-
     // 이메일 중복 검증
     public void verifyUserDuplicate(String email) {
         log.debug("이메일 중복 검증 시작 email= {}", email);
@@ -235,8 +180,7 @@ public class UserService {
     // 아이디 중복 확인
     public void verifyAccountDuplicate(String account) {
         log.debug("계정 중복 체크 요청 시작 account = {}", account);
-        if (userRepository.findByUserAccount(account).isPresent()
-                || clubMemberTempRepository.findByProfileTempAccount(account).isPresent()) {
+        if (userRepository.findByUserAccount(account).isPresent()) {
             throw new UserException(ExceptionType.USER_ACCOUNT_OVERLAP);
         }
         log.debug("계정 중복 체크 완료. account = {}", account);
@@ -404,43 +348,11 @@ public class UserService {
 
     }
 
-    // 기존 회원 가입 전 조건 검사
-    // fixme 기존회원가입 시 검사해야하는 조건 생각해보기(프로필 중복확인)
-    public void checkExistingSignupCondition(ExistingMemberSignUpRequest request) {
-
-        // 아이디 중복 확인 검사
-        verifyAccountDuplicate(request.getAccount());
-
-        // 비밀번호 유효성 검사
-        passwordService.validatePassword(request.getPassword(), request.getConfirmPassword());
-
-        // clubMemberTemp 테이블에서 프로필 중복 확인(이름&&학번&&전화번호)
-        checkClubMemberTempProfileDuplicate(request.getUserName(), request.getStudentNumber(), request.getTelephone());
-    }
-
-    // clubMemberTemp에서 이메일로 중복 확인
-    public void verifyClubMemberTempDuplicate(String email) {
-        clubMemberTempRepository.findByProfileTempEmail(email)
-                .ifPresent(clubMemberTemp -> {
-                    throw new ClubMemberTempException(ExceptionType.CLUB_MEMBERTEMP_IS_DUPLICATED);
-                });
-    }
-
-    // clubMemberTemp 테이블에서 프로필 중복 확인(이름&&학번&&전화번호)
-    public void checkClubMemberTempProfileDuplicate(String name, String studentNumber, String hp) {
-        clubMemberTempRepository
-                .findByProfileTempNameAndProfileTempStudentNumberAndAndProfileTempHp(name, studentNumber, hp)
-                .ifPresent(clubMemberTemp -> {
-                    throw new ClubMemberTempException(ExceptionType.CLUB_MEMBERTEMP_IS_EXISTS);
-                });
-    }
-
     // 이메일 중복 확인
     public void verifyEmailDuplicate(String email) {
         // user테이블에서 중복 확인
         verifyUserDuplicate(email);
-        // clubMemberTemp에서 이메일로 중복 확인
-        verifyClubMemberTempDuplicate(email);
+
     }
 
 }

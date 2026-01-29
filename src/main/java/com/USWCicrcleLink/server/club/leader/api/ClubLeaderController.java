@@ -120,7 +120,6 @@ public class ClubLeaderController {
 
         ApiResponse<List<ClubMembersResponse>> response = switch (sort.toLowerCase()) {
             case "regular-member" -> clubLeaderService.getClubMembersByMemberType(clubUUID, MemberType.REGULARMEMBER);
-            case "non-member" -> clubLeaderService.getClubMembersByMemberType(clubUUID, MemberType.NONMEMBER);
             case "default" -> clubLeaderService.getClubMembers(clubUUID);
             default -> throw new ProfileException(ExceptionType.INVALID_MEMBER_TYPE);
         };
@@ -133,15 +132,6 @@ public class ClubLeaderController {
     public ResponseEntity<ApiResponse> deleteClubMembers(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody List<ClubMembersDeleteRequest> clubMemberUUIDList) {
         return new ResponseEntity<>(clubLeaderService.deleteClubMembers(clubUUID, clubMemberUUIDList), HttpStatus.OK);
-    }
-
-    // 동아리 회원 엑셀 파일 추출
-    @GetMapping("/{clubUUID}/members/export")
-    public ResponseEntity<ApiResponse> exportClubMembers(@PathVariable("clubUUID") UUID clubUUID,
-            HttpServletResponse response) {
-        // 엑셀 파일 생성
-        clubLeaderService.downloadExcel(clubUUID, response);
-        return new ResponseEntity<>(new ApiResponse<>("동아리 회원 엑셀 파일 내보내기 완료"), HttpStatus.OK);
     }
 
     // fcm 토큰 갱신
@@ -179,63 +169,6 @@ public class ClubLeaderController {
             throws IOException {
         clubLeaderService.updateFailedApplicantResults(clubUUID, results);
         return new ResponseEntity<>(new ApiResponse<>("추합 결과 처리 완료"), HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 엑셀 파일 업로드
-    @PostMapping(value = "/{clubUUID}/members/import", consumes = { "multipart/form-data" })
-    public ResponseEntity<ApiResponse<ClubMembersImportExcelResponse>> importClubMembers(
-            @PathVariable("clubUUID") UUID clubUUID,
-            @RequestPart(value = "clubMembersFile", required = true) MultipartFile clubMembersFile) throws IOException {
-        return new ResponseEntity<>(clubLeaderService.uploadExcel(clubUUID, clubMembersFile), HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 엑셀 파일로 추가
-    @PostMapping("/{clubUUID}/members")
-    public ResponseEntity<ApiResponse> addClubMembersFromExcel(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubMembersAddFromExcelRequestList clubMembersAddFromExcelRequestList) {
-        clubLeaderService.addClubMembersFromExcel(clubUUID,
-                clubMembersAddFromExcelRequestList.getClubMembersAddFromExcelRequestList());
-        return new ResponseEntity<>(new ApiResponse<>("엑셀로 추가된 기존 동아리 회원 저장 완료"), HttpStatus.OK);
-    }
-
-    // 프로필 중복 동아리 회원 추가
-    @PostMapping("/{clubUUID}/members/duplicate-profiles")
-    public ResponseEntity<ApiResponse> getDuplicateProfileMember(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) DuplicateProfileMemberRequest duplicateProfileMemberRequest) {
-        return new ResponseEntity<>(
-                clubLeaderService.addDuplicateProfileMember(clubUUID, duplicateProfileMemberRequest), HttpStatus.OK);
-    }
-
-    // 비회원 프로필 업데이트
-    @PatchMapping("/{clubUUID}/members/{clubMemberUUID}/non-member")
-    public ResponseEntity<ApiResponse> updateNonMemberProfile(@PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("clubMemberUUID") UUID clubMemberUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubNonMemberUpdateRequest clubNonMemberUpdateRequest) {
-        return new ResponseEntity<>(
-                clubLeaderService.updateNonMemberProfile(clubUUID, clubMemberUUID, clubNonMemberUpdateRequest),
-                HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 조회
-    @GetMapping("/{clubUUID}/members/sign-up")
-    public ResponseEntity<ApiResponse> getSignUpRequest(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getSignUpRequest(clubUUID), HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 삭제(거절)
-    @DeleteMapping("/{clubUUID}/members/sign-up/{clubMemberAccountStatusUUID}")
-    public ResponseEntity<ApiResponse> deleteSignUpRequest(@PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("clubMemberAccountStatusUUID") UUID clubMemberAccountStatusUUID) {
-        return new ResponseEntity<>(clubLeaderService.deleteSignUpRequest(clubUUID, clubMemberAccountStatusUUID),
-                HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 수락
-    @PostMapping("/{clubUUID}/members/sign-up")
-    public ResponseEntity<ApiResponse> acceptSignUpRequest(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
-        return new ResponseEntity<>(clubLeaderService.acceptSignUpRequest(clubUUID, clubMembersAcceptSignUpRequest),
-                HttpStatus.OK);
     }
 
     // 지원서 작성

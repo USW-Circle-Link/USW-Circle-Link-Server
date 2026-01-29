@@ -1,16 +1,12 @@
 package com.USWCicrcleLink.server.user.api;
 
-import com.USWCicrcleLink.server.global.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.email.service.EmailTokenService;
 import com.USWCicrcleLink.server.global.bucket4j.RateLimite;
 import com.USWCicrcleLink.server.global.exception.errortype.EmailTokenException;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
-import com.USWCicrcleLink.server.global.security.jwt.dto.TokenDto;
+
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
-import com.USWCicrcleLink.server.user.domain.AuthToken;
-import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
-import com.USWCicrcleLink.server.user.domain.User;
-import com.USWCicrcleLink.server.user.domain.WithdrawalToken;
+
 import com.USWCicrcleLink.server.user.dto.*;
 import com.USWCicrcleLink.server.user.service.AuthTokenService;
 import com.USWCicrcleLink.server.user.service.UserService;
@@ -25,8 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -102,25 +97,6 @@ public class UserController {
             modelAndView.setViewName("failure");
         }
         return modelAndView;
-    }
-
-    // 기존 동아리원 회원가입
-    @PostMapping("/existing/register")
-    public ResponseEntity<ApiResponse<Void>> ExistingMemberSignUp(
-            @RequestBody @Validated(ValidationSequence.class) ExistingMemberSignUpRequest request) {
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse<>("현재 기존 동아리원 회원가입이 불가능합니다."));
-
-        /*
-         * // 기존 회원 가입을 위한 조건 검사
-         * userService.checkExistingSignupCondition(request);
-         * // 임시 동아리 회원 생성
-         * ClubMemberTemp clubMemberTemp = userService.registerClubMemberTemp(request);
-         * // 입력받은 동아리의 회장들에게 가입신청서 보내기
-         * userService.sendRequest(request, clubMemberTemp);
-         * return ResponseEntity.ok(new ApiResponse<>("가입 요청에 성공했습니다"));
-         */
     }
 
     // 회원 탈퇴 인증 번호 확인

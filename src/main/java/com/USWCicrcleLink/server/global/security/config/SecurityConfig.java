@@ -56,6 +56,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(securityProperties.getPermitAllPaths().toArray(new String[0])).permitAll();
 
+                    // Public Club Endpoints (manually added since /clubs/** was removed from
+                    // permit-all)
+                    auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/open", "/clubs/{clubUUID}",
+                            "/clubs/open/filter").permitAll();
+
+                    // Admin Club Management
+                    auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("ADMIN");
+
                     auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}").hasAnyRole("ADMIN",
                             "LEADER");
                     auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices").hasAnyRole("ADMIN",

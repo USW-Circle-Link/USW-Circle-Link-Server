@@ -17,11 +17,7 @@ import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import com.USWCicrcleLink.server.user.profile.domain.MemberType;
 import com.USWCicrcleLink.server.user.profile.domain.Profile;
 import com.USWCicrcleLink.server.user.profile.repository.ProfileRepository;
-import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberAccountStatus;
-import com.USWCicrcleLink.server.user.domain.ExistingMember.ClubMemberTemp;
 import com.USWCicrcleLink.server.user.domain.User;
-import com.USWCicrcleLink.server.user.repository.ClubMemberAccountStatusRepository;
-import com.USWCicrcleLink.server.user.repository.ClubMemberTempRepository;
 import com.USWCicrcleLink.server.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -52,8 +48,6 @@ public class DummyData {
         private final ClubHashtagRepository clubHashtagRepository;
         private final ClubCategoryRepository clubCategoryRepository;
         private final ClubCategoryMappingRepository clubCategoryMappingRepository;
-        private final ClubMemberTempRepository clubMemberTempRepository;
-        private final ClubMemberAccountStatusRepository clubMemberAccountStatusRepository;
 
         @PostConstruct
         public void init() {
@@ -136,50 +130,6 @@ public class DummyData {
                                 .build();
                 userRepository.save(user4);
 
-                User user5 = User.builder()
-                                .userUUID(UUID.randomUUID())
-                                .userAccount("user555")
-                                .userPw(passwordEncoder.encode("qwer1234!"))
-                                .email("user555@example.com")
-                                .userCreatedAt(LocalDateTime.now())
-                                .userUpdatedAt(LocalDateTime.now())
-                                .role(Role.USER)
-                                .build();
-                userRepository.save(user5);
-
-                User user6 = User.builder()
-                                .userUUID(UUID.randomUUID())
-                                .userAccount("user666")
-                                .userPw(passwordEncoder.encode("qwer1234!"))
-                                .email("user666@example.com")
-                                .userCreatedAt(LocalDateTime.now())
-                                .userUpdatedAt(LocalDateTime.now())
-                                .role(Role.USER)
-                                .build();
-                userRepository.save(user6);
-
-                User user7 = User.builder()
-                                .userUUID(UUID.randomUUID())
-                                .userAccount("user777")
-                                .userPw(passwordEncoder.encode("qwer1234!"))
-                                .email("user777@example.com")
-                                .userCreatedAt(LocalDateTime.now())
-                                .userUpdatedAt(LocalDateTime.now())
-                                .role(Role.USER)
-                                .build();
-                userRepository.save(user7);
-
-                User user8 = User.builder()
-                                .userUUID(UUID.randomUUID())
-                                .userAccount("user888")
-                                .userPw(passwordEncoder.encode("qwer1234!"))
-                                .email("user888@example.com")
-                                .userCreatedAt(LocalDateTime.now())
-                                .userUpdatedAt(LocalDateTime.now())
-                                .role(Role.USER)
-                                .build();
-                userRepository.save(user8);
-
                 Profile profile1 = Profile.builder()
                                 .user(user1)
                                 .userName("김땡떙")
@@ -228,119 +178,6 @@ public class DummyData {
                                 .build();
                 profileRepository.save(profile4);
 
-                // 동아리 회원 정렬 가나다순, 정회원, 비회원
-                Profile profile5 = Profile.builder()
-                                .user(user5)
-                                .userName("이성계")
-                                .studentNumber("00001005")
-                                .userHp("01011112222")
-                                .major("컴퓨터공학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.REGULARMEMBER)
-                                .build();
-                profileRepository.save(profile5);
-
-                Profile profile6 = Profile.builder()
-                                .user(user6)
-                                .userName("이순신")
-                                .studentNumber("00001006")
-                                .userHp("01022223333")
-                                .major("정보보호학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.NONMEMBER)
-                                .build();
-                profileRepository.save(profile6);
-
-                Profile profile7 = Profile.builder()
-                                .user(user7)
-                                .userName("장보고")
-                                .studentNumber("00001007")
-                                .userHp("01033334444")
-                                .major("데이터과학부")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.REGULARMEMBER)
-                                .build();
-                profileRepository.save(profile7);
-
-                Profile profile8 = Profile.builder()
-                                .user(user8)
-                                .userName("김유신")
-                                .studentNumber("00001008")
-                                .userHp("01044445555")
-                                .major("소프트웨어학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.NONMEMBER)
-                                .build();
-                profileRepository.save(profile8);
-
-                // 다른 동아리의 비회원 프로필 수정
-                Profile profile11 = Profile.builder()
-                                .userName("김엑삼")//
-                                .studentNumber("00001011")
-                                .userHp("01077778888")
-                                .major("정보보호학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.NONMEMBER)
-                                .build();
-                profileRepository.save(profile11);
-
-                // 엑셀로 들어간 비회원(FLAG, BADMINTON, FLAG, BADMINTON)
-                Profile profile9 = Profile.builder()
-                                .userName("김엑원")
-                                .studentNumber("00001009")
-                                .userHp("01055556666")
-                                .major("정보보호학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.NONMEMBER)
-                                .build();
-                profileRepository.save(profile9);
-
-                Profile profile10 = Profile.builder()
-                                .userName("김엑투")// 틀린 정보
-                                .studentNumber("00001010")
-                                .userHp("01066667777")
-                                .major("정보보호학과")
-                                .profileCreatedAt(LocalDateTime.now())
-                                .profileUpdatedAt(LocalDateTime.now())
-                                .memberType(MemberType.NONMEMBER)
-                                .build();
-                profileRepository.save(profile10);
-
-                // 기존 동아리 회원 가입 요청 프로필(FLAG, BADMINTON, FLAG)
-                ClubMemberTemp clubMemberTemp1 = ClubMemberTemp.builder()
-                                .profileTempAccount("clubMemberTemp1")
-                                .profileTempPw(passwordEncoder.encode("clubMemberTemp111"))
-                                .profileTempName("김엑원")
-                                .profileTempStudentNumber("00001009")
-                                .profileTempHp("01055556666")
-                                .profileTempMajor("정보보호학과")
-                                .profileTempEmail("clubMemberTemp1@naver.com")
-                                .totalClubRequest(2)
-                                .clubRequestCount(0)
-                                .clubMemberTempExpiryDate(LocalDateTime.now().plusDays(7))
-                                .build();
-                clubMemberTempRepository.save(clubMemberTemp1);
-
-                ClubMemberTemp clubMemberTemp2 = ClubMemberTemp.builder()
-                                .profileTempAccount("clubMemberTemp2")
-                                .profileTempPw(passwordEncoder.encode("clubMemberTemp222"))
-                                .profileTempName("김엑둘")
-                                .profileTempStudentNumber("00001010")
-                                .profileTempHp("01066667777")
-                                .profileTempMajor("정보보호학과")
-                                .profileTempEmail("clubMemberTemp2@naver.com")
-                                .totalClubRequest(1)
-                                .clubRequestCount(0)
-                                .clubMemberTempExpiryDate(LocalDateTime.now().plusDays(7))
-                                .build();
-                clubMemberTempRepository.save(clubMemberTemp2);
-
                 // flag 데이터
                 Club flagClub = Club.builder()
                                 .clubName("FLAG")
@@ -371,44 +208,6 @@ public class DummyData {
                                 .clubRoomNumber("108")
                                 .build();
                 clubRepository.save(volunteerClub);
-
-                // 엑셀로 동아리에 추가된 회원(FLAG, BADMINTON, FLAG)
-                ClubMembers excelMemberOne1 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile9)
-                                .build();
-                clubMembersRepository.save(excelMemberOne1);
-
-                ClubMembers excelMemberOne2 = ClubMembers.builder()
-                                .club(badmintonClub)
-                                .profile(profile9)
-                                .build();
-                clubMembersRepository.save(excelMemberOne2);
-
-                ClubMembers excelMemberTwo1 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile10)
-                                .build();
-                clubMembersRepository.save(excelMemberTwo1);
-
-                // 기존 동아리 회원 가입 요청 상태
-                ClubMemberAccountStatus clubMemberAccountStatus1 = ClubMemberAccountStatus.builder()
-                                .clubMemberTemp(clubMemberTemp1)
-                                .club(flagClub)
-                                .build();
-                clubMemberAccountStatusRepository.save(clubMemberAccountStatus1);
-
-                ClubMemberAccountStatus clubMemberAccountStatus2 = ClubMemberAccountStatus.builder()
-                                .clubMemberTemp(clubMemberTemp1)
-                                .club(badmintonClub)
-                                .build();
-                clubMemberAccountStatusRepository.save(clubMemberAccountStatus2);
-
-                ClubMemberAccountStatus clubMemberAccountStatus3 = ClubMemberAccountStatus.builder()
-                                .clubMemberTemp(clubMemberTemp2)
-                                .club(flagClub)
-                                .build();
-                clubMemberAccountStatusRepository.save(clubMemberAccountStatus3);
 
                 // 플래그, 배드민턴, 봉사 해시태그 데이터
                 ClubHashtag flagHashtag1 = ClubHashtag.builder()
@@ -581,44 +380,12 @@ public class DummyData {
                                 .build();
                 aplictRepository.save(aplict4);
 
-                // flag동아리 소속
-                ClubMembers clubMember5 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile5)
-                                .build();
-                clubMembersRepository.save(clubMember5);
-
-                ClubMembers clubMember6 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile6)
-                                .build();
-                clubMembersRepository.save(clubMember6);
-
-                ClubMembers clubMember7 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile7)
-                                .build();
-                clubMembersRepository.save(clubMember7);
-
-                ClubMembers clubMember8 = ClubMembers.builder()
-                                .club(flagClub)
-                                .profile(profile8)
-                                .build();
-                clubMembersRepository.save(clubMember8);
-
                 // 배드민턴동아리 소속 및 지원
                 ClubMembers badmintonMember = ClubMembers.builder()
                                 .club(badmintonClub)
                                 .profile(profile1)
                                 .build();
                 clubMembersRepository.save(badmintonMember);
-
-                // 비회원
-                ClubMembers badmintonMember2 = ClubMembers.builder()
-                                .club(badmintonClub)
-                                .profile(profile11)
-                                .build();
-                clubMembersRepository.save(badmintonMember2);
 
                 Aplict badmintonAplict = Aplict.builder()
                                 .profile(profile1)

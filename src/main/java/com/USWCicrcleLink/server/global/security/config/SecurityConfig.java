@@ -51,12 +51,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .exceptionHandling(
+                        exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(securityProperties.getPermitAllPaths().toArray(new String[0])).permitAll();
 
-                    auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}").hasAnyRole("ADMIN", "LEADER");
-                    auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices").hasAnyRole("ADMIN", "LEADER");
+                    auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}").hasAnyRole("ADMIN",
+                            "LEADER");
+                    auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices").hasAnyRole("ADMIN",
+                            "LEADER");
+                    auth.requestMatchers(HttpMethod.POST, "/auth/withdrawal/code").hasAnyRole("USER", "LEADER");
 
                     auth.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN");
@@ -66,8 +70,10 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/notices/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.DELETE, "/notices/**").hasRole("ADMIN");
 
-                    auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw", "/club-leader/fcmtoken").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.GET, "/my-notices", "/mypages/my-clubs", "/mypages/aplict-clubs", "/profiles/me", "/my-notices/{noticeUUID}/details").hasRole("USER");
+                    auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw", "/club-leader/fcmtoken")
+                            .hasRole("USER");
+                    auth.requestMatchers(HttpMethod.GET, "/my-notices", "/mypages/my-clubs", "/mypages/aplict-clubs",
+                            "/profiles/me", "/my-notices/{noticeUUID}/details").hasRole("USER");
                     auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
                     auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
@@ -97,7 +103,7 @@ public class SecurityConfig {
                 .filter(origin -> !origin.isEmpty())
                 .forEach(configuration::addAllowedOriginPattern);
 
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
         configuration.addExposedHeader("Authorization");

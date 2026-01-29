@@ -70,7 +70,7 @@ public class DummyData {
                 Admin clubUnion = Admin.builder()
                                 .adminUUID(UUID.randomUUID())
                                 .adminAccount("clubUnion")
-                                .adminPw(passwordEncoder.encode("hpsEetcTf7ymgy6")) // 비밀번호 암호화
+                                .adminPw(passwordEncoder.encode("hpsEetcTf7ymgy6!")) // 비밀번호 암호화
                                 .adminName("동아리 연합회")
                                 .role(Role.ADMIN)
                                 .build();
@@ -454,8 +454,8 @@ public class DummyData {
                 clubMainPhotoRepository.save(clubMainPhoto);
 
                 Leader leader = Leader.builder()
-                                .leaderAccount("flag")
-                                .leaderPw(passwordEncoder.encode("12345"))
+                                .leaderAccount("flag1")
+                                .leaderPw(passwordEncoder.encode("a123456!"))
                                 .club(flagClub)
                                 .role(Role.LEADER)
                                 .build();

@@ -57,6 +57,7 @@ public class AuthService {
 
         // 유저 객체가 존재하는지 확인
         if (user == null) {
+            log.warn("Login Failed: User not found with account: {}", request.getAccount()); // 로그 추가
             // 기존 회원 가입 요청을 보낸 사람인지 확인(비회원 확인)
             Optional<ClubMemberTemp> clubMemberTemp = clubMemberTempRepository
                     .findByProfileTempAccount(request.getAccount());
@@ -69,7 +70,11 @@ public class AuthService {
         }
 
         // 아이디 비밀번호 일치 불일치 여부 확인
-        if (!passwordEncoder.matches(request.getPassword(), user.getUserPw())) {
+        boolean matches = passwordEncoder.matches(request.getPassword(), user.getUserPw());
+        log.info("Login Debug - Account: {}, User Found: true, Password Match: {}", request.getAccount(), matches); // 로그
+                                                                                                                    // 추가
+
+        if (!matches) {
             throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
         }
 

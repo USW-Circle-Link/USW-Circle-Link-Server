@@ -49,10 +49,6 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
         @Override
         public void deleteClubAndDependencies(Long clubId) {
 
-                em.createQuery("DELETE FROM ClubMemberAccountStatus cmas WHERE cmas.club.clubId = :clubId")
-                                .setParameter("clubId", clubId)
-                                .executeUpdate();
-
                 em.createQuery("DELETE FROM ClubHashtag ch WHERE ch.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();

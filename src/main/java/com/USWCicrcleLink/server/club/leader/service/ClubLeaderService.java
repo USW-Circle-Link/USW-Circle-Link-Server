@@ -478,6 +478,17 @@ public class ClubLeaderService {
         return s3FileResponse;
     }
 
+    // 모집 상태 조회
+    @Transactional(readOnly = true)
+    public ApiResponse<RecruitmentStatusResponse> getRecruitmentStatus(UUID clubUUID) {
+        Club club = validateLeaderAccess(clubUUID);
+
+        ClubIntro clubIntro = clubIntroRepository.findByClubClubId(club.getClubId())
+                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INTRO_NOT_EXISTS));
+
+        return new ApiResponse<>("모집 상태 조회 완료", new RecruitmentStatusResponse(clubIntro.getRecruitmentStatus()));
+    }
+
     // 동아리 모집 상태 변경
     public ApiResponse toggleRecruitmentStatus(UUID clubUUID) {
 

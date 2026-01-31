@@ -16,5 +16,3 @@ public interface FcmService {
     public void refreshFcmToken(FcmTokenRequest fcmTokenRequest);
 
 }
-
-

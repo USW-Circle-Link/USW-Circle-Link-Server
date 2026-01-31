@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "LEADER_TABLE")
-public class Leader{
+public class Leader {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Leader{
     private String leaderAccount;
 
     @Builder.Default
-    @Column(name = "leader_uuid",nullable = false, updatable = false)
+    @Column(name = "leader_uuid", nullable = false, updatable = false)
     private UUID leaderUUID = UUID.randomUUID();
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -57,4 +57,3 @@ public class Leader{
         this.leaderPw = encodedPw;
     }
 }
-

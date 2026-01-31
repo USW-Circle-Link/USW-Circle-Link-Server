@@ -53,7 +53,8 @@ public class NoticeService {
                 .map(notice -> NoticeListResponse.builder()
                         .noticeUUID(notice.getNoticeUUID())
                         .noticeTitle(notice.getNoticeTitle())
-                        .adminName(notice.getAdmin().getAdminName())
+                        .authorName(notice.getAdmin() != null ? notice.getAdmin().getAdminName()
+                                : notice.getLeader().getClub().getLeaderName())
                         .noticeCreatedAt(notice.getNoticeCreatedAt())
                         .build())
                 .toList();
@@ -87,22 +88,31 @@ public class NoticeService {
                 notice.getNoticeContent(),
                 noticePhotoUrls,
                 notice.getNoticeCreatedAt(),
-                notice.getAdmin().getAdminName());
+                notice.getAdmin() != null ? notice.getAdmin().getAdminName()
+                        : notice.getLeader().getClub().getLeaderName());
     }
 
     /**
      * 공지사항 생성 (ADMIN)
      */
     public List<String> createNotice(NoticeRequest request, List<MultipartFile> noticePhotos) {
-        Admin admin = getAuthenticatedAdmin();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Notice notice = Notice.builder()
+        Notice.NoticeBuilder noticeBuilder = Notice.builder()
                 .noticeTitle(request.getNoticeTitle())
                 .noticeContent(request.getNoticeContent())
-                .noticeCreatedAt(LocalDateTime.now())
-                .admin(admin)
-                .build();
-        Notice savedNotice = noticeRepository.save(notice);
+                .noticeCreatedAt(LocalDateTime.now());
+
+        if (principal instanceof CustomAdminDetails) {
+            noticeBuilder.admin(((CustomAdminDetails) principal).admin());
+        } else if (principal instanceof com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) {
+            noticeBuilder.leader(
+                    ((com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) principal).leader());
+        } else {
+            throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
+        }
+
+        Notice savedNotice = noticeRepository.save(noticeBuilder.build());
 
         // 사진 순서와 파일 개수 검증
         validatePhotoOrdersAndPhotos(request.getPhotoOrders(), noticePhotos);
@@ -156,13 +166,10 @@ public class NoticeService {
     }
 
     /**
-     * 인증된 ADMIN 정보 가져오기
+     * 인증된 사용자 정보 가져오기 (Helper method if needed, currently replaced by inline
+     * checks)
      */
-    private Admin getAuthenticatedAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomAdminDetails adminDetails = (CustomAdminDetails) authentication.getPrincipal();
-        return adminDetails.admin();
-    }
+    // Removed getAuthenticatedAdmin as it's no longer sufficient for both types
 
     // 사진 순서와 파일 개수 검증
     private void validatePhotoOrdersAndPhotos(List<Integer> photoOrders, List<MultipartFile> noticePhotos) {

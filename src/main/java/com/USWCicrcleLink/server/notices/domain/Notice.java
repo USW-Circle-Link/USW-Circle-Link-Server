@@ -33,8 +33,12 @@ public class Notice {
     private LocalDateTime noticeCreatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id")
     private Admin admin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leader_id")
+    private com.USWCicrcleLink.server.club.leader.domain.Leader leader;
 
     @PrePersist
     public void prePersist() {

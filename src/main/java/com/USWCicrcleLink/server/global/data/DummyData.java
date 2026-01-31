@@ -180,13 +180,13 @@ public class DummyData {
 
                 // flag 데이터
                 Club flagClub = Club.builder()
-                                .clubName("FLAG")
-                                .leaderName("flag")
-                                .leaderHp("01012345678")
-                                .department(Department.ACADEMIC)
-                                .clubInsta("https://www.instagram.com/usw1982/")
-                                .clubRoomNumber("208")
-                                .build();
+                        .clubName("FLAG")
+                        .leaderName("flag")
+                        .leaderHp("01012345678")
+                        .department(Department.ACADEMIC)
+                        .clubInsta("https://www.instagram.com/usw1982/")
+                        .clubRoomNumber("208")
+                        .build();
                 clubRepository.save(flagClub);
 
                 Club badmintonClub = Club.builder()

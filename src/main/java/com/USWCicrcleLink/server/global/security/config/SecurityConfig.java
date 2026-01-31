@@ -28,100 +28,116 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtProvider jwtProvider;
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final SecurityProperties securityProperties;
+        private final JwtProvider jwtProvider;
+        private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+        private final SecurityProperties securityProperties;
 
-    @Value("#{'${cors.allowed-origins}'.split(',')}")
-    private List<String> allowedOrigins;
+        @Value("#{'${cors.allowed-origins}'.split(',')}")
+        private List<String> allowedOrigins;
 
-    @Bean
-    public JwtFilter jwtAuthFilter() {
-        return new JwtFilter(jwtProvider, securityProperties.getPermitAllPaths(), customAuthenticationEntryPoint);
-    }
+        @Bean
+        public JwtFilter jwtAuthFilter() {
+                return new JwtFilter(jwtProvider, securityProperties.getPermitAllPaths(),
+                                customAuthenticationEntryPoint);
+        }
 
-    @Bean
-    public LoggingFilter loggingFilter() {
-        return new LoggingFilter(securityProperties.getLoggingPaths(), securityProperties.getMethods());
-    }
+        @Bean
+        public LoggingFilter loggingFilter() {
+                return new LoggingFilter(securityProperties.getLoggingPaths(), securityProperties.getMethods());
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(
-                        exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint))
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(securityProperties.getPermitAllPaths().toArray(new String[0])).permitAll();
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .exceptionHandling(
+                                                exceptionHandling -> exceptionHandling.authenticationEntryPoint(
+                                                                customAuthenticationEntryPoint))
+                                .authorizeHttpRequests(auth -> {
+                                        auth.requestMatchers(
+                                                        securityProperties.getPermitAllPaths().toArray(new String[0]))
+                                                        .permitAll();
 
-                    // Public Club Endpoints (manually added since /clubs/** was removed from
-                    // permit-all)
-                    auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/open", "/clubs/{clubUUID}",
-                            "/clubs/open/filter").permitAll();
+                                        // Public Club Endpoints (manually added since /clubs/** was removed from
+                                        // permit-all)
+                                        auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/open",
+                                                        "/clubs/{clubUUID}",
+                                                        "/clubs/open/filter").permitAll();
 
-                    // Admin Club Management
-                    auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("ADMIN");
+                                        // Admin Club Management
+                                        auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("ADMIN");
 
-                    auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}").hasAnyRole("ADMIN",
-                            "LEADER");
-                    auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices").hasAnyRole("ADMIN",
-                            "LEADER");
-                    auth.requestMatchers(HttpMethod.POST, "/auth/withdrawal/code").hasAnyRole("USER", "LEADER");
+                                        auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}")
+                                                        .hasAnyRole("ADMIN",
+                                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices")
+                                                        .hasAnyRole("ADMIN",
+                                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.POST, "/auth/withdrawal/code")
+                                                        .hasAnyRole("USER", "LEADER");
 
-                    auth.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
 
-                    auth.requestMatchers(HttpMethod.POST, "/notices/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE, "/notices/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.POST, "/notices/**").hasAnyRole("ADMIN",
+                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.PUT, "/notices/**").hasAnyRole("ADMIN",
+                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/notices/**").hasAnyRole("ADMIN",
+                                                        "LEADER");
 
-                    auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw", "/club-leader/fcmtoken")
-                            .hasRole("USER");
-                    auth.requestMatchers(HttpMethod.GET, "/my-notices", "/mypages/my-clubs", "/mypages/aplict-clubs",
-                            "/profiles/me", "/my-notices/{noticeUUID}/details").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.DELETE, "/users/event/**").hasRole("USER");
-                    auth.requestMatchers(HttpMethod.POST, "/club-leader/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.GET, "/club-leader/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.PATCH, "/club-leader/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.DELETE, "/club-leader/**").hasRole("LEADER");
-                    auth.requestMatchers(HttpMethod.PUT, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw",
+                                                        "/club-leader/fcmtoken")
+                                                        .hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.GET, "/my-notices", "/mypages/my-clubs",
+                                                        "/mypages/aplict-clubs",
+                                                        "/profiles/me", "/my-notices/{noticeUUID}/details")
+                                                        .hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.POST, "/apply/**").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.GET, "/apply/**").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/users/event/**").hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.POST, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.GET, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.PATCH, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.PUT, "/club-leader/**").hasRole("LEADER");
 
-                    auth.anyRequest().authenticated();
-                })
-                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(loggingFilter(), JwtFilter.class);
-        return http.build();
-    }
+                                        auth.anyRequest().authenticated();
+                                })
+                                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                                .addFilterAfter(loggingFilter(), JwtFilter.class);
+                return http.build();
+        }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
 
-        allowedOrigins.stream()
-                .map(String::trim)
-                .filter(origin -> !origin.isEmpty())
-                .forEach(configuration::addAllowedOriginPattern);
+                allowedOrigins.stream()
+                                .map(String::trim)
+                                .filter(origin -> !origin.isEmpty())
+                                .forEach(configuration::addAllowedOriginPattern);
 
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
 
-        configuration.addExposedHeader("Authorization");
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+                configuration.addExposedHeader("Authorization");
+                configuration.setAllowCredentials(true);
+                configuration.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
 
-        return source;
-    }
+                return source;
+        }
 }

@@ -79,7 +79,8 @@ public class FcmServiceImpl implements FcmService {
                 return 1;
             } else {
                 // FCM 토큰아 유효하지 않음
-                if (response.getStatusCode() == HttpStatus.UNAUTHORIZED || response.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                if (response.getStatusCode() == HttpStatus.UNAUTHORIZED
+                        || response.getStatusCode() == HttpStatus.BAD_REQUEST) {
                     // FCM 토큰 삭제 처리
                     profileRepository.findById(aplict.getProfile().getProfileId())
                             .ifPresent(profile -> {
@@ -118,9 +119,12 @@ public class FcmServiceImpl implements FcmService {
 
         // 메시지 내용
         String bodyMessage;
-        if (aplictResult == AplictStatus.PASS) bodyMessage = aplict.getClub().getClubName() + APLICT_PASS_MESSAGE;
-        else if (aplictResult == AplictStatus.FAIL) bodyMessage = aplict.getClub().getClubName() + APLICT_FAIL_MESSAGE;
-        else bodyMessage = APLICT_ERROR_MESSAGE;
+        if (aplictResult == AplictStatus.PASS)
+            bodyMessage = aplict.getClub().getClubName() + APLICT_PASS_MESSAGE;
+        else if (aplictResult == AplictStatus.FAIL)
+            bodyMessage = aplict.getClub().getClubName() + APLICT_FAIL_MESSAGE;
+        else
+            bodyMessage = APLICT_ERROR_MESSAGE;
 
         // 메시지 구성
         FcmMessageDto createFcmMessage = FcmMessageDto.builder()
@@ -130,8 +134,7 @@ public class FcmServiceImpl implements FcmService {
                                 FcmMessageDto.Notification.builder()
                                         .title(titleMessage)
                                         .body(bodyMessage)
-                                        .build()
-                        )
+                                        .build())
                         .build())
                 .build();
 
@@ -150,7 +153,8 @@ public class FcmServiceImpl implements FcmService {
         Optional<Profile> userFcmTokenOptional = profileRepository.findByUserUserId(user.getUserId());
         if (userFcmTokenOptional.isPresent()) {
             Profile userFcmToken = userFcmTokenOptional.get();
-            userFcmToken.updateFcmTokenTime(fcmTokenRequest.getFcmToken(), LocalDateTime.now().plusDays(FCM_TOKEN_CERTIFICATION_TIME));
+            userFcmToken.updateFcmTokenTime(fcmTokenRequest.getFcmToken(),
+                    LocalDateTime.now().plusDays(FCM_TOKEN_CERTIFICATION_TIME));
             profileRepository.save(userFcmToken);
             log.debug("사용자 {}의 FCM 토큰 갱신 완료", user.getUserAccount());
         } else {
@@ -158,5 +162,3 @@ public class FcmServiceImpl implements FcmService {
         }
     }
 }
-
-

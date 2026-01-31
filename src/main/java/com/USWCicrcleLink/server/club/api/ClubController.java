@@ -2,19 +2,19 @@ package com.USWCicrcleLink.server.club.api;
 
 import com.USWCicrcleLink.server.admin.dto.AdminClubCreationRequest;
 import com.USWCicrcleLink.server.admin.dto.AdminClubIntroResponse;
-import com.USWCicrcleLink.server.admin.dto.AdminClubPageListResponse;
+
 import com.USWCicrcleLink.server.admin.dto.AdminPwRequest;
 import com.USWCicrcleLink.server.admin.service.AdminClubService;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
-import com.USWCicrcleLink.server.club.dto.ClubCategoryDto;
-import com.USWCicrcleLink.server.club.dto.ClubInfoListResponse;
+
 import com.USWCicrcleLink.server.club.dto.ClubListByClubCategoryResponse;
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.service.ClubService;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoResponse;
-import com.USWCicrcleLink.server.club.leader.dto.clubMembers.*;
+import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersResponse;
+import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersDeleteRequest;
 import com.USWCicrcleLink.server.club.leader.service.ClubLeaderService;
 import com.USWCicrcleLink.server.club.leader.service.FcmServiceImpl;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
@@ -158,18 +158,10 @@ public class ClubController {
     }
 
     // 모집 상태 조회
+    // 모집 상태 조회
     @GetMapping("/{clubUUID}/recruit-status")
     public ResponseEntity<ApiResponse> getRecruitmentStatus(@PathVariable("clubUUID") UUID clubUUID) {
-        // ClubLeaderService doesn't have a direct 'get recruitment status' method that
-        // just returns boolean?
-        // getClubInfo might have it.
-        // Actually ClubLeaderController had toggleRecruitmentStatus (Patch).
-        // Spec demands GET.
-        // Assuming getClubInfo contains it.
-        // Or I can add a method in service.
-        // For now, I'll return ClubInfo which has status.
-        ApiResponse<ClubInfoResponse> clubInfo = clubLeaderService.getClubInfo(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("모집 상태 조회", clubInfo.getData()));
+        return ResponseEntity.ok(clubLeaderService.getRecruitmentStatus(clubUUID));
     }
 
     // 모집 상태 변경 (Toggle)
@@ -197,29 +189,6 @@ public class ClubController {
     public ResponseEntity<ApiResponse> deleteClubMembers(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody List<ClubMembersDeleteRequest> clubMemberUUIDList) {
         return new ResponseEntity<>(clubLeaderService.deleteClubMembers(clubUUID, clubMemberUUIDList), HttpStatus.OK);
-    }
-
-    // 엑셀로 회원 추가 (Leader)
-    @PostMapping("/{clubUUID}/members/import")
-    public ResponseEntity<ApiResponse<ClubMembersImportExcelResponse>> importClubMembers(
-            @PathVariable("clubUUID") UUID clubUUID,
-            @RequestPart(value = "clubMembersFile", required = true) MultipartFile clubMembersFile) throws IOException {
-        return new ResponseEntity<>(clubLeaderService.uploadExcel(clubUUID, clubMembersFile), HttpStatus.OK);
-    }
-
-    // 엑셀 명단 파일 확인 후 실제 추가
-    @PostMapping("/{clubUUID}/members")
-    public ResponseEntity<ApiResponse> addClubMembersFromExcel(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubMembersAddFromExcelRequestList clubMembersAddFromExcelRequestList) {
-        clubLeaderService.addClubMembersFromExcel(clubUUID,
-                clubMembersAddFromExcelRequestList.getClubMembersAddFromExcelRequestList());
-        return new ResponseEntity<>(new ApiResponse<>("엑셀로 추가된 기존 동아리 회원 저장 완료"), HttpStatus.OK);
-    }
-
-    // 회원 엑셀로 내보내기
-    @GetMapping("/{clubUUID}/members/export")
-    public void exportClubMembers(@PathVariable("clubUUID") UUID clubUUID, HttpServletResponse response) {
-        clubLeaderService.downloadExcel(clubUUID, response);
     }
 
     // 최초 지원자 조회
@@ -250,28 +219,6 @@ public class ClubController {
             throws IOException {
         clubLeaderService.updateFailedApplicantResults(clubUUID, results);
         return new ResponseEntity<>(new ApiResponse<>("추합 결과 처리 완료"), HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 조회
-    @GetMapping("/{clubUUID}/members/sign-up")
-    public ResponseEntity<ApiResponse> getSignUpRequest(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getSignUpRequest(clubUUID), HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 수락
-    @PostMapping("/{clubUUID}/members/sign-up")
-    public ResponseEntity<ApiResponse> acceptSignUpRequest(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) ClubMembersAcceptSignUpRequest clubMembersAcceptSignUpRequest) {
-        return new ResponseEntity<>(clubLeaderService.acceptSignUpRequest(clubUUID, clubMembersAcceptSignUpRequest),
-                HttpStatus.OK);
-    }
-
-    // 기존 동아리 회원 가입 요청 거절
-    @DeleteMapping("/{clubUUID}/members/sign-up/{clubMemberAccountStatusUUID}")
-    public ResponseEntity<ApiResponse> deleteSignUpRequest(@PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("clubMemberAccountStatusUUID") UUID clubMemberAccountStatusUUID) {
-        return new ResponseEntity<>(clubLeaderService.deleteSignUpRequest(clubUUID, clubMemberAccountStatusUUID),
-                HttpStatus.OK);
     }
 
     // FCM 토큰 갱신 (Leader)

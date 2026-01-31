@@ -19,5 +19,5 @@ public class NoticeDetailResponse {
     private String noticeContent;
     private List<String> noticePhotos;
     private LocalDateTime noticeCreatedAt;
-    private String adminName;
+    private String authorName;
 }

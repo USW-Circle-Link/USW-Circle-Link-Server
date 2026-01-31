@@ -17,7 +17,8 @@ public class ClubMembersRepositoryImpl implements ClubMembersRepositoryCustom {
                 return em.createQuery(
                                 "select cm from ClubMembers cm" +
                                                 " join fetch cm.profile p" +
-                                                " where cm.clubId = :clubId",
+                                                " where cm.club.clubId = :clubId", // Changed cm.clubId to
+                                                                                   // cm.club.clubId
                                 ClubMembers.class).setParameter("clubId", clubId)
                                 .getResultList();
         }
@@ -28,7 +29,8 @@ public class ClubMembersRepositoryImpl implements ClubMembersRepositoryCustom {
                 return em.createQuery(
                                 "SELECT cm FROM ClubMembers cm" +
                                                 " JOIN FETCH cm.profile p" +
-                                                " WHERE cm.clubId = :clubId" +
+                                                " WHERE cm.club.clubId = :clubId" + // Changed cm.clubId to
+                                                                                    // cm.club.clubId
                                                 " ORDER BY p.userName ASC",
                                 ClubMembers.class).setParameter("clubId", clubId)
                                 .getResultList();
@@ -40,7 +42,8 @@ public class ClubMembersRepositoryImpl implements ClubMembersRepositoryCustom {
                 return em.createQuery(
                                 "SELECT cm FROM ClubMembers cm" +
                                                 " JOIN FETCH cm.profile p" +
-                                                " WHERE cm.clubId = :clubId" +
+                                                " WHERE cm.club.clubId = :clubId" + // Changed cm.clubId to
+                                                                                    // cm.club.clubId
                                                 " AND p.memberType = :memberType",
                                 ClubMembers.class)
                                 .setParameter("clubId", clubId)

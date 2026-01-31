@@ -12,7 +12,6 @@ import java.util.UUID;
 public class NoticeListResponse {
     private UUID noticeUUID;
     private String noticeTitle;
-    private String adminName;
+    private String authorName;
     private LocalDateTime noticeCreatedAt;
 }
-

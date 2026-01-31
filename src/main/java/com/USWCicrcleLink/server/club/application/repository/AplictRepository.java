@@ -16,23 +16,29 @@ import java.util.UUID;
 
 @Repository
 public interface AplictRepository extends JpaRepository<Aplict, Long>, AplictRepositoryCustom {
-    List<Aplict> findByProfileProfileId(Long profileId);
+        List<Aplict> findByProfileProfileId(Long profileId); // Restored
 
-    Optional<Aplict> findByClub_ClubIdAndAplictUUIDAndChecked(Long clubId, UUID aplictUUID, boolean checked);
+        Optional<Aplict> findByClub_ClubIdAndAplictUUID(Long clubId, UUID aplictUUID); // Restored
 
-    List<Aplict> findByClub_ClubIdAndChecked(Long clubId, boolean checked);
+        List<Aplict> findByClub_ClubIdAndAplictStatus(Long clubId, AplictStatus status); // Restored
 
-    Optional<Aplict> findByClub_ClubIdAndAplictUUIDAndCheckedAndAplictStatus(Long clubId, UUID aplictUUID,
-            boolean checked, AplictStatus status);
+        Optional<Aplict> findByClub_ClubIdAndAplictUUIDAndAplictStatus(Long clubId, UUID aplictUUID,
+                        AplictStatus status); // Restored
 
-    List<Aplict> findAllByDeleteDateBefore(LocalDateTime dateTime);
+        List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status);
 
-    void deleteAllByProfile(Profile profile);
+        List<Aplict> findAllWithProfileByClubId(Long clubId);
 
-    @Query("SELECT COUNT(a) > 0 FROM Aplict a WHERE a.profile = :profile AND a.club.clubuuid = :clubuuid AND a.checked = false")
-    boolean existsByProfileAndClubuuidAndCheckedIsFalse(@Param("profile") Profile profile,
-            @Param("clubuuid") UUID clubuuid);
+        List<Aplict> findAllByDeleteDateBefore(LocalDateTime dateTime);
 
-    @Query("SELECT a.club FROM Aplict a WHERE a.aplictId = :aplictId")
-    Optional<Club> findClubByAplictId(@Param("aplictId") Long aplictId);
+        void deleteAllByProfile(Profile profile);
+
+        @Query("SELECT COUNT(a) > 0 FROM Aplict a WHERE a.profile = :profile AND a.club.clubuuid = :clubuuid")
+        boolean existsByProfileAndClubuuid(@Param("profile") Profile profile,
+                        @Param("clubuuid") UUID clubuuid);
+
+        @Query("SELECT a.club FROM Aplict a WHERE a.aplictId = :aplictId")
+        Optional<Club> findClubByAplictId(@Param("aplictId") Long aplictId);
+
+        Optional<Aplict> findByAplictUUID(UUID aplictUUID);
 }

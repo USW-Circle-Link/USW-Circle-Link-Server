@@ -24,19 +24,8 @@ public class ClubForm {
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
-    @Column(length = 100, nullable = false)
-    private String title;
-
     @Column(columnDefinition = "TEXT")
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private FormStatus status;
-
-
-    private LocalDateTime startAt;
-    private LocalDateTime endAt;
 
     @Column(nullable = false)
     private Long createdBy;
@@ -52,13 +41,9 @@ public class ClubForm {
     private LocalDateTime updatedAt;
 
     @Builder
-    public ClubForm(Club club, String title, String description, LocalDateTime startAt, LocalDateTime endAt, Long createdBy) {
+    public ClubForm(Club club, String description, Long createdBy) {
         this.club = club;
-        this.title = title;
         this.description = description;
-        this.status = FormStatus.DRAFT; // 기본 상태 DRAFT
-        this.startAt = startAt;
-        this.endAt = endAt;
         this.createdBy = createdBy;
     }
 
@@ -68,10 +53,4 @@ public class ClubForm {
         question.setClubForm(this);
     }
 
-    // 상태 변경 메서드 DRAFT PUBLISHED CLOSED
-    public void updateStatus(FormStatus status) {
-        this.status = status;
-    }
-
 }
-

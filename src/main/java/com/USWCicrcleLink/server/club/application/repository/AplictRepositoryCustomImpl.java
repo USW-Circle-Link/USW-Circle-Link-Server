@@ -11,33 +11,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AplictRepositoryCustomImpl implements AplictRepositoryCustom {
 
-    @PersistenceContext
-    private final EntityManager em;
+        @PersistenceContext
+        private final EntityManager em;
 
-    // 동아리 지원자 조회
-    @Override
-    public List<Aplict> findAllWithProfileByClubId(Long clubId, boolean checked) {
-        return em.createQuery(
-                        "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p" +
-                                " WHERE ap.club.id = :clubId AND ap.checked = :checked",
-                        Aplict.class
-                ).setParameter("clubId", clubId)
-                .setParameter("checked", checked)
-                .getResultList();
-    }
+        // 동아리 지원자 조회 (상태별)
+        @Override
+        public List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status) {
+                return em.createQuery(
+                                "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p" +
+                                                " WHERE ap.club.id = :clubId AND ap.aplictStatus = :status",
+                                Aplict.class).setParameter("clubId", clubId)
+                                .setParameter("status", status)
+                                .getResultList();
+        }
 
-    // 불합격자 동아리 지원자 조회
-    @Override
-    public List<Aplict> findAllWithProfileByClubIdAndFailed(Long clubId, boolean checked, AplictStatus status) {
-        return em.createQuery(
-                        "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p" +
-                                " WHERE ap.club.id = :clubId AND ap.checked = :checked AND ap.aplictStatus = :status",
-                        Aplict.class
-                ).setParameter("clubId", clubId)
-                .setParameter("checked", checked)
-                .setParameter("status", status)
-                .getResultList();
-    }
+        @Override
+        public List<Aplict> findAllWithProfileByClubId(Long clubId) {
+                return em.createQuery(
+                                "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p" +
+                                                " WHERE ap.club.id = :clubId",
+                                Aplict.class).setParameter("clubId", clubId)
+                                .getResultList();
+        }
 
 }
-

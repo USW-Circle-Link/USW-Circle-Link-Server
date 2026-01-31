@@ -28,20 +28,13 @@ public class FormService {
         Club club = clubRepository.findByClubuuid(clubUUID)
                 .orElseThrow(() -> new EntityNotFoundException("해당 동아리를 찾을 수 없습니다."));
 
-        if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new IllegalArgumentException("마감일은 시작일보다 빠를 수 없습니다.");
-        }
-
         if (request.getQuestions() == null || request.getQuestions().isEmpty()) {
             throw new IllegalArgumentException("최소 1개 이상의 질문을 등록해야 합니다.");
         }
 
         ClubForm form = ClubForm.builder()
                 .club(club)
-                .title(request.getTitle())
                 .description(request.getDescription())
-                .startAt(request.getStartDate())
-                .endAt(request.getEndDate())
                 .createdBy(1L)
                 .build();
 
@@ -74,19 +67,4 @@ public class FormService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 지원서를 찾을 수 없습니다. ID=" + formId));
     }
 
-    public void updateStatus(UUID clubUUID, Long formId, FormDto.UpdateStatusRequest request) {
-
-        ClubForm form = formRepository.findById(formId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 지원서를 찾을 수 없습니다. ID=" + formId));
-
-        // uuid 다를 시 변경 불가 - Club 조회하여 검증
-        Club club = clubRepository.findById(form.getClub().getClubId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 동아리를 찾을 수 없습니다."));
-
-        if (!club.getClubuuid().equals(clubUUID)) {
-            throw new IllegalArgumentException("해당 동아리의 지원서가 아니므로 수정할 수 없습니다.");
-        }
-
-        form.updateStatus(request.getStatus());
-    }
 }

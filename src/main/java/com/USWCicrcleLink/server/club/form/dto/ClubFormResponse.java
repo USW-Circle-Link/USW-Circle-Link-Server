@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ClubFormResponse {
     private Long formId;
-    private String title;
+
     private List<QuestionResponse> questions;
 
     @Getter

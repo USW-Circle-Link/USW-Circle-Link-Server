@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import com.USWCicrcleLink.server.club.application.dto.AplictDto;
+import jakarta.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clubs/{clubUUID}/applications")
@@ -25,8 +28,18 @@ public class AplictController {
 
     // 지원서 제출
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> submitApplication(@PathVariable("clubUUID") UUID clubUUID) {
-        aplictService.submitAplict(clubUUID);
+    public ResponseEntity<ApiResponse<Void>> submitApplication(@PathVariable("clubUUID") UUID clubUUID,
+            @RequestBody @Valid AplictDto.SubmitRequest request) {
+        aplictService.submitAplict(clubUUID, request);
         return ResponseEntity.ok(new ApiResponse<>("지원서 제출 성공"));
+    }
+
+    // 지원서 상세 조회 (본인)
+    @GetMapping("/{aplictUUID}")
+    public ResponseEntity<ApiResponse<AplictDto.DetailResponse>> getApplicationDetail(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @PathVariable("aplictUUID") UUID aplictUUID) {
+        AplictDto.DetailResponse response = aplictService.getApplicationDetail(aplictUUID);
+        return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 성공", response));
     }
 }

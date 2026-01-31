@@ -180,13 +180,13 @@ public class DummyData {
 
                 // flag 데이터
                 Club flagClub = Club.builder()
-                        .clubName("FLAG")
-                        .leaderName("flag")
-                        .leaderHp("01012345678")
-                        .department(Department.ACADEMIC)
-                        .clubInsta("https://www.instagram.com/usw1982/")
-                        .clubRoomNumber("208")
-                        .build();
+                                .clubName("FLAG")
+                                .leaderName("flag")
+                                .leaderHp("01012345678")
+                                .department(Department.ACADEMIC)
+                                .clubInsta("https://www.instagram.com/usw1982/")
+                                .clubRoomNumber("208")
+                                .build();
                 clubRepository.save(flagClub);
 
                 Club badmintonClub = Club.builder()
@@ -348,12 +348,6 @@ public class DummyData {
                 }
 
                 // FLAG 동아리 지원자
-                Aplict aplict1 = Aplict.builder()
-                                .profile(profile1)
-                                .club(flagClub)
-                                .submittedAt(LocalDateTime.now())
-                                .build();
-                aplictRepository.save(aplict1);
 
                 Aplict aplict2 = Aplict.builder()
                                 .profile(profile2)
@@ -366,7 +360,7 @@ public class DummyData {
                                 .profile(profile3)
                                 .club(flagClub)
                                 .submittedAt(LocalDateTime.now())
-                                .checked(true)
+
                                 .aplictStatus(AplictStatus.FAIL)
                                 .build();
                 aplictRepository.save(aplict3);
@@ -375,7 +369,7 @@ public class DummyData {
                                 .profile(profile4)
                                 .club(flagClub)
                                 .submittedAt(LocalDateTime.now())
-                                .checked(true)
+
                                 .aplictStatus(AplictStatus.FAIL)
                                 .build();
                 aplictRepository.save(aplict4);

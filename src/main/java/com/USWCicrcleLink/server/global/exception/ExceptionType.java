@@ -168,6 +168,7 @@ public enum ExceptionType {
         ALREADY_MEMBER("APT-206", "이미 해당 동아리 회원입니다.", BAD_REQUEST),
         PHONE_NUMBER_ALREADY_REGISTERED("APT-207", "이미 등록된 전화번호입니다.", BAD_REQUEST),
         STUDENT_NUMBER_ALREADY_REGISTERED("APT-208", "이미 등록된 학번입니다.", BAD_REQUEST),
+        APLICT_ACCESS_DENIED("APT-209", "지원서 접근 권한이 없습니다.", FORBIDDEN),
 
         /**
          * Domain: AuthCodeToken

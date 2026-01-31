@@ -193,8 +193,10 @@ public class ClubController {
 
     // 최초 지원자 조회
     @GetMapping("/{clubUUID}/applicants")
-    public ResponseEntity<ApiResponse> getApplicants(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> getApplicants(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @RequestParam(value = "status", required = false) com.USWCicrcleLink.server.club.application.domain.AplictStatus status) {
+        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status), HttpStatus.OK);
     }
 
     // 최초 합격자 알림

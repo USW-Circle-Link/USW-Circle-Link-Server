@@ -4,6 +4,7 @@ import com.USWCicrcleLink.server.club.application.domain.Aplict;
 import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantsResponse;
+import com.USWCicrcleLink.server.club.application.dto.AplictDto;
 import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
 import com.USWCicrcleLink.server.club.domain.*;
 import com.USWCicrcleLink.server.club.repository.*;
@@ -590,59 +591,66 @@ public class ClubLeaderService {
         return new ApiResponse<>("동아리 회원 삭제 완료", clubMemberUUIDList);
     }
 
-    // 동아리 지원자 조회
+    // 동아리 지원자 조회 (전체 또는 상태별)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID) {
+    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID, AplictStatus status) {
         Club club = validateLeaderAccess(clubUUID);
 
-        // 합/불 처리되지 않은 동아리 지원자 조회
-        List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubId(club.getClubId(), false);
+        List<Aplict> aplicts;
+        if (status == null) {
+            // 상태 조건 없이 전체 조회
+            aplicts = aplictRepository.findAllWithProfileByClubId(club.getClubId());
+        } else {
+            // 특정 상태 조회
+            aplicts = aplictRepository.findAllWithProfileByClubIdAndStatus(club.getClubId(), status);
+        }
+
         List<ApplicantsResponse> applicants = aplicts.stream()
                 .map(ap -> new ApplicantsResponse(
                         ap.getAplictUUID(),
                         ap.getProfile()))
                 .toList();
 
-        return new ApiResponse<>("최초 동아리 지원자 조회 완료", applicants);
+        return new ApiResponse<>("동아리 지원자 조회 완료", applicants);
     }
 
     // 최초 합격자 알림
     public void updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
         Club club = validateLeaderAccess(clubUUID);
 
-        // 동아리 지원자 전원 조회(최초 합격)
-        List<Aplict> applicants = aplictRepository.findByClub_ClubIdAndChecked(club.getClubId(), false);
+        // 동아리 지원자 전원 조회(최초 합격) - WAIT 상태
+        List<Aplict> applicants = aplictRepository.findByClub_ClubIdAndAplictStatus(club.getClubId(),
+                AplictStatus.WAIT);
 
         // 선택된 지원자 수와 전체 동아리 지원자 수 비교
         validateTotalApplicants(applicants, results);
 
-        // 지원자 검증(지원한 동아리 + 지원서 + check안된 상태)
+        // 지원자 검증
         for (ApplicantResultsRequest result : results) {
             if (result.getAplictStatus() == null || result.getAplictStatus() == AplictStatus.WAIT) {
                 throw new AplictException(ExceptionType.INVALID_INPUT);
             }
-            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndChecked(
+            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndAplictStatus(
                     club.getClubId(),
                     result.getAplictUUID(),
-                    false)
+                    AplictStatus.WAIT)
                     .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
 
             // 중복 가입 체크
             checkDuplicateClubMember(applicant.getProfile().getProfileId(), club.getClubId());
 
             // 합격 불합격 상태 업데이트
-            // 합/불, checked, 삭제 날짜
             AplictStatus aplictResult = result.getAplictStatus();// 지원 결과 PASS/ FAIL
             if (aplictResult == AplictStatus.PASS) {
                 ClubMembers newClubMembers = ClubMembers.builder()
                         .club(club)
                         .profile(applicant.getProfile())
                         .build();
-                applicant.updateAplictStatus(aplictResult, true, LocalDateTime.now().plusDays(4));
+                applicant.updateAplictStatus(aplictResult, LocalDateTime.now().plusDays(4));
                 clubMembersRepository.save(newClubMembers);
                 log.debug("합격 처리 완료: {}", applicant.getAplictUUID());
             } else if (aplictResult == AplictStatus.FAIL) {
-                applicant.updateAplictStatus(aplictResult, true, LocalDateTime.now().plusDays(4));
+                applicant.updateAplictStatus(aplictResult, LocalDateTime.now().plusDays(4));
                 log.debug("불합격 처리 완료: {}", applicant.getAplictUUID());
             }
 
@@ -688,7 +696,7 @@ public class ClubLeaderService {
         Club club = validateLeaderAccess(clubUUID);
 
         // 불합격자 동아리 지원자 조회
-        List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubIdAndFailed(club.getClubId(), true,
+        List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubIdAndStatus(club.getClubId(),
                 AplictStatus.FAIL);
         List<ApplicantsResponse> applicants = aplicts.stream()
                 .map(ap -> new ApplicantsResponse(
@@ -703,15 +711,14 @@ public class ClubLeaderService {
     public void updateFailedApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
         Club club = validateLeaderAccess(clubUUID);
 
-        // 지원자 검증(지원한 동아리 + 지원서 + check된 상태 + 불합)
+        // 지원자 검증 (불합격자만)
         for (ApplicantResultsRequest result : results) {
             if (result.getAplictStatus() != AplictStatus.PASS) {
                 throw new AplictException(ExceptionType.INVALID_INPUT);
             }
-            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndCheckedAndAplictStatus(
+            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndAplictStatus(
                     club.getClubId(),
                     result.getAplictUUID(),
-                    true,
                     AplictStatus.FAIL)
                     .orElseThrow(() -> new AplictException(ExceptionType.ADDITIONAL_APPLICANT_NOT_EXISTS));
 
@@ -727,6 +734,26 @@ public class ClubLeaderService {
             clubMembersRepository.save(newClubMembers);
 
             AplictStatus aplictResult = result.getAplictStatus();
+            // updateFailedAplictStatus usage check. If it's effectively same as generic
+            // update, maybe unify.
+            // In Entity, updateFailedAplictStatus only updates status. updateAplictStatus
+            // updates status and deleteDate.
+            // When pass, we might want deleteDate logic?
+            // "applicant.updateFailedAplictStatus(aplictResult);" -> This method didn't
+            // take deleteDate in Entity defined previously?
+            // Let's check Entity definition again. It was:
+            // public void updateFailedAplictStatus(AplictStatus newStatus) {
+            // this.aplictStatus = newStatus; }
+            // If we want to consistency, maybe we should use updateAplictStatus here too?
+            // But here it was re-using failed ones.
+            // Let's stick to updateFailedAplictStatus if it exists, or use
+            // updateAplictStatus with null deleteDate?
+            // Actually, if they PASS, they shouldn't probably stay forever? Or deleteDate
+            // is for cleanup?
+            // Previous code passed "LocalDateTime.now().plusDays(4)" for PASS in
+            // updateApplicantResults.
+            // Here updateFailedApplicantResults didn't set date.
+            // I'll keep logic similar to what it was: update status only.
             applicant.updateFailedAplictStatus(aplictResult);
             aplictRepository.save(applicant);
 
@@ -735,4 +762,48 @@ public class ClubLeaderService {
         }
     }
 
+    // 지원서 상세 조회 (Leader)
+    @Transactional(readOnly = true)
+    public AplictDto.DetailResponse getApplicationDetail(UUID clubUUID, UUID aplictUUID) {
+        validateLeaderAccess(clubUUID);
+
+        Aplict aplict = aplictRepository.findByAplictUUID(aplictUUID)
+                .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
+
+        // Ensure the application belongs to this club
+        if (!aplict.getClub().getClubuuid().equals(clubUUID)) {
+            throw new AplictException(ExceptionType.APLICT_NOT_EXISTS);
+        }
+
+        List<AplictDto.QnAResponse> qnaList = aplict.getAnswers().stream()
+                .map(a -> new AplictDto.QnAResponse(a.getFormQuestion().getContent(), a.getAnswerText()))
+                .toList();
+
+        return new AplictDto.DetailResponse(
+                aplict.getAplictUUID(),
+                aplict.getProfile().getUserName(),
+                aplict.getProfile().getStudentNumber(),
+                aplict.getProfile().getMajor(),
+                aplict.getSubmittedAt(),
+                aplict.getAplictStatus(),
+                qnaList);
+    }
+
+    // 지원자 상태 변경 (Leader)
+    public void updateAplictStatus(UUID clubUUID, UUID aplictUUID, AplictStatus status) {
+        validateLeaderAccess(clubUUID);
+
+        Aplict aplict = aplictRepository.findByAplictUUID(aplictUUID)
+                .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
+
+        if (!aplict.getClub().getClubuuid().equals(clubUUID)) {
+            throw new AplictException(ExceptionType.APLICT_NOT_EXISTS);
+        }
+
+        // 상태 업데이트
+        aplict.updateFailedAplictStatus(status);
+
+        aplictRepository.save(aplict);
+        log.debug("지원자 상태 변경 완료: {} -> {}", aplictUUID, status);
+    }
 }

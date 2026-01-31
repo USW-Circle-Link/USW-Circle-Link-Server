@@ -6,8 +6,7 @@ import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import java.util.List;
 
 public interface AplictRepositoryCustom {
-    List<Aplict> findAllWithProfileByClubId(Long clubId, boolean checked);
+    List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status);
 
-    List<Aplict> findAllWithProfileByClubIdAndFailed(Long clubId, boolean checked, AplictStatus status);
+    List<Aplict> findAllWithProfileByClubId(Long clubId);
 }
-

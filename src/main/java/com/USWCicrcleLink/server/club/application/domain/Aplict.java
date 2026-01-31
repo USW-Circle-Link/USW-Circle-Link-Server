@@ -13,11 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "APLICT_TABLE",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_aplict_active", columnNames = {"club_id", "profile_id", "aplict_checked"})
-        }
-)
+@Table(name = "APLICT_TABLE", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_aplict_active", columnNames = { "club_id", "profile_id" })
+})
 public class Aplict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +42,7 @@ public class Aplict {
     @Column(name = "aplict_status", nullable = false, length = 10)
     private AplictStatus aplictStatus = AplictStatus.WAIT;
 
-    @Column(name = "aplict_checked")
-    private boolean checked;
+    // checked field removed
 
     @Column(name = "aplict_delete_date")
     private LocalDateTime deleteDate;
@@ -57,15 +54,21 @@ public class Aplict {
         }
     }
 
-    public void updateAplictStatus(AplictStatus newStatus, boolean checked, LocalDateTime deleteDate) {
+    public void updateAplictStatus(AplictStatus newStatus, LocalDateTime deleteDate) {
         this.aplictStatus = newStatus;
-        this.checked = checked;
         this.deleteDate = deleteDate;
     }
 
     public void updateFailedAplictStatus(AplictStatus newStatus) {
         this.aplictStatus = newStatus;
     }
+
+    @Builder.Default
+    @OneToMany(mappedBy = "aplict", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<AplictAnswer> answers = new java.util.ArrayList<>();
+
+    public void addAnswer(AplictAnswer answer) {
+        this.answers.add(answer);
+        answer.setAplict(this);
+    }
 }
-
-

@@ -6,6 +6,7 @@ import com.USWCicrcleLink.server.club.dto.ClubCategoryDto;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.*;
 import com.USWCicrcleLink.server.club.leader.dto.clubMembers.*;
+import com.USWCicrcleLink.server.club.application.dto.AplictDto;
 import com.USWCicrcleLink.server.club.leader.service.ClubLeaderService;
 import com.USWCicrcleLink.server.club.leader.service.FcmServiceImpl;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
@@ -143,8 +144,10 @@ public class ClubLeaderController {
 
     // 최초 지원자 조회
     @GetMapping("/{clubUUID}/applicants")
-    public ResponseEntity<ApiResponse> getApplicants(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> getApplicants(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @RequestParam(value = "status", required = false) com.USWCicrcleLink.server.club.application.domain.AplictStatus status) {
+        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status), HttpStatus.OK);
     }
 
     // 최초 합격자 알림
@@ -173,4 +176,22 @@ public class ClubLeaderController {
 
     // 지원서 작성
 
+    // 지원서 상세 조회
+    @GetMapping("/{clubUUID}/applications/{applicationUUID}")
+    public ResponseEntity<ApiResponse<AplictDto.DetailResponse>> getApplicationDetail(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @PathVariable("applicationUUID") UUID applicationUUID) {
+        return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 완료",
+                clubLeaderService.getApplicationDetail(clubUUID, applicationUUID)));
+    }
+
+    // 지원자 상태 변경
+    @PatchMapping("/{clubUUID}/applications/{applicationUUID}/status")
+    public ResponseEntity<ApiResponse<Void>> updateApplicationStatus(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @PathVariable("applicationUUID") UUID applicationUUID,
+            @RequestBody @Valid AplictDto.UpdateStatusRequest request) {
+        clubLeaderService.updateAplictStatus(clubUUID, applicationUUID, request.getStatus());
+        return ResponseEntity.ok(new ApiResponse<>("지원자 상태 변경 완료"));
+    }
 }

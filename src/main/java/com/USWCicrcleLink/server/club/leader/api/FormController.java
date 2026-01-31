@@ -21,22 +21,9 @@ public class FormController {
     @PostMapping("/{clubUUID}/forms")
     public ResponseEntity<Void> createForm(
             @PathVariable UUID clubUUID,
-            @RequestBody @Valid FormDto.CreateRequest request
-    ) {
+            @RequestBody @Valid FormDto.CreateRequest request) {
         Long formId = formService.createForm(clubUUID, request);
         return ResponseEntity.created(URI.create("/api/clubs/" + clubUUID + "/forms/" + formId)).build();
     }
-
-    // 2 지원서 상태 변경
-    @PatchMapping("/{clubUUID}/forms/{formId}/status")
-    public ResponseEntity<Void> updateStatus(
-            @PathVariable UUID clubUUID,
-            @PathVariable Long formId,
-            @RequestBody @Valid FormDto.UpdateStatusRequest request
-    ) {
-        formService.updateStatus(clubUUID, formId, request);
-        return ResponseEntity.ok().build();
-    }
-
 
 }

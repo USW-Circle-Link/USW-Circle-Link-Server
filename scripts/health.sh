@@ -29,6 +29,9 @@ do
         exit 0
     elif [ ${RETRY_COUNT} -eq 10 ]; then
         echo "> Health check failed."
+        echo "> --------------------------- APP LOGS ---------------------------"
+        cat $REPOSITORY/nohup.out | tail -n 100
+        echo "> ----------------------------------------------------------------"
         exit 1
     fi
     sleep 10

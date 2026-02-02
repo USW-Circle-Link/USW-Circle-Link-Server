@@ -14,5 +14,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ClubDTO {
     @NotNull
-    private UUID clubUUID;
+    private UUID clubuuid;
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface EventVerificationRepository extends JpaRepository<EventVerification, Long> {
-    boolean existsByUserUUIDAndClubUUID(UUID userUUID, UUID clubUUID);
+    boolean existsByUserUUIDAndClubuuid(UUID userUUID, UUID clubuuid);
 
-    Optional<EventVerification> findByUserUUIDAndClubUUID(UUID userUUID, UUID clubUUID);
+    Optional<EventVerification> findByUserUUIDAndClubuuid(UUID userUUID, UUID clubuuid);
 }

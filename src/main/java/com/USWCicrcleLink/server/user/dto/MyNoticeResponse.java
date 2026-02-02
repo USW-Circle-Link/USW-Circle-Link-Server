@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.user.dto;
 
-import com.USWCicrcleLink.server.admin.notice.domain.Notice;
+import com.USWCicrcleLink.server.notices.domain.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,6 @@ public class MyNoticeResponse {
                 notice.getNoticeUUID(),
                 notice.getNoticeTitle(),
                 notice.getAdmin().getAdminName(),
-                notice.getNoticeCreatedAt()
-        );
+                notice.getNoticeCreatedAt());
     }
 }

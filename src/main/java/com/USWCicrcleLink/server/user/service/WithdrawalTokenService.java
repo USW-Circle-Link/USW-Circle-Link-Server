@@ -42,12 +42,14 @@ public class WithdrawalTokenService {
                     // 토큰이 존재할 경우, 인증 코드를 업데이트
                     log.debug("회원의 탈퇴 토큰이 이미 존재 user_uuid=  {}. 인증 코드 업데이트 메서드 실행.", user.getUserUUID());
                     token.updateWithdrawalCode();
+                    log.debug("탈퇴인증코드={}", token.getWithdrawalCode());
                     return withdrawalTokenRepository.save(token);
                 })
                 .orElseGet(() -> {
                     // 토큰이 존재하지 않을 경우, 새로운 인증 토큰을 생성
                     log.debug("새로운 탈퇴 토큰 생성 시작 user_uuid={}", user.getUserUUID());
                     WithdrawalToken newToken = WithdrawalToken.createWithdrawalToken(user);
+                    log.debug("탈퇴인증코드={}", newToken.getWithdrawalCode());
                     return withdrawalTokenRepository.save(newToken);
                 });
     }
@@ -55,7 +57,7 @@ public class WithdrawalTokenService {
     // 탈퇴 코드 토큰 검증
     public UUID verifyWithdrawalToken(AuthCodeRequest authCodeRequest) {
 
-        UUID uuid  = getUserByAuth().getUserUUID();
+        UUID uuid = getUserByAuth().getUserUUID();
 
         log.debug("탈퇴 코드 토큰 검증 메서드 시작");
         WithdrawalToken token = withdrawalTokenRepository.findByUserUserUUID(uuid)
@@ -76,7 +78,7 @@ public class WithdrawalTokenService {
     @Transactional
     public void deleteWithdrawalToken(UUID uuid) {
 
-        WithdrawalToken token=  withdrawalTokenRepository.findByUserUserUUID(uuid)
+        WithdrawalToken token = withdrawalTokenRepository.findByUserUserUUID(uuid)
                 .orElseThrow(() -> new WithdrawalTokenException(ExceptionType.WITHDRAWALTOKEN_NOT_EXISTS));
 
         withdrawalTokenRepository.delete(token);

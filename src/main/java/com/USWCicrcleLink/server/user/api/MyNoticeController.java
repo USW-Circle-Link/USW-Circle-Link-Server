@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.user.api;
 
-import com.USWCicrcleLink.server.admin.notice.dto.NoticeDetailResponse;
-import com.USWCicrcleLink.server.admin.notice.service.AdminNoticeService;
+import com.USWCicrcleLink.server.notices.dto.NoticeDetailResponse;
+import com.USWCicrcleLink.server.notices.service.NoticeService;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.user.dto.MyNoticeResponse;
 import com.USWCicrcleLink.server.user.service.MyNoticeService;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MyNoticeController {
     private final MyNoticeService myNoticeService;
-    private final AdminNoticeService noticeService;
+    private final NoticeService noticeService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<MyNoticeResponse>>> getNotices() {
@@ -30,7 +30,8 @@ public class MyNoticeController {
     }
 
     @GetMapping("/{noticeUUID}/details")
-    public ResponseEntity<ApiResponse<NoticeDetailResponse>> getNoticeByUUID(@PathVariable("noticeUUID") UUID noticeUUID) {
+    public ResponseEntity<ApiResponse<NoticeDetailResponse>> getNoticeByUUID(
+            @PathVariable("noticeUUID") UUID noticeUUID) {
         NoticeDetailResponse notice = noticeService.getNoticeByUUID(noticeUUID);
         ApiResponse<NoticeDetailResponse> response = new ApiResponse<>("공지사항 세부 조회 성공", notice);
         return ResponseEntity.ok(response);

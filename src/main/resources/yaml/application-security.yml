@@ -20,6 +20,16 @@ spring:
       - /users/email/resend-confirmation
       - /users/login
       - /users/check/{email}/duplicate
+      - /auth/login
+      - /auth/signup
+      - /auth/check-Id
+      - /auth/signup/verification-mail
+      - /auth/signup/verify
+      - /auth/password/reset-code
+      - /auth/password/verify
+      - /auth/password/reset
+      - /auth/find-id
+      - /auth/refresh
       - /club-leader/login
       - /admin/login
       - /integration/**
@@ -27,7 +37,7 @@ spring:
       - /introPhoto/**
       - /notice/Photo/**
       - /my-notices/**
-      - /clubs/**
+      - /my-notices/**
       - /profiles/duplication-check
       - /mypages/clubs/{floor}/photo
       - /clubs/filter/**

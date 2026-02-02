@@ -15,6 +15,14 @@ public enum RateLimitAction {
         }
     },
 
+    // 유저 로그인
+    USER_LOGIN {
+        @Override
+        public Bandwidth getLimit() {
+            return Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(5)));
+        }
+    },
+
     // 웹 로그인
     WEB_LOGIN {
         @Override

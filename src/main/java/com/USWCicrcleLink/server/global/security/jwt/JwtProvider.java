@@ -73,15 +73,15 @@ public class JwtProvider {
 
         Claims claims = Jwts.claims().setSubject(uuid.toString());
 
-        UUID clubUUID = null;
+        UUID clubuuid = null;
         if (userDetails instanceof CustomUserDetails customUserDetails) {
-            clubUUID = customUserDetails.getClubUUIDs().isEmpty() ? null : customUserDetails.getClubUUIDs().get(0);
+            clubuuid = customUserDetails.getClubuuids().isEmpty() ? null : customUserDetails.getClubuuids().get(0);
         } else if (userDetails instanceof CustomLeaderDetails customLeaderDetails) {
-            clubUUID = customLeaderDetails.getClubUUID();
+            clubuuid = customLeaderDetails.getClubuuid();
         }
 
-        if (clubUUID != null) {
-            claims.put("clubUUID", clubUUID.toString());
+        if (clubuuid != null) {
+            claims.put("clubUUID", clubuuid.toString());
         }
 
         Date now = new Date();
@@ -119,7 +119,8 @@ public class JwtProvider {
                 return TokenValidationResult.INVALID; // claims null
             }
 
-            return claims.getExpiration().before(new Date()) ? TokenValidationResult.EXPIRED : TokenValidationResult.VALID;
+            return claims.getExpiration().before(new Date()) ? TokenValidationResult.EXPIRED
+                    : TokenValidationResult.VALID;
 
         } catch (ExpiredJwtException e) {
             return TokenValidationResult.EXPIRED; // 만료된 토큰
@@ -140,7 +141,7 @@ public class JwtProvider {
         return UUID.fromString(uuidStr);
     }
 
-    //액세스 토큰에서 clubUUID 추출 (없으면 null 반환
+    // 액세스 토큰에서 clubUUID 추출 (없으면 null 반환
     public UUID getClubUUIDFromAccessToken(String accessToken) {
         Claims claims = getClaims(accessToken);
         Object val = claims.get("clubUUID");
@@ -196,7 +197,8 @@ public class JwtProvider {
         String newRefreshToken = UUID.randomUUID().toString();
         String redisKey = "refreshToken:" + newRefreshToken;
 
-        redisTemplate.opsForValue().set(redisKey, uuid.toString(), REFRESH_TOKEN_EXPIRATION_TIME, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(redisKey, uuid.toString(), REFRESH_TOKEN_EXPIRATION_TIME,
+                TimeUnit.MILLISECONDS);
 
         setRefreshTokenCookie(response, newRefreshToken);
         log.debug("새로운 Refresh Token 발급 - UUID: {}", uuid);
@@ -286,7 +288,8 @@ public class JwtProvider {
     public void deleteRefreshTokenCookie(HttpServletResponse response) {
         String sameSite = (cookieSameSite == null || cookieSameSite.isBlank()) ? "Lax" : cookieSameSite;
         String securePart = cookieSecure ? "; Secure" : "";
-        String cookieValue = String.format("refreshToken=; Path=/; HttpOnly; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=%s%s",
+        String cookieValue = String.format(
+                "refreshToken=; Path=/; HttpOnly; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=%s%s",
                 sameSite, securePart);
         response.setHeader("Set-Cookie", cookieValue);
         log.debug("클라이언트 쿠키에서 리프레시 토큰 삭제 완료");

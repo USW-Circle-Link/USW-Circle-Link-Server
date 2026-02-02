@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.global.security.details.service;
 
-import com.USWCicrcleLink.server.admin.admin.repository.AdminRepository;
+import com.USWCicrcleLink.server.admin.repository.AdminRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;

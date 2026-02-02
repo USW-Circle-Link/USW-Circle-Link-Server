@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.global.security.details;
 
-import com.USWCicrcleLink.server.clubLeader.domain.Leader;
+import com.USWCicrcleLink.server.club.leader.domain.Leader;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,13 +8,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-public record CustomLeaderDetails(Leader leader, UUID clubUUID) implements UserDetails {
+public record CustomLeaderDetails(Leader leader, UUID clubuuid) implements UserDetails {
 
-    public UUID getClubUUID() {
-        return clubUUID;
+    public UUID getClubuuid() {
+        return clubuuid;
     }
 
-    public UUID getLeaderUUID(){
+    public UUID getLeaderUUID() {
         return leader.getLeaderUUID();
     }
 

@@ -1,6 +1,7 @@
 package com.USWCicrcleLink.server.club.form.service;
 
-import com.USWCicrcleLink.server.clubLeader.domain.FormQuestion;
+import com.USWCicrcleLink.server.club.leader.domain.FormQuestion;
+import com.USWCicrcleLink.server.club.leader.domain.ClubForm;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,23 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class ClubFormService {
         private final ClubFormRepository clubFormRepository;
+        private final com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository clubIntroRepository;
 
         public ClubFormResponse getQuestionsByClub(UUID clubUUID) {
-                var form = clubFormRepository.findActiveFormByClubUUID(clubUUID)
-                                .orElseThrow(() -> new IllegalArgumentException("현재 모집 중인 양식이 없습니다."));
+                // 1. 모집 상태 확인
+                var clubIntro = clubIntroRepository.findByClubuuid(clubUUID)
+                                .orElseThrow(() -> new IllegalArgumentException("동아리 소개 정보를 찾을 수 없습니다."));
+
+                if (clubIntro.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
+                        throw new IllegalArgumentException("현재 모집 기간이 아닙니다.");
+                }
+
+                // 2. 최신 폼 가져오기
+                List<ClubForm> forms = clubFormRepository.findFormsByClubUUID(clubUUID);
+                if (forms.isEmpty()) {
+                        throw new IllegalArgumentException("등록된 모집 양식이 없습니다.");
+                }
+                ClubForm form = forms.get(0);
 
                 List<ClubFormResponse.QuestionResponse> questions = form.getQuestions().stream()
                                 .sorted(Comparator.comparingInt(FormQuestion::getSequence))
@@ -35,6 +49,6 @@ public class ClubFormService {
                                                                 .toList()))
                                 .toList();
 
-                return new ClubFormResponse(form.getFormId(), form.getTitle(), questions);
+                return new ClubFormResponse(form.getFormId(), questions);
         }
 }

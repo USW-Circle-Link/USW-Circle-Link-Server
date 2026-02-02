@@ -44,3 +44,6 @@ memory-bank
 .cursor
 .specstory
 .cursorindexingignore
+
+# Secrets
+src/main/resources/yaml/application-secret.yml

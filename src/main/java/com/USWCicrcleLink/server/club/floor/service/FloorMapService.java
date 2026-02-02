@@ -27,13 +27,25 @@ public class FloorMapService {
     private final S3FileUploadService s3FileUploadService;
 
     /**
-     * 동아리 위치 정보 수정(ADMIN) - 층별 사진 업로드
+     * 동아리 위치 정보 수정(ADMIN) - 층별 사진 업로드 (일괄)
      */
-    public FloorMapResponse uploadPhoto(FloorPhotoEnum floor, MultipartFile photo) {
-        if (photo == null || photo.isEmpty()) {
-            throw new PhotoException(ExceptionType.PHOTO_FILE_IS_EMPTY);
+    public List<FloorMapResponse> uploadFloorPhotos(MultipartFile b1, MultipartFile f1, MultipartFile f2) {
+        List<FloorMapResponse> responses = new java.util.ArrayList<>();
+
+        if (b1 != null && !b1.isEmpty()) {
+            responses.add(processUpload(FloorPhotoEnum.B1, b1));
+        }
+        if (f1 != null && !f1.isEmpty()) {
+            responses.add(processUpload(FloorPhotoEnum.F1, f1));
+        }
+        if (f2 != null && !f2.isEmpty()) {
+            responses.add(processUpload(FloorPhotoEnum.F2, f2));
         }
 
+        return responses;
+    }
+
+    private FloorMapResponse processUpload(FloorPhotoEnum floor, MultipartFile photo) {
         // 기존 사진이 있다면 삭제
         floorPhotoRepository.findByFloor(floor).ifPresent(existingPhoto -> {
             log.debug("기존 층별 사진 삭제 진행 - Floor: {}, 기존 S3Key: {}", floor, existingPhoto.getFloorPhotoS3key());
@@ -97,5 +109,3 @@ public class FloorMapService {
         log.info("층별 사진 삭제 완료 - Floor: {}", floor);
     }
 }
-
-

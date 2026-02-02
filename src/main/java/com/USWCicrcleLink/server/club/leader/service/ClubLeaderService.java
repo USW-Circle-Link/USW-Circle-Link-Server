@@ -614,151 +614,53 @@ public class ClubLeaderService {
         return new ApiResponse<>("동아리 지원자 조회 완료", applicants);
     }
 
-    // 최초 합격자 알림
+    // 최종 합격자 알림 (개별/일괄 처리 가능)
     public void updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
         Club club = validateLeaderAccess(clubUUID);
 
-        // 동아리 지원자 전원 조회(최초 합격) - WAIT 상태
-        List<Aplict> applicants = aplictRepository.findByClub_ClubIdAndAplictStatus(club.getClubId(),
-                AplictStatus.WAIT);
-
-        // 선택된 지원자 수와 전체 동아리 지원자 수 비교
-        validateTotalApplicants(applicants, results);
-
-        // 지원자 검증
         for (ApplicantResultsRequest result : results) {
-            if (result.getAplictStatus() == null || result.getAplictStatus() == AplictStatus.WAIT) {
-                throw new AplictException(ExceptionType.INVALID_INPUT);
-            }
-            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndAplictStatus(
-                    club.getClubId(),
-                    result.getAplictUUID(),
-                    AplictStatus.WAIT)
+
+            Aplict applicant = aplictRepository.findByAplictUUID(result.getAplictUUID())
                     .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
 
-            // 중복 가입 체크
-            checkDuplicateClubMember(applicant.getProfile().getProfileId(), club.getClubId());
-
-            // 합격 불합격 상태 업데이트
-            AplictStatus aplictResult = result.getAplictStatus();// 지원 결과 PASS/ FAIL
-            if (aplictResult == AplictStatus.PASS) {
-                ClubMembers newClubMembers = ClubMembers.builder()
-                        .club(club)
-                        .profile(applicant.getProfile())
-                        .build();
-                applicant.updateAplictStatus(aplictResult, LocalDateTime.now().plusDays(4));
-                clubMembersRepository.save(newClubMembers);
-                log.debug("합격 처리 완료: {}", applicant.getAplictUUID());
-            } else if (aplictResult == AplictStatus.FAIL) {
-                applicant.updateAplictStatus(aplictResult, LocalDateTime.now().plusDays(4));
-                log.debug("불합격 처리 완료: {}", applicant.getAplictUUID());
+            // 해당 동아리 지원자가 맞는지 검증
+            if (!applicant.getClub().getClubuuid().equals(clubUUID)) {
+                throw new AplictException(ExceptionType.APPLICANT_NOT_EXISTS);
             }
 
-            aplictRepository.save(applicant);
-            fcmService.sendMessageTo(applicant, aplictResult);
-        }
-    }
+            AplictStatus currentStatus = applicant.getAplictStatus();
 
-    // 동아리 회원 중복 검사
-    private void checkDuplicateClubMember(Long profileId, Long clubId) {
-        boolean isDuplicate = clubMembersRepository
-                .findByProfileProfileIdAndClubClubId(profileId, clubId)
-                .isPresent();
-
-        if (isDuplicate) {
-            throw new ClubMemberException(ExceptionType.CLUB_MEMBER_ALREADY_EXISTS);
-        }
-    }
-
-    // 선택된 지원자 수와 전체 지원자 수 비교
-    private void validateTotalApplicants(List<Aplict> applicants, List<ApplicantResultsRequest> results) {
-        // 요청이 비어있는 경우는 허용하지 않음
-        if (results == null || results.isEmpty()) {
-            throw new AplictException(ExceptionType.INVALID_INPUT);
-        }
-
-        Set<UUID> applicantUUIDs = applicants.stream()
-                .map(Aplict::getAplictUUID)
-                .collect(Collectors.toSet());
-
-        Set<UUID> requestedApplicantUUIDs = results.stream()
-                .map(ApplicantResultsRequest::getAplictUUID)
-                .collect(Collectors.toSet());
-
-        if (!applicantUUIDs.containsAll(requestedApplicantUUIDs)) {
-            throw new AplictException(ExceptionType.APPLICANT_COUNT_MISMATCH);
-        }
-    }
-
-    // 불합격자 조회
-    @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getFailedApplicants(UUID clubUUID) {
-        Club club = validateLeaderAccess(clubUUID);
-
-        // 불합격자 동아리 지원자 조회
-        List<Aplict> aplicts = aplictRepository.findAllWithProfileByClubIdAndStatus(club.getClubId(),
-                AplictStatus.FAIL);
-        List<ApplicantsResponse> applicants = aplicts.stream()
-                .map(ap -> new ApplicantsResponse(
-                        ap.getAplictUUID(),
-                        ap.getProfile()))
-                .toList();
-
-        return new ApiResponse<>("불합격자 조회 완료", applicants);
-    }
-
-    // 동아리 지원자 추가 합격 처리
-    public void updateFailedApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
-        Club club = validateLeaderAccess(clubUUID);
-
-        // 지원자 검증 (불합격자만)
-        for (ApplicantResultsRequest result : results) {
-            if (result.getAplictStatus() != AplictStatus.PASS) {
-                throw new AplictException(ExceptionType.INVALID_INPUT);
+            // WAIT 상태이면 알림 보내지 않음
+            if (currentStatus == AplictStatus.WAIT) {
+                continue;
             }
-            Aplict applicant = aplictRepository.findByClub_ClubIdAndAplictUUIDAndAplictStatus(
-                    club.getClubId(),
-                    result.getAplictUUID(),
-                    AplictStatus.FAIL)
-                    .orElseThrow(() -> new AplictException(ExceptionType.ADDITIONAL_APPLICANT_NOT_EXISTS));
 
-            // 중복 가입 체크
-            checkDuplicateClubMember(applicant.getProfile().getProfileId(), club.getClubId());
+            if (currentStatus == AplictStatus.PASS) {
+                // 이미 멤버인지 확인 (중복 가입 방지)
+                boolean isMember = clubMembersRepository.findByProfileProfileIdAndClubClubId(
+                        applicant.getProfile().getProfileId(), club.getClubId()).isPresent();
 
-            // 합격 불합격 상태 업데이트
-            // 합격
-            ClubMembers newClubMembers = ClubMembers.builder()
-                    .club(club)
-                    .profile(applicant.getProfile())
-                    .build();
-            clubMembersRepository.save(newClubMembers);
+                if (!isMember) {
+                    ClubMembers newClubMembers = ClubMembers.builder()
+                            .club(club)
+                            .profile(applicant.getProfile())
+                            .build();
+                    clubMembersRepository.save(newClubMembers);
+                }
 
-            AplictStatus aplictResult = result.getAplictStatus();
-            // updateFailedAplictStatus usage check. If it's effectively same as generic
-            // update, maybe unify.
-            // In Entity, updateFailedAplictStatus only updates status. updateAplictStatus
-            // updates status and deleteDate.
-            // When pass, we might want deleteDate logic?
-            // "applicant.updateFailedAplictStatus(aplictResult);" -> This method didn't
-            // take deleteDate in Entity defined previously?
-            // Let's check Entity definition again. It was:
-            // public void updateFailedAplictStatus(AplictStatus newStatus) {
-            // this.aplictStatus = newStatus; }
-            // If we want to consistency, maybe we should use updateAplictStatus here too?
-            // But here it was re-using failed ones.
-            // Let's stick to updateFailedAplictStatus if it exists, or use
-            // updateAplictStatus with null deleteDate?
-            // Actually, if they PASS, they shouldn't probably stay forever? Or deleteDate
-            // is for cleanup?
-            // Previous code passed "LocalDateTime.now().plusDays(4)" for PASS in
-            // updateApplicantResults.
-            // Here updateFailedApplicantResults didn't set date.
-            // I'll keep logic similar to what it was: update status only.
-            applicant.updateFailedAplictStatus(aplictResult);
-            aplictRepository.save(applicant);
+                // 삭제 (지원자 DB에서 제거)
+                aplictRepository.delete(applicant);
+                log.debug("합격 처리/알림 및 지원서 삭제: {}", applicant.getAplictUUID());
+                fcmService.sendMessageTo(applicant, currentStatus);
 
-            fcmService.sendMessageTo(applicant, aplictResult);
-            log.debug("추가 합격 처리 완료: {}", applicant.getAplictUUID());
+            } else if (currentStatus == AplictStatus.FAIL) {
+                // 삭제 (지원자 DB에서 제거)
+                aplictRepository.delete(applicant);
+                log.debug("불합격 알림 및 지원서 삭제: {}", applicant.getAplictUUID());
+                fcmService.sendMessageTo(applicant, currentStatus);
+            }
+
+            // aplictRepository.save(applicant); // 삭제했으므로 저장 불필요
         }
     }
 

@@ -134,6 +134,9 @@ public class NoticeService {
         Notice notice = noticeRepository.findByNoticeUUID(noticeUUID)
                 .orElseThrow(() -> new NoticeException(ExceptionType.NOTICE_NOT_EXISTS));
 
+        // 작성자 권한 확인
+        validateNoticeAuthor(notice);
+
         notice.updateTitle(request.getNoticeTitle());
         notice.updateContent(request.getNoticeContent());
 
@@ -158,6 +161,9 @@ public class NoticeService {
 
         Notice notice = noticeRepository.findByNoticeUUID(noticeUUID)
                 .orElseThrow(() -> new NoticeException(ExceptionType.NOTICE_NOT_EXISTS));
+
+        // 작성자 권한 확인
+        validateNoticeAuthor(notice);
 
         deleteExistingPhotos(notice);
 
@@ -236,6 +242,29 @@ public class NoticeService {
         noticePhotoRepository.saveAll(newPhotoList);
 
         log.debug("공지사항 사진 일괄 업로드 완료 - 총 {}개", newPhotoList.size());
+        log.debug("공지사항 사진 일괄 업로드 완료 - 총 {}개", newPhotoList.size());
         return presignedUrls;
+    }
+
+    // 작성자 권한 검증
+    private void validateNoticeAuthor(Notice notice) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof CustomAdminDetails) {
+            Admin currentAdmin = ((CustomAdminDetails) principal).admin();
+            if (notice.getAdmin() == null || !notice.getAdmin().getAdminUUID().equals(currentAdmin.getAdminUUID())) {
+                throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
+            }
+        } else if (principal instanceof com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) {
+            com.USWCicrcleLink.server.club.leader.domain.Leader currentLeader = ((com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) principal)
+                    .leader();
+            if (notice.getLeader() == null
+                    || !notice.getLeader().getLeaderUUID().equals(currentLeader.getLeaderUUID())) {
+                throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
+            }
+        } else {
+            // ADMIN이나 LEADER가 아닌 경우 (예: 일반 USER가 접근 시도 시, API단에서 막히겠지만 이중 방어)
+            throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
+        }
     }
 }

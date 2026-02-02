@@ -18,11 +18,13 @@ public class FloorMapController {
 
     // 동아리 위치 정보 수정 - 층별 사진 업로드 (ADMIN)
     @PutMapping
-    public ResponseEntity<ApiResponse<FloorMapResponse>> uploadFloorMap(
-            @RequestParam("floor") FloorPhotoEnum floor,
-            @RequestPart("photo") MultipartFile photo) {
-        FloorMapResponse photoResponse = floorMapService.uploadPhoto(floor, photo);
-        return ResponseEntity.ok(new ApiResponse<>("해당 층 사진 업로드 성공", photoResponse));
+    public ResponseEntity<ApiResponse<Object>> uploadFloorMap(
+            @RequestPart(value = "B1", required = false) MultipartFile b1,
+            @RequestPart(value = "F1", required = false) MultipartFile f1,
+            @RequestPart(value = "F2", required = false) MultipartFile f2) {
+
+        java.util.List<FloorMapResponse> photoResponses = floorMapService.uploadFloorPhotos(b1, f1, f2);
+        return ResponseEntity.ok(new ApiResponse<>("층별 사진 업로드 성공", photoResponses));
     }
 
     // 동아리 위치 정보 조회 (ALL)
@@ -36,12 +38,10 @@ public class FloorMapController {
     }
 
     // 동아리 위치 정보 수정 - 특정 층 사진 삭제 (ADMIN)
-    @DeleteMapping("/{floorUUId}")
+    @DeleteMapping("/{floorEnum}")
     public ResponseEntity<ApiResponse<String>> deleteFloorMap(
-            @PathVariable("floorUUId") FloorPhotoEnum floor) {
-        floorMapService.deletePhotoByFloor(floor);
-        return ResponseEntity.ok(new ApiResponse<>("해당 층 사진 삭제 성공", "Floor: " + floor.name()));
+            @PathVariable("floorEnum") FloorPhotoEnum floorEnum) {
+        floorMapService.deletePhotoByFloor(floorEnum);
+        return ResponseEntity.ok(new ApiResponse<>("해당 층 사진 삭제 성공", "Floor: " + floorEnum.name()));
     }
 }
-
-

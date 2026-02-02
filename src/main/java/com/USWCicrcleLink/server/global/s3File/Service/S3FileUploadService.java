@@ -47,10 +47,27 @@ public class S3FileUploadService {
 
         log.debug("파일 업로드 준비: {}", s3FileName);
 
-        // 사전 서명된 URL 생성 (PUT 메서드로 업로드용 URL 생성)
-        String presignedUrl = generatePresignedPutUrl(s3FileName);
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(image.getContentType());
+            metadata.setContentLength(image.getSize());
 
-        log.debug("사전 서명된 URL 생성 완료: {}", presignedUrl);
+            amazonS3.putObject(bucket, s3FileName, image.getInputStream(), metadata);
+        } catch (IOException e) {
+            log.error("파일 입력 스트림 읽기 오류: {}", e.getMessage());
+            throw new FileException(ExceptionType.FILE_UPLOAD_FAILED);
+        } catch (AmazonS3Exception e) {
+            log.error("S3 파일 업로드 오류: " + e.getMessage());
+            throw new FileException(ExceptionType.FILE_UPLOAD_FAILED);
+        } catch (SdkClientException e) {
+            log.error("AWS SDK 클라이언트 오류: " + e.getMessage());
+            throw new FileException(ExceptionType.FILE_UPLOAD_FAILED);
+        }
+
+        // 업로드 후 조회용 URL 생성 (GET)
+        String presignedUrl = generatePresignedGetUrl(s3FileName);
+
+        log.debug("파일 업로드 및 URL 생성 완료: {}", presignedUrl);
 
         return new S3FileResponse(presignedUrl, s3FileName);
     }
@@ -86,12 +103,6 @@ public class S3FileUploadService {
         }
 
         return fileExtension;
-    }
-
-    // 파일 업로드 URL 생성 (PUT 메서드)
-    private String generatePresignedPutUrl(String fileName) {
-        URL url = generatePresignedUrl(fileName, HttpMethod.PUT);
-        return url != null ? url.toString() : "";
     }
 
     // 파일 조회 URL 생성 (GET 메서드)

@@ -74,9 +74,7 @@ public class SecurityConfig {
                                         auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}")
                                                         .hasAnyRole("ADMIN",
                                                                         "LEADER");
-                                        auth.requestMatchers(HttpMethod.GET, "/notices/{noticeUUID}", "/notices")
-                                                        .hasAnyRole("ADMIN",
-                                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.GET, "/notices/**").permitAll();
                                         auth.requestMatchers(HttpMethod.POST, "/auth/withdrawal/code")
                                                         .hasAnyRole("USER", "LEADER");
 

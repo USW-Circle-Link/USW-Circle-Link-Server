@@ -208,21 +208,6 @@ public class ClubController {
         return new ResponseEntity<>(new ApiResponse<>("지원 결과 처리 완료"), HttpStatus.OK);
     }
 
-    // 불합격자 조회
-    @GetMapping("/{clubUUID}/failed-applicants")
-    public ResponseEntity<ApiResponse> getFailedApplicants(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getFailedApplicants(clubUUID), HttpStatus.OK);
-    }
-
-    // 추가 합격자 알림
-    @PostMapping("/{clubUUID}/failed-applicants/notifications")
-    public ResponseEntity<ApiResponse> pushFailedApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) List<ApplicantResultsRequest> results)
-            throws IOException {
-        clubLeaderService.updateFailedApplicantResults(clubUUID, results);
-        return new ResponseEntity<>(new ApiResponse<>("추합 결과 처리 완료"), HttpStatus.OK);
-    }
-
     // FCM 토큰 갱신 (Leader)
     @PatchMapping("/fcmtoken")
     public ResponseEntity<ApiResponse> updateFcmToken(@RequestBody FcmTokenRequest fcmTokenRequest) {

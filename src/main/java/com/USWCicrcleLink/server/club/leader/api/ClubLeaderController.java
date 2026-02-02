@@ -106,13 +106,6 @@ public class ClubLeaderController {
         return new ResponseEntity<>(clubLeaderService.toggleRecruitmentStatus(clubUUID), HttpStatus.OK);
     }
 
-    // @GetMapping("/v1/members")
-    // public ResponseEntity<ApiResponse> getClubMembers(LeaderToken token) {
-    // // 원래는 GET 요청임 토큰때문
-    // return new ResponseEntity<>(clubLeaderService.findClubMembers(token),
-    // HttpStatus.OK);
-    // }
-
     // 소속 동아리 회원 조회
     @GetMapping("/{clubUUID}/members")
     public ResponseEntity<ApiResponse> getClubMembers(
@@ -142,7 +135,7 @@ public class ClubLeaderController {
         return new ResponseEntity<>(new ApiResponse<>("fcm token 갱신 완료"), HttpStatus.OK);
     }
 
-    // 최초 지원자 조회
+    // 지원자 조회
     @GetMapping("/{clubUUID}/applicants")
     public ResponseEntity<ApiResponse> getApplicants(
             @PathVariable("clubUUID") UUID clubUUID,
@@ -150,7 +143,7 @@ public class ClubLeaderController {
         return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status), HttpStatus.OK);
     }
 
-    // 최초 합격자 알림
+    // 합격자 알림
     @PostMapping("/{clubUUID}/applicants/notifications")
     public ResponseEntity<ApiResponse> pushApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody @Validated(ValidationSequence.class) List<ApplicantResultsRequest> results)
@@ -158,23 +151,6 @@ public class ClubLeaderController {
         clubLeaderService.updateApplicantResults(clubUUID, results);
         return new ResponseEntity<>(new ApiResponse<>("지원 결과 처리 완료"), HttpStatus.OK);
     }
-
-    // 불합격자 조회
-    @GetMapping("/{clubUUID}/failed-applicants")
-    public ResponseEntity<ApiResponse> getFailedApplicants(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getFailedApplicants(clubUUID), HttpStatus.OK);
-    }
-
-    // 지원자 추가 합격 알림
-    @PostMapping("/{clubUUID}/failed-applicants/notifications")
-    public ResponseEntity<ApiResponse> pushFailedApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestBody @Validated(ValidationSequence.class) List<ApplicantResultsRequest> results)
-            throws IOException {
-        clubLeaderService.updateFailedApplicantResults(clubUUID, results);
-        return new ResponseEntity<>(new ApiResponse<>("추합 결과 처리 완료"), HttpStatus.OK);
-    }
-
-    // 지원서 작성
 
     // 지원서 상세 조회
     @GetMapping("/{clubUUID}/applications/{applicationUUID}")

@@ -38,6 +38,47 @@ jobs:
         run: |
           printf '%s\n' "$DOTENV" > .env
 
+      - name: application-secret.yml 생성
+        run: |
+          mkdir -p ./src/main/resources/yaml
+          touch ./src/main/resources/yaml/application-secret.yml
+          echo "spring:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  config:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    activate:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      on-profile: secret" >> ./src/main/resources/yaml/application-secret.yml
+          echo "" >> ./src/main/resources/yaml/application-secret.yml
+          echo "mail:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  host: smtp.naver.com" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  port: 465" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  username: ${{ secrets.MAIL_USERNAME }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  password: ${{ secrets.MAIL_PASSWORD }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  properties:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    mail:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      smtp:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        auth: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        starttls:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          enable: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          required: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        connectiontimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        timeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        writetimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "" >> ./src/main/resources/yaml/application-secret.yml
+          echo "jwt:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  secret:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    key: ${{ secrets.JWT_SECRET_KEY }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "" >> ./src/main/resources/yaml/application-secret.yml
+          echo "cloud:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  aws:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    s3:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      bucket: usw-circle-link-storage-kr" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    stack:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      auto: false" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    region:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      static: ap-northeast-2" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    credentials:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      access-key: ${{ secrets.AWS_ACCESS_KEY }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      secret-key: ${{ secrets.AWS_SECRET_KEY }}" >> ./src/main/resources/yaml/application-secret.yml
+
       - name: Gradle 빌드
         run: ./gradlew build --parallel
 

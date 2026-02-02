@@ -47,22 +47,21 @@ jobs:
           echo "    import: optional:file:.env[.properties]" >> ./src/main/resources/yaml/application-secret.yml
           echo "    activate:" >> ./src/main/resources/yaml/application-secret.yml
           echo "      on-profile: secret" >> ./src/main/resources/yaml/application-secret.yml
-          echo "" >> ./src/main/resources/yaml/application-secret.yml
-          echo "mail:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "  host: smtp.naver.com" >> ./src/main/resources/yaml/application-secret.yml
-          echo "  port: 465" >> ./src/main/resources/yaml/application-secret.yml
-          echo "  username: ${{ secrets.MAIL_USERNAME }}" >> ./src/main/resources/yaml/application-secret.yml
-          echo "  password: ${{ secrets.MAIL_PASSWORD }}" >> ./src/main/resources/yaml/application-secret.yml
-          echo "  properties:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "    mail:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "      smtp:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "        auth: true" >> ./src/main/resources/yaml/application-secret.yml
-          echo "        starttls:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "          enable: true" >> ./src/main/resources/yaml/application-secret.yml
-          echo "          required: true" >> ./src/main/resources/yaml/application-secret.yml
-          echo "        connectiontimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
-          echo "        timeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
-          echo "        writetimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "  mail:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    host: smtp.naver.com" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    port: 465" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    username: ${{ secrets.MAIL_USERNAME }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    password: ${{ secrets.MAIL_PASSWORD }}" >> ./src/main/resources/yaml/application-secret.yml
+          echo "    properties:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "      mail:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "        smtp:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          auth: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          starttls:" >> ./src/main/resources/yaml/application-secret.yml
+          echo "            enable: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "            required: true" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          connectiontimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          timeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
+          echo "          writetimeout: 5000" >> ./src/main/resources/yaml/application-secret.yml
           echo "" >> ./src/main/resources/yaml/application-secret.yml
           echo "jwt:" >> ./src/main/resources/yaml/application-secret.yml
           echo "  secret:" >> ./src/main/resources/yaml/application-secret.yml

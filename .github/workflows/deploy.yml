@@ -45,7 +45,6 @@ jobs:
         run: |
           echo "spring:" >> ./src/main/resources/yaml/application-secret.yml
           echo "  config:" >> ./src/main/resources/yaml/application-secret.yml
-          echo "    import: optional:file:.env[.properties]" >> ./src/main/resources/yaml/application-secret.yml
           echo "    activate:" >> ./src/main/resources/yaml/application-secret.yml
           echo "      on-profile: secret" >> ./src/main/resources/yaml/application-secret.yml
           mkdir -p before-deploy/scripts

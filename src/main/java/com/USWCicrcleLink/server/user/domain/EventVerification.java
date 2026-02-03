@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "event_verification_table", uniqueConstraints = {
-                @UniqueConstraint(name = "UK_event_user_club", columnNames = { "user_uuid", "clubuuid" })
+                @UniqueConstraint(name = "UK_event_user_club", columnNames = { "user_uuid", "club_uuid" })
 })
 @Getter
 @NoArgsConstructor
@@ -24,7 +24,7 @@ public class EventVerification {
         @Column(name = "user_uuid", nullable = false, columnDefinition = "BINARY(16)")
         private UUID userUUID;
 
-        @Column(name = "clubuuid", nullable = false, columnDefinition = "BINARY(16)")
+        @Column(name = "club_uuid", nullable = false, columnDefinition = "BINARY(16)")
         private UUID clubuuid;
 
         @Column(name = "user_id", nullable = false)

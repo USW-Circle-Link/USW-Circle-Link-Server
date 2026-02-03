@@ -40,7 +40,11 @@ spring:
       - /my-notices/**
       - /profiles/duplication-check
       - /mypages/clubs/{floor}/photo
+      - /clubs
+      - /clubs/open
+      - /clubs/open/filter
       - /clubs/filter/**
+      - /clubs/*
       - /images/logo.png
       - /health-check
       - /swagger-ui.html

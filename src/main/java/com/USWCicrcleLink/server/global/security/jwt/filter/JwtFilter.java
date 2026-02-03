@@ -39,35 +39,41 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         String requestPath = request.getRequestURI();
-
-        if (isPermitAllPath(requestPath)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String accessToken = jwtProvider.resolveAccessToken(request);
 
         try {
-            TokenValidationResult tokenValidationResult = jwtProvider.validateAccessToken(accessToken);
+            if (accessToken != null) {
+                TokenValidationResult tokenValidationResult = jwtProvider.validateAccessToken(accessToken);
 
-            switch (tokenValidationResult) {
-                case EXPIRED -> throw new CustomAuthenticationException("TOKEN_EXPIRED");
-                case INVALID -> throw new CustomAuthenticationException("INVALID_TOKEN");
-                case VALID -> {
-                    Authentication auth = jwtProvider.getAuthentication(accessToken);
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    setMDCUserDetails(auth, request.getMethod(), request.getRequestURI());
-                    filterChain.doFilter(request, response);
+                switch (tokenValidationResult) {
+                    case EXPIRED -> throw new CustomAuthenticationException("TOKEN_EXPIRED");
+                    case INVALID -> throw new CustomAuthenticationException("INVALID_TOKEN");
+                    case VALID -> {
+                        Authentication auth = jwtProvider.getAuthentication(accessToken);
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                        setMDCUserDetails(auth, request.getMethod(), request.getRequestURI());
+                    }
                 }
             }
-        } catch (AuthenticationException e) {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            customAuthenticationEntryPoint.commence(request, response, e);
+
+            // permitAll 경로라면 토큰에 문제가 있어도 그냥 다음 필터로 진행 (익명 사용자)
+            if (isPermitAllPath(requestPath)) {
+                filterChain.doFilter(request, response);
+            } else {
+                // 그 외의 경우 AuthenticationException으로 변환하여 EntryPoint 호출
+                AuthenticationException authException = (e instanceof AuthenticationException)
+                        ? (AuthenticationException) e
+                        : new CustomAuthenticationException("INVALID_TOKEN");
+                customAuthenticationEntryPoint.commence(request, response, authException);
+            }
         } finally {
             MDC.clear();
         }

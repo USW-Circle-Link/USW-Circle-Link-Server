@@ -1,6 +1,7 @@
 package com.USWCicrcleLink.server.club.application.dto;
 
 import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class AplictDto {
         private String studentNumber;
         private String department;
         private LocalDateTime submittedAt;
+        @Schema(description = "지원 상태", example = "WAIT", allowableValues = { "WAIT", "PASS", "FAIL" })
         private AplictStatus status;
         private List<QnAResponse> qnaList;
     }

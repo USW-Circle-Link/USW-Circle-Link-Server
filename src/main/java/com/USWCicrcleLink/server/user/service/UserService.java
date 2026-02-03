@@ -105,6 +105,14 @@ public class UserService {
         return telephone;
     }
 
+    // 이메일 정규화 (@suwon.ac.kr 제거)
+    private String normalizeEmail(String email) {
+        if (email != null && email.endsWith("@suwon.ac.kr")) {
+            return email.substring(0, email.indexOf("@suwon.ac.kr"));
+        }
+        return email;
+    }
+
     // 신규 회원 가입
     public void signUpUser(SignUpRequest request, String email) {
         // user 객체 생성
@@ -152,8 +160,9 @@ public class UserService {
 
     // 이메일 중복 검증
     public void verifyUserDuplicate(String email) {
-        log.debug("이메일 중복 검증 시작 email= {}", email);
-        userRepository.findByEmail(email)
+        String normalizedEmail = normalizeEmail(email);
+        log.debug("이메일 중복 검증 시작 email= {}", normalizedEmail);
+        userRepository.findByEmail(normalizedEmail)
                 .ifPresent(user -> {
                     throw new UserException(ExceptionType.USER_OVERLAP);
                 });
@@ -188,15 +197,17 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUser(String email) {
-        log.debug("계정 찾기 요청  email= {}", email);
-        return userRepository.findByEmail(email)
+        String normalizedEmail = normalizeEmail(email);
+        log.debug("계정 찾기 요청  email= {}", normalizedEmail);
+        return userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
     }
 
     @Transactional(readOnly = true)
     public User validateAccountAndEmail(UserInfoDto request) {
         log.debug("아이디와 이메일 유효성 검증 시작");
-        return userRepository.findByUserAccountAndEmail(request.getUserAccount(), request.getEmail())
+        String normalizedEmail = normalizeEmail(request.getEmail());
+        return userRepository.findByUserAccountAndEmail(request.getUserAccount(), normalizedEmail)
                 .orElseThrow(() -> new UserException(ExceptionType.USER_INVALID_ACCOUNT_AND_EMAIL));
     }
 
@@ -260,25 +271,26 @@ public class UserService {
     }
 
     public EmailToken checkEmailDuplication(String email) {
-        log.debug("이메일 중복 확인 시작, email: {}", email);
+        String normalizedEmail = normalizeEmail(email);
+        log.debug("이메일 중복 확인 시작, email: {}", normalizedEmail);
 
         EmailToken emailToken;
 
         // 실제 사용중인 이메일 확인
-        if (userRepository.findByEmail(email).isPresent()) {
-            log.error("user 테이블에서 중복된 이메일 존재, email 값= {}", email);
+        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
+            log.error("user 테이블에서 중복된 이메일 존재, email 값= {}", normalizedEmail);
             throw new UserException(ExceptionType.USER_OVERLAP);
-        } else if (emailTokenRepository.findByEmail(email).isPresent()) {
-            log.debug("요청 가입 대기자 존재 - emailToken 테이블에서 중복된 이메일 존재, email 값= {}", email);
+        } else if (emailTokenRepository.findByEmail(normalizedEmail).isPresent()) {
+            log.debug("요청 가입 대기자 존재 - emailToken 테이블에서 중복된 이메일 존재, email 값= {}", normalizedEmail);
 
             // 토큰 만료시간 업데이트
-            emailToken = emailTokenService.getEmailTokenByEmail(email);
+            emailToken = emailTokenService.getEmailTokenByEmail(normalizedEmail);
             log.debug("emailToken 조회 완료, emailTokenUUID= {}", emailToken.getEmailTokenUUID());
             emailTokenService.updateCertificationTime(emailToken);
             log.debug("이메일 인증 만료시간 업데이트 완료, emailTokenUUID= {}", emailToken.getEmailTokenUUID());
         } else {
             // 그 외의 경우 새로운 이메일 토큰 생성
-            emailToken = emailTokenService.createEmailToken(email);
+            emailToken = emailTokenService.createEmailToken(normalizedEmail);
         }
         log.debug("이메일 중복 확인 완료");
 

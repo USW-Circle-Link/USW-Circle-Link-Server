@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmailDTO {
 
-    @NotBlank(message = "이메일(포털 아이디)을 입력해주세요")
-    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "이메일 아이디는 영문, 숫자, ., _, - 만 포함할 수 있습니다 (@ 제외)")
+    @NotBlank(message = "이메일을 입력해주세요")
+    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "이메일 아이디는 영문, 숫자, 특수문자(._-)만 가능합니다.")
     private String email;
 
 }

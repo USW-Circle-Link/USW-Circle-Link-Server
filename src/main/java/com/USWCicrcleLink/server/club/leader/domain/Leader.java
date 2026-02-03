@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "LEADER_TABLE")
+@Table(name = "leader_table")
 public class Leader {
 
     @Id

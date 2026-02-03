@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "FORM_QUESTION")
+@Table(name = "form_question")
 public class FormQuestion {
 
     @Id

@@ -25,7 +25,7 @@ public class Club {
 
     @Builder.Default
     @JdbcTypeCode(Types.BINARY)
-    @Column(name = "clubuuid", unique = true, nullable = false, updatable = false, columnDefinition = "BINARY(16)")
+    @Column(name = "club_uuid", unique = true, nullable = false, updatable = false, columnDefinition = "BINARY(16)")
     private UUID clubuuid = UUID.randomUUID();
 
     @Column(name = "club_name", nullable = false, unique = true, length = 10)

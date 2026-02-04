@@ -61,9 +61,8 @@ public class SecurityConfig {
                                                         securityProperties.getPermitAllPaths().toArray(new String[0]))
                                                         .permitAll();
 
-                                        // Public Club Endpoints (manually added since /clubs/** was removed from
-                                        // permit-all)
-                                        auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/open",
+                                        // Public Club Endpoints
+                                        auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/filter", "/clubs/open",
                                                         "/clubs/{clubUUID}",
                                                         "/clubs/open/filter").permitAll();
 

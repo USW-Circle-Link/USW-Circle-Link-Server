@@ -1,16 +1,18 @@
 package com.USWCicrcleLink.server.club.service;
 
 import com.USWCicrcleLink.server.admin.dto.AdminClubIntroResponse;
-import com.USWCicrcleLink.server.admin.mapper.ClubCategoryMapper;
+import com.USWCicrcleLink.server.category.mapper.ClubCategoryMapper;
 import com.USWCicrcleLink.server.club.domain.Club;
-import com.USWCicrcleLink.server.club.domain.ClubCategory;
+import com.USWCicrcleLink.server.category.domain.ClubCategory;
 import com.USWCicrcleLink.server.club.domain.ClubHashtag;
 import com.USWCicrcleLink.server.club.domain.ClubMainPhoto;
-import com.USWCicrcleLink.server.club.dto.ClubCategoryDto;
+import com.USWCicrcleLink.server.category.dto.ClubCategoryDto;
 import com.USWCicrcleLink.server.club.dto.ClubInfoListResponse;
 import com.USWCicrcleLink.server.club.dto.ClubListByClubCategoryResponse;
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.repository.*;
+import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
+import com.USWCicrcleLink.server.category.repository.ClubCategoryMappingRepository;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
 import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;

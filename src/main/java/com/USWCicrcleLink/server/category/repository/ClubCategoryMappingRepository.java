@@ -1,7 +1,7 @@
-package com.USWCicrcleLink.server.club.repository;
+package com.USWCicrcleLink.server.category.repository;
 
 import com.USWCicrcleLink.server.club.domain.Club;
-import com.USWCicrcleLink.server.club.domain.ClubCategoryMapping;
+import com.USWCicrcleLink.server.category.domain.ClubCategoryMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

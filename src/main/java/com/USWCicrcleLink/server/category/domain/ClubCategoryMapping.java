@@ -1,5 +1,6 @@
-package com.USWCicrcleLink.server.club.domain;
+package com.USWCicrcleLink.server.category.domain;
 
+import com.USWCicrcleLink.server.club.domain.Club;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,3 @@ public class ClubCategoryMapping {
     @JoinColumn(name = "club_category_id", nullable = false)
     private ClubCategory clubCategory;
 }
-

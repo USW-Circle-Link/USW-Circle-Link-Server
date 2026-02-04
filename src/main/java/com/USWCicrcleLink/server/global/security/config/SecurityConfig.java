@@ -70,6 +70,12 @@ public class SecurityConfig {
                                         auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
                                         auth.requestMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("ADMIN");
 
+                                        // Category Management
+                                        auth.requestMatchers(HttpMethod.GET, "/categories").hasAnyRole("LEADER",
+                                                        "ADMIN");
+                                        auth.requestMatchers(HttpMethod.POST, "/categories").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/categories/**").hasRole("ADMIN");
+
                                         auth.requestMatchers(HttpMethod.GET, "/admin/clubs", "/admin/clubs/{clubUUID}")
                                                         .hasAnyRole("ADMIN",
                                                                         "LEADER");

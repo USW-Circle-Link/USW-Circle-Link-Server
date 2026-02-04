@@ -1,11 +1,11 @@
 package com.USWCicrcleLink.server.category.service;
 
 import com.USWCicrcleLink.server.category.dto.CategoryRequest;
-import com.USWCicrcleLink.server.admin.mapper.ClubCategoryMapper;
-import com.USWCicrcleLink.server.club.dto.ClubCategoryDto;
-import com.USWCicrcleLink.server.club.domain.ClubCategory;
-import com.USWCicrcleLink.server.club.repository.ClubCategoryMappingRepository;
-import com.USWCicrcleLink.server.club.repository.ClubCategoryRepository;
+import com.USWCicrcleLink.server.category.mapper.ClubCategoryMapper;
+import com.USWCicrcleLink.server.category.dto.ClubCategoryDto;
+import com.USWCicrcleLink.server.category.domain.ClubCategory;
+import com.USWCicrcleLink.server.category.repository.ClubCategoryMappingRepository;
+import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubCategoryException;

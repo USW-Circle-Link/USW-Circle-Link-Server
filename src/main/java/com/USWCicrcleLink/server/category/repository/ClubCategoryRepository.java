@@ -1,6 +1,6 @@
-package com.USWCicrcleLink.server.club.repository;
+package com.USWCicrcleLink.server.category.repository;
 
-import com.USWCicrcleLink.server.club.domain.ClubCategory;
+import com.USWCicrcleLink.server.category.domain.ClubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +23,3 @@ public interface ClubCategoryRepository extends JpaRepository<ClubCategory, Long
 
     Optional<ClubCategory> findByClubCategoryName(String clubCategoryName);
 }
-

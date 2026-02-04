@@ -131,7 +131,8 @@ public class NoticeService {
     /**
      * 공지사항 수정 (ADMIN)
      */
-    public List<String> updateNotice(UUID noticeUUID, NoticeUpdateRequest request, List<MultipartFile> noticePhotos) {
+    public NoticeDetailResponse updateNotice(UUID noticeUUID, NoticeUpdateRequest request,
+            List<MultipartFile> noticePhotos) {
         if (request == null) {
             throw new NoticeException(ExceptionType.INVALID_INPUT);
         }
@@ -146,18 +147,41 @@ public class NoticeService {
         notice.updateTitle(request.getNoticeTitle());
         notice.updateContent(request.getNoticeContent());
 
-        // 기존 사진 삭제
-        deleteExistingPhotos(notice);
+        List<String> photoUrls;
 
-        // 사진 순서와 파일 개수 검증
-        validatePhotoOrdersAndPhotos(request.getPhotoOrders(), noticePhotos);
+        // 사진 변경 요청이 있는 경우에만 처리 (사진 or 순서 정보가 존재할 때)
+        boolean hasPhotos = noticePhotos != null && !noticePhotos.isEmpty();
+        boolean hasOrders = request.getPhotoOrders() != null && !request.getPhotoOrders().isEmpty();
 
-        // 사진 처리
-        List<String> presignedUrls = handleNoticePhotos(notice, noticePhotos, request.getPhotoOrders());
+        if (hasPhotos || hasOrders) {
+            // 기존 사진 삭제
+            deleteExistingPhotos(notice);
 
-        log.info("공지사항 수정 완료 - ID: {}, 첨부된 사진 수: {}", notice.getNoticeId(),
-                noticePhotos == null ? 0 : noticePhotos.size());
-        return presignedUrls;
+            // 사진 순서와 파일 개수 검증
+            validatePhotoOrdersAndPhotos(request.getPhotoOrders(), noticePhotos);
+
+            // 사진 처리 (Presigned URLs 반환)
+            photoUrls = handleNoticePhotos(notice, noticePhotos, request.getPhotoOrders());
+            log.info("공지사항 수정 완료 - ID: {}, 첨부된 사진 수: {}", notice.getNoticeId(),
+                    noticePhotos == null ? 0 : noticePhotos.size());
+
+        } else {
+            // 사진 변경 없음 - 기존 사진 Presigned URL 재발급
+            photoUrls = noticePhotoRepository.findByNotice(notice).stream()
+                    .sorted(Comparator.comparingInt(NoticePhoto::getOrder))
+                    .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getNoticePhotoS3Key()))
+                    .collect(Collectors.toList());
+
+            log.info("공지사항 수정 완료 (사진 변경 없음) - ID: {}", notice.getNoticeId());
+        }
+
+        return new NoticeDetailResponse(
+                notice.getNoticeUUID(),
+                notice.getNoticeTitle(),
+                notice.getNoticeContent(),
+                photoUrls,
+                notice.getNoticeCreatedAt(),
+                notice.getAdmin() != null ? notice.getAdmin().getAdminName() : "Unknown");
     }
 
     /**

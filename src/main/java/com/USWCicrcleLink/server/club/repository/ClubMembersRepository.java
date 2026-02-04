@@ -38,4 +38,7 @@ public interface ClubMembersRepository extends JpaRepository<ClubMembers, Long>,
 
     @Query("SELECT cm.club.clubuuid FROM ClubMembers cm WHERE cm.profile.profileId = :profileId")
     List<UUID> findClubuuidByProfileId(@Param("profileId") Long profileId);
+
+    @Query("SELECT cm.club.clubId, COUNT(cm) FROM ClubMembers cm WHERE cm.club.clubId IN :clubIds GROUP BY cm.club.clubId")
+    List<Object[]> countMembersByClubIds(@Param("clubIds") List<Long> clubIds);
 }

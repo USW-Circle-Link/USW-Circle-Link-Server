@@ -4,6 +4,7 @@ import com.USWCicrcleLink.server.admin.dto.AdminClubIntroResponse;
 import com.USWCicrcleLink.server.category.mapper.ClubCategoryMapper;
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.category.domain.ClubCategory;
+import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
 import com.USWCicrcleLink.server.club.domain.ClubHashtag;
 import com.USWCicrcleLink.server.club.domain.ClubMainPhoto;
 import com.USWCicrcleLink.server.category.dto.ClubCategoryDto;
@@ -43,6 +44,7 @@ public class ClubService {
         private final ClubIntroRepository clubIntroRepository;
         private final ClubRepository clubRepository;
         private final ClubIntroPhotoRepository clubIntroPhotoRepository;
+        private final ClubMembersRepository clubMembersRepository;
 
         // 전체 동아리 리스트 조회 (모바일)
         @Transactional(readOnly = true)
@@ -67,13 +69,20 @@ public class ClubService {
                                                 tag -> tag.getClub().getClubId(),
                                                 Collectors.mapping(ClubHashtag::getClubHashtag, Collectors.toList())));
 
+                Map<Long, Long> memberCounts = getMemberCountsMap(clubIds);
+                Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(clubIds);
+
                 return clubs.stream()
                                 .map(club -> new ClubListResponse(
                                                 club.getClubuuid(),
                                                 club.getClubName(),
                                                 mainPhotoUrls.getOrDefault(club.getClubId(), null),
                                                 club.getDepartment().name(),
-                                                clubHashtags.getOrDefault(club.getClubId(), Collections.emptyList())))
+                                                clubHashtags.getOrDefault(club.getClubId(), Collections.emptyList()),
+                                                club.getLeaderName(),
+                                                memberCounts.getOrDefault(club.getClubId(), 0L),
+                                                recruitmentStatuses.getOrDefault(club.getClubId(),
+                                                                RecruitmentStatus.CLOSE.name())))
                                 .collect(Collectors.toList());
         }
 
@@ -128,6 +137,9 @@ public class ClubService {
                                                 tag -> tag.getClub().getClubId(),
                                                 Collectors.mapping(ClubHashtag::getClubHashtag, Collectors.toList())));
 
+                Map<Long, Long> memberCounts = getMemberCountsMap(clubIds);
+                Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(clubIds);
+
                 return clubCategoryIds.stream()
                                 .map(categoryId -> {
                                         List<ClubListResponse> clubResponses = clubs.stream()
@@ -138,7 +150,13 @@ public class ClubService {
                                                                                         null),
                                                                         club.getDepartment().name(),
                                                                         clubHashtags.getOrDefault(club.getClubId(),
-                                                                                        Collections.emptyList())))
+                                                                                        Collections.emptyList()),
+                                                                        club.getLeaderName(),
+                                                                        memberCounts.getOrDefault(club.getClubId(), 0L),
+                                                                        recruitmentStatuses.getOrDefault(
+                                                                                        club.getClubId(),
+                                                                                        RecruitmentStatus.CLOSE
+                                                                                                        .name())))
                                                         .collect(Collectors.toList());
 
                                         ClubCategory category = clubCategoryRepository.findById(categoryId)
@@ -174,13 +192,20 @@ public class ClubService {
                                                 tag -> tag.getClub().getClubId(),
                                                 Collectors.mapping(ClubHashtag::getClubHashtag, Collectors.toList())));
 
+                Map<Long, Long> memberCounts = getMemberCountsMap(openClubIds);
+                Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(openClubIds);
+
                 return clubs.stream()
                                 .map(club -> new ClubListResponse(
                                                 club.getClubuuid(),
                                                 club.getClubName(),
                                                 mainPhotoUrls.getOrDefault(club.getClubId(), null),
                                                 club.getDepartment().name(),
-                                                clubHashtags.getOrDefault(club.getClubId(), Collections.emptyList())))
+                                                clubHashtags.getOrDefault(club.getClubId(), Collections.emptyList()),
+                                                club.getLeaderName(),
+                                                memberCounts.getOrDefault(club.getClubId(), 0L),
+                                                recruitmentStatuses.getOrDefault(club.getClubId(),
+                                                                RecruitmentStatus.CLOSE.name())))
                                 .collect(Collectors.toList());
         }
 
@@ -214,6 +239,9 @@ public class ClubService {
                                                 tag -> tag.getClub().getClubId(),
                                                 Collectors.mapping(ClubHashtag::getClubHashtag, Collectors.toList())));
 
+                Map<Long, Long> memberCounts = getMemberCountsMap(clubIds);
+                Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(clubIds);
+
                 return clubCategoryIds.stream()
                                 .map(categoryId -> {
                                         List<ClubListResponse> clubResponses = clubs.stream()
@@ -224,7 +252,13 @@ public class ClubService {
                                                                                         null),
                                                                         club.getDepartment().name(),
                                                                         clubHashtags.getOrDefault(club.getClubId(),
-                                                                                        Collections.emptyList())))
+                                                                                        Collections.emptyList()),
+                                                                        club.getLeaderName(),
+                                                                        memberCounts.getOrDefault(club.getClubId(), 0L),
+                                                                        recruitmentStatuses.getOrDefault(
+                                                                                        club.getClubId(),
+                                                                                        RecruitmentStatus.CLOSE
+                                                                                                        .name())))
                                                         .collect(Collectors.toList());
 
                                         ClubCategory category = clubCategoryRepository.findById(categoryId)
@@ -301,5 +335,27 @@ public class ClubService {
                                 clubCategoryNames,
                                 club.getClubRoomNumber(),
                                 clubIntro.getClubRecruitment());
+        }
+        // List<Long> clubIds check necessary?
+        // Yes, but I'll assume caller handles emptiness or it just returns empty map.
+
+        private Map<Long, Long> getMemberCountsMap(List<Long> clubIds) {
+                if (clubIds == null || clubIds.isEmpty()) {
+                        return Collections.emptyMap();
+                }
+                return clubMembersRepository.countMembersByClubIds(clubIds).stream()
+                                .collect(Collectors.toMap(
+                                                result -> (Long) result[0],
+                                                result -> (Long) result[1]));
+        }
+
+        private Map<Long, String> getRecruitmentStatusMap(List<Long> clubIds) {
+                if (clubIds == null || clubIds.isEmpty()) {
+                        return Collections.emptyMap();
+                }
+                return clubIntroRepository.findRecruitmentStatusByClubIds(clubIds).stream()
+                                .collect(Collectors.toMap(
+                                                result -> (Long) result[0],
+                                                result -> ((RecruitmentStatus) result[1]).name()));
         }
 }

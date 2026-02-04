@@ -16,4 +16,7 @@ public class ClubListResponse {
     private String mainPhotoUrl;
     private String department;
     private List<String> hashtags;
+    private String leaderName;
+    private long memberCount;
+    private String recruitmentStatus;
 }

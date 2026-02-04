@@ -47,6 +47,7 @@ public class ClubController {
     private final AdminClubService adminClubService;
     private final ClubLeaderService clubLeaderService;
     private final FcmServiceImpl fcmService;
+    private final com.USWCicrcleLink.server.club.leader.service.FormService formService;
 
     // --- Public / General Endpoints ---
 
@@ -262,5 +263,16 @@ public class ClubController {
             @RequestBody @jakarta.validation.Valid com.USWCicrcleLink.server.club.application.dto.AplictDto.UpdateStatusRequest request) {
         clubLeaderService.updateAplictStatus(clubUUID, applicationUUID, request.getStatus());
         return ResponseEntity.ok(new ApiResponse<>("지원자 상태 변경 완료"));
+    }
+
+    // --- Added from FormController ---
+
+    // 1️ 지원서 폼 생성
+    @PostMapping("/{clubUUID}/forms")
+    public ResponseEntity<Void> createForm(
+            @PathVariable UUID clubUUID,
+            @RequestBody @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.FormDto.CreateRequest request) {
+        Long formId = formService.createForm(clubUUID, request);
+        return ResponseEntity.created(java.net.URI.create("/clubs/" + clubUUID + "/forms/" + formId)).build();
     }
 }

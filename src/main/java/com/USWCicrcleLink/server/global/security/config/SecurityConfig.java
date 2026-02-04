@@ -95,9 +95,9 @@ public class SecurityConfig {
                                         auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw",
                                                         "/club-leader/fcmtoken")
                                                         .hasRole("USER");
-                                        auth.requestMatchers(HttpMethod.GET, "/my-notices", "/mypages/my-clubs",
+                                        auth.requestMatchers(HttpMethod.GET, "/mypages/my-clubs",
                                                         "/mypages/aplict-clubs",
-                                                        "/profiles/me", "/my-notices/{noticeUUID}/details")
+                                                        "/profiles/me")
                                                         .hasRole("USER");
                                         auth.requestMatchers(HttpMethod.DELETE, "/users/exit").hasRole("USER");
                                         auth.requestMatchers(HttpMethod.POST, "/users/exit/send-code").hasRole("USER");

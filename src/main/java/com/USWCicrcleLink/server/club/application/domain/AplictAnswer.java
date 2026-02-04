@@ -20,7 +20,7 @@ public class AplictAnswer {
     private Long answerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aplict_id", nullable = false)
+    @JoinColumn(name = "application_id", nullable = false)
     private Aplict aplict;
 
     @ManyToOne(fetch = FetchType.LAZY)

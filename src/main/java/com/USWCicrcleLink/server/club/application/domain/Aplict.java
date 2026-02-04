@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "APLICT_TABLE", uniqueConstraints = {
+@Table(name = "aplict_table", uniqueConstraints = {
         @UniqueConstraint(name = "uk_aplict_active", columnNames = { "club_id", "profile_id" })
 })
 public class Aplict {

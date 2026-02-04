@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "CLUB_TABLE")
+@Table(name = "club_table")
 public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

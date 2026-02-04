@@ -49,7 +49,7 @@ public class NoticeController {
     // 공지사항 생성 (Admin)
     @PostMapping
     public ResponseEntity<ApiResponse<List<String>>> createNotice(
-            @RequestPart(value = "request", required = false) @Validated(ValidationSequence.class) NoticeRequest request,
+            @RequestPart(value = "request", required = true) @Validated(ValidationSequence.class) NoticeRequest request,
             @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos) {
         List<String> presignedUrls = noticeService.createNotice(request, noticePhotos);
         return ResponseEntity.ok(new ApiResponse<>("공지사항 생성 성공", presignedUrls));
@@ -59,7 +59,7 @@ public class NoticeController {
     @PutMapping("/{noticeUUID}")
     public ResponseEntity<ApiResponse<List<String>>> updateNotice(
             @PathVariable("noticeUUID") UUID noticeUUID,
-            @RequestPart(value = "request", required = false) @Validated(ValidationSequence.class) NoticeUpdateRequest request,
+            @RequestPart(value = "request", required = true) @Validated(ValidationSequence.class) NoticeUpdateRequest request,
             @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos) {
 
         List<String> presignedUrls = noticeService.updateNotice(noticeUUID, request, noticePhotos);
@@ -73,4 +73,3 @@ public class NoticeController {
         return ResponseEntity.ok(new ApiResponse<>("공지사항 삭제 성공", noticeUUID));
     }
 }
-

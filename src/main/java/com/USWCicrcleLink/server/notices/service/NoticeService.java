@@ -53,8 +53,7 @@ public class NoticeService {
                 .map(notice -> NoticeListResponse.builder()
                         .noticeUUID(notice.getNoticeUUID())
                         .noticeTitle(notice.getNoticeTitle())
-                        .authorName(notice.getAdmin() != null ? notice.getAdmin().getAdminName()
-                                : notice.getLeader().getClub().getLeaderName())
+                        .authorName(notice.getAdmin() != null ? notice.getAdmin().getAdminName() : "Unknown")
                         .noticeCreatedAt(notice.getNoticeCreatedAt())
                         .build())
                 .toList();
@@ -88,14 +87,16 @@ public class NoticeService {
                 notice.getNoticeContent(),
                 noticePhotoUrls,
                 notice.getNoticeCreatedAt(),
-                notice.getAdmin() != null ? notice.getAdmin().getAdminName()
-                        : notice.getLeader().getClub().getLeaderName());
+                notice.getAdmin() != null ? notice.getAdmin().getAdminName() : "Unknown");
     }
 
     /**
      * 공지사항 생성 (ADMIN)
      */
     public List<String> createNotice(NoticeRequest request, List<MultipartFile> noticePhotos) {
+        if (request == null) {
+            throw new NoticeException(ExceptionType.INVALID_INPUT);
+        }
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Notice.NoticeBuilder noticeBuilder = Notice.builder()
@@ -105,9 +106,6 @@ public class NoticeService {
 
         if (principal instanceof CustomAdminDetails) {
             noticeBuilder.admin(((CustomAdminDetails) principal).admin());
-        } else if (principal instanceof com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) {
-            noticeBuilder.leader(
-                    ((com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) principal).leader());
         } else {
             throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
         }
@@ -115,6 +113,11 @@ public class NoticeService {
         Notice savedNotice = noticeRepository.save(noticeBuilder.build());
 
         // 사진 순서와 파일 개수 검증
+        log.info("공지사항 생성 요청 - NoticeID: {}, 사진 수: {}, 순서 정보 수: {}",
+                savedNotice.getNoticeId(),
+                noticePhotos == null ? 0 : noticePhotos.size(),
+                request.getPhotoOrders() == null ? 0 : request.getPhotoOrders().size());
+
         validatePhotoOrdersAndPhotos(request.getPhotoOrders(), noticePhotos);
 
         // 사진 처리
@@ -129,6 +132,9 @@ public class NoticeService {
      * 공지사항 수정 (ADMIN)
      */
     public List<String> updateNotice(UUID noticeUUID, NoticeUpdateRequest request, List<MultipartFile> noticePhotos) {
+        if (request == null) {
+            throw new NoticeException(ExceptionType.INVALID_INPUT);
+        }
 
         // 공지사항 조회
         Notice notice = noticeRepository.findByNoticeUUID(noticeUUID)
@@ -179,15 +185,22 @@ public class NoticeService {
 
     // 사진 순서와 파일 개수 검증
     private void validatePhotoOrdersAndPhotos(List<Integer> photoOrders, List<MultipartFile> noticePhotos) {
-        if (noticePhotos != null && !noticePhotos.isEmpty()) {
-            // 사진과 사진 순서의 개수 일치 확인
-            if (photoOrders == null || noticePhotos.size() != photoOrders.size()) {
+        boolean hasPhotos = noticePhotos != null && !noticePhotos.isEmpty();
+        boolean hasOrders = photoOrders != null && !photoOrders.isEmpty();
+
+        if (hasPhotos) {
+            // 사진은 있는데 순서가 없거나 개수가 안 맞는 경우
+            if (!hasOrders || noticePhotos.size() != photoOrders.size()) {
                 throw new NoticeException(ExceptionType.PHOTO_ORDER_MISMATCH);
             }
-
             // 사진 개수 제한 확인
             if (noticePhotos.size() > FILE_LIMIT) {
                 throw new NoticeException(ExceptionType.UP_TO_5_PHOTOS_CAN_BE_UPLOADED);
+            }
+        } else {
+            // 사진은 없는데 순서 정보만 있는 경우
+            if (hasOrders) {
+                throw new NoticeException(ExceptionType.PHOTO_ORDER_MISMATCH);
             }
         }
     }
@@ -211,8 +224,10 @@ public class NoticeService {
     // 사진 업로드
     private List<String> handleNoticePhotos(Notice notice, List<MultipartFile> noticePhotos,
             List<Integer> photoOrders) {
-        if (noticePhotos == null || noticePhotos.isEmpty())
+        if (noticePhotos == null || noticePhotos.isEmpty()) {
+            log.info("처리할 사진이 없습니다.");
             return List.of();
+        }
 
         List<NoticePhoto> newPhotoList = new ArrayList<>();
         List<String> presignedUrls = new ArrayList<>();
@@ -255,15 +270,7 @@ public class NoticeService {
             if (notice.getAdmin() == null || !notice.getAdmin().getAdminUUID().equals(currentAdmin.getAdminUUID())) {
                 throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
             }
-        } else if (principal instanceof com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) {
-            com.USWCicrcleLink.server.club.leader.domain.Leader currentLeader = ((com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails) principal)
-                    .leader();
-            if (notice.getLeader() == null
-                    || !notice.getLeader().getLeaderUUID().equals(currentLeader.getLeaderUUID())) {
-                throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
-            }
         } else {
-            // ADMIN이나 LEADER가 아닌 경우 (예: 일반 USER가 접근 시도 시, API단에서 막히겠지만 이중 방어)
             throw new NoticeException(ExceptionType.NOTICE_NOT_AUTHOR);
         }
     }

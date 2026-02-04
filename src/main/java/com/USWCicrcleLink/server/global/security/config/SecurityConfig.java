@@ -83,12 +83,9 @@ public class SecurityConfig {
                                         auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
                                         auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
 
-                                        auth.requestMatchers(HttpMethod.POST, "/notices/**").hasAnyRole("ADMIN",
-                                                        "LEADER");
-                                        auth.requestMatchers(HttpMethod.PUT, "/notices/**").hasAnyRole("ADMIN",
-                                                        "LEADER");
-                                        auth.requestMatchers(HttpMethod.DELETE, "/notices/**").hasAnyRole("ADMIN",
-                                                        "LEADER");
+                                        auth.requestMatchers(HttpMethod.POST, "/notices/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.PUT, "/notices/**").hasRole("ADMIN");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/notices/**").hasRole("ADMIN");
 
                                         auth.requestMatchers(HttpMethod.PATCH, "/profiles/change", "/users/userpw",
                                                         "/club-leader/fcmtoken")

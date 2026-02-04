@@ -117,4 +117,26 @@ public class UserController {
 
         return new ApiResponse<>("회원 탈퇴가 완료되었습니다.");
     }
+
+    // 프로필 중복 확인 (From ProfileController)
+    @PostMapping("/profile/duplication-check")
+    public ApiResponse<com.USWCicrcleLink.server.user.profile.dto.ProfileDuplicationCheckResponse> checkDuplication(
+            @RequestBody @Validated(ValidationSequence.class) com.USWCicrcleLink.server.user.profile.dto.ProfileDuplicationCheckRequest request) {
+        com.USWCicrcleLink.server.user.profile.dto.ProfileDuplicationCheckResponse response = profileService
+                .checkProfileDuplication(
+                        request.getUserName(),
+                        request.getStudentNumber(),
+                        request.getUserHp(),
+                        request.getClubUUID());
+        return new ApiResponse<>("프로필 중복 확인 결과", response);
+    }
+
+    // 동아리방 층별 사진 조회 (From MypageController)
+    @GetMapping("/clubs/{floor}/photo")
+    public ApiResponse<com.USWCicrcleLink.server.user.dto.ClubFloorPhotoResponse> getClubFloorPhoto(
+            @PathVariable("floor") String floor) {
+        com.USWCicrcleLink.server.user.dto.ClubFloorPhotoResponse clubFloorPhotoResponse = mypageService
+                .getClubFloorPhoto(floor);
+        return new ApiResponse<>("동아리방 층별 사진 조회 성공", clubFloorPhotoResponse);
+    }
 }

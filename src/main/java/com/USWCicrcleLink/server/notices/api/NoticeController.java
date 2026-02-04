@@ -56,14 +56,15 @@ public class NoticeController {
     }
 
     // 공지사항 수정 (Admin)
+    // 공지사항 수정 (Admin)
     @PutMapping("/{noticeUUID}")
-    public ResponseEntity<ApiResponse<List<String>>> updateNotice(
+    public ResponseEntity<ApiResponse<NoticeDetailResponse>> updateNotice(
             @PathVariable("noticeUUID") UUID noticeUUID,
             @RequestPart(value = "request", required = true) @Validated(ValidationSequence.class) NoticeUpdateRequest request,
             @RequestPart(value = "photos", required = false) List<MultipartFile> noticePhotos) {
 
-        List<String> presignedUrls = noticeService.updateNotice(noticeUUID, request, noticePhotos);
-        return ResponseEntity.ok(new ApiResponse<>("공지사항 수정 성공", presignedUrls));
+        NoticeDetailResponse response = noticeService.updateNotice(noticeUUID, request, noticePhotos);
+        return ResponseEntity.ok(new ApiResponse<>("공지사항 수정 성공", response));
     }
 
     // 공지사항 삭제 (Admin)

@@ -21,4 +21,7 @@ public interface ClubIntroRepository extends JpaRepository<ClubIntro, Long> {
 
     @Query("SELECT ci FROM ClubIntro ci WHERE ci.club.clubuuid = :clubuuid")
     Optional<ClubIntro> findByClubuuid(@Param("clubuuid") UUID clubuuid);
+
+    @Query("SELECT ci.club.clubId, ci.recruitmentStatus FROM ClubIntro ci WHERE ci.club.clubId IN :clubIds")
+    List<Object[]> findRecruitmentStatusByClubIds(@Param("clubIds") List<Long> clubIds);
 }

@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.club.domain;
+package com.USWCicrcleLink.server.category.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,4 +35,3 @@ public class ClubCategory {
         }
     }
 }
-

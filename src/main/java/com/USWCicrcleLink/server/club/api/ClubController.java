@@ -47,6 +47,7 @@ public class ClubController {
     private final AdminClubService adminClubService;
     private final ClubLeaderService clubLeaderService;
     private final FcmServiceImpl fcmService;
+    private final com.USWCicrcleLink.server.club.leader.service.FormService formService;
 
     // --- Public / General Endpoints ---
 
@@ -213,5 +214,65 @@ public class ClubController {
     public ResponseEntity<ApiResponse> updateFcmToken(@RequestBody FcmTokenRequest fcmTokenRequest) {
         fcmService.refreshFcmToken(fcmTokenRequest);
         return new ResponseEntity<>(new ApiResponse<>("fcm token 갱신 완료"), HttpStatus.OK);
+    }
+
+    // --- Added from ClubLeaderController ---
+
+    // 동아리 요약 조회
+    @GetMapping("/{clubUUID}/leader/summary")
+    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse>> getClubSummary(
+            @PathVariable("clubUUID") UUID clubUUID) {
+        com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse clubIntroWebResponse = clubLeaderService
+                .getClubSummary(clubUUID);
+        ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse> response = new ApiResponse<>(
+                "동아리 요약 조회 완료", clubIntroWebResponse);
+        return ResponseEntity.ok(response);
+    }
+
+    // 동아리 소개 조회 (Leader)
+    @GetMapping("/{clubUUID}/leader/intro")
+    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.LeaderClubIntroResponse>> getClubIntro(
+            @PathVariable("clubUUID") UUID clubUUID) {
+        return new ResponseEntity<>(clubLeaderService.getClubIntro(clubUUID), HttpStatus.OK);
+    }
+
+    // 동아리 소개 변경
+    @PutMapping("/{clubUUID}/leader/intro")
+    public ResponseEntity<ApiResponse> updateClubIntro(@PathVariable("clubUUID") UUID clubUUID,
+            @RequestPart(value = "clubIntroRequest", required = false) @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.club.ClubIntroRequest clubIntroRequest,
+            @RequestPart(value = "introPhotos", required = false) List<MultipartFile> introPhotos) throws IOException {
+
+        return new ResponseEntity<>(clubLeaderService.updateClubIntro(clubUUID, clubIntroRequest, introPhotos),
+                HttpStatus.OK);
+    }
+
+    // 지원서 상세 조회
+    @GetMapping("/{clubUUID}/leader/applications/{applicationUUID}")
+    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.application.dto.AplictDto.DetailResponse>> getApplicationDetail(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @PathVariable("applicationUUID") UUID applicationUUID) {
+        return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 완료",
+                clubLeaderService.getApplicationDetail(clubUUID, applicationUUID)));
+    }
+
+    // 지원자 상태 변경
+    @PatchMapping("/{clubUUID}/leader/applications/{applicationUUID}/status")
+    public ResponseEntity<ApiResponse<Void>> updateApplicationStatus(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @PathVariable("applicationUUID") UUID applicationUUID,
+            @RequestBody @jakarta.validation.Valid com.USWCicrcleLink.server.club.application.dto.AplictDto.UpdateStatusRequest request) {
+        clubLeaderService.updateAplictStatus(clubUUID, applicationUUID, request.getStatus());
+        return ResponseEntity.ok(new ApiResponse<>("지원자 상태 변경 완료"));
+    }
+
+    // --- Added from FormController ---
+
+    // 1️ 지원서 폼 생성
+    @PostMapping("/{clubUUID}/forms")
+    public ResponseEntity<Void> createForm(
+            @PathVariable UUID clubUUID,
+            @RequestBody @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.FormDto.CreateRequest request) {
+        Long formId = formService.createForm(clubUUID, request);
+        return ResponseEntity.created(java.net.URI.create("/clubs/" + clubUUID + "/forms/" + formId)).build();
     }
 }

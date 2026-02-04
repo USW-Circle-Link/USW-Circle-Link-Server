@@ -1,5 +1,7 @@
 package com.USWCicrcleLink.server.club.leader.service;
 
+import com.USWCicrcleLink.server.category.repository.ClubCategoryMappingRepository;
+import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
 import com.USWCicrcleLink.server.club.application.domain.Aplict;
 import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
@@ -8,6 +10,8 @@ import com.USWCicrcleLink.server.club.application.dto.AplictDto;
 import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
 import com.USWCicrcleLink.server.club.domain.*;
 import com.USWCicrcleLink.server.club.repository.*;
+import com.USWCicrcleLink.server.category.domain.ClubCategory;
+import com.USWCicrcleLink.server.category.domain.ClubCategoryMapping;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
 import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
 import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;

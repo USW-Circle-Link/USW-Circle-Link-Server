@@ -7,7 +7,6 @@ import com.USWCicrcleLink.server.admin.dto.AdminPwRequest;
 import com.USWCicrcleLink.server.admin.service.AdminClubService;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
 
-import com.USWCicrcleLink.server.club.dto.ClubListByClubCategoryResponse;
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.service.ClubService;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
@@ -51,34 +50,12 @@ public class ClubController {
 
     // --- Public / General Endpoints ---
 
-    // 전체 동아리 조회 (모바일 - 리스트)
+    // 동아리 리스트 조회 (필터링 및 검색 포함)
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ClubListResponse>>> getAllClubs() {
-        List<ClubListResponse> clubs = clubService.getAllClubs();
-        return ResponseEntity.ok(new ApiResponse<>("전체 동아리 조회 완료", clubs));
-    }
-
-    // 전체 동아리 조회 (모바일 - 리스트, 카테고리 필터)
-    @GetMapping("/filter")
-    public ResponseEntity<ApiResponse<List<ClubListByClubCategoryResponse>>> getAllClubsByClubCategories(
-            @RequestParam(name = "clubCategoryUUIDs", defaultValue = "") List<UUID> clubCategoryUUIDs) {
-        List<ClubListByClubCategoryResponse> clubs = clubService.getAllClubsByClubCategories(clubCategoryUUIDs);
-        return ResponseEntity.ok(new ApiResponse<>("카테고리별 전체 동아리 조회 완료", clubs));
-    }
-
-    // 모집 중인 동아리 조회
-    @GetMapping("/open")
-    public ResponseEntity<ApiResponse<List<ClubListResponse>>> getOpenClubs() {
-        List<ClubListResponse> clubs = clubService.getOpenClubs();
-        return ResponseEntity.ok(new ApiResponse<>("모집 중인 동아리 조회 완료", clubs));
-    }
-
-    // 모집 중인 동아리 조회 (카테고리 필터)
-    @GetMapping("/open/filter")
-    public ResponseEntity<ApiResponse<List<ClubListByClubCategoryResponse>>> getOpenClubsByCategories(
-            @RequestParam(name = "clubCategoryUUIDs", defaultValue = "") List<UUID> clubCategoryUUIDs) {
-        List<ClubListByClubCategoryResponse> clubs = clubService.getOpenClubsByClubCategories(clubCategoryUUIDs);
-        return ResponseEntity.ok(new ApiResponse<>("카테고리별 모집 중인 동아리 조회 완료", clubs));
+    public ResponseEntity<ApiResponse<List<ClubListResponse>>> getClubs(
+            @ModelAttribute com.USWCicrcleLink.server.club.dto.ClubSearchCondition condition) {
+        List<ClubListResponse> clubs = clubService.searchClubs(condition);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 리스트 조회 성공", clubs));
     }
 
     // 동아리 상세 조회 (소개글 - Public)

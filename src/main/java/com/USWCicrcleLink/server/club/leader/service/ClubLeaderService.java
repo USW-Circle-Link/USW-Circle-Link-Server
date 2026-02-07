@@ -72,7 +72,7 @@ public class ClubLeaderService {
     int PHOTO_LIMIT = 5;
 
     private final String S3_MAINPHOTO_DIR = "mainPhoto/";
-    private final String S3_INFOPHOTO_DIR = "introPhoto/"; // Keep bucket path same but rename constant
+    private final String S3_INFOPHOTO_DIR = "infoPhoto/";
 
     // 동아리 접근 권한 확인
     public Club validateLeaderAccess(UUID clubuuid) {

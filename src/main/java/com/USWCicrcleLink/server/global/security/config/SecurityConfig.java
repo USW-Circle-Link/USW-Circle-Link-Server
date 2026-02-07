@@ -106,11 +106,7 @@ public class SecurityConfig {
                                         auth.requestMatchers(HttpMethod.GET, "/users/event/**").hasRole("USER");
                                         auth.requestMatchers(HttpMethod.POST, "/users/event/**").hasRole("USER");
                                         auth.requestMatchers(HttpMethod.DELETE, "/users/event/**").hasRole("USER");
-                                        auth.requestMatchers(HttpMethod.POST, "/club-leader/**").hasRole("LEADER");
-                                        auth.requestMatchers(HttpMethod.GET, "/club-leader/**").hasRole("LEADER");
-                                        auth.requestMatchers(HttpMethod.PATCH, "/club-leader/**").hasRole("LEADER");
-                                        auth.requestMatchers(HttpMethod.DELETE, "/club-leader/**").hasRole("LEADER");
-                                        auth.requestMatchers(HttpMethod.PUT, "/club-leader/**").hasRole("LEADER");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/users/event/**").hasRole("USER");
 
                                         auth.anyRequest().authenticated();
                                 })

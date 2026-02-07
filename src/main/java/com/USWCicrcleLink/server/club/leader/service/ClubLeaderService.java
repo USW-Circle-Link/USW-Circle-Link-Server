@@ -77,7 +77,12 @@ public class ClubLeaderService {
     // 동아리 접근 권한 확인
     public Club validateLeaderAccess(UUID clubuuid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomLeaderDetails leaderDetails = (CustomLeaderDetails) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomLeaderDetails leaderDetails)) {
+            throw new ClubLeaderException(ExceptionType.CLUB_LEADER_ACCESS_DENIED);
+        }
+
         if (!clubuuid.equals(leaderDetails.getClubuuid())) {
             throw new ClubLeaderException(ExceptionType.CLUB_LEADER_ACCESS_DENIED);
         }

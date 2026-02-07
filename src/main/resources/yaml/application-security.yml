@@ -34,7 +34,7 @@ spring:
       - /admin/login
       - /integration/**
       - /mainPhoto/**
-      - /introPhoto/**
+      - /infoPhoto/**
       - /notice/Photo/**
       - /my-notices/**
       - /my-notices/**

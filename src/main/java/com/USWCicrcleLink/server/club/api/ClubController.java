@@ -205,19 +205,17 @@ public class ClubController {
     }
 
     // 동아리 소개 조회 (Leader) -> getClubInfo (was getClubIntro)
-    @GetMapping("/{clubUUID}/leader/info")
+    @GetMapping("/{clubUUID}/info")
     public ResponseEntity<ApiResponse<LeaderClubInfoResponse>> getClubInfo(
             @PathVariable("clubUUID") UUID clubUUID) {
         return new ResponseEntity<>(clubLeaderService.getClubInfo(clubUUID), HttpStatus.OK);
     }
 
     // 동아리 소개 변경 -> updateClubInfo (was updateClubIntro)
-    @PutMapping("/{clubUUID}/leader/info")
+    @PutMapping("/{clubUUID}/info")
     public ResponseEntity<ApiResponse> updateClubInfo(@PathVariable("clubUUID") UUID clubUUID,
             @RequestPart(value = "clubInfoRequest", required = false) @jakarta.validation.Valid ClubInfoRequest clubInfoRequest,
-            @RequestPart(value = "infoPhotos", required = false) List<MultipartFile> infoPhotos) throws IOException { // introPhotos
-                                                                                                                      // ->
-                                                                                                                      // infoPhotos
+            @RequestPart(value = "infoPhotos", required = false) List<MultipartFile> infoPhotos) throws IOException {
 
         return new ResponseEntity<>(clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, infoPhotos),
                 HttpStatus.OK);

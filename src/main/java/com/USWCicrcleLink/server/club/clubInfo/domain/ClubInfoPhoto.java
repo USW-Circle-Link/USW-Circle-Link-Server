@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "CLUB_INTRO_PHOTO_TABLE")
+@Table(name = "CLUB_INFO_PHOTO_TABLE")
 public class ClubInfoPhoto {
 
     @Id

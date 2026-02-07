@@ -2,7 +2,7 @@ package com.USWCicrcleLink.server.club.leader.dto.club;
 
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,11 +13,11 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeaderClubIntroResponse {
+public class LeaderClubInfoResponse {
 
     private UUID clubuuid;
 
-    private String clubIntro;
+    private String clubInfo;
 
     private String clubRecruitment;
 
@@ -25,14 +25,14 @@ public class LeaderClubIntroResponse {
 
     private String googleFormUrl;
 
-    private List<String> introPhotos;
+    private List<String> infoPhotos;
 
-    public LeaderClubIntroResponse(Club club, ClubIntro clubIntro, List<String> introPhotoUrls) {
+    public LeaderClubInfoResponse(Club club, ClubInfo clubInfo, List<String> infoPhotoUrls) {
         this.clubuuid = club.getClubuuid();
-        this.clubIntro = clubIntro.getClubIntro();
-        this.clubRecruitment = clubIntro.getClubRecruitment();
-        this.recruitmentStatus = clubIntro.getRecruitmentStatus();
-        this.googleFormUrl = clubIntro.getGoogleFormUrl();
-        this.introPhotos = introPhotoUrls;
+        this.clubInfo = clubInfo.getClubInfo();
+        this.clubRecruitment = clubInfo.getClubRecruitment();
+        this.recruitmentStatus = clubInfo.getRecruitmentStatus();
+        this.googleFormUrl = clubInfo.getGoogleFormUrl();
+        this.infoPhotos = infoPhotoUrls;
     }
 }

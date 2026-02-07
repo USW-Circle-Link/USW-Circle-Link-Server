@@ -11,10 +11,10 @@ import com.USWCicrcleLink.server.category.domain.ClubCategory;
 import com.USWCicrcleLink.server.category.domain.ClubCategoryMapping;
 import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
 import com.USWCicrcleLink.server.category.repository.ClubCategoryMappingRepository;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfo;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfoPhoto;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoPhotoRepository;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import com.USWCicrcleLink.server.club.leader.domain.Leader;
 import com.USWCicrcleLink.server.club.leader.repository.LeaderRepository;
 import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
@@ -44,8 +44,8 @@ public class DummyData {
         private final ClubRepository clubRepository;
         private final ClubMembersRepository clubMembersRepository;
         private final AplictRepository aplictRepository;
-        private final ClubIntroRepository clubIntroRepository;
-        private final ClubIntroPhotoRepository clubIntroPhotoRepository;
+        private final ClubInfoRepository clubInfoRepository;
+        private final ClubInfoPhotoRepository clubInfoPhotoRepository;
         private final LeaderRepository leaderRepository;
         private final PasswordEncoder passwordEncoder;
         private final ClubMainPhotoRepository clubMainPhotoRepository;
@@ -264,14 +264,14 @@ public class DummyData {
                                 .build();
                 leaderRepository.save(leader);
 
-                ClubIntro clubIntro = ClubIntro.builder()
+                ClubInfo clubInfo = ClubInfo.builder()
                                 .club(flagClub)
-                                .clubIntro("플래그입니다.")
+                                .clubInfo("플래그입니다.")
                                 .clubRecruitment("플래그 모집글입니다.")
                                 .googleFormUrl("flag_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(clubIntro);
+                clubInfoRepository.save(clubInfo);
 
                 Leader leader1 = Leader.builder()
                                 .leaderAccount("badmintonClub")
@@ -281,14 +281,14 @@ public class DummyData {
                                 .build();
                 leaderRepository.save(leader1);
 
-                ClubIntro clubIntro1 = ClubIntro.builder()
+                ClubInfo clubInfo1 = ClubInfo.builder()
                                 .club(badmintonClub)
-                                .clubIntro("배드민턴 동아리입니다.")
+                                .clubInfo("배드민턴 동아리입니다.")
                                 .clubRecruitment("배드민턴 모집글입니다.")
                                 .googleFormUrl("badmintonClub_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(clubIntro1);
+                clubInfoRepository.save(clubInfo1);
 
                 ClubMainPhoto badmintonMainPhoto = ClubMainPhoto.builder()
                                 .club(badmintonClub)
@@ -298,13 +298,13 @@ public class DummyData {
                 clubMainPhotoRepository.save(badmintonMainPhoto);
 
                 for (int i = 1; i <= 5; i++) {
-                        ClubIntroPhoto badmintonIntroPhoto = ClubIntroPhoto.builder()
-                                        .clubIntro(clubIntro1)
-                                        .clubIntroPhotoName("")
-                                        .clubIntroPhotoS3Key("")
+                        ClubInfoPhoto badmintonInfoPhoto = ClubInfoPhoto.builder()
+                                        .clubInfo(clubInfo1)
+                                        .clubInfoPhotoName("")
+                                        .clubInfoPhotoS3Key("")
                                         .order(i)
                                         .build();
-                        clubIntroPhotoRepository.save(badmintonIntroPhoto);
+                        clubInfoPhotoRepository.save(badmintonInfoPhoto);
                 }
 
                 Leader leader2 = Leader.builder()
@@ -315,14 +315,14 @@ public class DummyData {
                                 .build();
                 leaderRepository.save(leader2);
 
-                ClubIntro clubIntro2 = ClubIntro.builder()
+                ClubInfo clubInfo2 = ClubInfo.builder()
                                 .club(volunteerClub)
-                                .clubIntro("봉사동아리입니다.")
+                                .clubInfo("봉사동아리입니다.")
                                 .clubRecruitment("봉사 모집글입니다.")
                                 .googleFormUrl("volunteerClub_google_url")
                                 .recruitmentStatus(RecruitmentStatus.CLOSE)
                                 .build();
-                clubIntroRepository.save(clubIntro2);
+                clubInfoRepository.save(clubInfo2);
 
                 ClubMainPhoto volunteerMainPhoto = ClubMainPhoto.builder()
                                 .club(volunteerClub)
@@ -332,23 +332,23 @@ public class DummyData {
                 clubMainPhotoRepository.save(volunteerMainPhoto);
 
                 for (int i = 1; i <= 5; i++) {
-                        ClubIntroPhoto volunteerIntroPhoto = ClubIntroPhoto.builder()
-                                        .clubIntro(clubIntro2)
-                                        .clubIntroPhotoName("")
-                                        .clubIntroPhotoS3Key("")
+                        ClubInfoPhoto volunteerInfoPhoto = ClubInfoPhoto.builder()
+                                        .clubInfo(clubInfo2)
+                                        .clubInfoPhotoName("")
+                                        .clubInfoPhotoS3Key("")
                                         .order(i)
                                         .build();
-                        clubIntroPhotoRepository.save(volunteerIntroPhoto);
+                        clubInfoPhotoRepository.save(volunteerInfoPhoto);
                 }
 
                 for (int i = 1; i <= 5; i++) {
-                        ClubIntroPhoto clubIntroPhoto = ClubIntroPhoto.builder()
-                                        .clubIntro(clubIntro)
-                                        .clubIntroPhotoName("")
-                                        .clubIntroPhotoS3Key("")
+                        ClubInfoPhoto clubInfoPhoto = ClubInfoPhoto.builder()
+                                        .clubInfo(clubInfo)
+                                        .clubInfoPhotoName("")
+                                        .clubInfoPhotoS3Key("")
                                         .order(i)
                                         .build();
-                        clubIntroPhotoRepository.save(clubIntroPhoto);
+                        clubInfoPhotoRepository.save(clubInfoPhoto);
                 }
 
                 // FLAG 동아리 지원자
@@ -523,14 +523,14 @@ public class DummyData {
                                 .build();
                 leaderRepository.save(allaboutLeader);
 
-                ClubIntro allaboutIntro = ClubIntro.builder()
+                ClubInfo allaboutInfo = ClubInfo.builder()
                                 .club(allaboutClub)
-                                .clubIntro("올어바웃 동아리입니다.")
+                                .clubInfo("올어바웃 동아리입니다.")
                                 .clubRecruitment("올어바웃 모집글입니다.")
                                 .googleFormUrl("allaboutClub_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(allaboutIntro);
+                clubInfoRepository.save(allaboutInfo);
 
                 ClubMembers clubMembers = ClubMembers.builder()
                                 .club(allaboutClub)
@@ -603,14 +603,14 @@ public class DummyData {
 
                 clubMembersRepository.save(clubMembers);
 
-                ClubIntro gullisaeIntro = ClubIntro.builder()
+                ClubInfo gullisaeInfo = ClubInfo.builder()
                                 .club(gullisaeClub)
-                                .clubIntro("굴리세 동아리입니다.")
+                                .clubInfo("굴리세 동아리입니다.")
                                 .clubRecruitment("굴리세 모집글입니다.")
                                 .googleFormUrl("gullisaeClub_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(gullisaeIntro);
+                clubInfoRepository.save(gullisaeInfo);
 
                 Aplict aplict = Aplict.builder()
                                 .profile(profile)
@@ -635,14 +635,14 @@ public class DummyData {
 
                 clubRepository.save(tennisclub);
 
-                ClubIntro tennisIntro = ClubIntro.builder()
+                ClubInfo tennisInfo = ClubInfo.builder()
                                 .club(tennisclub)
-                                .clubIntro("테니스 동아리입니다.")
+                                .clubInfo("테니스 동아리입니다.")
                                 .clubRecruitment("테니스 모집글입니다.")
                                 .googleFormUrl("tennisClub_google_url")
                                 .recruitmentStatus(RecruitmentStatus.CLOSE)
                                 .build();
-                clubIntroRepository.save(tennisIntro);
+                clubInfoRepository.save(tennisInfo);
 
                 Leader tennisLeader = Leader.builder()
                                 .leaderAccount("tennisClub")
@@ -664,14 +664,14 @@ public class DummyData {
 
                 clubRepository.save(basketballClub);
 
-                ClubIntro basketballIntro = ClubIntro.builder()
+                ClubInfo basketballInfo = ClubInfo.builder()
                                 .club(basketballClub)
-                                .clubIntro("농구 동아리입니다.")
+                                .clubInfo("농구 동아리입니다.")
                                 .clubRecruitment("농구 모집글입니다.")
                                 .googleFormUrl("basketball_google_url")
                                 .recruitmentStatus(RecruitmentStatus.CLOSE)
                                 .build();
-                clubIntroRepository.save(basketballIntro);
+                clubInfoRepository.save(basketballInfo);
 
                 Leader basketballLeader = Leader.builder()
                                 .leaderAccount("basketballClub")
@@ -693,14 +693,14 @@ public class DummyData {
 
                 clubRepository.save(argClub);
 
-                ClubIntro argIntro = ClubIntro.builder()
+                ClubInfo argInfo = ClubInfo.builder()
                                 .club(argClub)
-                                .clubIntro("토론 동아리입니다.")
+                                .clubInfo("토론 동아리입니다.")
                                 .clubRecruitment("토론 모집글입니다.")
                                 .googleFormUrl("arg_google_url")
                                 .recruitmentStatus(RecruitmentStatus.CLOSE)
                                 .build();
-                clubIntroRepository.save(argIntro);
+                clubInfoRepository.save(argInfo);
 
                 Leader argLeader = Leader.builder()
                                 .leaderAccount("argClub")
@@ -722,14 +722,14 @@ public class DummyData {
 
                 clubRepository.save(hamsterClub);
 
-                ClubIntro hamsterIntro = ClubIntro.builder()
+                ClubInfo hamsterInfo = ClubInfo.builder()
                                 .club(hamsterClub)
-                                .clubIntro("햄스터 동아리입니다.")
+                                .clubInfo("햄스터 동아리입니다.")
                                 .clubRecruitment("햄스터 모집글입니다.")
                                 .googleFormUrl("hamster_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(hamsterIntro);
+                clubInfoRepository.save(hamsterInfo);
 
                 Leader hamsterLeader = Leader.builder()
                                 .leaderAccount("hamsterClub")
@@ -751,14 +751,14 @@ public class DummyData {
 
                 clubRepository.save(sunmoonClub);
 
-                ClubIntro hsunmoonIntro = ClubIntro.builder()
+                ClubInfo sunmoonInfo = ClubInfo.builder()
                                 .club(sunmoonClub)
-                                .clubIntro("해달 동아리입니다.")
+                                .clubInfo("해달 동아리입니다.")
                                 .clubRecruitment("해달 모집글입니다.")
                                 .googleFormUrl("sunmoon_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(hsunmoonIntro);
+                clubInfoRepository.save(sunmoonInfo);
 
                 Leader sunmoonLeader = Leader.builder()
                                 .leaderAccount("sunmoonClub")
@@ -780,14 +780,14 @@ public class DummyData {
 
                 clubRepository.save(pigClub);
 
-                ClubIntro pigIntro = ClubIntro.builder()
+                ClubInfo pigInfo = ClubInfo.builder()
                                 .club(pigClub)
-                                .clubIntro("돼지 동아리입니다.")
+                                .clubInfo("돼지 동아리입니다.")
                                 .clubRecruitment("돼지 모집글입니다.")
                                 .googleFormUrl("pig_google_url")
                                 .recruitmentStatus(RecruitmentStatus.OPEN)
                                 .build();
-                clubIntroRepository.save(pigIntro);
+                clubInfoRepository.save(pigInfo);
 
                 Leader pigLeader = Leader.builder()
                                 .leaderAccount("pigClub")
@@ -809,14 +809,14 @@ public class DummyData {
 
                 clubRepository.save(catClub);
 
-                ClubIntro catIntro = ClubIntro.builder()
+                ClubInfo catInfo = ClubInfo.builder()
                                 .club(catClub)
-                                .clubIntro("고양이 동아리입니다.")
+                                .clubInfo("고양이 동아리입니다.")
                                 .clubRecruitment("고양이 모집글입니다.")
                                 .googleFormUrl("cat_google_url")
                                 .recruitmentStatus(RecruitmentStatus.CLOSE)
                                 .build();
-                clubIntroRepository.save(catIntro);
+                clubInfoRepository.save(catInfo);
 
                 Leader catLeader = Leader.builder()
                                 .leaderAccount("catClub")

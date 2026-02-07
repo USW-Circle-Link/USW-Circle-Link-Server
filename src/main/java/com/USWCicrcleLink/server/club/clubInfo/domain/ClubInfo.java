@@ -1,4 +1,4 @@
-package com.USWCicrcleLink.server.club.clubIntro.domain;
+package com.USWCicrcleLink.server.club.clubInfo.domain;
 
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "CLUB_INTRO_TABLE")
-public class ClubIntro {
+@Table(name = "CLUB_INFO_TABLE")
+public class ClubInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "club_intro_id")
-    private Long clubIntroId;
+    @Column(name = "club_info_id")
+    private Long clubInfoId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
-    @Column(name = "club_intro", length = 3000)
-    private String clubIntro;
+    @Column(name = "club_info", length = 3000)
+    private String clubInfo;
 
     @Column(name = "club_recruitment", length = 3000)
     private String clubRecruitment;
@@ -35,11 +35,11 @@ public class ClubIntro {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "club_intro_recruitment_status", nullable = false)
+    @Column(name = "club_info_recruitment_status", nullable = false)
     private RecruitmentStatus recruitmentStatus = RecruitmentStatus.CLOSE;
 
-    public void updateClubIntro(String clubIntro, String clubRecruitment, String googleFormUrl) {
-        this.clubIntro = clubIntro;
+    public void updateClubInfo(String clubInfo, String clubRecruitment, String googleFormUrl) {
+        this.clubInfo = clubInfo;
         this.clubRecruitment = clubRecruitment;
         this.googleFormUrl = googleFormUrl;
     }

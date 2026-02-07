@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import jakarta.persistence.EntityNotFoundException;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,10 +34,10 @@ public class GlobalExceptionHandler {
      * 공통 ErrorResponse 생성 메서드
      */
     private ErrorResponse buildErrorResponse(String exception,
-                                             String code,
-                                             String message,
-                                             HttpStatus status,
-                                             Object additionalData) {
+            String code,
+            String message,
+            HttpStatus status,
+            Object additionalData) {
 
         return ErrorResponse.builder()
                 .exception(exception)
@@ -78,8 +79,7 @@ public class GlobalExceptionHandler {
                 "NO_CATCH_ERROR",
                 e.getMessage(),
                 status,
-                null
-        );
+                null);
 
         logByHttpStatus(status, e.getMessage(), e, request);
         return new ResponseEntity<>(errorResponse, status);
@@ -101,18 +101,18 @@ public class GlobalExceptionHandler {
                 exceptionType.getCode(),
                 exceptionType.getMessage(),
                 status,
-                e.getAdditionalData()
-        );
+                e.getAdditionalData());
 
         return new ResponseEntity<>(errorResponse, status);
     }
 
     /**
      * @Valid 검증 실패 (예: @NotBlank) 처리 - 400 에러
-     * "어떤 필드가 누락되었는지" 친절하게 알려줌
+     *        "어떤 필드가 누락되었는지" 친절하게 알려줌
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
         Map<String, String> fieldErrors = new HashMap<>();
         StringBuilder errorMessageBuilder = new StringBuilder("다음 필수 항목을 확인해 주세요: ");
 
@@ -131,8 +131,7 @@ public class GlobalExceptionHandler {
                 "INVALID_ARGUMENT",
                 errorMessageBuilder.toString().trim(), // "다음 필수 항목을 확인해 주세요: [email] [password]"
                 status,
-                fieldErrors
-        );
+                fieldErrors);
 
         return new ResponseEntity<>(errorResponse, status);
     }
@@ -141,7 +140,8 @@ public class GlobalExceptionHandler {
      * 필수 쿼리 파라미터 누락 (예: ?uuid=... 안 보냈을 때)
      */
     @ExceptionHandler(org.springframework.web.bind.MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleMissingParams(org.springframework.web.bind.MissingServletRequestParameterException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMissingParams(
+            org.springframework.web.bind.MissingServletRequestParameterException ex, HttpServletRequest request) {
         String parameterName = ex.getParameterName();
         String message = String.format("필수 파라미터가 누락되었습니다. '%s' 값을 넣어주세요.", parameterName);
 
@@ -153,8 +153,7 @@ public class GlobalExceptionHandler {
                 "MISSING_PARAMETER",
                 message,
                 status,
-                null
-        );
+                null);
 
         return new ResponseEntity<>(errorResponse, status);
     }
@@ -163,7 +162,8 @@ public class GlobalExceptionHandler {
      * 필수 헤더 누락 (예: Authorization 헤더 등)
      */
     @ExceptionHandler(org.springframework.web.bind.MissingRequestHeaderException.class)
-    public ResponseEntity<ErrorResponse> handleMissingHeaders(org.springframework.web.bind.MissingRequestHeaderException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMissingHeaders(
+            org.springframework.web.bind.MissingRequestHeaderException ex, HttpServletRequest request) {
         String headerName = ex.getHeaderName();
         String message = String.format("필수 헤더가 누락되었습니다. '%s' 헤더를 포함해서 보내주세요.", headerName);
 
@@ -175,10 +175,30 @@ public class GlobalExceptionHandler {
                 "MISSING_HEADER",
                 message,
                 status,
-                null
-        );
+                null);
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    /**
+     * 파일 업로드 용량 초과 핸들링
+     * (spring.servlet.multipart.max-file-size 등 설정값 초과 시 발생)
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex,
+            HttpServletRequest request) {
+        String message = "파일 용량이 너무 큽니다. (최대 20MB)";
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        logByHttpStatus(status, message, ex, request);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                ex.getClass().getSimpleName(),
+                "FILE_SIZE_EXCEEDED",
+                message,
+                status,
+                null);
 
         return new ResponseEntity<>(errorResponse, status);
     }
 }
-

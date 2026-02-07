@@ -97,9 +97,9 @@ public enum ExceptionType {
         DUPLICATE_CATEGORY("CTG-203", "이미 있는 카테고리입니다.", CONFLICT),
 
         /**
-         * Domain: ClubIntro
+         * Domain: ClubInfo
          */
-        CLUB_INTRO_NOT_EXISTS("CINT-201", "동아리 소개글을 찾을 수 없습니다.", NOT_FOUND),
+        CLUB_INFO_NOT_EXISTS("CINT-201", "동아리 소개글을 찾을 수 없습니다.", NOT_FOUND),
         GOOGLE_FORM_URL_NOT_EXISTS("CINT-202", "등록된 구글 폼 링크가 없습니다.", BAD_REQUEST),
         INVALID_RECRUITMENT_STATUS("CINT-303", "모집 상태 설정이 올바르지 않습니다.", BAD_REQUEST),
 
@@ -133,7 +133,7 @@ public enum ExceptionType {
         PROFILE_CREATION_FAILED("PFL-210", "프로필 생성에 실패했습니다.", INTERNAL_SERVER_ERROR),
 
         /**
-         * Domain: ClubIntroPhoto, Club(MainPhoto)
+         * Domain: ClubInfoPhoto, Club(MainPhoto)
          */
         PHOTO_ORDER_MISS_MATCH("CLP-201", "사진 순서가 올바르지 않습니다.", BAD_REQUEST),
         CLUB_ID_NOT_EXISTS("CLP-202", "동아리 정보가 없습니다.", INTERNAL_SERVER_ERROR),

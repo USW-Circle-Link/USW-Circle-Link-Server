@@ -4,7 +4,7 @@ spring:
     import:
       - classpath:/yaml/application-prod.yml
       - classpath:/yaml/application-local.yml
-      - classpath:/yaml/application-secret.yml
+      - optional:classpath:/yaml/application-secret.yml
       - classpath:/yaml/application-file.yml
       - classpath:/yaml/application-test.yml
       - classpath:/yaml/application-security.yml

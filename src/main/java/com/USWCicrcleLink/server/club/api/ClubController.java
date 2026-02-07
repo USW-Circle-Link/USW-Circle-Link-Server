@@ -204,18 +204,20 @@ public class ClubController {
         return ResponseEntity.ok(response);
     }
 
-    // 동아리 소개 조회 (Leader)
-    @GetMapping("/{clubUUID}/intro")
-    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.LeaderClubIntroResponse>> getClubIntro(
+    // 동아리 소개 조회 (Leader) -> getClubInfo (was getClubIntro)
+    @GetMapping("/{clubUUID}/leader/info")
+    public ResponseEntity<ApiResponse<LeaderClubInfoResponse>> getClubInfo(
             @PathVariable("clubUUID") UUID clubUUID) {
         return new ResponseEntity<>(clubLeaderService.getClubInfo(clubUUID), HttpStatus.OK);
     }
 
-    // 동아리 소개 변경
-    @PutMapping("/{clubUUID}/intro")
-    public ResponseEntity<ApiResponse> updateClubIntro(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestPart(value = "clubIntroRequest", required = false) @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.club.ClubIntroRequest clubIntroRequest,
-            @RequestPart(value = "introPhotos", required = false) List<MultipartFile> introPhotos) throws IOException {
+    // 동아리 소개 변경 -> updateClubInfo (was updateClubIntro)
+    @PutMapping("/{clubUUID}/leader/info")
+    public ResponseEntity<ApiResponse> updateClubInfo(@PathVariable("clubUUID") UUID clubUUID,
+            @RequestPart(value = "clubInfoRequest", required = false) @jakarta.validation.Valid ClubInfoRequest clubInfoRequest,
+            @RequestPart(value = "infoPhotos", required = false) List<MultipartFile> infoPhotos) throws IOException { // introPhotos
+                                                                                                                      // ->
+                                                                                                                      // infoPhotos
 
         return new ResponseEntity<>(clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, infoPhotos),
                 HttpStatus.OK);

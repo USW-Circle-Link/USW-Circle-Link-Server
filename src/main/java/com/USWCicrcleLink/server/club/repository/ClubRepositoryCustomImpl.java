@@ -112,7 +112,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
         @Override
         public List<Long> searchClubIds(ClubSearchCondition condition) {
                 StringBuilder jpql = new StringBuilder("SELECT DISTINCT c.clubId FROM Club c ");
-                jpql.append("LEFT JOIN ClubIntro ci ON ci.club.clubId = c.clubId ");
+                jpql.append("LEFT JOIN ClubInfo ci ON ci.club.clubId = c.clubId ");
                 jpql.append("LEFT JOIN ClubHashtag ch ON ch.club.clubId = c.clubId ");
                 jpql.append("LEFT JOIN ClubCategoryMapping ccm ON ccm.club.clubId = c.clubId ");
                 jpql.append("LEFT JOIN ClubCategory cc ON cc.clubCategoryId = ccm.clubCategory.clubCategoryId ");

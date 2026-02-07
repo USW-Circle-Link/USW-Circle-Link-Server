@@ -10,10 +10,10 @@ import com.USWCicrcleLink.server.club.domain.ClubMainPhoto;
 import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
 import com.USWCicrcleLink.server.club.repository.ClubMainPhotoRepository;
 import com.USWCicrcleLink.server.club.repository.ClubRepository;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfo;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfoPhoto;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoPhotoRepository;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import com.USWCicrcleLink.server.club.leader.domain.Leader;
 import com.USWCicrcleLink.server.club.leader.repository.LeaderRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
@@ -44,9 +44,9 @@ public class AdminClubService {
 
     private final LeaderRepository leaderRepository;
     private final ClubRepository clubRepository;
-    private final ClubIntroRepository clubIntroRepository;
+    private final ClubInfoRepository clubInfoRepository;
     private final ClubMainPhotoRepository clubMainPhotoRepository;
-    private final ClubIntroPhotoRepository clubIntroPhotoRepository;
+    private final ClubInfoPhotoRepository clubInfoPhotoRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -119,8 +119,8 @@ public class AdminClubService {
     // 동아리 생성 - 기본 동아리 데이터 생성
     private void createClubDefaultData(Club club) {
         createClubMainPhoto(club);
-        ClubIntro clubIntro = createClubIntro(club);
-        createClubIntroPhotos(clubIntro);
+        ClubInfo clubInfo = createClubInfo(club);
+        createClubInfoPhotos(clubInfo);
     }
 
     private void createClubMainPhoto(Club club) {
@@ -132,30 +132,31 @@ public class AdminClubService {
                         .build());
     }
 
-    private ClubIntro createClubIntro(Club club) {
-        return clubIntroRepository.save(
-                ClubIntro.builder()
+    private ClubInfo createClubInfo(Club club) {
+        return clubInfoRepository.save(
+                ClubInfo.builder()
                         .club(club)
-                        .clubIntro("")
+                        .clubInfo("")
+                        .clubRecruitment("")
                         .googleFormUrl("")
                         .recruitmentStatus(RecruitmentStatus.CLOSE)
                         .build());
     }
 
-    private void createClubIntroPhotos(ClubIntro clubIntro) {
-        List<ClubIntroPhoto> introPhotos = new ArrayList<>();
+    private void createClubInfoPhotos(ClubInfo clubInfo) {
+        List<ClubInfoPhoto> infoPhotos = new ArrayList<>();
 
         for (int i = 1; i <= 5; i++) {
-            introPhotos.add(ClubIntroPhoto.builder()
-                    .clubIntro(clubIntro)
-                    .clubIntroPhotoName("")
-                    .clubIntroPhotoS3Key("")
+            infoPhotos.add(ClubInfoPhoto.builder()
+                    .clubInfo(clubInfo)
+                    .clubInfoPhotoName("")
+                    .clubInfoPhotoS3Key("")
                     .order(i)
                     .build());
         }
 
-        clubIntroPhotoRepository.saveAll(introPhotos);
-        log.debug("기본 동아리 소개 사진 5개 생성 완료 - Club ID: {}", clubIntro.getClub().getClubId());
+        clubInfoPhotoRepository.saveAll(infoPhotos);
+        log.debug("기본 동아리 소개 사진 5개 생성 완료 - Club ID: {}", clubInfo.getClub().getClubId());
     }
 
     // 동아리 생성 - 동아리 회장 아이디 중복 확인

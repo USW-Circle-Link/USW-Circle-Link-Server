@@ -11,15 +11,15 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminClubIntroResponse {
+public class AdminClubInfoResponse {
     private UUID clubUUID;
     private String mainPhoto;
-    private List<String> introPhotos;
+    private List<String> infoPhotos;
     private String clubName;
     private String leaderName;
     private String leaderHp;
     private String clubInsta;
-    private String clubIntro;
+    private String clubInfo;
     private RecruitmentStatus recruitmentStatus;
     private String googleFormUrl;
     private List<String> clubHashtags;

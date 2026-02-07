@@ -1,7 +1,7 @@
 package com.USWCicrcleLink.server.club.api;
 
 import com.USWCicrcleLink.server.admin.dto.AdminClubCreationRequest;
-import com.USWCicrcleLink.server.admin.dto.AdminClubIntroResponse;
+import com.USWCicrcleLink.server.admin.dto.AdminClubInfoResponse;
 
 import com.USWCicrcleLink.server.admin.dto.AdminPwRequest;
 import com.USWCicrcleLink.server.admin.service.AdminClubService;
@@ -12,7 +12,9 @@ import com.USWCicrcleLink.server.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.service.ClubService;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoRequest;
-import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoResponse;
+import com.USWCicrcleLink.server.club.leader.dto.club.ClubProfileRequest;
+import com.USWCicrcleLink.server.club.leader.dto.club.ClubProfileResponse;
+import com.USWCicrcleLink.server.club.leader.dto.club.LeaderClubInfoResponse;
 import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersResponse;
 import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersDeleteRequest;
 import com.USWCicrcleLink.server.club.leader.service.ClubLeaderService;
@@ -81,12 +83,12 @@ public class ClubController {
         return ResponseEntity.ok(new ApiResponse<>("카테고리별 모집 중인 동아리 조회 완료", clubs));
     }
 
-    // 동아리 상세 조회 (소개글 - Public)
+    // 동아리 상세 조회 (소개글 - Public) -> getClubInfo (was getClubIntro)
     @GetMapping("/{clubUUID}")
-    public ResponseEntity<ApiResponse<AdminClubIntroResponse>> getClubIntroByClubId(
+    public ResponseEntity<ApiResponse<AdminClubInfoResponse>> getClubInfoByClubId(
             @PathVariable("clubUUID") UUID clubUUID) {
-        AdminClubIntroResponse clubIntroResponse = clubService.getClubIntro(clubUUID);
-        return ResponseEntity.ok(new ApiResponse<>("동아리 소개글 조회 성공", clubIntroResponse));
+        AdminClubInfoResponse clubInfoResponse = clubService.getClubInfo(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 소개글 조회 성공", clubInfoResponse));
     }
 
     // --- Admin Endpoints ---
@@ -103,9 +105,6 @@ public class ClubController {
     @DeleteMapping("/{clubUUID}")
     public ResponseEntity<ApiResponse<Long>> deleteClub(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody(required = false) @Validated(ValidationSequence.class) AdminPwRequest request) {
-        // AdminPwRequest checks might be specific to implementation.
-        // If request is null, it might be an issue if service requires it.
-        // Assuming Admin context validation.
         adminClubService.deleteClub(clubUUID, request);
         return ResponseEntity.ok(new ApiResponse<>("동아리 삭제 성공"));
     }
@@ -135,30 +134,29 @@ public class ClubController {
         return ResponseEntity.ok(new ApiResponse<>("약관 동의 완료"));
     }
 
-    // 동아리 관리 정보 조회 (Leader)
-    @GetMapping("/{clubUUID}/info")
-    public ResponseEntity<ApiResponse<ClubInfoResponse>> getClubInfo(@PathVariable("clubUUID") UUID clubUUID) {
-        ApiResponse<ClubInfoResponse> clubInfo = clubLeaderService.getClubInfo(clubUUID);
-        return ResponseEntity.ok(clubInfo);
+    // 동아리 관리 정보 조회 (Leader) -> getClubProfile (was getClubInfo)
+    @GetMapping("/{clubUUID}/profile")
+    public ResponseEntity<ApiResponse<ClubProfileResponse>> getClubProfile(@PathVariable("clubUUID") UUID clubUUID) {
+        ApiResponse<ClubProfileResponse> clubProfile = clubLeaderService.getClubProfile(clubUUID);
+        return ResponseEntity.ok(clubProfile);
     }
 
-    // 동아리 관리 정보 수정 (Leader)
+    // 동아리 관리 정보 수정 (Leader) -> updateClubProfile (was updateClubInfo)
     @PutMapping("/{clubUUID}")
-    public ResponseEntity<ApiResponse> updateClubInfo(
+    public ResponseEntity<ApiResponse> updateClubProfile(
             @PathVariable("clubUUID") UUID clubUUID,
             @RequestPart(value = "mainPhoto", required = false) MultipartFile mainPhoto,
-            @RequestPart(value = "clubInfoRequest", required = false) @Validated(ValidationSequence.class) ClubInfoRequest clubInfoRequest,
+            @RequestPart(value = "clubProfileRequest", required = false) @Validated(ValidationSequence.class) ClubProfileRequest clubProfileRequest,
             @RequestPart(value = "leaderUpdatePwRequest", required = false) @Validated(ValidationSequence.class) com.USWCicrcleLink.server.club.leader.dto.LeaderUpdatePwRequest leaderUpdatePwRequest,
             HttpServletResponse response) throws IOException {
 
-        ApiResponse result = clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, mainPhoto);
+        ApiResponse result = clubLeaderService.updateClubProfile(clubUUID, clubProfileRequest, mainPhoto);
         if (leaderUpdatePwRequest != null) {
             clubLeaderService.updatePassword(leaderUpdatePwRequest, response);
         }
         return ResponseEntity.ok(result);
     }
 
-    // 모집 상태 조회
     // 모집 상태 조회
     @GetMapping("/{clubUUID}/recruit-status")
     public ResponseEntity<ApiResponse> getRecruitmentStatus(@PathVariable("clubUUID") UUID clubUUID) {
@@ -222,27 +220,29 @@ public class ClubController {
     @GetMapping("/{clubUUID}/leader/summary")
     public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse>> getClubSummary(
             @PathVariable("clubUUID") UUID clubUUID) {
-        com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse clubIntroWebResponse = clubLeaderService
+        com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse clubSummaryResponse = clubLeaderService
                 .getClubSummary(clubUUID);
         ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.ClubSummaryResponse> response = new ApiResponse<>(
-                "동아리 요약 조회 완료", clubIntroWebResponse);
+                "동아리 요약 조회 완료", clubSummaryResponse);
         return ResponseEntity.ok(response);
     }
 
-    // 동아리 소개 조회 (Leader)
-    @GetMapping("/{clubUUID}/leader/intro")
-    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.leader.dto.club.LeaderClubIntroResponse>> getClubIntro(
+    // 동아리 소개 조회 (Leader) -> getClubInfo (was getClubIntro)
+    @GetMapping("/{clubUUID}/leader/info")
+    public ResponseEntity<ApiResponse<LeaderClubInfoResponse>> getClubInfo(
             @PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.getClubIntro(clubUUID), HttpStatus.OK);
+        return new ResponseEntity<>(clubLeaderService.getClubInfo(clubUUID), HttpStatus.OK);
     }
 
-    // 동아리 소개 변경
-    @PutMapping("/{clubUUID}/leader/intro")
-    public ResponseEntity<ApiResponse> updateClubIntro(@PathVariable("clubUUID") UUID clubUUID,
-            @RequestPart(value = "clubIntroRequest", required = false) @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.club.ClubIntroRequest clubIntroRequest,
-            @RequestPart(value = "introPhotos", required = false) List<MultipartFile> introPhotos) throws IOException {
+    // 동아리 소개 변경 -> updateClubInfo (was updateClubIntro)
+    @PutMapping("/{clubUUID}/leader/info")
+    public ResponseEntity<ApiResponse> updateClubInfo(@PathVariable("clubUUID") UUID clubUUID,
+            @RequestPart(value = "clubInfoRequest", required = false) @jakarta.validation.Valid ClubInfoRequest clubInfoRequest,
+            @RequestPart(value = "infoPhotos", required = false) List<MultipartFile> infoPhotos) throws IOException { // introPhotos
+                                                                                                                      // ->
+                                                                                                                      // infoPhotos
 
-        return new ResponseEntity<>(clubLeaderService.updateClubIntro(clubUUID, clubIntroRequest, introPhotos),
+        return new ResponseEntity<>(clubLeaderService.updateClubInfo(clubUUID, clubInfoRequest, infoPhotos),
                 HttpStatus.OK);
     }
 

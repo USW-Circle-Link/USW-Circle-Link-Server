@@ -2,7 +2,7 @@ package com.USWCicrcleLink.server.club.leader.dto.club;
 
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,18 +29,18 @@ public class ClubSummaryResponse {
     // club
     private List<String> clubCategories;
 
-    // clubIntro
-    private String clubIntro;
+    // clubInfo (was ClubIntro)
+    private String clubInfo;
     private String clubRecruitment;
     private RecruitmentStatus recruitmentStatus;
     private String googleFormUrl;
 
     // photo
     private String mainPhoto;
-    private List<String> introPhotos;
+    private List<String> infoPhotos; // Renamed from introPhotos
 
     public ClubSummaryResponse(Club club, List<String> clubHashtag, List<String> clubCategories,
-            ClubIntro clubIntro, String mainPhotoUrl, List<String> introPhotoUrls) {
+            ClubInfo clubInfo, String mainPhotoUrl, List<String> infoPhotoUrls) {
         // club
         this.clubuuid = club.getClubuuid();
         this.clubName = club.getClubName();
@@ -52,13 +52,13 @@ public class ClubSummaryResponse {
         this.clubHashtag = clubHashtag;
         // clubCategories
         this.clubCategories = clubCategories;
-        // clubIntro
-        this.clubIntro = clubIntro.getClubIntro();
-        this.clubRecruitment = clubIntro.getClubRecruitment();
-        this.recruitmentStatus = clubIntro.getRecruitmentStatus();
-        this.googleFormUrl = clubIntro.getGoogleFormUrl();
+        // clubInfo
+        this.clubInfo = clubInfo.getClubInfo();
+        this.clubRecruitment = clubInfo.getClubRecruitment();
+        this.recruitmentStatus = clubInfo.getRecruitmentStatus();
+        this.googleFormUrl = clubInfo.getGoogleFormUrl();
         // photo
         this.mainPhoto = mainPhotoUrl;
-        this.introPhotos = introPhotoUrls;
+        this.infoPhotos = infoPhotoUrls;
     }
 }

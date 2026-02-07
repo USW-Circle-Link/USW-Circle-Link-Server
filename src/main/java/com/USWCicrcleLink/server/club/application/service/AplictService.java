@@ -8,8 +8,7 @@ import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.club.repository.ClubMembersRepository;
 import com.USWCicrcleLink.server.club.repository.ClubRepository;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
+
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.AplictException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
@@ -38,12 +37,11 @@ public class AplictService {
     private final AplictRepository aplictRepository;
     private final ClubRepository clubRepository;
     private final ProfileRepository profileRepository;
-    private final ClubIntroRepository clubIntroRepository;
+
     private final ClubMembersRepository clubMembersRepository;
     private final com.USWCicrcleLink.server.club.form.repository.FormQuestionRepository formQuestionRepository;
-    private final com.USWCicrcleLink.server.club.application.repository.AplictAnswerRepository aplictAnswerRepository;
-    private final com.USWCicrcleLink.server.club.form.repository.FormQuestionOptionRepository formQuestionOptionRepository; // Corrected
-                                                                                                                            // import
+
+    private final com.USWCicrcleLink.server.club.form.repository.FormQuestionOptionRepository formQuestionOptionRepository;
 
     /**
      * 동아리 지원 가능 여부 확인 (ANYONE)
@@ -121,53 +119,8 @@ public class AplictService {
 
         // 권한 확인: 본인 또는 해당 동아리 회장
         boolean isOwner = aplict.getProfile().getProfileId().equals(profile.getProfileId());
-        boolean isLeader = clubMembersRepository.existsByProfileAndClubuuid(profile, aplict.getClub().getClubuuid()); // This
-                                                                                                                      // check
-                                                                                                                      // might
-                                                                                                                      // be
-                                                                                                                      // insufficient
-                                                                                                                      // for
-                                                                                                                      // Leader
-                                                                                                                      // role
-                                                                                                                      // check.
-                                                                                                                      // Using
-                                                                                                                      // simplified
-                                                                                                                      // logic
-                                                                                                                      // for
-                                                                                                                      // now
-                                                                                                                      // as
-                                                                                                                      // per
-                                                                                                                      // previous
-                                                                                                                      // service
-                                                                                                                      // patterns
-                                                                                                                      // or
-                                                                                                                      // assume
-                                                                                                                      // Leader
-                                                                                                                      // check
-                                                                                                                      // happens
-                                                                                                                      // elsewhere.
-        // Better Leader check:
-        // boolean isLeader = leaderRepository.existsByClub_ClubIdAndLeaderId(...);
-        // But for "User also seeing their application", isOwner is enough.
-        // For Leader seeing application, we usually access via Leader Service.
-        // Let's assume this method is primarily for the User to see THEIR application,
-        // OR for a generic view if we add Leader check.
-        // Wait, the requirement says "User also can see". Leader sees via LeaderService
-        // usually.
-        // Let's implement strict check.
 
         if (!isOwner) {
-            // For Leader access, we might need a separate check or different service
-            // method.
-            // But if this is a shared endpoint, we need to check if 'profile' is the leader
-            // of 'aplict.club'.
-            // Checking if profile corresponds to a Leader entity for this club.
-            // This can be complex without LeaderRepository here.
-            // Let's stick to "User can see their own". Leader has separate endpoint in
-            // ClubLeaderController usually.
-            // If Leader uses this, we need to allow it.
-
-            // Simplest: Check if User UUID matches Aplict Profile User UUID.
             if (!aplict.getProfile().getUser().getUserUUID().equals(profile.getUser().getUserUUID())) {
                 throw new AplictException(ExceptionType.APLICT_ACCESS_DENIED);
             }
@@ -205,7 +158,6 @@ public class AplictService {
                 .aplictStatus(AplictStatus.WAIT)
                 .build();
 
-        // 답변 저장
         // 답변 저장
         if (request.getAnswers() != null) {
             for (AplictDto.AnswerRequest ansReq : request.getAnswers()) {

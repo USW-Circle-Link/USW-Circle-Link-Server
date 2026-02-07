@@ -1,6 +1,6 @@
 package com.USWCicrcleLink.server.club.service;
 
-import com.USWCicrcleLink.server.admin.dto.AdminClubIntroResponse;
+import com.USWCicrcleLink.server.admin.dto.AdminClubInfoResponse;
 import com.USWCicrcleLink.server.category.mapper.ClubCategoryMapper;
 import com.USWCicrcleLink.server.club.domain.Club;
 import com.USWCicrcleLink.server.category.domain.ClubCategory;
@@ -15,10 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
 import com.USWCicrcleLink.server.category.repository.ClubCategoryMappingRepository;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntro;
-import com.USWCicrcleLink.server.club.clubIntro.domain.ClubIntroPhoto;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroPhotoRepository;
-import com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfo;
+import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfoPhoto;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoPhotoRepository;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
@@ -42,9 +42,9 @@ public class ClubService {
         private final ClubMainPhotoRepository clubMainPhotoRepository;
         private final ClubHashtagRepository clubHashtagRepository;
         private final S3FileUploadService s3FileUploadService;
-        private final ClubIntroRepository clubIntroRepository;
+        private final ClubInfoRepository clubInfoRepository;
         private final ClubRepository clubRepository;
-        private final ClubIntroPhotoRepository clubIntroPhotoRepository;
+        private final ClubInfoPhotoRepository clubInfoPhotoRepository;
         private final ClubMembersRepository clubMembersRepository;
 
         // 동아리 검색 (필터링, 조건부 필드 포함)
@@ -126,25 +126,25 @@ public class ClubService {
 
         // 동아리 소개/모집글 페이지 조회 (웹 - 운영팀, 모바일)
         @Transactional(readOnly = true)
-        public AdminClubIntroResponse getClubIntro(UUID clubUUID) {
+        public AdminClubInfoResponse getClubInfo(UUID clubUUID) {
                 Club club = clubRepository.findByClubuuid(clubUUID)
                                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
 
                 Long clubId = club.getClubId();
 
-                ClubIntro clubIntro = clubIntroRepository.findByClubClubId(clubId)
-                                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INTRO_NOT_EXISTS));
+                ClubInfo clubInfo = clubInfoRepository.findByClubClubId(clubId)
+                                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INFO_NOT_EXISTS));
 
                 String mainPhotoUrl = clubMainPhotoRepository.findByClubClubId(clubId)
                                 .map(photo -> s3FileUploadService
                                                 .generatePresignedGetUrl(photo.getClubMainPhotoS3Key()))
                                 .orElse(null);
 
-                List<String> introPhotoUrls = clubIntroPhotoRepository.findByClubIntroClubId(clubId)
+                List<String> infoPhotoUrls = clubInfoPhotoRepository.findByClubInfoClubId(clubId)
                                 .stream()
-                                .sorted(Comparator.comparingInt(ClubIntroPhoto::getOrder))
+                                .sorted(Comparator.comparingInt(ClubInfoPhoto::getOrder))
                                 .map(photo -> s3FileUploadService
-                                                .generatePresignedGetUrl(photo.getClubIntroPhotoS3Key()))
+                                                .generatePresignedGetUrl(photo.getClubInfoPhotoS3Key()))
                                 .collect(Collectors.toList());
 
                 List<String> hashtags = clubHashtagRepository.findByClubClubId(clubId)
@@ -157,21 +157,21 @@ public class ClubService {
                                 .map(mapping -> mapping.getClubCategory().getClubCategoryName())
                                 .collect(Collectors.toList());
 
-                return new AdminClubIntroResponse(
+                return new AdminClubInfoResponse(
                                 club.getClubuuid(),
                                 mainPhotoUrl,
-                                introPhotoUrls,
+                                infoPhotoUrls,
                                 club.getClubName(),
                                 club.getLeaderName(),
                                 club.getLeaderHp(),
                                 club.getClubInsta(),
-                                clubIntro.getClubIntro(),
-                                clubIntro.getRecruitmentStatus(),
-                                clubIntro.getGoogleFormUrl(),
+                                clubInfo.getClubInfo(),
+                                clubInfo.getRecruitmentStatus(),
+                                clubInfo.getGoogleFormUrl(),
                                 hashtags,
                                 clubCategoryNames,
                                 club.getClubRoomNumber(),
-                                clubIntro.getClubRecruitment());
+                                clubInfo.getClubRecruitment());
         }
         // List<Long> clubIds check necessary?
         // Yes, but I'll assume caller handles emptiness or it just returns empty map.
@@ -190,7 +190,7 @@ public class ClubService {
                 if (clubIds == null || clubIds.isEmpty()) {
                         return Collections.emptyMap();
                 }
-                return clubIntroRepository.findRecruitmentStatusByClubIds(clubIds).stream()
+                return clubInfoRepository.findRecruitmentStatusByClubIds(clubIds).stream()
                                 .collect(Collectors.toMap(
                                                 result -> (Long) result[0],
                                                 result -> ((RecruitmentStatus) result[1]).name()));

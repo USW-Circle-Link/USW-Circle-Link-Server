@@ -4,6 +4,7 @@ import com.USWCicrcleLink.server.club.leader.domain.FormQuestion;
 import com.USWCicrcleLink.server.club.leader.domain.ClubForm;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
+import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +18,14 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class ClubFormService {
         private final ClubFormRepository clubFormRepository;
-        private final com.USWCicrcleLink.server.club.clubIntro.repository.ClubIntroRepository clubIntroRepository;
+        private final ClubInfoRepository clubInfoRepository;
 
         public ClubFormResponse getQuestionsByClub(UUID clubUUID) {
                 // 1. 모집 상태 확인
-                var clubIntro = clubIntroRepository.findByClubuuid(clubUUID)
+                var clubInfo = clubInfoRepository.findByClubuuid(clubUUID)
                                 .orElseThrow(() -> new IllegalArgumentException("동아리 소개 정보를 찾을 수 없습니다."));
 
-                if (clubIntro.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
+                if (clubInfo.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
                         throw new IllegalArgumentException("현재 모집 기간이 아닙니다.");
                 }
 

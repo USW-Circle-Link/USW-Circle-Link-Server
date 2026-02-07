@@ -68,7 +68,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubIntroPhoto cip WHERE cip.clubIntro.club.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubInfoPhoto cip WHERE cip.clubInfo.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
@@ -76,7 +76,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                em.createQuery("DELETE FROM ClubIntro ci WHERE ci.club.clubId = :clubId")
+                em.createQuery("DELETE FROM ClubInfo ci WHERE ci.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
@@ -84,8 +84,8 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
-                List<String> clubIntroPhotoKeys = em.createQuery(
-                                "SELECT cip.clubIntroPhotoS3Key FROM ClubIntroPhoto cip WHERE cip.clubIntro.club.clubId = :clubId",
+                List<String> clubInfoPhotoKeys = em.createQuery(
+                                "SELECT cip.clubInfoPhotoS3Key FROM ClubInfoPhoto cip WHERE cip.clubInfo.club.clubId = :clubId",
                                 String.class)
                                 .setParameter("clubId", clubId)
                                 .getResultList();
@@ -97,7 +97,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                                 .getResultList();
 
                 List<String> s3Keys = new ArrayList<>();
-                s3Keys.addAll(clubIntroPhotoKeys);
+                s3Keys.addAll(clubInfoPhotoKeys);
                 s3Keys.addAll(clubMainPhotoKeys);
 
                 if (!s3Keys.isEmpty()) {

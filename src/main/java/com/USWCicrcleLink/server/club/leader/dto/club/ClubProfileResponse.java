@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClubInfoResponse {
+public class ClubProfileResponse {
 
     private String mainPhotoUrl;
 
@@ -31,7 +31,9 @@ public class ClubInfoResponse {
 
     private Department department;
 
-    public ClubInfoResponse(String mainPhotoUrl, Club club, List<String> clubHashtag, List<String> clubCategoryName) {
+    // Renamed constructor to match class name
+    public ClubProfileResponse(String mainPhotoUrl, Club club, List<String> clubHashtag,
+            List<String> clubCategoryName) {
         this.mainPhotoUrl = mainPhotoUrl;
         this.clubName = club.getClubName();
         this.leaderName = club.getLeaderName();
@@ -44,5 +46,3 @@ public class ClubInfoResponse {
     }
 
 }
-
-

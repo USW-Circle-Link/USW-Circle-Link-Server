@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "CLUB_INFO_TABLE")
+@Table(name = "CLUB_INTRO_TABLE")
 public class ClubInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

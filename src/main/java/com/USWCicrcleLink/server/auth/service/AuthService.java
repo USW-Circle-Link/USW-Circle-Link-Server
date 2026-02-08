@@ -47,50 +47,71 @@ public class AuthService {
     private static final int FCM_TOKEN_CERTIFICATION_TIME = 60;
 
     /**
-     * 유저 로그인
+     * 통합 로그인 (user_table 기반 단일 인증)
      */
     @RateLimite(action = "USER_LOGIN")
-    public UnifiedLoginResponse userLogin(UnifiedLoginRequest request, HttpServletResponse response) {
-        User user = userRepository.findByUserAccount(request.getAccount()).orElse(null);
+    public UnifiedLoginResponse unifiedLogin(UnifiedLoginRequest request, HttpServletResponse response) {
+        // 1. user_table에서 계정 조회
+        User user = userRepository.findByUserAccount(request.getAccount())
+                .orElseThrow(() -> new UserException(ExceptionType.USER_AUTHENTICATION_FAILED));
 
-        // 유저 객체가 존재하는지 확인
-        if (user == null) {
-            log.warn("Login Failed: User not found with account: {}", request.getAccount()); // 로그 추가
-            throw new UserException(ExceptionType.THIRD_PARTY_LOGIN_ATTEMPT);
-        }
-
-        // 아이디 비밀번호 일치 불일치 여부 확인
-        boolean matches = passwordEncoder.matches(request.getPassword(), user.getUserPw());
-        log.info("Login Debug - Account: {}, User Found: true, Password Match: {}", request.getAccount(), matches); // 로그
-                                                                                                                    // 추가
-
-        if (!matches) {
+        // 2. 비밀번호 검증
+        if (!passwordEncoder.matches(request.getPassword(), user.getUserPw())) {
             throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
         }
 
         UUID userUUID = user.getUserUUID();
-        Profile profile = profileRepository.findByUser_UserUUID(userUUID)
-                .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
-
-        log.debug("프로필 조회 성공 - 사용자 UUID: {}, 회원 타입: {}", userUUID, profile.getMemberType());
-
-        String accessToken = jwtProvider.createAccessToken(userUUID, response);
+        String accessToken = jwtProvider.createAccessToken(userUUID, user.getRole(), response);
         String refreshToken = jwtProvider.createRefreshToken(userUUID, response);
 
-        // FCM 토큰 업데이트
-        if (request.getFcmToken() != null && !request.getFcmToken().isEmpty()) {
-            profile.updateFcmTokenTime(request.getFcmToken(),
-                    LocalDateTime.now().plusDays(FCM_TOKEN_CERTIFICATION_TIME));
-            profileRepository.save(profile);
-            log.debug("FCM 토큰 업데이트 완료: {}", user.getUserAccount());
-        }
+        // 3. Role에 따라 분기 처리
+        switch (user.getRole()) {
+            case USER:
+                Profile profile = profileRepository.findByUser_UserUUID(userUUID)
+                        .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
 
-        log.debug("User 로그인 성공, UUID: {}", userUUID);
-        return UnifiedLoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .role(Role.USER)
-                .build();
+                // FCM 토큰 업데이트
+                if (request.getFcmToken() != null && !request.getFcmToken().isEmpty()) {
+                    profile.updateFcmTokenTime(request.getFcmToken(),
+                            LocalDateTime.now().plusDays(FCM_TOKEN_CERTIFICATION_TIME));
+                    profileRepository.save(profile);
+                    log.debug("FCM 토큰 업데이트 완료: {}", user.getUserAccount());
+                }
+
+                log.debug("User 로그인 성공, UUID: {}", userUUID);
+                return UnifiedLoginResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .role(Role.USER)
+                        .build();
+
+            case LEADER:
+                // Leader 테이블에서 clubuuid 조회
+                Leader leader = leaderRepository.findByLeaderAccount(request.getAccount())
+                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+                UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leader.getLeaderUUID())
+                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+
+                log.debug("Leader 로그인 성공 - uuid: {}, 클럽 UUID: {}", userUUID, clubuuid);
+                return UnifiedLoginResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .role(Role.LEADER)
+                        .clubuuid(clubuuid)
+                        .isAgreedTerms(leader.isAgreedTerms())
+                        .build();
+
+            case ADMIN:
+                log.debug("Admin 로그인 성공 - uuid: {}", userUUID);
+                return UnifiedLoginResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .role(Role.ADMIN)
+                        .build();
+
+            default:
+                throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+        }
     }
 
     /**

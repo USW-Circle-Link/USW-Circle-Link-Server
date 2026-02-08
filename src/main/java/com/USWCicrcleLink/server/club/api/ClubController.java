@@ -13,7 +13,6 @@ import com.USWCicrcleLink.server.club.service.ClubService;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubProfileRequest;
-import com.USWCicrcleLink.server.club.leader.dto.club.ClubProfileResponse;
 import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersResponse;
 import com.USWCicrcleLink.server.club.leader.dto.clubMembers.ClubMembersDeleteRequest;
 import com.USWCicrcleLink.server.club.leader.service.ClubLeaderService;
@@ -56,8 +55,10 @@ public class ClubController {
     // 동아리 리스트 조회 (필터링 및 검색 포함)
     @GetMapping
     public ResponseEntity<ApiResponse<List<ClubListResponse>>> getClubs(
-            @ModelAttribute com.USWCicrcleLink.server.club.dto.ClubSearchCondition condition) {
-        List<ClubListResponse> clubs = clubService.searchClubs(condition);
+            @RequestParam(required = false) Boolean open,
+            @RequestParam(required = false) List<String> filter,
+            @RequestParam(required = false) Boolean adminInfo) {
+        List<ClubListResponse> clubs = clubService.searchClubs(open, filter, adminInfo);
         return ResponseEntity.ok(new ApiResponse<>("동아리 리스트 조회 성공", clubs));
     }
 

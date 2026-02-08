@@ -7,6 +7,7 @@ import com.USWCicrcleLink.server.global.exception.errortype.UserException;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import com.USWCicrcleLink.server.global.security.details.service.UserDetailsServiceManager;
+import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import com.USWCicrcleLink.server.global.security.jwt.domain.TokenValidationResult;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -68,9 +69,23 @@ public class JwtProvider {
     /**
      * 엑세스 토큰 생성 및 응답 헤더에 추가
      */
+    /**
+     * 엑세스 토큰 생성 (Role 기반 최적화)
+     */
+    public String createAccessToken(UUID uuid, Role role, HttpServletResponse response) {
+        UserDetails userDetails = userDetailsServiceManager.loadUserByUuidAndRole(uuid, role);
+        return generateAccessToken(uuid, userDetails, response);
+    }
+
+    /**
+     * 엑세스 토큰 생성 및 응답 헤더에 추가 (기존 메서드 유지, 필요 시 제거 가능)
+     */
     public String createAccessToken(UUID uuid, HttpServletResponse response) {
         UserDetails userDetails = userDetailsServiceManager.loadUserByUuid(uuid);
+        return generateAccessToken(uuid, userDetails, response);
+    }
 
+    private String generateAccessToken(UUID uuid, UserDetails userDetails, HttpServletResponse response) {
         Claims claims = Jwts.claims().setSubject(uuid.toString());
 
         UUID clubuuid = null;

@@ -1,7 +1,6 @@
 package com.USWCicrcleLink.server.club.repository;
 
 import com.USWCicrcleLink.server.admin.dto.AdminClubListResponse;
-import com.USWCicrcleLink.server.club.dto.ClubSearchCondition;
 import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.USWCicrcleLink.server.club.domain.Department;
 import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,42 +108,31 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
         }
 
         @Override
-        public List<Long> searchClubIds(ClubSearchCondition condition) {
+        public List<Long> searchClubIds(Boolean open, List<String> filter) {
                 StringBuilder jpql = new StringBuilder("SELECT DISTINCT c.clubId FROM Club c ");
                 jpql.append("LEFT JOIN ClubInfo ci ON ci.club.clubId = c.clubId ");
-                jpql.append("LEFT JOIN ClubHashtag ch ON ch.club.clubId = c.clubId ");
                 jpql.append("LEFT JOIN ClubCategoryMapping ccm ON ccm.club.clubId = c.clubId ");
                 jpql.append("LEFT JOIN ClubCategory cc ON cc.clubCategoryId = ccm.clubCategory.clubCategoryId ");
 
                 List<String> whereClauses = new ArrayList<>();
 
-                if (condition.getOpen() != null) {
+                // 1. 모집 여부 필터
+                if (open != null) {
                         whereClauses.add("ci.recruitmentStatus = :openStatus");
                 }
 
-                List<Department> matchingDepartments = new ArrayList<>();
-                if (condition.getFilter() != null && !condition.getFilter().isEmpty()) {
-                        String filter = condition.getFilter();
-                        // Find matching departments (Korean value or Enum name)
-                        for (Department d : Department.values()) {
-                                if (d.getValue().contains(filter) || d.name().contains(filter.toUpperCase())) {
-                                        matchingDepartments.add(d);
-                                }
-                        }
-
+                // 2. 카테고리 이름 필터 (OR 조건)
+                if (filter != null && !filter.isEmpty()) {
                         StringBuilder filterClause = new StringBuilder();
                         filterClause.append("(");
-                        filterClause.append("cc.clubCategoryName LIKE :filter");
-
-                        if (!matchingDepartments.isEmpty()) {
-                                filterClause.append(" OR c.department IN :matchingDepartments");
+                        for (int i = 0; i < filter.size(); i++) {
+                                if (i > 0) {
+                                        filterClause.append(" OR ");
+                                }
+                                filterClause.append("cc.clubCategoryName LIKE :filter").append(i);
                         }
                         filterClause.append(")");
                         whereClauses.add(filterClause.toString());
-                }
-
-                if (condition.getCategoryUUIDs() != null && !condition.getCategoryUUIDs().isEmpty()) {
-                        whereClauses.add("cc.clubCategoryUUID IN :categoryUUIDs");
                 }
 
                 if (!whereClauses.isEmpty()) {
@@ -154,20 +141,15 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
 
                 TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class);
 
-                if (condition.getOpen() != null) {
+                if (open != null) {
                         query.setParameter("openStatus",
-                                        condition.getOpen() ? RecruitmentStatus.OPEN : RecruitmentStatus.CLOSE);
+                                        open ? RecruitmentStatus.OPEN : RecruitmentStatus.CLOSE);
                 }
 
-                if (condition.getFilter() != null && !condition.getFilter().isEmpty()) {
-                        query.setParameter("filter", "%" + condition.getFilter() + "%");
-                        if (!matchingDepartments.isEmpty()) {
-                                query.setParameter("matchingDepartments", matchingDepartments);
+                if (filter != null && !filter.isEmpty()) {
+                        for (int i = 0; i < filter.size(); i++) {
+                                query.setParameter("filter" + i, "%" + filter.get(i) + "%");
                         }
-                }
-
-                if (condition.getCategoryUUIDs() != null && !condition.getCategoryUUIDs().isEmpty()) {
-                        query.setParameter("categoryUUIDs", condition.getCategoryUUIDs());
                 }
 
                 return query.getResultList();

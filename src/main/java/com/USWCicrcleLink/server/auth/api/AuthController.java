@@ -15,9 +15,6 @@ import com.USWCicrcleLink.server.auth.service.AuthService;
 import com.USWCicrcleLink.server.user.dto.*;
 import com.USWCicrcleLink.server.user.service.*;
 import com.USWCicrcleLink.server.user.domain.*;
-import com.USWCicrcleLink.server.global.exception.errortype.UserException;
-import com.USWCicrcleLink.server.global.exception.errortype.RateLimitExceededException;
-import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.email.domain.EmailToken;
 import com.USWCicrcleLink.server.global.email.service.EmailTokenService;
 import com.USWCicrcleLink.server.global.validation.ValidationSequence;
@@ -46,32 +43,7 @@ public class AuthController {
             @RequestBody @Validated(ValidationSequence.class) UnifiedLoginRequest request,
             HttpServletResponse response) {
 
-        // 1. Try User Login
-        try {
-            return ResponseEntity.ok(new ApiResponse<>("유저 로그인 성공", authService.userLogin(request, response)));
-        } catch (Exception e) {
-            log.info("User Login Failed: {}", e.getMessage());
-        }
-
-        // 2. Try Club Leader Login
-        try {
-            return ResponseEntity.ok(new ApiResponse<>("동아리 회장 로그인 성공", authService.leaderLogin(request, response)));
-        } catch (RateLimitExceededException e) {
-            throw e;
-        } catch (Exception e) {
-            log.info("Leader Login Failed: {}", e.getMessage());
-        }
-
-        // 3. Try Admin Login
-        try {
-            return ResponseEntity.ok(new ApiResponse<>("관리자 로그인 성공", authService.adminLogin(request, response)));
-        } catch (RateLimitExceededException e) {
-            throw e;
-        } catch (Exception e) {
-            log.info("Admin Login Failed: {}", e.getMessage());
-        }
-
-        throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+        return ResponseEntity.ok(new ApiResponse<>("로그인 성공", authService.unifiedLogin(request, response)));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.USWCicrcleLink.server.global.security.details.service;
 
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.UserException;
+import com.USWCicrcleLink.server.global.security.jwt.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,9 @@ import java.util.UUID;
 public class UserDetailsServiceManager {
 
     private final List<RoleBasedUserDetailsService> userDetailsServices;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomLeaderDetailsService customLeaderDetailsService;
+    private final CustomAdminDetailsService customAdminDetailsService;
 
     public UserDetails loadUserByUuid(UUID uuid) {
         for (RoleBasedUserDetailsService service : userDetailsServices) {
@@ -25,5 +29,14 @@ public class UserDetailsServiceManager {
             }
         }
         throw new UserException(ExceptionType.USER_NOT_EXISTS);
+    }
+
+    public UserDetails loadUserByUuidAndRole(UUID uuid, Role role) {
+        return switch (role) {
+            case USER -> customUserDetailsService.loadUserByUuid(uuid);
+            case LEADER -> customLeaderDetailsService.loadUserByUuid(uuid);
+            case ADMIN -> customAdminDetailsService.loadUserByUuid(uuid);
+            default -> throw new UserException(ExceptionType.USER_NOT_EXISTS);
+        };
     }
 }

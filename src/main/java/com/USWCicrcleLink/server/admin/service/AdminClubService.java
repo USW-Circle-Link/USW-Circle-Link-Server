@@ -16,6 +16,8 @@ import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoPhotoRepositor
 import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import com.USWCicrcleLink.server.club.leader.domain.Leader;
 import com.USWCicrcleLink.server.club.leader.repository.LeaderRepository;
+import com.USWCicrcleLink.server.user.domain.User;
+import com.USWCicrcleLink.server.user.repository.UserRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
 import com.USWCicrcleLink.server.global.exception.errortype.AdminException;
 import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
@@ -48,6 +50,7 @@ public class AdminClubService {
     private final ClubMainPhotoRepository clubMainPhotoRepository;
     private final ClubInfoPhotoRepository clubInfoPhotoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     /**
      * 메인 페이지(ADMIN) - 동아리 목록 조회
@@ -103,17 +106,32 @@ public class AdminClubService {
         return clubRepository.save(club);
     }
 
-    // 동아리 생성 - 회장 계정 생성
+    // 동아리 생성 - 회장 계정 생성 (User 테이블에도 동기화)
     private void createLeaderAccount(String leaderAccount, String leaderPw, Club club) {
+        String encodedPw = passwordEncoder.encode(leaderPw);
+        UUID leaderUUID = UUID.randomUUID();
+
+        // Leader 테이블에 저장
         Leader leader = Leader.builder()
                 .leaderAccount(leaderAccount)
-                .leaderPw(passwordEncoder.encode(leaderPw))
-                .leaderUUID(UUID.randomUUID())
+                .leaderPw(encodedPw)
+                .leaderUUID(leaderUUID)
                 .role(Role.LEADER)
                 .club(club)
                 .build();
         leaderRepository.save(leader);
         log.info("회장 계정 생성 성공 - uuid: {}", leader.getLeaderUUID());
+
+        // User 테이블에도 동기화 (통합 로그인을 위함)
+        User user = User.builder()
+                .userUUID(leaderUUID)
+                .userAccount(leaderAccount)
+                .userPw(encodedPw)
+                .email(leaderAccount + "@leader.club") // 임시 이메일
+                .role(Role.LEADER)
+                .build();
+        userRepository.save(user);
+        log.info("회장 User 계정 동기화 성공 - uuid: {}", leaderUUID);
     }
 
     // 동아리 생성 - 기본 동아리 데이터 생성

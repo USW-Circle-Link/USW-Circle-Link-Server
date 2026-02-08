@@ -8,7 +8,6 @@ import com.USWCicrcleLink.server.club.domain.RecruitmentStatus;
 import com.USWCicrcleLink.server.club.domain.ClubHashtag;
 import com.USWCicrcleLink.server.club.domain.ClubHashtag;
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
-import com.USWCicrcleLink.server.club.dto.ClubSearchCondition;
 import com.USWCicrcleLink.server.category.dto.ClubCategoryDto;
 import com.USWCicrcleLink.server.club.repository.*;
 import org.springframework.security.core.Authentication;
@@ -20,7 +19,6 @@ import com.USWCicrcleLink.server.club.clubInfo.domain.ClubInfoPhoto;
 import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoPhotoRepository;
 import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
 import com.USWCicrcleLink.server.global.exception.ExceptionType;
-import com.USWCicrcleLink.server.global.exception.errortype.BaseException;
 import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
 import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +47,9 @@ public class ClubService {
 
         // 동아리 검색 (필터링, 조건부 필드 포함)
         @Transactional(readOnly = true)
-        public List<ClubListResponse> searchClubs(ClubSearchCondition condition) {
-                // 1. 카테고리 개수 검증
-                if (condition.getCategoryUUIDs() != null && condition.getCategoryUUIDs().size() > 3) {
-                        throw new BaseException(ExceptionType.INVALID_CATEGORY_COUNT);
-                }
-
-                // 2. 동아리 ID 검색
-                List<Long> clubIds = clubRepository.searchClubIds(condition);
+        public List<ClubListResponse> searchClubs(Boolean open, List<String> filter, Boolean adminInfo) {
+                // 1. 동아리 ID 검색
+                List<Long> clubIds = clubRepository.searchClubIds(open, filter);
 
                 if (clubIds.isEmpty()) {
                         return Collections.emptyList();
@@ -71,7 +64,7 @@ public class ClubService {
                 Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(clubIds);
 
                 // 5. 회원 수 조회 (권한 확인)
-                boolean isAdminInfoRequested = isAuthorizedForAdminInfo(condition);
+                boolean isAdminInfoRequested = isAuthorizedForAdminInfo(adminInfo);
                 Map<Long, Long> memberCounts = isAdminInfoRequested
                                 ? getMemberCountsMap(clubIds)
                                 : Collections.emptyMap();
@@ -92,8 +85,8 @@ public class ClubService {
                                 .collect(Collectors.toList());
         }
 
-        private boolean isAuthorizedForAdminInfo(ClubSearchCondition condition) {
-                if (!Boolean.TRUE.equals(condition.getIncludeAdminInfo())) {
+        private boolean isAuthorizedForAdminInfo(Boolean adminInfo) {
+                if (!Boolean.TRUE.equals(adminInfo)) {
                         return false;
                 }
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

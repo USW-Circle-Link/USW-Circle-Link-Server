@@ -26,5 +26,6 @@ public class MyAplictResponse {
 
     private AplictStatus aplictStatus;
 
-}
+    private UUID aplictUUID;
 
+}

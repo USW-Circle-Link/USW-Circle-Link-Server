@@ -55,9 +55,17 @@ public class Club {
     }
 
     public void updateClubInfo(String leaderName, String leaderHp, String clubInsta, String clubRoomNumber) {
-        this.leaderName = leaderName;
-        this.leaderHp = leaderHp;
-        this.clubInsta = clubInsta;
-        this.clubRoomNumber = clubRoomNumber;
+        if (leaderName != null && !leaderName.isBlank()) {
+            this.leaderName = leaderName;
+        }
+        if (leaderHp != null && !leaderHp.isBlank()) {
+            this.leaderHp = leaderHp;
+        }
+        if (clubInsta != null) {
+            this.clubInsta = clubInsta;
+        }
+        if (clubRoomNumber != null && !clubRoomNumber.isBlank()) {
+            this.clubRoomNumber = clubRoomNumber;
+        }
     }
 }

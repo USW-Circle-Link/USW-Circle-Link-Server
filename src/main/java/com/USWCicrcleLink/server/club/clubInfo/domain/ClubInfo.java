@@ -38,10 +38,20 @@ public class ClubInfo {
     @Column(name = "club_info_recruitment_status", nullable = false)
     private RecruitmentStatus recruitmentStatus = RecruitmentStatus.CLOSE;
 
-    public void updateClubInfo(String clubInfo, String clubRecruitment, String googleFormUrl) {
-        this.clubInfo = clubInfo;
-        this.clubRecruitment = clubRecruitment;
-        this.googleFormUrl = googleFormUrl;
+    public void updateClubInfo(String clubInfo, String clubRecruitment, String googleFormUrl,
+            RecruitmentStatus recruitmentStatus) {
+        if (clubInfo != null) {
+            this.clubInfo = clubInfo;
+        }
+        if (clubRecruitment != null) {
+            this.clubRecruitment = clubRecruitment;
+        }
+        if (googleFormUrl != null) {
+            this.googleFormUrl = googleFormUrl;
+        }
+        if (recruitmentStatus != null) {
+            this.recruitmentStatus = recruitmentStatus;
+        }
     }
 
     public void toggleRecruitmentStatus() {

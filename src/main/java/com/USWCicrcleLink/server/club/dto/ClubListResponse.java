@@ -17,6 +17,7 @@ public class ClubListResponse {
     private String department;
     private List<String> hashtags;
     private String leaderName;
+    private String leaderHp;
     private Long memberCount;
     private String recruitmentStatus;
 }

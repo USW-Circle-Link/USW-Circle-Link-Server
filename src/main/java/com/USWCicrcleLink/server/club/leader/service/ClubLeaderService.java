@@ -38,7 +38,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -161,40 +160,106 @@ public class ClubLeaderService {
     }
 
     /**
-     * 동아리 기본 정보 변경 -> 동아리 프로필 변경
+     * 통합 동아리 정보 수정
      */
-    public ApiResponse<UpdateClubProfileResponse> updateClubProfile(UUID clubUUID,
+    public ApiResponse<UpdateClubResponse> updateClub(UUID clubUUID,
             ClubProfileRequest clubProfileRequest,
-            MultipartFile mainPhoto) throws IOException {
-        // 동아리 회장 유효성 검증
+            MultipartFile mainPhoto,
+            ClubInfoRequest clubInfoRequest,
+            List<MultipartFile> infoPhotos) throws IOException {
+
         Club club = validateLeaderAccess(clubUUID);
 
-        // 사진 업데이트
-        String mainPhotoUrl = updateClubMainPhoto(club.getClubId(), mainPhoto);
-
-        // clubProfileRequest가 있을 때만 정보 업데이트
+        // 1. 기본 프로필 업데이트 (기본 정보 + 해시태그 + 카테고리)
         if (clubProfileRequest != null) {
-            // 동아리 회장 이름 변경 시 약관 동의 갱신 필요
             updateLeaderAgreementIfNameChanged(club, clubProfileRequest.getLeaderName());
-
-            // 해시태그 업데이트
             updateClubHashtags(club, clubProfileRequest.getClubHashtag());
-
-            // 카테고리 업데이트
             updateClubCategories(club, clubProfileRequest.getClubCategoryName());
-
-            // 동아리 정보 업데이트
             club.updateClubInfo(clubProfileRequest.getLeaderName(), clubProfileRequest.getLeaderHp(),
                     clubProfileRequest.getClubInsta(), clubProfileRequest.getClubRoomNumber());
-
-            log.info("동아리 기본 정보 변경 완료 - Club UUID: {}, Club Name: {}", club.getClubuuid(), club.getClubName());
+            clubRepository.save(club);
         }
 
-        return new ApiResponse<>("동아리 기본 정보 변경 완료", new UpdateClubProfileResponse(mainPhotoUrl));
+        // 2. 메인 사진 업데이트
+        String mainPhotoUrl;
+        if (mainPhoto != null && !mainPhoto.isEmpty()) {
+            mainPhotoUrl = processClubMainPhoto(club.getClubId(), mainPhoto);
+        } else {
+            mainPhotoUrl = clubMainPhotoRepository.findByClub(club)
+                    .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getClubMainPhotoS3Key()))
+                    .orElse(null);
+        }
+
+        // 3. 상세 정보 업데이트 (소개/모집글 + 소개 사진)
+        ClubInfo clubInfo = clubInfoRepository.findByClubClubId(club.getClubId())
+                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INFO_NOT_EXISTS));
+
+        if (clubInfoRequest != null) {
+            // 삭제할 사진 처리
+            if (clubInfoRequest.getDeletedOrders() != null && !clubInfoRequest.getDeletedOrders().isEmpty()) {
+                validateOrderValues(clubInfoRequest.getDeletedOrders());
+                for (int deletingOrder : clubInfoRequest.getDeletedOrders()) {
+                    clubInfoPhotoRepository.findByClubInfo_ClubInfoIdAndOrder(clubInfo.getClubInfoId(), deletingOrder)
+                            .ifPresent(deletingPhoto -> {
+                                if (deletingPhoto.getClubInfoPhotoS3Key() != null
+                                        && !deletingPhoto.getClubInfoPhotoS3Key().isEmpty()) {
+                                    s3FileUploadService.deleteFile(deletingPhoto.getClubInfoPhotoS3Key());
+                                }
+                                deletingPhoto.updateClubInfoPhoto("", "", deletingOrder);
+                                clubInfoPhotoRepository.save(deletingPhoto);
+                            });
+                }
+            }
+
+            // 새로운 사진 업로드
+            if (infoPhotos != null && !infoPhotos.isEmpty() && clubInfoRequest.getOrders() != null) {
+                validateOrderValues(clubInfoRequest.getOrders());
+                if (infoPhotos.size() > PHOTO_LIMIT) {
+                    throw new FileException(ExceptionType.MAXIMUM_FILE_LIMIT_EXCEEDED);
+                }
+
+                for (int i = 0; i < infoPhotos.size(); i++) {
+                    MultipartFile infoPhoto = infoPhotos.get(i);
+                    if (infoPhoto == null || infoPhoto.isEmpty())
+                        continue;
+                    int order = clubInfoRequest.getOrders().get(i);
+
+                    ClubInfoPhoto existingPhoto = clubInfoPhotoRepository
+                            .findByClubInfo_ClubInfoIdAndOrder(clubInfo.getClubInfoId(), order)
+                            .orElseThrow(() -> new ClubPhotoException(ExceptionType.PHOTO_ORDER_MISS_MATCH));
+
+                    if (existingPhoto.getClubInfoPhotoS3Key() != null
+                            && !existingPhoto.getClubInfoPhotoS3Key().isEmpty()) {
+                        s3FileUploadService.deleteFile(existingPhoto.getClubInfoPhotoS3Key());
+                    }
+                    updateClubInfoPhotoAndS3File(infoPhoto, existingPhoto, order);
+                }
+            }
+
+            clubInfo.updateClubInfo(clubInfoRequest.getClubInfo(), clubInfoRequest.getClubRecruitment(),
+                    clubInfoRequest.getGoogleFormUrl(), clubInfoRequest.getRecruitmentStatus());
+            clubInfoRepository.save(clubInfo);
+        }
+
+        // 4. 최종 결과 응답 구성 (현재 사진 목록 및 모집 상태)
+        List<String> currentInfoPhotoUrls = clubInfoPhotoRepository.findByClubInfo(clubInfo).stream()
+                .sorted(Comparator.comparingInt(ClubInfoPhoto::getOrder))
+                .filter(photo -> photo.getClubInfoPhotoS3Key() != null && !photo.getClubInfoPhotoS3Key().isBlank())
+                .map(photo -> s3FileUploadService.generatePresignedGetUrl(photo.getClubInfoPhotoS3Key()))
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("동아리 정보 수정 완료",
+                UpdateClubResponse.builder()
+                        .mainPhotoPresignedUrl(mainPhotoUrl)
+                        .infoPhotoPresignedUrls(currentInfoPhotoUrls)
+                        .recruitmentStatus(clubInfo.getRecruitmentStatus())
+                        .build());
     }
 
     // 동아리 회장 이름 변경 시 약관 동의 갱신
     private void updateLeaderAgreementIfNameChanged(Club club, String newLeaderName) {
+        if (newLeaderName == null)
+            return;
 
         if (!Objects.equals(club.getLeaderName(), newLeaderName)) {
             Leader leader = leaderRepository.findByClubuuid(club.getClubuuid())
@@ -208,7 +273,7 @@ public class ClubLeaderService {
 
     // 동아리 해시태그 업데이트
     private void updateClubHashtags(Club club, List<String> newHashtags) {
-        if (newHashtags == null || newHashtags.isEmpty())
+        if (newHashtags == null)
             return;
 
         Set<String> newHashtagsSet = new HashSet<>(newHashtags);
@@ -227,7 +292,7 @@ public class ClubLeaderService {
 
     // 동아리 카테고리 업데이트
     private void updateClubCategories(Club club, List<String> newCategories) {
-        if (newCategories == null || newCategories.isEmpty())
+        if (newCategories == null)
             return;
 
         Set<String> newCategoriesSet = new HashSet<>(newCategories);
@@ -367,101 +432,6 @@ public class ClubLeaderService {
                         .collect(Collectors.toList());
 
         return new ApiResponse<>("동아리 소개 조회 완료", new LeaderClubInfoResponse(club, clubInfo, infoPhotoUrls));
-    }
-
-    // 동아리 소개 변경 -> updateClubInfo (was updateClubIntro)
-    public ApiResponse updateClubInfo(UUID clubUUID, ClubInfoRequest clubInfoRequest, // Renamed from updateClubIntro
-                                                                                      // and ClubIntroRequest
-            List<MultipartFile> infoPhotos) throws IOException { // introPhotos -> infoPhotos
-
-        Club club = validateLeaderAccess(clubUUID);
-
-        ClubInfo clubInfo = clubInfoRepository.findByClubClubId(club.getClubId())
-                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INFO_NOT_EXISTS));
-
-        // 모집 상태가 null일 때 예외 처리
-        if (clubInfoRequest.getRecruitmentStatus() == null) {
-            throw new ClubException(ExceptionType.INVALID_RECRUITMENT_STATUS);
-        }
-
-        // 삭제할 사진 확인
-        if (clubInfoRequest.getDeletedOrders() != null && !clubInfoRequest.getDeletedOrders().isEmpty()) {
-            // 순서 개수, 범위 검증
-            validateOrderValues(clubInfoRequest.getDeletedOrders());
-
-            for (int i = 0; i < clubInfoRequest.getDeletedOrders().size(); i++) {// 하나씩 삭제
-                int deletingOrder = clubInfoRequest.getDeletedOrders().get(i);
-
-                ClubInfoPhoto deletingPhoto = clubInfoPhotoRepository
-                        .findByClubInfo_ClubInfoIdAndOrder(clubInfo.getClubInfoId(), deletingOrder) // getClubIntroId ->
-                                                                                                    // getClubInfoId
-                        .orElseThrow(() -> new ClubPhotoException(ExceptionType.PHOTO_ORDER_MISS_MATCH));
-
-                s3FileUploadService.deleteFile(deletingPhoto.getClubInfoPhotoS3Key());
-
-                deletingPhoto.updateClubInfoPhoto("", "", deletingOrder); // updateClubIntroPhoto -> updateClubInfoPhoto
-                clubInfoPhotoRepository.save(deletingPhoto);
-
-                log.debug("소개 사진 삭제 완료: {}", deletingPhoto.getOrder());
-            }
-        }
-
-        // 각 사진의 조회 presignedUrls
-        List<String> presignedUrls = new ArrayList<>();
-
-        // 동아리 소개 사진을 넣을 경우
-        if (infoPhotos != null && !infoPhotos.isEmpty() && clubInfoRequest.getOrders() != null
-                && !clubInfoRequest.getOrders().isEmpty()) {
-
-            // 순서 개수, 범위 검증
-            validateOrderValues(clubInfoRequest.getOrders());
-
-            if (infoPhotos.size() > PHOTO_LIMIT) {// 최대 5장 업로드
-                throw new FileException(ExceptionType.MAXIMUM_FILE_LIMIT_EXCEEDED);
-            }
-
-            // N번째 사진 1장씩
-            for (int i = 0; i < infoPhotos.size(); i++) {
-                MultipartFile infoPhoto = infoPhotos.get(i); // introPhoto -> infoPhoto
-                int order = clubInfoRequest.getOrders().get(i);
-
-                // 동아리 소개 사진이 존재하지 않으면 순서 스킵
-                if (infoPhoto == null || infoPhoto.isEmpty()) {
-                    continue;
-                }
-
-                ClubInfoPhoto existingPhoto = clubInfoPhotoRepository
-                        .findByClubInfo_ClubInfoIdAndOrder(clubInfo.getClubInfoId(), order) // getClubIntroId ->
-                                                                                            // getClubInfoId
-                        .orElseThrow(() -> new ClubPhotoException(ExceptionType.PHOTO_ORDER_MISS_MATCH));
-
-                S3FileResponse s3FileResponse;
-
-                // N번째 동아리 소개 사진 존재할 경우
-                if (!Optional.ofNullable(existingPhoto.getClubInfoPhotoName()).orElse("").isEmpty() && // getClubIntroPhotoName
-                        !Optional.ofNullable(existingPhoto.getClubInfoPhotoS3Key()).orElse("").isEmpty()) { // getClubIntroPhotoS3Key
-
-                    // 기존 S3 파일 삭제
-                    s3FileUploadService.deleteFile(existingPhoto.getClubInfoPhotoS3Key());
-                    log.debug("기존 소개 사진 삭제 완료: {}", existingPhoto.getClubInfoPhotoS3Key());
-                }
-                // 새로운 파일 업로드 및 메타 데이터 업데이트
-                s3FileResponse = updateClubInfoPhotoAndS3File(infoPhoto, existingPhoto, order);
-
-                // 업로드된 사진의 사전 서명된 URL을 리스트에 추가
-                presignedUrls.add(s3FileResponse.getPresignedUrl());
-            }
-        }
-
-        // 소개 글, 모집 글, google form 저장
-        clubInfo.updateClubInfo(clubInfoRequest.getClubInfo(), clubInfoRequest.getClubRecruitment(), // updateClubIntro
-                                                                                                     // ->
-                                                                                                     // updateClubInfo
-                clubInfoRequest.getGoogleFormUrl());
-        clubInfoRepository.save(clubInfo);
-
-        log.debug("{} 동아리 소개 변경 완료", club.getClubName());
-        return new ApiResponse<>("동아리 소개 변경 완료", new UpdateClubInfoResponse(presignedUrls));
     }
 
     private void validateOrderValues(List<Integer> orders) {

@@ -71,8 +71,10 @@ public class ClubService {
                 Map<Long, String> recruitmentStatuses = getRecruitmentStatusMap(clubIds);
 
                 // 5. 회원 수 조회 (권한 확인)
-                Map<Long, Long> memberCounts = getMemberCountsIfAuthorized(clubIds,
-                                condition.getIncludeNumberOfMembers());
+                boolean isAdminInfoRequested = isAuthorizedForAdminInfo(condition);
+                Map<Long, Long> memberCounts = isAdminInfoRequested
+                                ? getMemberCountsMap(clubIds)
+                                : Collections.emptyMap();
 
                 // 6. DTO 변환
                 return clubs.stream()
@@ -83,11 +85,20 @@ public class ClubService {
                                                 club.getDepartment().name(),
                                                 clubHashtags.getOrDefault(club.getClubId(), Collections.emptyList()),
                                                 club.getLeaderName(),
-                                                memberCounts.isEmpty() ? null
-                                                                : memberCounts.getOrDefault(club.getClubId(), 0L),
+                                                isAdminInfoRequested ? club.getLeaderHp() : null,
+                                                memberCounts.getOrDefault(club.getClubId(), 0L),
                                                 recruitmentStatuses.getOrDefault(club.getClubId(),
                                                                 RecruitmentStatus.CLOSE.name())))
                                 .collect(Collectors.toList());
+        }
+
+        private boolean isAuthorizedForAdminInfo(ClubSearchCondition condition) {
+                if (!Boolean.TRUE.equals(condition.getIncludeAdminInfo())) {
+                        return false;
+                }
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                return authentication != null && authentication.getAuthorities().stream()
+                                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         }
 
         private Map<Long, String> getMainPhotoUrls(List<Long> clubIds) {
@@ -105,16 +116,6 @@ public class ClubService {
                                 .collect(Collectors.groupingBy(
                                                 tag -> tag.getClub().getClubId(),
                                                 Collectors.mapping(ClubHashtag::getClubHashtag, Collectors.toList())));
-        }
-
-        private Map<Long, Long> getMemberCountsIfAuthorized(List<Long> clubIds, Boolean includeNumberOfMembers) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication != null && authentication.getAuthorities().stream()
-                                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")
-                                                || a.getAuthority().equals("ROLE_UNION"))) {
-                        return getMemberCountsMap(clubIds);
-                }
-                return Collections.emptyMap();
         }
 
         // 카테고리 조회

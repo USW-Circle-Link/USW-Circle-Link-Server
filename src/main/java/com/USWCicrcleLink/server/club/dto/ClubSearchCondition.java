@@ -16,5 +16,9 @@ public class ClubSearchCondition {
     private Boolean open;
     private String filter;
     private List<UUID> categoryUUIDs;
-    private Boolean includeNumberOfMembers;
+    private Boolean includeAdminInfo;
+
+    public void setInclude_admin_info(Boolean includeAdminInfo) {
+        this.includeAdminInfo = includeAdminInfo;
+    }
 }

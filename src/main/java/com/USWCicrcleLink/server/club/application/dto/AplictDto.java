@@ -49,6 +49,7 @@ public class AplictDto {
     public static class QnAResponse {
         private String question;
         private String answer;
+        private Long optionId;
     }
 
     @Getter

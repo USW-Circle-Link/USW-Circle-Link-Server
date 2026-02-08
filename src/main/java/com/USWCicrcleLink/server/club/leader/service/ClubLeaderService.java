@@ -678,7 +678,10 @@ public class ClubLeaderService {
         }
 
         List<AplictDto.QnAResponse> qnaList = aplict.getAnswers().stream()
-                .map(a -> new AplictDto.QnAResponse(a.getFormQuestion().getContent(), a.getAnswerText()))
+                .map(a -> new AplictDto.QnAResponse(
+                        a.getFormQuestion().getContent(),
+                        a.getAnswerText(),
+                        a.getOption() != null ? a.getOption().getOptionId() : null))
                 .toList();
 
         return new AplictDto.DetailResponse(

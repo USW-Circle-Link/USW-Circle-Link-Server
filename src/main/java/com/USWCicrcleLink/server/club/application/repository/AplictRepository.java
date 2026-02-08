@@ -37,6 +37,8 @@ public interface AplictRepository extends JpaRepository<Aplict, Long>, AplictRep
         boolean existsByProfileAndClubuuid(@Param("profile") Profile profile,
                         @Param("clubuuid") UUID clubuuid);
 
+        Optional<Aplict> findByProfileAndClub_Clubuuid(Profile profile, UUID clubuuid);
+
         @Query("SELECT a.club FROM Aplict a WHERE a.aplictId = :aplictId")
         Optional<Club> findClubByAplictId(@Param("aplictId") Long aplictId);
 

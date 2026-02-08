@@ -184,7 +184,11 @@ public class AplictService {
         try {
             aplictRepository.save(aplict);
         } catch (DataIntegrityViolationException e) {
-            throw new AplictException(ExceptionType.ALREADY_APPLIED);
+            // 디버깅용: 실제 에러 메시지를 포함하여 프론트에서 확인 가능하게 함
+            String realError = e.getMostSpecificCause() != null
+                    ? e.getMostSpecificCause().getMessage()
+                    : e.getMessage();
+            throw new RuntimeException("[DEBUG] 실제 에러: " + realError, e);
         }
         log.debug("동아리 지원서 제출 성공 - ClubUUID: {}, Status: {}", clubuuid, AplictStatus.WAIT);
     }

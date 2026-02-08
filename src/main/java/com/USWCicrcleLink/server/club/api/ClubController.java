@@ -8,6 +8,7 @@ import com.USWCicrcleLink.server.admin.service.AdminClubService;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
 
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
+import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.service.ClubService;
 import com.USWCicrcleLink.server.club.leader.dto.FcmTokenRequest;
 import com.USWCicrcleLink.server.club.leader.dto.club.ClubInfoRequest;
@@ -48,6 +49,7 @@ public class ClubController {
     private final ClubLeaderService clubLeaderService;
     private final FcmServiceImpl fcmService;
     private final com.USWCicrcleLink.server.club.leader.service.FormService formService;
+    private final com.USWCicrcleLink.server.club.form.service.ClubFormService clubFormService;
 
     // --- Public / General Endpoints ---
 
@@ -110,12 +112,14 @@ public class ClubController {
         return ResponseEntity.ok(new ApiResponse<>("약관 동의 완료"));
     }
 
-    // 동아리 관리 정보 조회 (Leader) -> getClubProfile (was getClubInfo)
-    @GetMapping("/{clubUUID}/profile")
-    public ResponseEntity<ApiResponse<ClubProfileResponse>> getClubProfile(@PathVariable("clubUUID") UUID clubUUID) {
-        ApiResponse<ClubProfileResponse> clubProfile = clubLeaderService.getClubProfile(clubUUID);
-        return ResponseEntity.ok(clubProfile);
-    }
+    // // 동아리 관리 정보 조회 (Leader) -> getClubProfile (was getClubInfo)
+    // @GetMapping("/{clubUUID}/profile")
+    // public ResponseEntity<ApiResponse<ClubProfileResponse>>
+    // getClubProfile(@PathVariable("clubUUID") UUID clubUUID) {
+    // ApiResponse<ClubProfileResponse> clubProfile =
+    // clubLeaderService.getClubProfile(clubUUID);
+    // return ResponseEntity.ok(clubProfile);
+    // }
 
     // 동아리 정보 수정 (Leader)
     @PutMapping("/{clubUUID}")
@@ -241,4 +245,11 @@ public class ClubController {
         Long formId = formService.createForm(clubUUID, request);
         return ResponseEntity.created(java.net.URI.create("/clubs/" + clubUUID + "/forms/" + formId)).build();
     }
+
+    @GetMapping("/{clubUUID}/forms")
+    public ResponseEntity<ApiResponse<ClubFormResponse>> getActiveForm(@PathVariable UUID clubUUID) {
+        ClubFormResponse response = clubFormService.getQuestionsByClub(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("활성화된 지원서 조회 완료", response));
+    }
+
 }

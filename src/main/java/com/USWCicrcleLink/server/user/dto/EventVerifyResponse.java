@@ -19,6 +19,5 @@ public class EventVerifyResponse {
     @JsonProperty("isFirstVerify")
     private boolean isFirstVerify;
 
-    @JsonProperty("verified_at")
     private LocalDateTime verifiedAt;
 }

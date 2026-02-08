@@ -2,8 +2,6 @@ package com.USWCicrcleLink.server.club.leader.dto.club;
 
 import com.USWCicrcleLink.server.global.validation.ValidClubRoomNumber;
 import com.USWCicrcleLink.server.global.validation.ValidationGroups;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,7 +14,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClubProfileRequest {
 
     @Size(min = 2, max = 30, message = "회장 이름은 2~30자 이내여야 합니다.", groups = ValidationGroups.SizeGroup.class)

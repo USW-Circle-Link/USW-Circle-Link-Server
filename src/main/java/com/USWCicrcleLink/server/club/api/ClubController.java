@@ -221,15 +221,6 @@ public class ClubController {
                 HttpStatus.OK);
     }
 
-    // 지원서 상세 조회
-    @GetMapping("/{clubUUID}/applications/{applicationUUID}")
-    public ResponseEntity<ApiResponse<com.USWCicrcleLink.server.club.application.dto.AplictDto.DetailResponse>> getApplicationDetail(
-            @PathVariable("clubUUID") UUID clubUUID,
-            @PathVariable("applicationUUID") UUID applicationUUID) {
-        return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 완료",
-                clubLeaderService.getApplicationDetail(clubUUID, applicationUUID)));
-    }
-
     // 지원자 상태 변경
     @PatchMapping("/{clubUUID}/applications/{applicationUUID}/status")
     public ResponseEntity<ApiResponse<Void>> updateApplicationStatus(

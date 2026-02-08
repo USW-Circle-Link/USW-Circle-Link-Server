@@ -22,7 +22,7 @@ logging:
 #email url
 email:
   config:
-    baseUrl: ${PROD_SERVER_URL}
+    baseUrl: https://api.donggurami.net
 
 firebase:
   config-path: ${SERVER_FIREBASE_CONFIG_PATH}

@@ -91,7 +91,7 @@ public class MypageService {
                 .map(aplict -> {
                     Club club = getClubByAplictId(aplict.getAplictId()); // ID 기반 조회로 변경
                     AplictStatus aplictStatus = aplict.getAplictStatus();
-                    return myAplictResponse(club, aplictStatus);
+                    return myAplictResponse(club, aplictStatus, aplict.getAplictUUID());
                 })
                 .collect(Collectors.toList());
     }
@@ -126,7 +126,7 @@ public class MypageService {
     }
 
     // 동아리 정보 + 지원현황 가져오기
-    private MyAplictResponse myAplictResponse(Club club, AplictStatus aplictStatus) {
+    private MyAplictResponse myAplictResponse(Club club, AplictStatus aplictStatus, java.util.UUID aplictUUID) {
 
         String mainPhotoUrl = getClubMainPhotoUrl(club);
 
@@ -138,7 +138,8 @@ public class MypageService {
                 club.getLeaderHp(),
                 club.getClubInsta(),
                 club.getClubRoomNumber(),
-                aplictStatus);
+                aplictStatus,
+                aplictUUID);
         return myAplictResponse;
     }
 

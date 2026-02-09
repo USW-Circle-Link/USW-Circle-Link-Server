@@ -68,7 +68,27 @@ public class SecurityConfig {
 
                                         // Admin Club Management
                                         auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
-                                        auth.requestMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("ADMIN");
+                                        // 동아리 자체 삭제는 ADMIN만 가능 (정확한 경로만 매칭)
+                                        auth.requestMatchers(HttpMethod.DELETE, "/clubs/{clubUUID}").hasRole("ADMIN");
+
+                                        // 동아리 하위 리소스 (회원, 지원자, 모집폼 등) - Leader와 Admin 모두 접근 가능
+                                        auth.requestMatchers(HttpMethod.GET, "/clubs/{clubUUID}/members",
+                                                        "/clubs/{clubUUID}/applicants",
+                                                        "/clubs/{clubUUID}/forms",
+                                                        "/clubs/{clubUUID}/recruit-status")
+                                                        .hasAnyRole("LEADER", "ADMIN");
+                                        auth.requestMatchers(HttpMethod.POST,
+                                                        "/clubs/{clubUUID}/applicants/notifications",
+                                                        "/clubs/{clubUUID}/forms")
+                                                        .hasAnyRole("LEADER", "ADMIN");
+                                        auth.requestMatchers(HttpMethod.PUT, "/clubs/{clubUUID}")
+                                                        .hasAnyRole("LEADER", "ADMIN");
+                                        auth.requestMatchers(HttpMethod.PATCH, "/clubs/{clubUUID}/recruit-status",
+                                                        "/clubs/{clubUUID}/applications/{applicationUUID}/status",
+                                                        "/clubs/terms/agreement")
+                                                        .hasAnyRole("LEADER", "ADMIN");
+                                        auth.requestMatchers(HttpMethod.DELETE, "/clubs/{clubUUID}/members")
+                                                        .hasAnyRole("LEADER", "ADMIN");
 
                                         // Category Management
                                         auth.requestMatchers(HttpMethod.GET, "/categories").hasAnyRole("LEADER",

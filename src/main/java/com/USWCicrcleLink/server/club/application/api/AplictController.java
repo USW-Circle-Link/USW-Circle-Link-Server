@@ -3,6 +3,7 @@ package com.USWCicrcleLink.server.club.application.api;
 import com.USWCicrcleLink.server.club.application.service.AplictService;
 import com.USWCicrcleLink.server.club.leader.service.ClubLeaderService;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
+import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,8 @@ public class AplictController {
         Object principal = authentication.getPrincipal();
 
         AplictDto.DetailResponse response;
-        if (principal instanceof CustomLeaderDetails) {
+        if (principal instanceof CustomAdminDetails || principal instanceof CustomLeaderDetails) {
+            // Admin 또는 Leader는 동일한 권한으로 조회
             response = clubLeaderService.getApplicationDetail(clubUUID, aplictUUID);
         } else if (principal instanceof CustomUserDetails) {
             response = aplictService.getApplicationDetail(aplictUUID);

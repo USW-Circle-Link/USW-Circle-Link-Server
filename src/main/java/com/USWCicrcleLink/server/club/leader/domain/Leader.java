@@ -46,7 +46,9 @@ public class Leader {
 
     @PrePersist
     public void prePersist() {
-        this.leaderUUID = UUID.randomUUID();
+        if (this.leaderUUID == null) {
+            this.leaderUUID = UUID.randomUUID();
+        }
     }
 
     public void setAgreeTerms(boolean isAgreed) {

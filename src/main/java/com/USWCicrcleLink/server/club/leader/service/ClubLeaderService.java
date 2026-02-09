@@ -25,6 +25,7 @@ import com.USWCicrcleLink.server.global.exception.errortype.*;
 import com.USWCicrcleLink.server.global.response.ApiResponse;
 import com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadService;
 import com.USWCicrcleLink.server.global.s3File.dto.S3FileResponse;
+import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import com.USWCicrcleLink.server.user.profile.domain.MemberType;
 
@@ -73,11 +74,18 @@ public class ClubLeaderService {
     private final String S3_MAINPHOTO_DIR = "mainPhoto/";
     private final String S3_INFOPHOTO_DIR = "infoPhoto/";
 
-    // 동아리 접근 권한 확인
+    // 동아리 접근 권한 확인 (Admin 또는 해당 동아리 Leader)
     public Club validateLeaderAccess(UUID clubuuid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
+        // Admin인 경우 모든 동아리 접근 허용
+        if (principal instanceof CustomAdminDetails) {
+            return clubRepository.findByClubuuid(clubuuid)
+                    .orElseThrow(() -> new ClubException(ExceptionType.CLUB_NOT_EXISTS));
+        }
+
+        // Leader인 경우 자신의 동아리만 접근 가능
         if (!(principal instanceof CustomLeaderDetails leaderDetails)) {
             throw new ClubLeaderException(ExceptionType.CLUB_LEADER_ACCESS_DENIED);
         }

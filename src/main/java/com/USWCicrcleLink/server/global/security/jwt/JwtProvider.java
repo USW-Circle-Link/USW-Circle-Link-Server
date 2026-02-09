@@ -74,7 +74,7 @@ public class JwtProvider {
      */
     public String createAccessToken(UUID uuid, Role role, HttpServletResponse response) {
         UserDetails userDetails = userDetailsServiceManager.loadUserByUuidAndRole(uuid, role);
-        return generateAccessToken(uuid, userDetails, response);
+        return generateAccessToken(uuid, userDetails, role, response);
     }
 
     /**
@@ -82,11 +82,15 @@ public class JwtProvider {
      */
     public String createAccessToken(UUID uuid, HttpServletResponse response) {
         UserDetails userDetails = userDetailsServiceManager.loadUserByUuid(uuid);
-        return generateAccessToken(uuid, userDetails, response);
+        return generateAccessToken(uuid, userDetails, null, response);
     }
 
-    private String generateAccessToken(UUID uuid, UserDetails userDetails, HttpServletResponse response) {
+    private String generateAccessToken(UUID uuid, UserDetails userDetails, Role role, HttpServletResponse response) {
         Claims claims = Jwts.claims().setSubject(uuid.toString());
+
+        if (role != null) {
+            claims.put("role", role.name());
+        }
 
         UUID clubuuid = null;
         if (userDetails instanceof CustomUserDetails customUserDetails) {
@@ -115,7 +119,19 @@ public class JwtProvider {
      * 엑세스 토큰에서 사용자 정보 추출
      */
     public UserDetails getUserDetails(String accessToken) {
-        UUID uuid = getUUIDFromAccessToken(accessToken);
+        Claims claims = getClaims(accessToken);
+        String uuidStr = claims.getSubject();
+        UUID uuid = UUID.fromString(uuidStr);
+        String roleStr = claims.get("role", String.class);
+
+        if (roleStr != null) {
+            try {
+                Role role = Role.valueOf(roleStr);
+                return userDetailsServiceManager.loadUserByUuidAndRole(uuid, role);
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid role in token: {}", roleStr);
+            }
+        }
         return userDetailsServiceManager.loadUserByUuid(uuid);
     }
 

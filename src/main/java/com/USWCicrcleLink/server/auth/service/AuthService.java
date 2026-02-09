@@ -51,30 +51,26 @@ public class AuthService {
      */
     @RateLimite(action = "USER_LOGIN")
     public UnifiedLoginResponse unifiedLogin(UnifiedLoginRequest request, HttpServletResponse response) {
-        // 1. user_table에서 계정 조회
+        // 1. user_table에서 계정 조회 (Role 확인용)
         User user = userRepository.findByUserAccount(request.getAccount())
                 .orElseThrow(() -> {
                     log.error("로그인 실패: User 테이블에 계정 없음 - inputAccount: {}", request.getAccount());
                     return new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
                 });
 
-        // 2. 비밀번호 검증
-        if (!passwordEncoder.matches(request.getPassword(), user.getUserPw())) {
-            log.error("로그인 실패: 비밀번호 불일치 - inputAccount: {}, DB Role: {}", request.getAccount(), user.getRole());
-            // 디버깅: 암호화된 비밀번호 비교 (앞 10글자만 로그에 남김 - 보안 주의)
-            log.debug("PW Check - Matches: {}", passwordEncoder.matches(request.getPassword(), user.getUserPw()));
-            throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
-        }
-
-        log.info("로그인 성공 (Role 분기 전) - Account: {}, Role: {}", user.getUserAccount(), user.getRole());
-
         UUID userUUID = user.getUserUUID();
-        String accessToken = jwtProvider.createAccessToken(userUUID, user.getRole(), response);
-        String refreshToken = jwtProvider.createRefreshToken(userUUID, response);
+        String accessToken;
+        String refreshToken;
 
-        // 3. Role에 따라 분기 처리
+        // 2. Role에 따라 분기 및 비밀번호 검증
         switch (user.getRole()) {
             case USER:
+                // User는 user_table 비밀번호 사용
+                if (!passwordEncoder.matches(request.getPassword(), user.getUserPw())) {
+                    log.error("로그인 실패(USER): 비밀번호 불일치 - Account: {}", user.getUserAccount());
+                    throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+                }
+
                 Profile profile = profileRepository.findByUser_UserUUID(userUUID)
                         .orElseThrow(() -> new ProfileException(ExceptionType.PROFILE_NOT_EXISTS));
 
@@ -86,6 +82,9 @@ public class AuthService {
                     log.debug("FCM 토큰 업데이트 완료: {}", user.getUserAccount());
                 }
 
+                accessToken = jwtProvider.createAccessToken(userUUID, user.getRole(), response);
+                refreshToken = jwtProvider.createRefreshToken(userUUID, response);
+
                 log.debug("User 로그인 성공, UUID: {}", userUUID);
                 return UnifiedLoginResponse.builder()
                         .accessToken(accessToken)
@@ -94,53 +93,65 @@ public class AuthService {
                         .build();
 
             case LEADER:
-                // Leader 테이블에서 account로 Leader 조회
+                // Leader 테이블에서 Leader 조회 및 비밀번호 검증
                 Leader leader = leaderRepository.findByLeaderAccount(user.getUserAccount())
                         .orElseThrow(() -> {
-                            log.error("로그인 실패: Leader 테이블에 계정 없음 - Account: {}", user.getUserAccount());
+                            log.error("로그인 실패(LEADER): Leader 테이블 계정 없음 - Account: {}", user.getUserAccount());
                             return new UserException(ExceptionType.USER_NOT_EXISTS);
                         });
+
+                if (!passwordEncoder.matches(request.getPassword(), leader.getLeaderPw())) {
+                    log.error("로그인 실패(LEADER): 비밀번호 불일치 - Account: {}", user.getUserAccount());
+                    throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+                }
 
                 UUID leaderUUID = leader.getLeaderUUID();
                 UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leaderUUID)
                         .orElseThrow(() -> {
-                            log.error("로그인 실패: ClubUUID 찾을 수 없음 - LeaderUUID: {}", leaderUUID);
+                            log.error("로그인 실패(LEADER): ClubUUID 없음 - LeaderUUID: {}", leaderUUID);
                             return new UserException(ExceptionType.USER_NOT_EXISTS);
                         });
 
-                // Leader UUID로 토큰 생성
-                String leaderAccessToken = jwtProvider.createAccessToken(leaderUUID, user.getRole(), response);
-                String leaderRefreshToken = jwtProvider.createRefreshToken(leaderUUID, response);
-
                 log.debug("Leader 로그인 성공 - leaderUUID: {}, 클럽 UUID: {}", leaderUUID, clubuuid);
+
+                accessToken = jwtProvider.createAccessToken(leaderUUID, user.getRole(), response);
+                refreshToken = jwtProvider.createRefreshToken(leaderUUID, response);
+
                 return UnifiedLoginResponse.builder()
-                        .accessToken(leaderAccessToken)
-                        .refreshToken(leaderRefreshToken)
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
                         .role(Role.LEADER)
                         .clubuuid(clubuuid)
                         .isAgreedTerms(leader.isAgreedTerms())
                         .build();
 
             case ADMIN:
-                // Admin 테이블에서 account로 Admin 조회 (user_table.user_account =
-                // admin_table.admin_account)
+                // Admin 테이블에서 Admin 조회 및 비밀번호 검증
                 Admin admin = adminRepository.findByAdminAccount(user.getUserAccount())
-                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+                        .orElseThrow(() -> {
+                            log.error("로그인 실패(ADMIN): Admin 테이블 계정 없음 - Account: {}", user.getUserAccount());
+                            return new UserException(ExceptionType.USER_NOT_EXISTS);
+                        });
+
+                if (!passwordEncoder.matches(request.getPassword(), admin.getAdminPw())) {
+                    log.error("로그인 실패(ADMIN): 비밀번호 불일치 - Account: {}", user.getUserAccount());
+                    throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+                }
 
                 UUID adminUUID = admin.getAdminUUID();
 
-                // Admin UUID로 토큰 생성
-                String adminAccessToken = jwtProvider.createAccessToken(adminUUID, user.getRole(), response);
-                String adminRefreshToken = jwtProvider.createRefreshToken(adminUUID, response);
+                accessToken = jwtProvider.createAccessToken(adminUUID, user.getRole(), response);
+                refreshToken = jwtProvider.createRefreshToken(adminUUID, response);
 
                 log.debug("Admin 로그인 성공 - adminUUID: {}", adminUUID);
                 return UnifiedLoginResponse.builder()
-                        .accessToken(adminAccessToken)
-                        .refreshToken(adminRefreshToken)
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
                         .role(Role.ADMIN)
                         .build();
 
             default:
+                log.error("로그인 실패: 알 수 없는 Role - {}", user.getRole());
                 throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
         }
     }

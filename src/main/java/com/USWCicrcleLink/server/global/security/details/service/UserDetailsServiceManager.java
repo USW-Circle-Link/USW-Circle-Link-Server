@@ -25,7 +25,8 @@ public class UserDetailsServiceManager {
         for (RoleBasedUserDetailsService service : userDetailsServices) {
             try {
                 return service.loadUserByUuid(uuid);
-            } catch (UserException ignored) {
+            } catch (Exception ignored) {
+                // 특정 권한의 정보가 없을 경우 다음 서비스 시도
             }
         }
         throw new UserException(ExceptionType.USER_NOT_EXISTS);

@@ -86,26 +86,44 @@ public class AuthService {
                         .build();
 
             case LEADER:
-                // Leader 테이블에서 clubuuid 조회
-                Leader leader = leaderRepository.findByLeaderAccount(request.getAccount())
-                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
-                UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leader.getLeaderUUID())
+                // Leader 테이블에서 account로 Leader 조회 (user_table.user_account =
+                // leader_table.leader_account)
+                Leader leader = leaderRepository.findByLeaderAccount(user.getUserAccount())
                         .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
 
-                log.debug("Leader 로그인 성공 - uuid: {}, 클럽 UUID: {}", userUUID, clubuuid);
+                UUID leaderUUID = leader.getLeaderUUID();
+                UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leaderUUID)
+                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+
+                // Leader UUID로 토큰 생성 (이후 CustomLeaderDetailsService에서 정상 조회 가능)
+                String leaderAccessToken = jwtProvider.createAccessToken(leaderUUID, user.getRole(), response);
+                String leaderRefreshToken = jwtProvider.createRefreshToken(leaderUUID, response);
+
+                log.debug("Leader 로그인 성공 - leaderUUID: {}, 클럽 UUID: {}", leaderUUID, clubuuid);
                 return UnifiedLoginResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .accessToken(leaderAccessToken)
+                        .refreshToken(leaderRefreshToken)
                         .role(Role.LEADER)
                         .clubuuid(clubuuid)
                         .isAgreedTerms(leader.isAgreedTerms())
                         .build();
 
             case ADMIN:
-                log.debug("Admin 로그인 성공 - uuid: {}", userUUID);
+                // Admin 테이블에서 account로 Admin 조회 (user_table.user_account =
+                // admin_table.admin_account)
+                Admin admin = adminRepository.findByAdminAccount(user.getUserAccount())
+                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+
+                UUID adminUUID = admin.getAdminUUID();
+
+                // Admin UUID로 토큰 생성
+                String adminAccessToken = jwtProvider.createAccessToken(adminUUID, user.getRole(), response);
+                String adminRefreshToken = jwtProvider.createRefreshToken(adminUUID, response);
+
+                log.debug("Admin 로그인 성공 - adminUUID: {}", adminUUID);
                 return UnifiedLoginResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .accessToken(adminAccessToken)
+                        .refreshToken(adminRefreshToken)
                         .role(Role.ADMIN)
                         .build();
 
@@ -143,29 +161,6 @@ public class AuthService {
                 .build();
     }
 
-    /**
-     * 관리자 로그인
-     */
-    @RateLimite(action = "WEB_LOGIN")
-    public UnifiedLoginResponse adminLogin(UnifiedLoginRequest request, HttpServletResponse response) {
-        Admin admin = adminRepository.findByAdminAccount(request.getAccount())
-                .orElseThrow(() -> new UserException(ExceptionType.USER_AUTHENTICATION_FAILED));
-
-        if (!passwordEncoder.matches(request.getPassword(), admin.getAdminPw())) {
-            throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
-        }
-
-        UUID adminUUID = admin.getAdminUUID();
-        String accessToken = jwtProvider.createAccessToken(adminUUID, response);
-        String refreshToken = jwtProvider.createRefreshToken(adminUUID, response);
-
-        log.debug("Admin 로그인 성공 - uuid: {}", adminUUID);
-        return UnifiedLoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .role(Role.ADMIN)
-                .build();
-    }
 
     /**
      * 로그아웃 (User, Admin & Leader 통합)
@@ -211,9 +206,13 @@ public class AuthService {
             jwtProvider.validateRefreshToken(refreshToken, request);
             UUID uuid = jwtProvider.getUUIDFromRefreshToken(refreshToken);
 
+            // UUID로 유저와 권한 조회 (Access Token 생성에 필요)
+            User user = userRepository.findByUserUUID(uuid)
+                    .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+
             jwtProvider.deleteRefreshToken(uuid);
 
-            String newAccessToken = jwtProvider.createAccessToken(uuid, response);
+            String newAccessToken = jwtProvider.createAccessToken(uuid, user.getRole(), response);
             String newRefreshToken = jwtProvider.createRefreshToken(uuid, response);
 
             log.debug("토큰 갱신 성공 - UUID: {}", uuid);

@@ -64,18 +64,20 @@ public class DummyData {
 
         // 관리자 동연회 데이터
         public void initAdmin() {
+                UUID clubUnionUUID = UUID.randomUUID();
                 // 동아리 연합회 관리자 계정
                 Admin clubUnion = Admin.builder()
-                                .adminUUID(UUID.randomUUID())
+                                .adminUUID(clubUnionUUID)
                                 .adminAccount("clubUnion")
                                 .adminPw(passwordEncoder.encode("hpsEetcTf7ymgy6!")) // 비밀번호 암호화
                                 .adminName("동아리 연합회")
                                 .role(Role.ADMIN)
                                 .build();
 
+                UUID developerUUID = UUID.randomUUID();
                 // 개발자 계정
                 Admin developer = Admin.builder()
-                                .adminUUID(UUID.randomUUID())
+                                .adminUUID(developerUUID)
                                 .adminAccount("developer")
                                 .adminPw(passwordEncoder.encode("5MYcg7Cuvrh50fS")) // 비밀번호 암호화
                                 .adminName("운영자")
@@ -85,6 +87,10 @@ public class DummyData {
                 // 데이터 저장
                 adminRepository.save(clubUnion);
                 adminRepository.save(developer);
+
+                // User 테이블 동기화
+                saveUserSync(clubUnionUUID, "clubUnion", clubUnion.getAdminPw(), "admin@club.union", Role.ADMIN);
+                saveUserSync(developerUUID, "developer", developer.getAdminPw(), "developer@club.union", Role.ADMIN);
         }
 
         // user1
@@ -256,13 +262,16 @@ public class DummyData {
                                 .build();
                 clubMainPhotoRepository.save(clubMainPhoto);
 
+                UUID flagLeaderUUID = UUID.randomUUID();
                 Leader leader = Leader.builder()
+                                .leaderUUID(flagLeaderUUID)
                                 .leaderAccount("flag1")
                                 .leaderPw(passwordEncoder.encode("a123456!"))
                                 .club(flagClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(leader);
+                saveUserSync(flagLeaderUUID, "flag1", leader.getLeaderPw(), "flag1@leader.club", Role.LEADER);
 
                 ClubInfo clubInfo = ClubInfo.builder()
                                 .club(flagClub)
@@ -273,13 +282,17 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(clubInfo);
 
+                UUID badmintonLeaderUUID = UUID.randomUUID();
                 Leader leader1 = Leader.builder()
+                                .leaderUUID(badmintonLeaderUUID)
                                 .leaderAccount("badmintonClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(badmintonClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(leader1);
+                saveUserSync(badmintonLeaderUUID, "badmintonClub", leader1.getLeaderPw(), "badminton@leader.club",
+                                Role.LEADER);
 
                 ClubInfo clubInfo1 = ClubInfo.builder()
                                 .club(badmintonClub)
@@ -307,13 +320,17 @@ public class DummyData {
                         clubInfoPhotoRepository.save(badmintonInfoPhoto);
                 }
 
+                UUID volunteerLeaderUUID = UUID.randomUUID();
                 Leader leader2 = Leader.builder()
+                                .leaderUUID(volunteerLeaderUUID)
                                 .leaderAccount("volunteerClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(volunteerClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(leader2);
+                saveUserSync(volunteerLeaderUUID, "volunteerClub", leader2.getLeaderPw(), "volunteer@leader.club",
+                                Role.LEADER);
 
                 ClubInfo clubInfo2 = ClubInfo.builder()
                                 .club(volunteerClub)
@@ -515,13 +532,17 @@ public class DummyData {
                 clubHashtagRepository.save(allaboutHashtag1);
                 clubHashtagRepository.save(allaboutHashtag2);
 
+                UUID allaboutLeaderUUID = UUID.randomUUID();
                 Leader allaboutLeader = Leader.builder()
+                                .leaderUUID(allaboutLeaderUUID)
                                 .leaderAccount("allaboutClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(allaboutClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(allaboutLeader);
+                saveUserSync(allaboutLeaderUUID, "allaboutClub", allaboutLeader.getLeaderPw(), "allabout@leader.club",
+                                Role.LEADER);
 
                 ClubInfo allaboutInfo = ClubInfo.builder()
                                 .club(allaboutClub)
@@ -588,13 +609,17 @@ public class DummyData {
 
                 clubRepository.save(gullisaeClub);
 
+                UUID gullisaeLeaderUUID = UUID.randomUUID();
                 Leader gullisaeLeader = Leader.builder()
+                                .leaderUUID(gullisaeLeaderUUID)
                                 .leaderAccount("gullisaeClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(gullisaeClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(gullisaeLeader);
+                saveUserSync(gullisaeLeaderUUID, "gullisaeClub", gullisaeLeader.getLeaderPw(), "gullisae@leader.club",
+                                Role.LEADER);
 
                 ClubMembers clubMembers = ClubMembers.builder()
                                 .club(gullisaeClub)
@@ -644,13 +669,17 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(tennisInfo);
 
+                UUID tennisLeaderUUID = UUID.randomUUID();
                 Leader tennisLeader = Leader.builder()
+                                .leaderUUID(tennisLeaderUUID)
                                 .leaderAccount("tennisClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(tennisclub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(tennisLeader);
+                saveUserSync(tennisLeaderUUID, "tennisClub", tennisLeader.getLeaderPw(), "tennis@leader.club",
+                                Role.LEADER);
 
                 // 농구동아리
                 Club basketballClub = Club.builder()
@@ -673,13 +702,17 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(basketballInfo);
 
+                UUID basketballLeaderUUID = UUID.randomUUID();
                 Leader basketballLeader = Leader.builder()
+                                .leaderUUID(basketballLeaderUUID)
                                 .leaderAccount("basketballClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(basketballClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(basketballLeader);
+                saveUserSync(basketballLeaderUUID, "basketballClub", basketballLeader.getLeaderPw(),
+                                "basketball@leader.club", Role.LEADER);
 
                 // 토론동아리
                 Club argClub = Club.builder()
@@ -702,13 +735,16 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(argInfo);
 
+                UUID argLeaderUUID = UUID.randomUUID();
                 Leader argLeader = Leader.builder()
+                                .leaderUUID(argLeaderUUID)
                                 .leaderAccount("argClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(argClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(argLeader);
+                saveUserSync(argLeaderUUID, "argClub", argLeader.getLeaderPw(), "arg@leader.club", Role.LEADER);
 
                 // 햄스터동아리
                 Club hamsterClub = Club.builder()
@@ -731,13 +767,17 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(hamsterInfo);
 
+                UUID hamsterLeaderUUID = UUID.randomUUID();
                 Leader hamsterLeader = Leader.builder()
+                                .leaderUUID(hamsterLeaderUUID)
                                 .leaderAccount("hamsterClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(hamsterClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(hamsterLeader);
+                saveUserSync(hamsterLeaderUUID, "hamsterClub", hamsterLeader.getLeaderPw(), "hamster@leader.club",
+                                Role.LEADER);
 
                 // 해달동아리
                 Club sunmoonClub = Club.builder()
@@ -760,13 +800,17 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(sunmoonInfo);
 
+                UUID sunmoonLeaderUUID = UUID.randomUUID();
                 Leader sunmoonLeader = Leader.builder()
+                                .leaderUUID(sunmoonLeaderUUID)
                                 .leaderAccount("sunmoonClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(sunmoonClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(sunmoonLeader);
+                saveUserSync(sunmoonLeaderUUID, "sunmoonClub", sunmoonLeader.getLeaderPw(), "sunmoon@leader.club",
+                                Role.LEADER);
 
                 // 돼지동아리
                 Club pigClub = Club.builder()
@@ -789,13 +833,16 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(pigInfo);
 
+                UUID pigLeaderUUID = UUID.randomUUID();
                 Leader pigLeader = Leader.builder()
+                                .leaderUUID(pigLeaderUUID)
                                 .leaderAccount("pigClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(pigClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(pigLeader);
+                saveUserSync(pigLeaderUUID, "pigClub", pigLeader.getLeaderPw(), "pig@leader.club", Role.LEADER);
 
                 // 고양이동아리
                 Club catClub = Club.builder()
@@ -818,13 +865,27 @@ public class DummyData {
                                 .build();
                 clubInfoRepository.save(catInfo);
 
+                UUID catLeaderUUID = UUID.randomUUID();
                 Leader catLeader = Leader.builder()
+                                .leaderUUID(catLeaderUUID)
                                 .leaderAccount("catClub")
                                 .leaderPw(passwordEncoder.encode("12345"))
                                 .club(catClub)
                                 .role(Role.LEADER)
                                 .build();
                 leaderRepository.save(catLeader);
+                saveUserSync(catLeaderUUID, "catClub", catLeader.getLeaderPw(), "cat@leader.club", Role.LEADER);
+        }
+
+        private void saveUserSync(UUID uuid, String account, String encodedPw, String email, Role role) {
+                User user = User.builder()
+                                .userUUID(uuid)
+                                .userAccount(account)
+                                .userPw(encodedPw)
+                                .email(email)
+                                .role(role)
+                                .build();
+                userRepository.save(user);
         }
 
 }

@@ -53,12 +53,20 @@ public class AuthService {
     public UnifiedLoginResponse unifiedLogin(UnifiedLoginRequest request, HttpServletResponse response) {
         // 1. user_table에서 계정 조회
         User user = userRepository.findByUserAccount(request.getAccount())
-                .orElseThrow(() -> new UserException(ExceptionType.USER_AUTHENTICATION_FAILED));
+                .orElseThrow(() -> {
+                    log.error("로그인 실패: User 테이블에 계정 없음 - inputAccount: {}", request.getAccount());
+                    return new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
+                });
 
         // 2. 비밀번호 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getUserPw())) {
+            log.error("로그인 실패: 비밀번호 불일치 - inputAccount: {}, DB Role: {}", request.getAccount(), user.getRole());
+            // 디버깅: 암호화된 비밀번호 비교 (앞 10글자만 로그에 남김 - 보안 주의)
+            log.debug("PW Check - Matches: {}", passwordEncoder.matches(request.getPassword(), user.getUserPw()));
             throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
         }
+
+        log.info("로그인 성공 (Role 분기 전) - Account: {}, Role: {}", user.getUserAccount(), user.getRole());
 
         UUID userUUID = user.getUserUUID();
         String accessToken = jwtProvider.createAccessToken(userUUID, user.getRole(), response);
@@ -86,16 +94,21 @@ public class AuthService {
                         .build();
 
             case LEADER:
-                // Leader 테이블에서 account로 Leader 조회 (user_table.user_account =
-                // leader_table.leader_account)
+                // Leader 테이블에서 account로 Leader 조회
                 Leader leader = leaderRepository.findByLeaderAccount(user.getUserAccount())
-                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+                        .orElseThrow(() -> {
+                            log.error("로그인 실패: Leader 테이블에 계정 없음 - Account: {}", user.getUserAccount());
+                            return new UserException(ExceptionType.USER_NOT_EXISTS);
+                        });
 
                 UUID leaderUUID = leader.getLeaderUUID();
                 UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leaderUUID)
-                        .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
+                        .orElseThrow(() -> {
+                            log.error("로그인 실패: ClubUUID 찾을 수 없음 - LeaderUUID: {}", leaderUUID);
+                            return new UserException(ExceptionType.USER_NOT_EXISTS);
+                        });
 
-                // Leader UUID로 토큰 생성 (이후 CustomLeaderDetailsService에서 정상 조회 가능)
+                // Leader UUID로 토큰 생성
                 String leaderAccessToken = jwtProvider.createAccessToken(leaderUUID, user.getRole(), response);
                 String leaderRefreshToken = jwtProvider.createRefreshToken(leaderUUID, response);
 
@@ -133,34 +146,9 @@ public class AuthService {
     }
 
     /**
-     * 동아리 회장 로그인
+     * 동아리 회장 로그인 (삭제됨 - unifiedLogin 사용)
      */
-    @RateLimite(action = "WEB_LOGIN")
-    public UnifiedLoginResponse leaderLogin(UnifiedLoginRequest request, HttpServletResponse response) {
-        Leader leader = leaderRepository.findByLeaderAccount(request.getAccount())
-                .orElseThrow(() -> new UserException(ExceptionType.USER_AUTHENTICATION_FAILED));
-
-        if (!passwordEncoder.matches(request.getPassword(), leader.getLeaderPw())) {
-            throw new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
-        }
-
-        UUID clubuuid = leaderRepository.findClubuuidByLeaderUUID(leader.getLeaderUUID())
-                .orElseThrow(() -> new UserException(ExceptionType.USER_NOT_EXISTS));
-
-        UUID leaderUUID = leader.getLeaderUUID();
-        String accessToken = jwtProvider.createAccessToken(leaderUUID, response);
-        String refreshToken = jwtProvider.createRefreshToken(leaderUUID, response);
-
-        log.debug("Leader 로그인 성공 - uuid: {}, 클럽 UUID: {}", leaderUUID, clubuuid);
-        return UnifiedLoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .role(Role.LEADER)
-                .clubuuid(clubuuid) // Changed from .clubUUID(clubUUID) to .clubuuid(clubUUID)
-                .isAgreedTerms(leader.isAgreedTerms())
-                .build();
-    }
-
+    // leaderLogin 메서드 삭제 완료
 
     /**
      * 로그아웃 (User, Admin & Leader 통합)

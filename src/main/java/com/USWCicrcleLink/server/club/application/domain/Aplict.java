@@ -39,10 +39,13 @@ public class Aplict {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "aplict_status", nullable = false, length = 10)
-    private AplictStatus aplictStatus = AplictStatus.WAIT;
+    @Column(name = "public_status", nullable = false, length = 10)
+    private AplictStatus publicStatus = AplictStatus.WAIT;
 
-    // checked field removed
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(name = "private_status", nullable = false, length = 10)
+    private AplictStatus privateStatus = AplictStatus.WAIT;
 
     @Column(name = "aplict_delete_date")
     private LocalDateTime deleteDate;
@@ -54,13 +57,14 @@ public class Aplict {
         }
     }
 
-    public void updateAplictStatus(AplictStatus newStatus, LocalDateTime deleteDate) {
-        this.aplictStatus = newStatus;
-        this.deleteDate = deleteDate;
+    // 리더가 상태 변경 시 privateStatus만 변경
+    public void updatePrivateStatus(AplictStatus newStatus) {
+        this.privateStatus = newStatus;
     }
 
-    public void updateFailedAplictStatus(AplictStatus newStatus) {
-        this.aplictStatus = newStatus;
+    // 최종 결과 처리 시 publicStatus를 privateStatus와 동기화
+    public void publishResults() {
+        this.publicStatus = this.privateStatus;
     }
 
     @Builder.Default

@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.club.application.dto;
 
+import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import com.USWCicrcleLink.server.user.profile.domain.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,13 +23,14 @@ public class ApplicantsResponse {
 
     private String userHp;
 
-    public ApplicantsResponse(UUID aplictUUID, Profile profile) {
+    private AplictStatus privateStatus;
+
+    public ApplicantsResponse(UUID aplictUUID, Profile profile, AplictStatus privateStatus) {
         this.aplictUUID = aplictUUID;
         this.userName = profile.getUserName();
         this.major = profile.getMajor();
         this.studentNumber = profile.getStudentNumber();
         this.userHp = profile.getUserHp();
+        this.privateStatus = privateStatus;
     }
 }
-
-

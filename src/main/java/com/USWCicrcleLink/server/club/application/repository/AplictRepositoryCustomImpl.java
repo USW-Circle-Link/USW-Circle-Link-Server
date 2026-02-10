@@ -19,10 +19,39 @@ public class AplictRepositoryCustomImpl implements AplictRepositoryCustom {
         public List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status) {
                 return em.createQuery(
                                 "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p" +
-                                                " WHERE ap.club.id = :clubId AND ap.aplictStatus = :status",
+                                                " WHERE ap.club.id = :clubId AND ap.privateStatus = :status",
                                 Aplict.class).setParameter("clubId", clubId)
                                 .setParameter("status", status)
                                 .getResultList();
+        }
+
+        @Override
+        public List<Aplict> findApplicants(Long clubId, AplictStatus privateStatus, Boolean isResultPublished) {
+                String jpql = "SELECT ap FROM Aplict ap JOIN FETCH ap.profile p WHERE ap.club.id = :clubId";
+
+                if (privateStatus != null) {
+                        jpql += " AND ap.privateStatus = :privateStatus";
+                }
+
+                if (isResultPublished != null) {
+                        if (isResultPublished) {
+                                jpql += " AND ap.publicStatus <> :waitStatus";
+                        } else {
+                                jpql += " AND ap.publicStatus = :waitStatus";
+                        }
+                }
+
+                var query = em.createQuery(jpql, Aplict.class).setParameter("clubId", clubId);
+
+                if (privateStatus != null) {
+                        query.setParameter("privateStatus", privateStatus);
+                }
+
+                if (isResultPublished != null) {
+                        query.setParameter("waitStatus", AplictStatus.WAIT);
+                }
+
+                return query.getResultList();
         }
 
         @Override

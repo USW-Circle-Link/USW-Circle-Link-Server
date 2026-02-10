@@ -571,22 +571,17 @@ public class ClubLeaderService {
 
     // 동아리 지원자 조회 (전체 또는 상태별)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID, AplictStatus status) {
+    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID, AplictStatus privateStatus,
+            Boolean isResultPublished) {
         Club club = validateLeaderAccess(clubUUID);
 
-        List<Aplict> aplicts;
-        if (status == null) {
-            // 상태 조건 없이 전체 조회
-            aplicts = aplictRepository.findAllWithProfileByClubId(club.getClubId());
-        } else {
-            // 특정 상태 조회
-            aplicts = aplictRepository.findAllWithProfileByClubIdAndStatus(club.getClubId(), status);
-        }
+        List<Aplict> aplicts = aplictRepository.findApplicants(club.getClubId(), privateStatus, isResultPublished);
 
         List<ApplicantsResponse> applicants = aplicts.stream()
                 .map(ap -> new ApplicantsResponse(
                         ap.getAplictUUID(),
-                        ap.getProfile()))
+                        ap.getProfile(),
+                        ap.getPrivateStatus()))
                 .toList();
 
         return new ApiResponse<>("동아리 지원자 조회 완료", applicants);
@@ -606,14 +601,17 @@ public class ClubLeaderService {
                 throw new AplictException(ExceptionType.APPLICANT_NOT_EXISTS);
             }
 
-            AplictStatus currentStatus = applicant.getAplictStatus();
+            AplictStatus privateStatus = applicant.getPrivateStatus();
 
             // WAIT 상태이면 알림 보내지 않음
-            if (currentStatus == AplictStatus.WAIT) {
+            if (privateStatus == AplictStatus.WAIT) {
                 continue;
             }
 
-            if (currentStatus == AplictStatus.PASS) {
+            // publicStatus를 privateStatus와 동기화
+            applicant.publishResults();
+
+            if (privateStatus == AplictStatus.PASS) {
                 // 이미 멤버인지 확인 (중복 가입 방지)
                 boolean isMember = clubMembersRepository.findByProfileProfileIdAndClubClubId(
                         applicant.getProfile().getProfileId(), club.getClubId()).isPresent();
@@ -626,19 +624,15 @@ public class ClubLeaderService {
                     clubMembersRepository.save(newClubMembers);
                 }
 
-                // 삭제 (지원자 DB에서 제거)
-                aplictRepository.delete(applicant);
-                log.debug("합격 처리/알림 및 지원서 삭제: {}", applicant.getAplictUUID());
-                fcmService.sendMessageTo(applicant, currentStatus);
+                log.debug("합격 처리/알림 완료: {}", applicant.getAplictUUID());
+                fcmService.sendMessageTo(applicant, privateStatus);
 
-            } else if (currentStatus == AplictStatus.FAIL) {
-                // 삭제 (지원자 DB에서 제거)
-                aplictRepository.delete(applicant);
-                log.debug("불합격 알림 및 지원서 삭제: {}", applicant.getAplictUUID());
-                fcmService.sendMessageTo(applicant, currentStatus);
+            } else if (privateStatus == AplictStatus.FAIL) {
+                log.debug("불합격 알림 완료: {}", applicant.getAplictUUID());
+                fcmService.sendMessageTo(applicant, privateStatus);
             }
 
-            // aplictRepository.save(applicant); // 삭제했으므로 저장 불필요
+            aplictRepository.save(applicant);
         }
     }
 
@@ -668,11 +662,11 @@ public class ClubLeaderService {
                 aplict.getProfile().getStudentNumber(),
                 aplict.getProfile().getMajor(),
                 aplict.getSubmittedAt(),
-                aplict.getAplictStatus(),
+                aplict.getPrivateStatus(),
                 qnaList);
     }
 
-    // 지원자 상태 변경 (Leader)
+    // 지원자 상태 변경 (Leader) - privateStatus만 변경
     public void updateAplictStatus(UUID clubUUID, UUID aplictUUID, AplictStatus status) {
         validateLeaderAccess(clubUUID);
 
@@ -683,10 +677,27 @@ public class ClubLeaderService {
             throw new AplictException(ExceptionType.APLICT_NOT_EXISTS);
         }
 
-        // 상태 업데이트
-        aplict.updateFailedAplictStatus(status);
+        // privateStatus만 업데이트 (publicStatus는 WAIT 유지)
+        aplict.updatePrivateStatus(status);
 
         aplictRepository.save(aplict);
-        log.debug("지원자 상태 변경 완료: {} -> {}", aplictUUID, status);
+        log.debug("지원자 privateStatus 변경 완료: {} -> {}", aplictUUID, status);
+    }
+
+    // 지원자 수동 삭제 (Leader - 최종 결과 처리 후 사용)
+    public void deleteApplicants(UUID clubUUID, List<UUID> aplictUUIDs) {
+        validateLeaderAccess(clubUUID);
+
+        for (UUID aplictUUID : aplictUUIDs) {
+            Aplict aplict = aplictRepository.findByAplictUUID(aplictUUID)
+                    .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
+
+            if (!aplict.getClub().getClubuuid().equals(clubUUID)) {
+                throw new AplictException(ExceptionType.APLICT_NOT_EXISTS);
+            }
+
+            aplictRepository.delete(aplict);
+            log.debug("지원자 수동 삭제 완료: {}", aplictUUID);
+        }
     }
 }

@@ -8,5 +8,7 @@ import java.util.List;
 public interface AplictRepositoryCustom {
     List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status);
 
+    List<Aplict> findApplicants(Long clubId, AplictStatus privateStatus, Boolean isResultPublished);
+
     List<Aplict> findAllWithProfileByClubId(Long clubId);
 }

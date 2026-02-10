@@ -139,7 +139,7 @@ public class AplictService {
                 aplict.getProfile().getStudentNumber(),
                 aplict.getProfile().getMajor(),
                 aplict.getSubmittedAt(),
-                aplict.getAplictStatus(),
+                aplict.getPublicStatus(),
                 qnaList);
     }
 
@@ -158,7 +158,8 @@ public class AplictService {
                 .profile(profile)
                 .club(club)
                 .submittedAt(LocalDateTime.now())
-                .aplictStatus(AplictStatus.WAIT)
+                .publicStatus(AplictStatus.WAIT)
+                .privateStatus(AplictStatus.WAIT)
                 .build();
 
         // 답변 저장

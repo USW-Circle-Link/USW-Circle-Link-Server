@@ -382,7 +382,8 @@ public class DummyData {
                                 .club(flagClub)
                                 .submittedAt(LocalDateTime.now())
 
-                                .aplictStatus(AplictStatus.FAIL)
+                                .privateStatus(AplictStatus.FAIL)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
                 aplictRepository.save(aplict3);
 
@@ -391,7 +392,8 @@ public class DummyData {
                                 .club(flagClub)
                                 .submittedAt(LocalDateTime.now())
 
-                                .aplictStatus(AplictStatus.FAIL)
+                                .privateStatus(AplictStatus.FAIL)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
                 aplictRepository.save(aplict4);
 
@@ -406,7 +408,8 @@ public class DummyData {
                                 .profile(profile1)
                                 .club(badmintonClub)
                                 .submittedAt(LocalDateTime.now())
-                                .aplictStatus(AplictStatus.PASS)
+                                .privateStatus(AplictStatus.PASS)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
                 aplictRepository.save(badmintonAplict);
 
@@ -421,7 +424,8 @@ public class DummyData {
                                 .profile(profile1)
                                 .club(volunteerClub)
                                 .submittedAt(LocalDateTime.now())
-                                .aplictStatus(AplictStatus.FAIL)
+                                .privateStatus(AplictStatus.FAIL)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
                 aplictRepository.save(volunteerAplict);
 
@@ -476,6 +480,95 @@ public class DummyData {
                                 .clubCategory(clubCategory2)
                                 .build();
                 clubCategoryMappingRepository.save(mapping5);
+
+                // Postman Test Users
+                User testUser1 = User.builder()
+                                .userUUID(UUID.randomUUID())
+                                .userAccount("test1")
+                                .userPw(passwordEncoder.encode("12345"))
+                                .email("test1")
+                                .userCreatedAt(LocalDateTime.now())
+                                .userUpdatedAt(LocalDateTime.now())
+                                .role(Role.USER)
+                                .build();
+                userRepository.save(testUser1);
+
+                User testUser2 = User.builder()
+                                .userUUID(UUID.randomUUID())
+                                .userAccount("test2")
+                                .userPw(passwordEncoder.encode("12345"))
+                                .email("test2")
+                                .userCreatedAt(LocalDateTime.now())
+                                .userUpdatedAt(LocalDateTime.now())
+                                .role(Role.USER)
+                                .build();
+                userRepository.save(testUser2);
+
+                User testUser3 = User.builder()
+                                .userUUID(UUID.randomUUID())
+                                .userAccount("test3")
+                                .userPw(passwordEncoder.encode("12345"))
+                                .email("test3")
+                                .userCreatedAt(LocalDateTime.now())
+                                .userUpdatedAt(LocalDateTime.now())
+                                .role(Role.USER)
+                                .build();
+                userRepository.save(testUser3);
+
+                Profile testProfile1 = Profile.builder()
+                                .user(testUser1)
+                                .userName("테스터1")
+                                .studentNumber("11111111")
+                                .userHp("01011111111")
+                                .major("테스트학과")
+                                .profileCreatedAt(LocalDateTime.now())
+                                .profileUpdatedAt(LocalDateTime.now())
+                                .memberType(MemberType.REGULARMEMBER)
+                                .build();
+                profileRepository.save(testProfile1);
+
+                Profile testProfile2 = Profile.builder()
+                                .user(testUser2)
+                                .userName("테스터2")
+                                .studentNumber("22222222")
+                                .userHp("01022222222")
+                                .major("테스트학과")
+                                .profileCreatedAt(LocalDateTime.now())
+                                .profileUpdatedAt(LocalDateTime.now())
+                                .memberType(MemberType.REGULARMEMBER)
+                                .build();
+                profileRepository.save(testProfile2);
+
+                Profile testProfile3 = Profile.builder()
+                                .user(testUser3)
+                                .userName("테스터3")
+                                .studentNumber("33333333")
+                                .userHp("01033333333")
+                                .major("테스트학과")
+                                .profileCreatedAt(LocalDateTime.now())
+                                .profileUpdatedAt(LocalDateTime.now())
+                                .memberType(MemberType.REGULARMEMBER)
+                                .build();
+                profileRepository.save(testProfile3);
+
+                // test1, test2 apply to FLAG
+                Aplict testAplict1 = Aplict.builder()
+                                .profile(testProfile1)
+                                .club(flagClub)
+                                .submittedAt(LocalDateTime.now())
+                                .privateStatus(AplictStatus.WAIT)
+                                .publicStatus(AplictStatus.WAIT)
+                                .build();
+                aplictRepository.save(testAplict1);
+
+                Aplict testAplict2 = Aplict.builder()
+                                .profile(testProfile2)
+                                .club(flagClub)
+                                .submittedAt(LocalDateTime.now())
+                                .privateStatus(AplictStatus.WAIT)
+                                .publicStatus(AplictStatus.WAIT)
+                                .build();
+                aplictRepository.save(testAplict2);
 
         }
 
@@ -564,7 +657,8 @@ public class DummyData {
                                 .profile(profile)
                                 .club(allaboutClub)
                                 .submittedAt(LocalDateTime.now())
-                                .aplictStatus(AplictStatus.PASS)
+                                .privateStatus(AplictStatus.PASS)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
 
                 aplictRepository.save(aplict);
@@ -641,7 +735,8 @@ public class DummyData {
                                 .profile(profile)
                                 .club(gullisaeClub)
                                 .submittedAt(LocalDateTime.now())
-                                .aplictStatus(AplictStatus.PASS)
+                                .privateStatus(AplictStatus.PASS)
+                                .publicStatus(AplictStatus.WAIT)
                                 .build();
 
                 aplictRepository.save(aplict);

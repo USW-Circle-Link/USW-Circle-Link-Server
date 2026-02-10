@@ -8,6 +8,8 @@ import lombok.*;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApplicantResultsRequest {
 
     @NotNull(message = "지원서는 필수 입력값입니다.", groups = ValidationGroups.NotBlankGroup.class)

@@ -24,7 +24,7 @@ public class MyAplictResponse {
 
     private String ClubRoomNumber;
 
-    private AplictStatus aplictStatus;
+    private AplictStatus publicStatus;
 
     private UUID aplictUUID;
 

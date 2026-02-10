@@ -90,7 +90,7 @@ public class MypageService {
         return aplicts.stream()
                 .map(aplict -> {
                     Club club = getClubByAplictId(aplict.getAplictId()); // ID 기반 조회로 변경
-                    AplictStatus aplictStatus = aplict.getAplictStatus();
+                    AplictStatus aplictStatus = aplict.getPublicStatus();
                     return myAplictResponse(club, aplictStatus, aplict.getAplictUUID());
                 })
                 .collect(Collectors.toList());

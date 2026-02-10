@@ -20,9 +20,9 @@ public interface AplictRepository extends JpaRepository<Aplict, Long>, AplictRep
 
         Optional<Aplict> findByClub_ClubIdAndAplictUUID(Long clubId, UUID aplictUUID); // Restored
 
-        List<Aplict> findByClub_ClubIdAndAplictStatus(Long clubId, AplictStatus status); // Restored
+        List<Aplict> findByClub_ClubIdAndPrivateStatus(Long clubId, AplictStatus status); // Restored
 
-        Optional<Aplict> findByClub_ClubIdAndAplictUUIDAndAplictStatus(Long clubId, UUID aplictUUID,
+        Optional<Aplict> findByClub_ClubIdAndAplictUUIDAndPrivateStatus(Long clubId, UUID aplictUUID,
                         AplictStatus status); // Restored
 
         List<Aplict> findAllWithProfileByClubIdAndStatus(Long clubId, AplictStatus status);

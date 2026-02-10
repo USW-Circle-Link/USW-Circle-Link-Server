@@ -178,8 +178,10 @@ public class ClubController {
     @GetMapping("/{clubUUID}/applicants")
     public ResponseEntity<ApiResponse> getApplicants(
             @PathVariable("clubUUID") UUID clubUUID,
-            @RequestParam(value = "status", required = false) com.USWCicrcleLink.server.club.application.domain.AplictStatus status) {
-        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status), HttpStatus.OK);
+            @RequestParam(value = "status", required = false) com.USWCicrcleLink.server.club.application.domain.AplictStatus status,
+            @RequestParam(value = "isResultPublished", required = false) Boolean isResultPublished) {
+        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status, isResultPublished),
+                HttpStatus.OK);
     }
 
     // 합격자 알림

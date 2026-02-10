@@ -62,4 +62,13 @@ public class AplictController {
 
         return ResponseEntity.ok(new ApiResponse<>("지원서 상세 조회 성공", response));
     }
+
+    // 지원자 수동 삭제 (Leader)
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteApplicants(
+            @PathVariable("clubUUID") UUID clubUUID,
+            @RequestBody java.util.List<UUID> aplictUUIDs) {
+        clubLeaderService.deleteApplicants(clubUUID, aplictUUIDs);
+        return ResponseEntity.ok(new ApiResponse<>("지원자 삭제 성공"));
+    }
 }

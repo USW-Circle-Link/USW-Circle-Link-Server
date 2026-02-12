@@ -64,17 +64,29 @@ public class SecurityConfig {
                                         // Public Club Endpoints
                                         auth.requestMatchers(HttpMethod.GET, "/clubs", "/clubs/filter", "/clubs/open",
                                                         "/clubs/{clubUUID}",
-                                                        "/clubs/open/filter").permitAll();
+                                                        "/clubs/open/filter",
+                                                        "/clubs/{clubUUID}/forms") // 폼 조회는 누구나 가능 (지원서 작성 위해)
+                                                        .permitAll();
 
                                         // Admin Club Management
                                         auth.requestMatchers(HttpMethod.POST, "/clubs").hasRole("ADMIN");
                                         // 동아리 자체 삭제는 ADMIN만 가능 (정확한 경로만 매칭)
                                         auth.requestMatchers(HttpMethod.DELETE, "/clubs/{clubUUID}").hasRole("ADMIN");
 
-                                        // 동아리 하위 리소스 (회원, 지원자, 모집폼 등) - Leader와 Admin 모두 접근 가능
+                                        // 지원서 관련 엔드포인트 (USER 권한 필요)
+                                        auth.requestMatchers(HttpMethod.GET,
+                                                        "/clubs/{clubUUID}/applications/eligibility")
+                                                        .hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.POST,
+                                                        "/clubs/{clubUUID}/applications")
+                                                        .hasRole("USER");
+                                        auth.requestMatchers(HttpMethod.GET,
+                                                        "/clubs/{clubUUID}/applications/{aplictUUID}")
+                                                        .hasAnyRole("USER", "LEADER", "ADMIN");
+
+                                        // 동아리 하위 리소스 (회원, 지원자 관리 등) - Leader와 Admin 모두 접근 가능
                                         auth.requestMatchers(HttpMethod.GET, "/clubs/{clubUUID}/members",
                                                         "/clubs/{clubUUID}/applicants",
-                                                        "/clubs/{clubUUID}/forms",
                                                         "/clubs/{clubUUID}/recruit-status")
                                                         .hasAnyRole("LEADER", "ADMIN");
                                         auth.requestMatchers(HttpMethod.POST,

@@ -103,8 +103,7 @@ public class SecurityConfig {
                                                         .hasAnyRole("LEADER", "ADMIN");
 
                                         // Category Management
-                                        auth.requestMatchers(HttpMethod.GET, "/categories").hasAnyRole("LEADER",
-                                                        "ADMIN");
+                                        auth.requestMatchers(HttpMethod.GET, "/categories").permitAll();
                                         auth.requestMatchers(HttpMethod.POST, "/categories").hasRole("ADMIN");
                                         auth.requestMatchers(HttpMethod.DELETE, "/categories/**").hasRole("ADMIN");
 

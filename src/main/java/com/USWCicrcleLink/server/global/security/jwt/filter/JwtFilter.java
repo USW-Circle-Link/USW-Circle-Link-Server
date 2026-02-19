@@ -62,6 +62,11 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+            // AccessDeniedException은 403 처리를 위해 그대로 던짐
+            if (e instanceof org.springframework.security.access.AccessDeniedException) {
+                throw e;
+            }
+
             SecurityContextHolder.clearContext();
 
             // permitAll 경로라면 토큰에 문제가 있어도 그냥 다음 필터로 진행 (익명 사용자)

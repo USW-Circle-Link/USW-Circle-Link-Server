@@ -1,5 +1,6 @@
 package com.USWCicrcleLink.server.global.security.config;
 
+import com.USWCicrcleLink.server.global.security.exception.CustomAccessDeniedHandler;
 import com.USWCicrcleLink.server.global.security.exception.CustomAuthenticationEntryPoint;
 import com.USWCicrcleLink.server.global.security.jwt.filter.JwtFilter;
 import com.USWCicrcleLink.server.global.security.jwt.filter.LoggingFilter;
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
         private final JwtProvider jwtProvider;
         private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+        private final CustomAccessDeniedHandler customAccessDeniedHandler;
         private final SecurityProperties securityProperties;
 
         @Value("#{'${cors.allowed-origins}'.split(',')}")
@@ -54,8 +56,10 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .exceptionHandling(
-                                                exceptionHandling -> exceptionHandling.authenticationEntryPoint(
-                                                                customAuthenticationEntryPoint))
+                                                exceptionHandling -> exceptionHandling
+                                                                .authenticationEntryPoint(
+                                                                                customAuthenticationEntryPoint)
+                                                                .accessDeniedHandler(customAccessDeniedHandler))
                                 .authorizeHttpRequests(auth -> {
                                         auth.requestMatchers(
                                                         securityProperties.getPermitAllPaths().toArray(new String[0]))

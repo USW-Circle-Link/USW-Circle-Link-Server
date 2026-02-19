@@ -78,6 +78,18 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();
 
+                // Leader 계정에 해당하는 User 삭제 (통합 로그인 동기화 정리)
+                List<String> leaderAccounts = em.createQuery(
+                                "SELECT l.leaderAccount FROM Leader l WHERE l.club.clubId = :clubId", String.class)
+                                .setParameter("clubId", clubId)
+                                .getResultList();
+
+                if (!leaderAccounts.isEmpty()) {
+                        em.createQuery("DELETE FROM User u WHERE u.userAccount IN :accounts")
+                                        .setParameter("accounts", leaderAccounts)
+                                        .executeUpdate();
+                }
+
                 em.createQuery("DELETE FROM Leader l WHERE l.club.clubId = :clubId")
                                 .setParameter("clubId", clubId)
                                 .executeUpdate();

@@ -201,4 +201,25 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, status);
     }
+
+    /**
+     * Request Body가 없거나 잘 못된 포맷일 때 처리 - 400 에러
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
+            HttpServletRequest request) {
+        String message = "잘못된 요청입니다. Request Body를 확인해 주세요.";
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        logByHttpStatus(status, message, ex, request);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                ex.getClass().getSimpleName(),
+                "INVALID_REQUEST_BODY",
+                message,
+                status,
+                null);
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 }

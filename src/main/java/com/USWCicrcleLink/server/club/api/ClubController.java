@@ -93,7 +93,7 @@ public class ClubController {
     public ResponseEntity<ApiResponse<String>> checkDuplication(
             @RequestParam("type") String type,
             @RequestParam("val") String val) {
-        if ("LEADER".equalsIgnoreCase(type)) {
+        if ("LEADER".equalsIgnoreCase(type) || "ACCOUNT".equalsIgnoreCase(type)) {
             adminClubService.validateLeaderAccount(val);
             return ResponseEntity.ok(new ApiResponse<>("사용 가능한 동아리 회장 아이디입니다."));
         } else if ("NAME".equalsIgnoreCase(type)) {

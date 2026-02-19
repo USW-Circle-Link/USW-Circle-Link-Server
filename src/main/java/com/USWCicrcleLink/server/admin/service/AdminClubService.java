@@ -177,9 +177,9 @@ public class AdminClubService {
         log.debug("기본 동아리 소개 사진 5개 생성 완료 - Club ID: {}", clubInfo.getClub().getClubId());
     }
 
-    // 동아리 생성 - 동아리 회장 아이디 중복 확인
+    // 동아리 생성 - 동아리 회장 아이디 중복 확인 (user_table 조회)
     public void validateLeaderAccount(String leaderAccount) {
-        if (leaderRepository.existsByLeaderAccount(leaderAccount)) {
+        if (userRepository.existsByUserAccount(leaderAccount)) {
             log.warn("동아리 회장 계정 중복 - LeaderAccount: {}", leaderAccount);
             throw new ClubException(ExceptionType.LEADER_ACCOUNT_ALREADY_EXISTS);
         }

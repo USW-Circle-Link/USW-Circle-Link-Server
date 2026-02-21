@@ -102,6 +102,8 @@ public enum ExceptionType {
         CLUB_INFO_NOT_EXISTS("CINT-201", "동아리 소개글을 찾을 수 없습니다.", NOT_FOUND),
         GOOGLE_FORM_URL_NOT_EXISTS("CINT-202", "등록된 구글 폼 링크가 없습니다.", BAD_REQUEST),
         INVALID_RECRUITMENT_STATUS("CINT-303", "모집 상태 설정이 올바르지 않습니다.", BAD_REQUEST),
+        RECRUITMENT_CLOSED("CINT-304", "현재 모집 기간이 아닙니다.", BAD_REQUEST),
+        CLUB_FORM_NOT_FOUND("CINT-305", "등록된 모집 양식이 없습니다.", NOT_FOUND),
 
         /**
          * Domain: Admin

@@ -18,21 +18,22 @@ public class FloorMapController {
 
     // 동아리 위치 정보 수정 - 층별 사진 업로드 (ADMIN)
     @PutMapping
-    public ResponseEntity<ApiResponse<Object>> uploadFloorMap(
+    public ResponseEntity<ApiResponse<Void>> uploadFloorMap(
             @RequestPart(value = "B1", required = false) MultipartFile b1,
             @RequestPart(value = "F1", required = false) MultipartFile f1,
             @RequestPart(value = "F2", required = false) MultipartFile f2) {
 
-        java.util.List<FloorMapResponse> photoResponses = floorMapService.uploadFloorPhotos(b1, f1, f2);
-        return ResponseEntity.ok(new ApiResponse<>("층별 사진 업로드 성공", photoResponses));
+        floorMapService.uploadFloorPhotos(b1, f1, f2);
+        return ResponseEntity.ok(new ApiResponse<>("층별 사진 업로드 성공"));
     }
 
     // 동아리 위치 정보 조회 (ALL)
     @GetMapping
-    public ResponseEntity<ApiResponse<Object>> getFloorMaps(
+    public ResponseEntity<ApiResponse<java.util.List<FloorMapResponse>>> getFloorMaps(
             @RequestParam(value = "floor", required = false) FloorPhotoEnum floor) {
         if (floor != null) {
-            return ResponseEntity.ok(new ApiResponse<>("해당 층 사진 조회 성공", floorMapService.getFloorMap(floor)));
+            return ResponseEntity
+                    .ok(new ApiResponse<>("해당 층 사진 조회 성공", java.util.List.of(floorMapService.getFloorMap(floor))));
         }
         return ResponseEntity.ok(new ApiResponse<>("전체 층 사진 조회 성공", floorMapService.getAllFloorMaps()));
     }

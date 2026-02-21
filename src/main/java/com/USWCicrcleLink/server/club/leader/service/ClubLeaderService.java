@@ -99,7 +99,7 @@ public class ClubLeaderService {
     }
 
     // 약관 동의 여부 업데이트
-    public ApiResponse<String> updateAgreedTermsTrue() {
+    public void updateAgreedTermsTrue() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication.getPrincipal() instanceof CustomLeaderDetails leaderDetails)) {
@@ -109,7 +109,6 @@ public class ClubLeaderService {
         Leader leader = leaderDetails.leader();
         leader.setAgreeTerms(true);
         leaderRepository.save(leader);
-        return new ApiResponse<>("약관 동의 완료");
     }
 
     public ApiResponse<String> updatePassword(com.USWCicrcleLink.server.club.leader.dto.LeaderUpdatePwRequest request,
@@ -478,17 +477,17 @@ public class ClubLeaderService {
 
     // 모집 상태 조회
     @Transactional(readOnly = true)
-    public ApiResponse<RecruitmentStatusResponse> getRecruitmentStatus(UUID clubUUID) {
+    public RecruitmentStatusResponse getRecruitmentStatus(UUID clubUUID) {
         Club club = validateLeaderAccess(clubUUID);
 
         ClubInfo clubInfo = clubInfoRepository.findByClubClubId(club.getClubId())
                 .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INFO_NOT_EXISTS));
 
-        return new ApiResponse<>("모집 상태 조회 완료", new RecruitmentStatusResponse(clubInfo.getRecruitmentStatus()));
+        return new RecruitmentStatusResponse(clubInfo.getRecruitmentStatus());
     }
 
     // 동아리 모집 상태 변경
-    public ApiResponse toggleRecruitmentStatus(UUID clubUUID) {
+    public void toggleRecruitmentStatus(UUID clubUUID) {
 
         Club club = validateLeaderAccess(clubUUID);
 
@@ -499,8 +498,6 @@ public class ClubLeaderService {
         // 모집 상태 현재와 반전
         clubInfo.toggleRecruitmentStatus();
         clubRepository.save(club);
-
-        return new ApiResponse<>("동아리 모집 상태 변경 완료", clubInfo.getRecruitmentStatus());
     }
 
     // 소속 동아리원 조회(구, 성능 비교용)
@@ -508,27 +505,25 @@ public class ClubLeaderService {
 
     // 소속 동아리 회원 조회(가나다순 정렬)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ClubMembersResponse>> getClubMembers(UUID clubUUID) {
+    public List<ClubMembersResponse> getClubMembers(UUID clubUUID) {
 
         Club club = validateLeaderAccess(clubUUID);
 
         List<ClubMembers> findClubMembers = clubMembersRepository.findAllWithProfileByName(club.getClubId());
 
         // 동아리원과 프로필 조회
-        List<ClubMembersResponse> memberProfiles = findClubMembers.stream()
+        return findClubMembers.stream()
                 .map(cm -> new ClubMembersResponse(
                         cm.getClubMemberUUID(),
                         cm.getProfile()))
                 .collect(toList());
-
-        return new ApiResponse<>("소속 동아리 회원 가나다순 조회 완료", memberProfiles);
     }
 
     // ... (remaining methods)
 
     // 소속 동아리 회원 조회(정회원/ 비회원 정렬)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ClubMembersResponse>> getClubMembersByMemberType(UUID clubUUID, MemberType memberType) {
+    public List<ClubMembersResponse> getClubMembersByMemberType(UUID clubUUID, MemberType memberType) {
 
         Club club = validateLeaderAccess(clubUUID);
 
@@ -536,17 +531,15 @@ public class ClubLeaderService {
                 memberType);
 
         // 동아리원과 프로필 조회
-        List<ClubMembersResponse> memberProfiles = findClubMembers.stream()
+        return findClubMembers.stream()
                 .map(cm -> new ClubMembersResponse(
                         cm.getClubMemberUUID(),
                         cm.getProfile()))
                 .collect(toList());
-
-        return new ApiResponse<>("소속 동아리 회원 조회 완료", memberProfiles);
     }
 
     // 소속 동아리원 삭제
-    public ApiResponse deleteClubMembers(UUID clubUUID, List<ClubMembersDeleteRequest> clubMemberUUIDList) {
+    public void deleteClubMembers(UUID clubUUID, List<ClubMembersDeleteRequest> clubMemberUUIDList) {
 
         Club club = validateLeaderAccess(clubUUID);
 
@@ -565,26 +558,22 @@ public class ClubLeaderService {
 
         // 동아리 회원 삭제
         clubMembersRepository.deleteAll(membersToDelete);
-
-        return new ApiResponse<>("동아리 회원 삭제 완료", clubMemberUUIDList);
     }
 
     // 동아리 지원자 조회 (전체 또는 상태별)
     @Transactional(readOnly = true)
-    public ApiResponse<List<ApplicantsResponse>> getApplicants(UUID clubUUID, AplictStatus privateStatus,
+    public List<ApplicantsResponse> getApplicants(UUID clubUUID, AplictStatus privateStatus,
             Boolean isResultPublished) {
         Club club = validateLeaderAccess(clubUUID);
 
         List<Aplict> aplicts = aplictRepository.findApplicants(club.getClubId(), privateStatus, isResultPublished);
 
-        List<ApplicantsResponse> applicants = aplicts.stream()
+        return aplicts.stream()
                 .map(ap -> new ApplicantsResponse(
                         ap.getAplictUUID(),
                         ap.getProfile(),
                         ap.getPrivateStatus()))
                 .toList();
-
-        return new ApiResponse<>("동아리 지원자 조회 완료", applicants);
     }
 
     // 최종 합격자 알림 (개별/일괄 처리 가능)

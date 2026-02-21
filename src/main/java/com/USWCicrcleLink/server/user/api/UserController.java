@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/password")
-    public ApiResponse<String> updateUserPw(@Validated(ValidationSequence.class) @RequestBody UpdatePwRequest request) {
+    public ApiResponse<Void> updateUserPw(@Validated(ValidationSequence.class) @RequestBody UpdatePwRequest request) {
         userService.updateNewPW(request);
         return new ApiResponse<>("비밀번호가 성공적으로 업데이트 되었습니다.");
     }
@@ -102,7 +102,7 @@ public class UserController {
     // 회원 탈퇴 인증 번호 확인
     @DeleteMapping("/me")
     @RateLimite(action = "WITHDRAWAL_CODE")
-    public ApiResponse<String> cancelMembership(HttpServletRequest request, HttpServletResponse response,
+    public ApiResponse<Void> cancelMembership(HttpServletRequest request, HttpServletResponse response,
             @Valid @RequestBody AuthCodeRequest authCodeRequest) {
 
         // 토큰 검증 및 삭제

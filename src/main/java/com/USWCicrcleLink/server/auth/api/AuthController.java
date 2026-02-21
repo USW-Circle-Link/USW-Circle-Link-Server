@@ -63,7 +63,7 @@ public class AuthController {
      * 아이디 중복 확인
      */
     @GetMapping("/check-Id")
-    public ResponseEntity<ApiResponse<String>> verifyAccountDuplicate(@RequestParam("Id") String account) {
+    public ResponseEntity<ApiResponse<Void>> verifyAccountDuplicate(@RequestParam("Id") String account) {
         userService.verifyAccountDuplicate(account);
         return ResponseEntity.ok(new ApiResponse<>("사용 가능한 ID 입니다."));
     }
@@ -107,27 +107,28 @@ public class AuthController {
      */
     @PostMapping("/password/verify")
     @RateLimite(action = "VALIDATE_CODE")
-    public ApiResponse<String> verifyAuthToken(@RequestHeader("uuid") UUID uuid,
+    public ResponseEntity<ApiResponse<Void>> verifyAuthToken(@RequestHeader("uuid") UUID uuid,
             @Valid @RequestBody AuthCodeRequest request) {
         authTokenService.verifyAuthToken(uuid, request);
         authTokenService.deleteAuthToken(uuid);
-        return new ApiResponse<>("인증 코드 검증이 완료되었습니다");
+        return ResponseEntity.ok(new ApiResponse<>("인증 코드 검증이 완료되었습니다"));
     }
 
     /**
      * 비밀번호 초기화 (인증 후)
      */
     @PatchMapping("/password/reset")
-    public ApiResponse<String> resetUserPw(@RequestHeader("uuid") UUID uuid, @RequestBody PasswordRequest request) {
+    public ResponseEntity<ApiResponse<Void>> resetUserPw(@RequestHeader("uuid") UUID uuid,
+            @RequestBody PasswordRequest request) {
         userService.resetPW(uuid, request);
-        return new ApiResponse<>("비밀번호가 변경되었습니다.");
+        return ResponseEntity.ok(new ApiResponse<>("비밀번호가 변경되었습니다."));
     }
 
     /**
      * 아이디 찾기 (이메일로 전송)
      */
     @PostMapping("/find-id")
-    public ResponseEntity<ApiResponse<String>> findUserAccount(@RequestBody EmailDTO request) {
+    public ResponseEntity<ApiResponse<Void>> findUserAccount(@RequestBody EmailDTO request) {
         User findUser = userService.findUser(request.getEmail());
         userService.sendAccountInfoMail(findUser);
         return ResponseEntity.ok(new ApiResponse<>("계정 정보 전송 완료"));
@@ -138,10 +139,10 @@ public class AuthController {
      */
     @PostMapping("/withdrawal/code")
     @RateLimite(action = "WITHDRAWAL_EMAIL")
-    public ApiResponse<String> sendWithdrawalCode() {
+    public ResponseEntity<ApiResponse<Void>> sendWithdrawalCode() {
         WithdrawalToken token = withdrawalTokenService.createOrUpdateWithdrawalToken();
         userService.sendWithdrawalCodeMail(token);
-        return new ApiResponse<>("탈퇴를 위한 인증 메일이 전송 되었습니다");
+        return ResponseEntity.ok(new ApiResponse<>("탈퇴를 위한 인증 메일이 전송 되었습니다"));
     }
 
     /**

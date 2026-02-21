@@ -5,6 +5,8 @@ import com.USWCicrcleLink.server.club.leader.domain.ClubForm;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
 import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
+import com.USWCicrcleLink.server.global.exception.ExceptionType;
+import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ public class ClubFormService {
                                 .orElseThrow(() -> new IllegalArgumentException("동아리 소개 정보를 찾을 수 없습니다."));
 
                 if (clubInfo.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
-                        throw new IllegalArgumentException("현재 모집 기간이 아닙니다.");
+                        throw new ClubException(ExceptionType.RECRUITMENT_CLOSED);
                 }
 
                 // 2. 최신 폼 가져오기

@@ -6,6 +6,9 @@ import com.USWCicrcleLink.server.admin.dto.AdminClubInfoResponse;
 import com.USWCicrcleLink.server.admin.dto.AdminPwRequest;
 import com.USWCicrcleLink.server.admin.service.AdminClubService;
 import com.USWCicrcleLink.server.club.application.dto.ApplicantResultsRequest;
+import com.USWCicrcleLink.server.club.application.dto.ApplicantsResponse;
+import com.USWCicrcleLink.server.club.leader.dto.club.UpdateClubResponse;
+import com.USWCicrcleLink.server.club.leader.dto.club.RecruitmentStatusResponse;
 
 import com.USWCicrcleLink.server.club.dto.ClubListResponse;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
@@ -74,7 +77,7 @@ public class ClubController {
 
     // 동아리 생성
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> createClub(
+    public ResponseEntity<ApiResponse<Void>> createClub(
             @RequestBody @Validated(ValidationSequence.class) AdminClubCreationRequest clubRequest) {
         adminClubService.createClub(clubRequest);
         return ResponseEntity.ok(new ApiResponse<>("동아리 생성 성공"));
@@ -82,7 +85,7 @@ public class ClubController {
 
     // 동아리 삭제
     @DeleteMapping("/{clubUUID}")
-    public ResponseEntity<ApiResponse<Long>> deleteClub(@PathVariable("clubUUID") UUID clubUUID,
+    public ResponseEntity<ApiResponse<Void>> deleteClub(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody(required = false) @Validated(ValidationSequence.class) AdminPwRequest request) {
         adminClubService.deleteClub(clubUUID, request);
         return ResponseEntity.ok(new ApiResponse<>("동아리 삭제 성공"));
@@ -90,7 +93,7 @@ public class ClubController {
 
     // 중복 확인 (회장 ID or 동아리 이름)
     @GetMapping("/check-duplication")
-    public ResponseEntity<ApiResponse<String>> checkDuplication(
+    public ResponseEntity<ApiResponse<Void>> checkDuplication(
             @RequestParam("type") String type,
             @RequestParam("val") String val) {
         if ("LEADER".equalsIgnoreCase(type) || "ACCOUNT".equalsIgnoreCase(type)) {
@@ -108,7 +111,7 @@ public class ClubController {
 
     // 약관 동의 (Leader)
     @PatchMapping("/terms/agreement")
-    public ResponseEntity<ApiResponse<String>> setAgreedTermsTrue() {
+    public ResponseEntity<ApiResponse<Void>> setAgreedTermsTrue() {
         clubLeaderService.updateAgreedTermsTrue();
         return ResponseEntity.ok(new ApiResponse<>("약관 동의 완료"));
     }
@@ -124,7 +127,7 @@ public class ClubController {
 
     // 동아리 정보 수정 (Leader)
     @PutMapping("/{clubUUID}")
-    public ResponseEntity<ApiResponse> updateClub(
+    public ResponseEntity<ApiResponse<UpdateClubResponse>> updateClub(
             @PathVariable("clubUUID") UUID clubUUID,
             @RequestPart(value = "mainPhoto", required = false) MultipartFile mainPhoto,
             @RequestPart(value = "clubProfileRequest", required = false) @Validated(ValidationSequence.class) ClubProfileRequest clubProfileRequest,
@@ -133,7 +136,8 @@ public class ClubController {
             @RequestPart(value = "infoPhotos", required = false) List<MultipartFile> infoPhotos,
             HttpServletResponse response) throws IOException {
 
-        ApiResponse result = clubLeaderService.updateClub(clubUUID, clubProfileRequest, mainPhoto, clubInfoRequest,
+        ApiResponse<UpdateClubResponse> result = clubLeaderService.updateClub(clubUUID, clubProfileRequest, mainPhoto,
+                clubInfoRequest,
                 infoPhotos);
         if (leaderUpdatePwRequest != null) {
             clubLeaderService.updatePassword(leaderUpdatePwRequest, response);
@@ -143,61 +147,65 @@ public class ClubController {
 
     // 모집 상태 조회
     @GetMapping("/{clubUUID}/recruit-status")
-    public ResponseEntity<ApiResponse> getRecruitmentStatus(@PathVariable("clubUUID") UUID clubUUID) {
-        return ResponseEntity.ok(clubLeaderService.getRecruitmentStatus(clubUUID));
+    public ResponseEntity<ApiResponse<RecruitmentStatusResponse>> getRecruitmentStatus(
+            @PathVariable("clubUUID") UUID clubUUID) {
+        RecruitmentStatusResponse status = clubLeaderService.getRecruitmentStatus(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("모집 상태 조회 완료", status));
     }
 
     // 모집 상태 변경 (Toggle)
     @PatchMapping("/{clubUUID}/recruit-status")
-    public ResponseEntity<ApiResponse> toggleRecruitmentStatus(@PathVariable("clubUUID") UUID clubUUID) {
-        return new ResponseEntity<>(clubLeaderService.toggleRecruitmentStatus(clubUUID), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<Void>> toggleRecruitmentStatus(@PathVariable("clubUUID") UUID clubUUID) {
+        clubLeaderService.toggleRecruitmentStatus(clubUUID);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 모집 상태 변경 완료"));
     }
 
     // 동아리 회원 조회 (Leader)
     @GetMapping("/{clubUUID}/members")
-    public ResponseEntity<ApiResponse> getClubMembers(
+    public ResponseEntity<ApiResponse<List<ClubMembersResponse>>> getClubMembers(
             @PathVariable("clubUUID") UUID clubUUID,
             @RequestParam(value = "sort", defaultValue = "default") String sort) {
 
-        ApiResponse<List<ClubMembersResponse>> response = switch (sort.toLowerCase()) {
+        List<ClubMembersResponse> members = switch (sort.toLowerCase()) {
             case "regular-member" -> clubLeaderService.getClubMembersByMemberType(clubUUID, MemberType.REGULARMEMBER);
             case "default" -> clubLeaderService.getClubMembers(clubUUID);
             default -> throw new ProfileException(ExceptionType.INVALID_MEMBER_TYPE);
         };
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 회원 조회 완료", members));
     }
 
     // 동아리 회원 삭제 (Leader)
     @DeleteMapping("/{clubUUID}/members")
-    public ResponseEntity<ApiResponse> deleteClubMembers(@PathVariable("clubUUID") UUID clubUUID,
+    public ResponseEntity<ApiResponse<Void>> deleteClubMembers(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody List<ClubMembersDeleteRequest> clubMemberUUIDList) {
-        return new ResponseEntity<>(clubLeaderService.deleteClubMembers(clubUUID, clubMemberUUIDList), HttpStatus.OK);
+        clubLeaderService.deleteClubMembers(clubUUID, clubMemberUUIDList);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 회원 삭제 완료"));
     }
 
     // 지원자 조회
     @GetMapping("/{clubUUID}/applicants")
-    public ResponseEntity<ApiResponse> getApplicants(
+    public ResponseEntity<ApiResponse<List<ApplicantsResponse>>> getApplicants(
             @PathVariable("clubUUID") UUID clubUUID,
             @RequestParam(value = "status", required = false) com.USWCicrcleLink.server.club.application.domain.AplictStatus status,
             @RequestParam(value = "isResultPublished", required = false) Boolean isResultPublished) {
-        return new ResponseEntity<>(clubLeaderService.getApplicants(clubUUID, status, isResultPublished),
-                HttpStatus.OK);
+        List<ApplicantsResponse> applicants = clubLeaderService.getApplicants(clubUUID, status, isResultPublished);
+        return ResponseEntity.ok(new ApiResponse<>("동아리 지원자 조회 완료", applicants));
     }
 
     // 합격자 알림
     @PostMapping("/{clubUUID}/applicants/notifications")
-    public ResponseEntity<ApiResponse> pushApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
+    public ResponseEntity<ApiResponse<Void>> pushApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody @Validated(ValidationSequence.class) List<ApplicantResultsRequest> results)
             throws IOException {
         clubLeaderService.updateApplicantResults(clubUUID, results);
-        return new ResponseEntity<>(new ApiResponse<>("지원 결과 처리 완료"), HttpStatus.OK);
+        return ResponseEntity.ok(new ApiResponse<>("지원 결과 처리 완료"));
     }
 
     // FCM 토큰 갱신 (Leader)
     @PatchMapping("/fcmtoken")
-    public ResponseEntity<ApiResponse> updateFcmToken(@RequestBody FcmTokenRequest fcmTokenRequest) {
+    public ResponseEntity<ApiResponse<Void>> updateFcmToken(@RequestBody FcmTokenRequest fcmTokenRequest) {
         fcmService.refreshFcmToken(fcmTokenRequest);
-        return new ResponseEntity<>(new ApiResponse<>("fcm token 갱신 완료"), HttpStatus.OK);
+        return ResponseEntity.ok(new ApiResponse<>("fcm token 갱신 완료"));
     }
 
     // --- Added from ClubLeaderController ---
@@ -242,11 +250,11 @@ public class ClubController {
 
     // 1️ 지원서 폼 생성
     @PostMapping("/{clubUUID}/forms")
-    public ResponseEntity<Void> createForm(
+    public ResponseEntity<ApiResponse<Void>> createForm(
             @PathVariable UUID clubUUID,
             @RequestBody @jakarta.validation.Valid com.USWCicrcleLink.server.club.leader.dto.FormDto.CreateRequest request) {
-        Long formId = formService.createForm(clubUUID, request);
-        return ResponseEntity.created(java.net.URI.create("/clubs/" + clubUUID + "/forms/" + formId)).build();
+        formService.createForm(clubUUID, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("폼 생성 성공"));
     }
 
     @GetMapping("/{clubUUID}/forms")

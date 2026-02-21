@@ -5,7 +5,13 @@ import com.USWCicrcleLink.server.club.leader.domain.ClubForm;
 import com.USWCicrcleLink.server.club.form.dto.ClubFormResponse;
 import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
 import com.USWCicrcleLink.server.club.clubInfo.repository.ClubInfoRepository;
+import com.USWCicrcleLink.server.global.exception.ExceptionType;
+import com.USWCicrcleLink.server.global.exception.errortype.ClubException;
+import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;
+import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +29,19 @@ public class ClubFormService {
         public ClubFormResponse getQuestionsByClub(UUID clubUUID) {
                 // 1. 모집 상태 확인
                 var clubInfo = clubInfoRepository.findByClubuuid(clubUUID)
-                                .orElseThrow(() -> new IllegalArgumentException("동아리 소개 정보를 찾을 수 없습니다."));
+                                .orElseThrow(() -> new ClubException(ExceptionType.CLUB_INFO_NOT_EXISTS));
 
-                if (clubInfo.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
-                        throw new IllegalArgumentException("현재 모집 기간이 아닙니다.");
+                // 리더나 어드민은 모집 상태와 무관하게 조회 가능
+                if (!isLeaderOrAdminOfClub(clubUUID)) {
+                        if (clubInfo.getRecruitmentStatus() == com.USWCicrcleLink.server.club.domain.RecruitmentStatus.CLOSE) {
+                                throw new ClubException(ExceptionType.RECRUITMENT_CLOSED);
+                        }
                 }
 
                 // 2. 최신 폼 가져오기
                 List<ClubForm> forms = clubFormRepository.findFormsByClubUUID(clubUUID);
                 if (forms.isEmpty()) {
-                        throw new IllegalArgumentException("등록된 모집 양식이 없습니다.");
+                        throw new ClubException(ExceptionType.CLUB_FORM_NOT_FOUND);
                 }
                 ClubForm form = forms.get(0);
 
@@ -51,5 +60,24 @@ public class ClubFormService {
                                 .toList();
 
                 return new ClubFormResponse(form.getFormId(), questions);
+        }
+
+        private boolean isLeaderOrAdminOfClub(UUID clubUUID) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null || !authentication.isAuthenticated()) {
+                        return false;
+                }
+
+                Object principal = authentication.getPrincipal();
+
+                if (principal instanceof CustomAdminDetails) {
+                        return true;
+                }
+
+                if (principal instanceof CustomLeaderDetails leaderDetails) {
+                        return leaderDetails.getClubuuid().equals(clubUUID);
+                }
+
+                return false;
         }
 }

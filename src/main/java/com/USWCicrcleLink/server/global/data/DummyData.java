@@ -286,7 +286,7 @@ public class DummyData {
                 Leader leader1 = Leader.builder()
                                 .leaderUUID(badmintonLeaderUUID)
                                 .leaderAccount("badmintonClub")
-                                .leaderPw(passwordEncoder.encode("12345"))
+                                .leaderPw(passwordEncoder.encode("a123456!"))
                                 .club(badmintonClub)
                                 .role(Role.LEADER)
                                 .build();

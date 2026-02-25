@@ -40,9 +40,10 @@ public class FormQuestion {
     private List<FormQuestionOption> options = new ArrayList<>();
 
     @Builder
-    public FormQuestion(QuestionType type, String content, boolean required, int sequence) {
+    public FormQuestion(Long questionId, QuestionType type, String content, boolean required, int sequence) {
+        this.questionId = questionId;
         this.type = type;
-        this.renderType = type.getDefaultRenderType(); // Type에 따라 RenderType 자동 결정
+        this.renderType = type != null ? type.getDefaultRenderType() : null;
         this.content = content;
         this.required = required;
         this.sequence = sequence;

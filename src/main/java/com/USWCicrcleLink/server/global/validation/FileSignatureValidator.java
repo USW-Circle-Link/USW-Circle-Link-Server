@@ -11,11 +11,12 @@ public class FileSignatureValidator {
     private static final Map<String, String> FILE_SIGNATURES = new HashMap<>();
 
     static {
-        FILE_SIGNATURES.put("jpg", "FFD8FF");      // JPG
-        FILE_SIGNATURES.put("jpeg", "FFD8FF");     // JPEG
-        FILE_SIGNATURES.put("png", "89504E47");    // PNG (8바이트가 필요)
-        FILE_SIGNATURES.put("xls", "D0CF11E0");       // XLS (Excel 97-2003)
-        FILE_SIGNATURES.put("xlsx", "504B0304");      // XLSX (Excel 2007 이상, ZIP 기반)
+        FILE_SIGNATURES.put("jpg", "FFD8FF"); // JPG
+        FILE_SIGNATURES.put("jpeg", "FFD8FF"); // JPEG
+        FILE_SIGNATURES.put("png", "89504E47"); // PNG (8바이트가 필요)
+        FILE_SIGNATURES.put("xls", "D0CF11E0"); // XLS (Excel 97-2003)
+        FILE_SIGNATURES.put("xlsx", "504B0304"); // XLSX (Excel 2007 이상, ZIP 기반)
+        FILE_SIGNATURES.put("webp", "52494646"); // WebP (RIFF header)
     }
 
     public static String getFileSignature(InputStream inputStream, int bytesToRead) throws IOException {
@@ -40,8 +41,21 @@ public class FileSignatureValidator {
         }
 
         // 파일 시그니처가 확장자에 따라 필요한 바이트 수에 맞게 읽어옴
-        int bytesToRead = expectedExtension.equalsIgnoreCase("png") ? 8 : 4;  // PNG는 8바이트가 필요함
+        int bytesToRead;
+        if (expectedExtension.equalsIgnoreCase("webp")) {
+            bytesToRead = 12; // RIFF + size + WEBP
+        } else if (expectedExtension.equalsIgnoreCase("png")) {
+            bytesToRead = 8;
+        } else {
+            bytesToRead = 4;
+        }
+
         String fileSignature = getFileSignature(inputStream, bytesToRead);
+
+        // WebP의 경우 RIFF(0-3)와 WEBP(8-11) 식별자 모두 확인
+        if (expectedExtension.equalsIgnoreCase("webp")) {
+            return fileSignature.startsWith("52494646") && fileSignature.endsWith("57454250");
+        }
 
         // 파일 시그니처가 시작 부분만 일치해도 허용
         return fileSignature.startsWith(expectedSignature);

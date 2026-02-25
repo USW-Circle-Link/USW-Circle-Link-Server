@@ -27,7 +27,8 @@ public class FormQuestionOption {
     private int sequence;
 
     @Builder
-    public FormQuestionOption(String content, String value, int sequence) {
+    public FormQuestionOption(Long optionId, String content, String value, int sequence) {
+        this.optionId = optionId;
         this.content = content;
         this.value = value;
         this.sequence = sequence;

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,20 +16,24 @@ import java.util.UUID;
 public class AplictDto {
 
     @Getter
+    @Setter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class SubmitRequest {
         @Valid
         @NotNull
-        private List<AnswerRequest> answers;
+        private List<AnswerRequest> qnaList;
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class AnswerRequest {
         @NotNull
         private Long questionId;
-        private Long optionId; // New field
-        private String answerText; // Renamed from content
+        private Long optionId;
+        private String answerText;
     }
 
     @Getter
@@ -50,6 +55,7 @@ public class AplictDto {
         private String question;
         private String answer;
         private Long optionId;
+        private String optionContent;
     }
 
     @Getter

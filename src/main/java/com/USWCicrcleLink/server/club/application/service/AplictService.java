@@ -130,7 +130,8 @@ public class AplictService {
                 .map(a -> new AplictDto.QnAResponse(
                         a.getFormQuestion().getContent(),
                         a.getAnswerText(),
-                        a.getOption() != null ? a.getOption().getOptionId() : null))
+                        a.getOption() != null ? a.getOption().getOptionId() : null,
+                        a.getOption() != null ? a.getOption().getContent() : null))
                 .toList();
 
         return new AplictDto.DetailResponse(
@@ -163,8 +164,8 @@ public class AplictService {
                 .build();
 
         // 답변 저장
-        if (request.getAnswers() != null) {
-            for (AplictDto.AnswerRequest ansReq : request.getAnswers()) {
+        if (request.getQnaList() != null) {
+            for (AplictDto.AnswerRequest ansReq : request.getQnaList()) {
                 com.USWCicrcleLink.server.club.leader.domain.FormQuestion question = formQuestionRepository
                         .findById(ansReq.getQuestionId())
                         .orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));

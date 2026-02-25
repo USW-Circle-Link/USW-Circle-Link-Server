@@ -5,8 +5,14 @@ import com.USWCicrcleLink.server.admin.repository.AdminRepository;
 import com.USWCicrcleLink.server.club.application.domain.Aplict;
 import com.USWCicrcleLink.server.club.application.domain.AplictStatus;
 import com.USWCicrcleLink.server.club.application.repository.AplictRepository;
+import com.USWCicrcleLink.server.club.application.domain.AplictAnswer;
+import com.USWCicrcleLink.server.club.application.repository.AplictAnswerRepository;
 import com.USWCicrcleLink.server.club.domain.*;
 import com.USWCicrcleLink.server.club.repository.*;
+import com.USWCicrcleLink.server.club.form.repository.ClubFormRepository;
+import com.USWCicrcleLink.server.club.form.repository.FormQuestionOptionRepository;
+import com.USWCicrcleLink.server.club.form.repository.FormQuestionRepository;
+import com.USWCicrcleLink.server.club.leader.domain.*;
 import com.USWCicrcleLink.server.category.domain.ClubCategory;
 import com.USWCicrcleLink.server.category.domain.ClubCategoryMapping;
 import com.USWCicrcleLink.server.category.repository.ClubCategoryRepository;
@@ -52,6 +58,10 @@ public class DummyData {
         private final ClubHashtagRepository clubHashtagRepository;
         private final ClubCategoryRepository clubCategoryRepository;
         private final ClubCategoryMappingRepository clubCategoryMappingRepository;
+        private final ClubFormRepository clubFormRepository;
+        private final FormQuestionRepository formQuestionRepository;
+        private final FormQuestionOptionRepository formQuestionOptionRepository;
+        private final AplictAnswerRepository aplictAnswerRepository;
 
         @PostConstruct
         public void init() {
@@ -60,6 +70,7 @@ public class DummyData {
                 initUser2();
                 initUser3();
                 initclub();
+                initAplictFlow();
         }
 
         // 관리자 동연회 데이터
@@ -981,6 +992,98 @@ public class DummyData {
                                 .role(role)
                                 .build();
                 userRepository.save(user);
+        }
+
+        private void initAplictFlow() {
+                // 1. 테스트 유저 생성 (postman-test)
+                UUID testUserUUID = UUID.fromString("45c0ef76-9509-4888-bdc3-9679964006ad");
+                User testUser = User.builder()
+                                .userUUID(testUserUUID)
+                                .userAccount("testuser")
+                                .userPw(passwordEncoder.encode("test1234!"))
+                                .email("test@example.com")
+                                .role(Role.USER)
+                                .build();
+                userRepository.save(testUser);
+
+                Profile testProfile = Profile.builder()
+                                .user(testUser)
+                                .userName("홍길동")
+                                .studentNumber("20240001")
+                                .userHp("01011112222")
+                                .major("컴퓨터공학과")
+                                .memberType(MemberType.REGULARMEMBER)
+                                .profileCreatedAt(LocalDateTime.now())
+                                .profileUpdatedAt(LocalDateTime.now())
+                                .build();
+                profileRepository.save(testProfile);
+
+                // 2. 테스트 동아리 생성
+                Club testClub = Club.builder()
+                                .clubuuid(UUID.fromString("3b35b596-aa83-4e28-b4dd-174d6f7d32d0"))
+                                .clubName("테스트동아리")
+                                .leaderName("회장님")
+                                .leaderHp("01012345678")
+                                .department(Department.VOLUNTEER)
+                                .clubRoomNumber("101")
+                                .build();
+                clubRepository.save(testClub);
+
+                ClubInfo testClubInfo = ClubInfo.builder()
+                                .club(testClub)
+                                .clubInfo("테스트 동아리입니다.")
+                                .clubRecruitment("신입 부원을 모집합니다.")
+                                .recruitmentStatus(RecruitmentStatus.OPEN)
+                                .build();
+                clubInfoRepository.save(testClubInfo);
+
+                // 3. 지원 폼 생성
+                ClubForm form = ClubForm.builder()
+                                .club(testClub)
+                                .description("신입 부원 모집")
+                                .createdBy(1L)
+                                .build();
+                clubFormRepository.save(form);
+
+                // 4. 질문 및 옵션 생성
+                FormQuestion q1 = FormQuestion.builder()
+                                .type(QuestionType.RADIO)
+                                .content("사용 가능한 프로그래밍 언어는?")
+                                .build();
+                form.addQuestion(q1);
+                formQuestionRepository.save(q1);
+
+                FormQuestionOption o1 = FormQuestionOption.builder()
+                                .content("Java")
+                                .build();
+                q1.addOption(o1);
+                formQuestionOptionRepository.save(o1);
+
+                FormQuestionOption o2 = FormQuestionOption.builder()
+                                .content("Python")
+                                .build();
+                q1.addOption(o2);
+                formQuestionOptionRepository.save(o2);
+
+                // 5. 지원서 생성
+                Aplict aplict = Aplict.builder()
+                                .aplictUUID(UUID.fromString("d9942a31-c748-4bc2-9c69-80d5414604c8"))
+                                .profile(testProfile)
+                                .club(testClub)
+                                .submittedAt(LocalDateTime.now())
+                                .publicStatus(AplictStatus.WAIT)
+                                .privateStatus(AplictStatus.WAIT)
+                                .build();
+                aplictRepository.save(aplict);
+
+                // 6. 답변 생성
+                AplictAnswer answer = AplictAnswer.builder()
+                                .aplict(aplict)
+                                .formQuestion(q1)
+                                .option(o1) // Java 선택
+                                .answerText(null)
+                                .build();
+                aplictAnswerRepository.save(answer);
         }
 
 }

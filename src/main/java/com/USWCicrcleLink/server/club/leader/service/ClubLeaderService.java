@@ -642,7 +642,8 @@ public class ClubLeaderService {
                 .map(a -> new AplictDto.QnAResponse(
                         a.getFormQuestion().getContent(),
                         a.getAnswerText(),
-                        a.getOption() != null ? a.getOption().getOptionId() : null))
+                        a.getOption() != null ? a.getOption().getOptionId() : null,
+                        a.getOption() != null ? a.getOption().getContent() : null))
                 .toList();
 
         return new AplictDto.DetailResponse(

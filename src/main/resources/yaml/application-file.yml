@@ -11,4 +11,4 @@ spring:
       resolve-lazily: true
 
 file:
-  allowed-extensions: jpg,jpeg,png
+  allowed-extensions: jpg,jpeg,png,webp

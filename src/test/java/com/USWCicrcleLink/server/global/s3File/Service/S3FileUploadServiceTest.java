@@ -43,22 +43,23 @@ class S3FileUploadServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 리사이징 및 업로드 성공 테스트")
-    void uploadFile_Success() throws IOException {
+    @DisplayName("이미지 업로드 시 리사이즈 없이 원본 크기 유지 테스트")
+    void uploadFile_NoResizing() throws IOException {
         // Given
-        // 1. Create a large image (1000x1000) to trigger resizing
+        // 1. 원본 이미지 생성 (1000x1000)
         int width = 1000;
         int height = 1000;
         BufferedImage largeImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(largeImage, "jpg", baos);
-        byte[] imageBytes = baos.toByteArray();
+        byte[] originalBytes = baos.toByteArray();
+        long originalSize = originalBytes.length;
 
         MockMultipartFile file = new MockMultipartFile(
                 "image",
                 "test.jpg",
                 "image/jpeg",
-                imageBytes);
+                originalBytes);
 
         when(amazonS3.generatePresignedUrl(anyString(), anyString(), any(), any()))
                 .thenReturn(new URL("https://s3.amazonaws.com/test-bucket/test.jpg"));
@@ -68,7 +69,12 @@ class S3FileUploadServiceTest {
 
         // Then
         assertNotNull(response);
-        verify(amazonS3, times(1)).putObject(anyString(), anyString(), any(ByteArrayInputStream.class),
-                any(ObjectMetadata.class));
+
+        // putObject가 호출될 때 전달된 metadata의 Content-Length가 원본 크기와 같은지 확인
+        verify(amazonS3, times(1)).putObject(
+                eq("test-bucket"),
+                anyString(),
+                any(ByteArrayInputStream.class),
+                argThat(metadata -> metadata.getContentLength() == originalSize));
     }
 }

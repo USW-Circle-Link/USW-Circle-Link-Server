@@ -48,14 +48,12 @@ public class S3FileUploadService {
         log.debug("파일 업로드 준비: {}", s3FileName);
 
         try {
-            // 이미지 리사이징 (너비 800px 기준) - 압축 및 크기 조정
-            java.io.ByteArrayInputStream inputStream = resizeImage(image, fileExtension);
-
+            // 원본 이미지 업로드 (리사이즈 비활성화)
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(image.getContentType());
-            metadata.setContentLength(inputStream.available()); // 리사이징된 크기
+            metadata.setContentLength(image.getSize());
 
-            amazonS3.putObject(bucket, s3FileName, inputStream, metadata);
+            amazonS3.putObject(bucket, s3FileName, image.getInputStream(), metadata);
         } catch (IOException e) {
             log.error("파일 입력 스트림 읽기 오류: {}", e.getMessage());
             throw new FileException(ExceptionType.FILE_UPLOAD_FAILED);
@@ -73,45 +71,6 @@ public class S3FileUploadService {
         log.debug("파일 업로드 및 URL 생성 완료: {}", presignedUrl);
 
         return new S3FileResponse(presignedUrl, s3FileName);
-    }
-
-    // 이미지 리사이징
-    private java.io.ByteArrayInputStream resizeImage(MultipartFile originalImage, String format) throws IOException {
-        java.awt.image.BufferedImage image = javax.imageio.ImageIO.read(originalImage.getInputStream());
-
-        // 원본 이미지가 null인 경우 (이미지 포맷이 아니거나 손상됨)
-        if (image == null) {
-            throw new FileException(ExceptionType.FILE_VALIDATION_FAILED);
-        }
-
-        int originalWidth = image.getWidth();
-        int originalHeight = image.getHeight();
-        int targetWidth = 800; // 목표 너비
-
-        // 이미지가 목표보다 작으면 원본 그대로 반환
-        if (originalWidth <= targetWidth) {
-            return new java.io.ByteArrayInputStream(originalImage.getBytes());
-        }
-
-        int targetHeight = (int) (originalHeight * ((double) targetWidth / originalWidth));
-
-        // PNG일 경우 투명도 유지 (ARGB), 그 외 (JPG 등)는 RGB
-        int imageType = (format.equalsIgnoreCase("png")) ? java.awt.image.BufferedImage.TYPE_INT_ARGB
-                : java.awt.image.BufferedImage.TYPE_INT_RGB;
-
-        java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(targetWidth, targetHeight,
-                imageType);
-        java.awt.Graphics2D graphics = resizedImage.createGraphics();
-        graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
-        graphics.dispose();
-
-        java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
-
-        // 포맷이 png/jpg 등일 경우 해당 포맷 유지, 그 외엔 jpg로 변환
-        String outputFormat = (format.equalsIgnoreCase("png")) ? "png" : "jpg";
-        javax.imageio.ImageIO.write(resizedImage, outputFormat, outputStream);
-
-        return new java.io.ByteArrayInputStream(outputStream.toByteArray());
     }
 
     // 파일 확장 및 시그니처 확인

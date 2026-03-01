@@ -33,6 +33,7 @@ public class AplictDto {
         @NotNull
         private Long questionId;
         private Long optionId;
+        private List<Long> optionIds; // 체크박스 다중선택용
         private String answerText;
     }
 
@@ -56,6 +57,8 @@ public class AplictDto {
         private String answer;
         private Long optionId;
         private String optionContent;
+        private List<Long> optionIds; // 체크박스 다중선택 응답용
+        private List<String> optionContents; // 체크박스 다중선택 응답용
     }
 
     @Getter

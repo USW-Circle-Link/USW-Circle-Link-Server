@@ -638,12 +638,41 @@ public class ClubLeaderService {
             throw new AplictException(ExceptionType.APLICT_NOT_EXISTS);
         }
 
-        List<AplictDto.QnAResponse> qnaList = aplict.getAnswers().stream()
-                .map(a -> new AplictDto.QnAResponse(
-                        a.getFormQuestion().getContent(),
-                        a.getAnswerText(),
-                        a.getOption() != null ? a.getOption().getOptionId() : null,
-                        a.getOption() != null ? a.getOption().getContent() : null))
+        // 같은 questionId를 가진 답변들을 그룹핑 (체크박스 다중선택 지원)
+        Map<Long, List<com.USWCicrcleLink.server.club.application.domain.AplictAnswer>> groupedAnswers = aplict
+                .getAnswers().stream()
+                .collect(Collectors.groupingBy(a -> a.getFormQuestion().getQuestionId(), LinkedHashMap::new,
+                        Collectors.toList()));
+
+        List<AplictDto.QnAResponse> qnaList = groupedAnswers.values().stream()
+                .map(answers -> {
+                    var first = answers.get(0);
+                    String question = first.getFormQuestion().getContent();
+                    String answerText = first.getAnswerText();
+
+                    if (answers.size() == 1) {
+                        // 단일 옵션 (RADIO, DROPDOWN, TEXT 등)
+                        return new AplictDto.QnAResponse(
+                                question, answerText,
+                                first.getOption() != null ? first.getOption().getOptionId() : null,
+                                first.getOption() != null ? first.getOption().getContent() : null,
+                                null, null);
+                    } else {
+                        // 다중 옵션 (CHECKBOX)
+                        List<Long> optionIds = answers.stream()
+                                .filter(a -> a.getOption() != null)
+                                .map(a -> a.getOption().getOptionId())
+                                .toList();
+                        List<String> optionContents = answers.stream()
+                                .filter(a -> a.getOption() != null)
+                                .map(a -> a.getOption().getContent())
+                                .toList();
+                        return new AplictDto.QnAResponse(
+                                question, answerText,
+                                null, null,
+                                optionIds, optionContents);
+                    }
+                })
                 .toList();
 
         return new AplictDto.DetailResponse(

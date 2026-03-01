@@ -144,6 +144,12 @@ public class FcmServiceImpl implements FcmService {
     // fcm token 갱신
     @Transactional
     public void refreshFcmToken(FcmTokenRequest fcmTokenRequest) {
+        // FCM 토큰 유효성 검사
+        String token = fcmTokenRequest.getFcmToken();
+        if (token == null || token.isBlank()) {
+            throw new IllegalArgumentException("FCM 토큰은 null이거나 비어있을 수 없습니다.");
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.user();
@@ -153,7 +159,7 @@ public class FcmServiceImpl implements FcmService {
         Optional<Profile> userFcmTokenOptional = profileRepository.findByUserUserId(user.getUserId());
         if (userFcmTokenOptional.isPresent()) {
             Profile userFcmToken = userFcmTokenOptional.get();
-            userFcmToken.updateFcmTokenTime(fcmTokenRequest.getFcmToken(),
+            userFcmToken.updateFcmTokenTime(token.trim(),
                     LocalDateTime.now().plusDays(FCM_TOKEN_CERTIFICATION_TIME));
             profileRepository.save(userFcmToken);
             log.debug("사용자 {}의 FCM 토큰 갱신 완료", user.getUserAccount());

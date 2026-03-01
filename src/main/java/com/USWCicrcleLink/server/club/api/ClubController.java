@@ -203,7 +203,8 @@ public class ClubController {
 
     // FCM 토큰 갱신 (Leader)
     @PatchMapping("/fcmtoken")
-    public ResponseEntity<ApiResponse<Void>> updateFcmToken(@RequestBody FcmTokenRequest fcmTokenRequest) {
+    public ResponseEntity<ApiResponse<Void>> updateFcmToken(
+            @RequestBody @jakarta.validation.Valid FcmTokenRequest fcmTokenRequest) {
         fcmService.refreshFcmToken(fcmTokenRequest);
         return ResponseEntity.ok(new ApiResponse<>("fcm token 갱신 완료"));
     }

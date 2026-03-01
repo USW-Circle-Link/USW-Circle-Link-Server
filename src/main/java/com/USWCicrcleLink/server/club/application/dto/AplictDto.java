@@ -50,6 +50,7 @@ public class AplictDto {
         private List<QnAResponse> qnaList;
     }
 
+
     @Getter
     @AllArgsConstructor
     public static class QnAResponse {

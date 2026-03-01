@@ -54,6 +54,7 @@ public enum ExceptionType {
         USER_CREATION_FAILED("USR-218", "회원 가입을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.", INTERNAL_SERVER_ERROR),
         USER_UUID_IS_NOT_VALID("USR-219", "잘못된 가입 정보입니다.", UNAUTHORIZED),
         THIRD_PARTY_LOGIN_ATTEMPT("USR-220", "잘못된 접근입니다.", UNAUTHORIZED),
+        ROLE_NOT_ALLOWED_FOR_ORIGIN("USR-221", "해당 사이트에서는 접근할 수 없는 계정입니다.", FORBIDDEN),
 
         /**
          * Domain: ClubMemberTemp

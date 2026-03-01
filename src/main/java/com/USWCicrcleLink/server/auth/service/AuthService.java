@@ -28,7 +28,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -50,7 +52,8 @@ public class AuthService {
      * 통합 로그인 (user_table 기반 단일 인증)
      */
     @RateLimite(action = "USER_LOGIN")
-    public UnifiedLoginResponse unifiedLogin(UnifiedLoginRequest request, HttpServletResponse response) {
+    public UnifiedLoginResponse unifiedLogin(UnifiedLoginRequest request, HttpServletRequest httpRequest,
+            HttpServletResponse response) {
         // 1. user_table에서 계정 조회 (Role 확인용)
         User user = userRepository.findByUserAccount(request.getAccount())
                 .orElseThrow(() -> {
@@ -58,11 +61,14 @@ public class AuthService {
                     return new UserException(ExceptionType.USER_AUTHENTICATION_FAILED);
                 });
 
+        // 2. Referer 기반 역할 접근 검증
+        validateRoleForOrigin(httpRequest, user.getRole());
+
         UUID userUUID = user.getUserUUID();
         String accessToken;
         String refreshToken;
 
-        // 2. Role에 따라 분기 및 비밀번호 검증
+        // 3. Role에 따라 분기 및 비밀번호 검증
         switch (user.getRole()) {
             case USER:
                 // User는 user_table 비밀번호 사용
@@ -219,6 +225,57 @@ public class AuthService {
         } catch (TokenException e) {
             logout(request, response);
             return null;
+        }
+    }
+
+    /**
+     * Referer 헤더 기반 역할 접근 검증
+     * - admin.donggurami.net: ADMIN, LEADER만 허용
+     * - donggurami.net: USER만 허용
+     * - localhost, null(모바일): 모두 허용
+     */
+    private void validateRoleForOrigin(HttpServletRequest request, Role role) {
+        String referer = request.getHeader("Referer");
+
+        // Referer가 없으면 (모바일 등) 모두 허용
+        if (referer == null || referer.isBlank()) {
+            log.debug("Referer 없음 - 모든 역할 허용");
+            return;
+        }
+
+        try {
+            String host = URI.create(referer).getHost();
+
+            // localhost는 모두 허용
+            if (host == null || host.equals("localhost")) {
+                log.debug("localhost 접근 - 모든 역할 허용");
+                return;
+            }
+
+            // admin.donggurami.net → ADMIN, LEADER만 허용
+            if (host.equals("admin.donggurami.net")) {
+                Set<Role> allowed = Set.of(Role.ADMIN, Role.LEADER);
+                if (!allowed.contains(role)) {
+                    log.warn("admin 사이트에서 허용되지 않은 역할 로그인 시도 - role: {}, referer: {}", role, referer);
+                    throw new UserException(ExceptionType.ROLE_NOT_ALLOWED_FOR_ORIGIN);
+                }
+                return;
+            }
+
+            // donggurami.net → USER만 허용
+            if (host.equals("donggurami.net")) {
+                if (role != Role.USER) {
+                    log.warn("유저 사이트에서 허용되지 않은 역할 로그인 시도 - role: {}, referer: {}", role, referer);
+                    throw new UserException(ExceptionType.ROLE_NOT_ALLOWED_FOR_ORIGIN);
+                }
+                return;
+            }
+
+            // 그 외 알 수 없는 origin은 모두 허용 (필요 시 차단으로 변경 가능)
+            log.debug("알 수 없는 origin - 모든 역할 허용: {}", host);
+        } catch (IllegalArgumentException e) {
+            log.warn("Referer 파싱 실패: {}", referer);
+            // 파싱 실패 시 모두 허용 (안전 측)
         }
     }
 }

@@ -32,6 +32,7 @@ public class UserDetailsServiceManager {
         throw new UserException(ExceptionType.USER_NOT_EXISTS);
     }
 
+
     public UserDetails loadUserByUuidAndRole(UUID uuid, Role role) {
         return switch (role) {
             case USER -> customUserDetailsService.loadUserByUuid(uuid);

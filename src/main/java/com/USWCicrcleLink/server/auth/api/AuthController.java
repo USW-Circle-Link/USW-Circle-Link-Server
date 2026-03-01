@@ -41,9 +41,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UnifiedLoginResponse>> login(
             @RequestBody @Validated(ValidationSequence.class) UnifiedLoginRequest request,
+            HttpServletRequest httpRequest,
             HttpServletResponse response) {
 
-        return ResponseEntity.ok(new ApiResponse<>("로그인 성공", authService.unifiedLogin(request, response)));
+        return ResponseEntity.ok(new ApiResponse<>("로그인 성공", authService.unifiedLogin(request, httpRequest, response)));
     }
 
     /**

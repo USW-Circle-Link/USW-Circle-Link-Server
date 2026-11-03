@@ -1,0 +1,16 @@
+CREATE TABLE `aplict_table` (
+  `aplict_delete_date` datetime(6) DEFAULT NULL,
+  `aplict_id` bigint NOT NULL AUTO_INCREMENT,
+  `aplict_submitted_at` datetime(6) NOT NULL,
+  `club_id` bigint NOT NULL,
+  `profile_id` bigint NOT NULL,
+  `aplict_uuid` binary(16) NOT NULL,
+  `private_status` enum('FAIL','PASS','WAIT') NOT NULL,
+  `public_status` enum('FAIL','PASS','WAIT') NOT NULL,
+  PRIMARY KEY (`aplict_id`),
+  UNIQUE KEY `uk_aplict_active` (`club_id`,`profile_id`),
+  UNIQUE KEY `UKrnxw4j85csarbk4fo24wtdqyv` (`aplict_uuid`),
+  KEY `FK6wi76h2y2qsmy2656tceudjns` (`profile_id`),
+  CONSTRAINT `FK6wi76h2y2qsmy2656tceudjns` FOREIGN KEY (`profile_id`) REFERENCES `profile_table` (`profile_id`),
+  CONSTRAINT `FKpgsmuq2edvc3f77991md7v532` FOREIGN KEY (`club_id`) REFERENCES `club_table` (`club_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

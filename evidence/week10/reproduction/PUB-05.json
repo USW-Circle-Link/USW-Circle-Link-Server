@@ -1,0 +1,25 @@
+{
+  "scenario" : "PUB-05",
+  "snapshot" : {
+    "members" : 1,
+    "token2" : "T2",
+    "a1" : "PASS/PASS",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1"
+  },
+  "baselineCommit" : "794306c2b48c5d3e92a8a8018b2701e32a4c14dd",
+  "recordedAt" : "2026-11-03T14:47:38.909378500+09:00",
+  "responses" : [ {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  } ],
+  "fcm" : [ {
+    "status" : 200,
+    "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"A2ae5cc에 합격했습니다.\"},\"token\":\"T1\"}}",
+    "time" : "Tue Nov 03 14:47:38 KST 2026"
+  }, {
+    "status" : 200,
+    "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"A2ae5cc에 합격했습니다.\"},\"token\":\"T1\"}}",
+    "time" : "Tue Nov 03 14:47:38 KST 2026"
+  } ]
+}

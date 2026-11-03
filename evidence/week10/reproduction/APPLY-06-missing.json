@@ -1,0 +1,9 @@
+{
+  "scenario" : "APPLY-06-missing",
+  "responses" : [ {
+    "http" : 500,
+    "body" : "{\"exception\":\"IllegalArgumentException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"질문을 찾을 수 없습니다.\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  } ],
+  "applications" : 0,
+  "answers" : 0
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "794306c2b48c5d3e92a8a8018b2701e32a4c14dd",
+  "suites": [
+    {
+      "name": "com.USWCicrcleLink.server.baseline.BaselineReproductionTest",
+      "tests": "78",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-11-03T05:47:30",
+      "time": "37.946"
+    },
+    {
+      "name": "ClubLeaderService 접근 권한 테스트",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-11-03T05:48:08",
+      "time": "0.309"
+    },
+    {
+      "name": "com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadServiceTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-11-03T05:48:08",
+      "time": "0.404"
+    }
+  ],
+  "codeSha256": {
+    "src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java": "7d3207babe2d6d1f4956962d5873ffd3bf35911d2b397a94c9840a743ca2d757",
+    "src/main/java/com/USWCicrcleLink/server/club/leader/service/FcmServiceImpl.java": "65d6b5b320dd236a7f9f74e9bdd96788f516840b8bbe770a6954ad0ba66aa31f",
+    "build.gradle": "0e06504bba399895aa6dd79ca6b9af821bd2acbd7a6adfc49627e077addd107f"
+  }
+}

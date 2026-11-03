@@ -1,0 +1,9 @@
+{
+  "scenario" : "APPLY-04-member",
+  "responses" : [ {
+    "http" : 400,
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-206\",\"message\":\"이미 활동 중인 회원입니다.\",\"status\":400,\"error\":\"Bad Request\",\"additionalData\":null}"
+  } ],
+  "applications" : 0,
+  "answers" : 0
+}

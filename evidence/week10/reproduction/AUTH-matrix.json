@@ -1,0 +1,169 @@
+[ {
+  "body" : "{\"errorCode\":\"AUTH_REQUIRED\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "none",
+  "expected" : 401,
+  "endpoint" : "PUB",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"AUTH_REQUIRED\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "none",
+  "expected" : 401,
+  "endpoint" : "STATUS",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"AUTH_REQUIRED\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "none",
+  "expected" : 401,
+  "endpoint" : "LIST",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"AUTH_REQUIRED\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "none",
+  "expected" : 401,
+  "endpoint" : "APPLY",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"INVALID_TOKEN\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "invalid",
+  "expected" : 401,
+  "endpoint" : "PUB",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"INVALID_TOKEN\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "invalid",
+  "expected" : 401,
+  "endpoint" : "STATUS",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"INVALID_TOKEN\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "invalid",
+  "expected" : 401,
+  "endpoint" : "LIST",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"INVALID_TOKEN\",\"message\":\"인증이 필요합니다.\",\"status\":401}",
+  "tokenKind" : "invalid",
+  "expected" : 401,
+  "endpoint" : "APPLY",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"TOKEN_EXPIRED\",\"message\":\"토큰이 만료되었습니다.\",\"status\":401}",
+  "tokenKind" : "expired",
+  "expected" : 401,
+  "endpoint" : "PUB",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"TOKEN_EXPIRED\",\"message\":\"토큰이 만료되었습니다.\",\"status\":401}",
+  "tokenKind" : "expired",
+  "expected" : 401,
+  "endpoint" : "STATUS",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"TOKEN_EXPIRED\",\"message\":\"토큰이 만료되었습니다.\",\"status\":401}",
+  "tokenKind" : "expired",
+  "expected" : 401,
+  "endpoint" : "LIST",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"TOKEN_EXPIRED\",\"message\":\"토큰이 만료되었습니다.\",\"status\":401}",
+  "tokenKind" : "expired",
+  "expected" : 401,
+  "endpoint" : "APPLY",
+  "http" : 401
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "user",
+  "expected" : 403,
+  "endpoint" : "PUB",
+  "http" : 403
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "user",
+  "expected" : 403,
+  "endpoint" : "STATUS",
+  "http" : 403
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "user",
+  "expected" : 403,
+  "endpoint" : "LIST",
+  "http" : 403
+}, {
+  "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-205\",\"message\":\"이미 지원 완료된 동아리입니다.\",\"status\":400,\"error\":\"Bad Request\",\"additionalData\":null}",
+  "tokenKind" : "user",
+  "expected" : 400,
+  "endpoint" : "APPLY",
+  "http" : 400
+}, {
+  "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+  "tokenKind" : "leader",
+  "expected" : 200,
+  "endpoint" : "PUB",
+  "http" : 200
+}, {
+  "body" : "{\"message\":\"지원자 상태 변경 완료\"}",
+  "tokenKind" : "leader",
+  "expected" : 200,
+  "endpoint" : "STATUS",
+  "http" : 200
+}, {
+  "body" : "{\"message\":\"동아리 지원자 조회 완료\",\"data\":[{\"aplictUUID\":\"e059ba52-f14c-40a2-beba-3ec30dbbf637\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"PASS\"},{\"aplictUUID\":\"91e67b3a-7ad9-4501-a1e6-417293d41365\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"FAIL\"},{\"aplictUUID\":\"7e52f2ef-c20f-4d80-8cd6-cd33a8beefea\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"WAIT\"}]}",
+  "tokenKind" : "leader",
+  "expected" : 200,
+  "endpoint" : "LIST",
+  "http" : 200
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "leader",
+  "expected" : 403,
+  "endpoint" : "APPLY",
+  "http" : 403
+}, {
+  "body" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+  "tokenKind" : "otherLeader",
+  "expected" : 403,
+  "endpoint" : "PUB",
+  "http" : 403
+}, {
+  "body" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+  "tokenKind" : "otherLeader",
+  "expected" : 403,
+  "endpoint" : "STATUS",
+  "http" : 403
+}, {
+  "body" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+  "tokenKind" : "otherLeader",
+  "expected" : 403,
+  "endpoint" : "LIST",
+  "http" : 403
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "otherLeader",
+  "expected" : 403,
+  "endpoint" : "APPLY",
+  "http" : 403
+}, {
+  "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+  "tokenKind" : "admin",
+  "expected" : 200,
+  "endpoint" : "PUB",
+  "http" : 200
+}, {
+  "body" : "{\"message\":\"지원자 상태 변경 완료\"}",
+  "tokenKind" : "admin",
+  "expected" : 200,
+  "endpoint" : "STATUS",
+  "http" : 200
+}, {
+  "body" : "{\"message\":\"동아리 지원자 조회 완료\",\"data\":[{\"aplictUUID\":\"e059ba52-f14c-40a2-beba-3ec30dbbf637\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"PASS\"},{\"aplictUUID\":\"91e67b3a-7ad9-4501-a1e6-417293d41365\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"FAIL\"},{\"aplictUUID\":\"7e52f2ef-c20f-4d80-8cd6-cd33a8beefea\",\"userName\":\"tester\",\"major\":\"test\",\"studentNumber\":\"12345678\",\"userHp\":\"01000000000\",\"privateStatus\":\"WAIT\"}]}",
+  "tokenKind" : "admin",
+  "expected" : 200,
+  "endpoint" : "LIST",
+  "http" : 200
+}, {
+  "body" : "{\"errorCode\":\"ACCESS_DENIED\",\"message\":\"접근 권한이 없습니다.\",\"status\":403}",
+  "tokenKind" : "admin",
+  "expected" : 403,
+  "endpoint" : "APPLY",
+  "http" : 403
+} ]

@@ -1,0 +1,9 @@
+{
+  "scenario" : "APPLY-07",
+  "responses" : [ {
+    "http" : 200,
+    "body" : "{\"message\":\"지원서 제출 성공\"}"
+  } ],
+  "applications" : 1,
+  "answers" : 2
+}

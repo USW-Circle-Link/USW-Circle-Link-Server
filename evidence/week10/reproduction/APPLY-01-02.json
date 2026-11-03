@@ -1,0 +1,12 @@
+{
+  "scenario" : "APPLY-01-02",
+  "responses" : [ {
+    "http" : 200,
+    "body" : "{\"message\":\"지원서 제출 성공\"}"
+  }, {
+    "http" : 400,
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-205\",\"message\":\"이미 지원 완료된 동아리입니다.\",\"status\":400,\"error\":\"Bad Request\",\"additionalData\":null}"
+  } ],
+  "applications" : 1,
+  "answers" : 4
+}

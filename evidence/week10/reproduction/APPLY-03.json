@@ -1,0 +1,36 @@
+{
+  "scenario" : "APPLY-03",
+  "responses" : [ {
+    "http" : 200,
+    "body" : "{\"message\":\"지원서 제출 성공\"}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  }, {
+    "http" : 500,
+    "body" : "{\"exception\":\"RuntimeException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"[DEBUG] 실제 에러: Duplicate entry '61-130' for key 'aplict_table.uk_aplict_active'\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  } ],
+  "applications" : 1,
+  "answers" : 4
+}

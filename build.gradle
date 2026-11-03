@@ -26,6 +26,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.wiremock:wiremock-standalone:3.9.1'
 	implementation 'org.springframework:spring-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

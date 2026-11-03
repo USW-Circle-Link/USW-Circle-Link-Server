@@ -38,7 +38,8 @@ public class FcmServiceImpl implements FcmService {
 
     @Value("${firebase.config-path}")
     private String fireBaseConfigPath;
-    private final String FCM_API_URL = "https://fcm.googleapis.com/v1/projects/usw-circle-link/messages:send";
+    @Value("${fcm.api-url:https://fcm.googleapis.com/v1/projects/usw-circle-link/messages:send}")
+    private String fcmApiUrl;
     private final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth/cloud-platform";
     private final String APLICT_TITLE_MESSAGE = "동아리 지원 결과";
     private final String APLICT_PASS_MESSAGE = "에 합격했습니다.";
@@ -60,7 +61,7 @@ public class FcmServiceImpl implements FcmService {
             // 메시지 구성
             String message = makeMessage(aplict, aplictResult);
 
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = createRestTemplate();
             // 한글 설정
             restTemplate.getMessageConverters()
                     .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
@@ -71,7 +72,7 @@ public class FcmServiceImpl implements FcmService {
             headers.set("Authorization", " Bearer " + getAccessToken());
 
             HttpEntity entity = new HttpEntity<>(message, headers);
-            ResponseEntity response = restTemplate.exchange(FCM_API_URL, HttpMethod.POST, entity, String.class);
+            ResponseEntity response = restTemplate.exchange(fcmApiUrl, HttpMethod.POST, entity, String.class);
 
             // 푸시 알림 전송 실패 예외처리
             if (response.getStatusCode() == HttpStatus.OK) {
@@ -98,7 +99,7 @@ public class FcmServiceImpl implements FcmService {
     }
 
     // Firebase Admin SDK의 비공개 키 참조해 bearer 토큰 발급
-    private String getAccessToken() throws IOException {
+    protected String getAccessToken() throws IOException {
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new FileInputStream(fireBaseConfigPath))
                 .createScoped(List.of(GOOGLE_AUTH_URL));
@@ -106,6 +107,11 @@ public class FcmServiceImpl implements FcmService {
         // 토큰 만료 ? 갱신 : 토큰
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
+    }
+
+    // Test seam: production still constructs one transport per send with its original defaults.
+    protected RestTemplate createRestTemplate() {
+        return new RestTemplate();
     }
 
     // FCM 전송 정보를 기반으로 메시지 구성

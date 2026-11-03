@@ -1,0 +1,9 @@
+{
+  "scenario" : "APPLY-04-student",
+  "responses" : [ {
+    "http" : 400,
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-208\",\"message\":\"이미 등록된 학번입니다.\",\"status\":400,\"error\":\"Bad Request\",\"additionalData\":null}"
+  } ],
+  "applications" : 0,
+  "answers" : 0
+}

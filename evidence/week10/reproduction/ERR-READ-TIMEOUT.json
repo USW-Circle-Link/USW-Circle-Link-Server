@@ -1,0 +1,25 @@
+{
+  "scenario" : "ERR-READ-TIMEOUT",
+  "snapshot" : {
+    "members" : 0,
+    "token2" : "T2",
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1"
+  },
+  "baselineCommit" : "794306c2b48c5d3e92a8a8018b2701e32a4c14dd",
+  "recordedAt" : "2026-11-03T14:48:01.353430+09:00",
+  "responses" : [ {
+    "http" : 500,
+    "body" : "{\"exception\":\"ResourceAccessException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"I/O error on POST request for \\\"http://localhost:56852/send\\\": Read timed out\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}"
+  } ],
+  "fcm" : [ {
+    "status" : 200,
+    "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"A5c4d07에 불합격했습니다.\"},\"token\":\"T2\"}}",
+    "time" : "Tue Nov 03 14:47:57 KST 2026"
+  }, {
+    "status" : 200,
+    "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"A5c4d07에 합격했습니다.\"},\"token\":\"T1\"}}",
+    "time" : "Tue Nov 03 14:47:56 KST 2026"
+  } ]
+}

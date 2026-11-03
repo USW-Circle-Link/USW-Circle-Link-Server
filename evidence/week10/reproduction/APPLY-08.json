@@ -1,0 +1,9 @@
+{
+  "scenario" : "APPLY-08",
+  "responses" : [ {
+    "http" : 400,
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-205\",\"message\":\"이미 지원 완료된 동아리입니다.\",\"status\":400,\"error\":\"Bad Request\",\"additionalData\":null}"
+  } ],
+  "applications" : 1,
+  "answers" : 0
+}

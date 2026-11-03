@@ -1,0 +1,17 @@
+{
+  "scenario" : "PUB-10-3749321305",
+  "snapshot" : {
+    "members" : 0,
+    "token2" : "T2",
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1"
+  },
+  "baselineCommit" : "794306c2b48c5d3e92a8a8018b2701e32a4c14dd",
+  "recordedAt" : "2026-11-03T14:48:06.931324200+09:00",
+  "responses" : [ {
+    "http" : 404,
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-202\",\"message\":\"지원자 정보를 찾을 수 없습니다.\",\"status\":404,\"error\":\"Not Found\",\"additionalData\":null}"
+  } ],
+  "fcm" : [ ]
+}

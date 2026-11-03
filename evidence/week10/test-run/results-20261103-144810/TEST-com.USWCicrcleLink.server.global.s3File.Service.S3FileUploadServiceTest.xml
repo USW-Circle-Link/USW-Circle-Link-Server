@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-03T05:48:08" hostname="DESKTOP-N8U8BLI" time="0.404">
+  <properties/>
+  <testcase name="이미지 업로드 시 리사이즈 없이 원본 크기 유지 테스트" classname="com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadServiceTest" time="0.404"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

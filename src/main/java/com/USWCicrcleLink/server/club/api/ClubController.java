@@ -197,8 +197,8 @@ public class ClubController {
     public ResponseEntity<ApiResponse<Void>> pushApplicantResults(@PathVariable("clubUUID") UUID clubUUID,
             @RequestBody @Validated(ValidationSequence.class) List<ApplicantResultsRequest> results)
             throws IOException {
-        clubLeaderService.updateApplicantResults(clubUUID, results);
-        return ResponseEntity.ok(new ApiResponse<>("지원 결과 처리 완료"));
+        boolean allAlreadyPublished = clubLeaderService.updateApplicantResults(clubUUID, results);
+        return ResponseEntity.ok(new ApiResponse<>(allAlreadyPublished ? "이미 발표했습니다" : "지원 결과 처리 완료"));
     }
 
     // FCM 토큰 갱신 (Leader)

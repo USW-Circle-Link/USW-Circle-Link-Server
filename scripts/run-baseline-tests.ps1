@@ -38,7 +38,7 @@ $binding = & docker port $container 3306
 if ($binding -notmatch '^127\.0\.0\.1:(\d+)$') { throw 'Expected loopback-only MySQL binding.' }
 $previousUrl = $env:BASELINE_MYSQL_URL
 $env:BASELINE_MYSQL_URL = "jdbc:mysql://127.0.0.1:$($Matches[1])/baseline?useSSL=false&allowPublicKeyRetrieval=true"
-$logDir = Join-Path $repoPath 'evidence/week10/duplicate-publication-fix'
+$logDir = Join-Path $repoPath 'evidence/week10/publication-response'
 New-Item -ItemType Directory -Force $logDir | Out-Null
 try {
     & ($Drive + '\gradlew.bat') -p ($Drive + '\') test --rerun-tasks --console=plain 2>&1 | Tee-Object -FilePath (Join-Path $logDir 'green.log')

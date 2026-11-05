@@ -577,8 +577,10 @@ public class ClubLeaderService {
     }
 
     // 최종 합격자 알림 (개별/일괄 처리 가능)
-    public void updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
+    // Returns true only when every requested applicant was already published.
+    public boolean updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
         Club club = validateLeaderAccess(clubUUID);
+        boolean allAlreadyPublished = !results.isEmpty();
 
         // All requests acquire overlapping row locks in the same order.
         // Locking reads see the latest committed publicStatus before deciding to publish.
@@ -607,6 +609,7 @@ public class ClubLeaderService {
             if (applicant.getPublicStatus() != AplictStatus.WAIT) {
                 continue;
             }
+            allAlreadyPublished = false;
 
             AplictStatus privateStatus = applicant.getPrivateStatus();
 
@@ -641,6 +644,7 @@ public class ClubLeaderService {
 
             aplictRepository.save(applicant);
         }
+        return allAlreadyPublished;
     }
 
     // 지원서 상세 조회 (Leader)

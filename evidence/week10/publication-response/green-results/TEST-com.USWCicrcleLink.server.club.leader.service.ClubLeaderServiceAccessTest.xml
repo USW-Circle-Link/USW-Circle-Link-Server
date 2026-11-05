@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ClubLeaderService 접근 권한 테스트" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-05T10:36:18" hostname="DESKTOP-N8U8BLI" time="0.237">
+  <properties/>
+  <testcase name="인증되지 않은 사용자는 접근할 수 없다" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderServiceAccessTest" time="0.166"/>
+  <testcase name="Leader는 다른 동아리에 접근할 수 없다" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderServiceAccessTest" time="0.001"/>
+  <testcase name="Admin은 모든 동아리에 접근할 수 있다" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderServiceAccessTest" time="0.067"/>
+  <testcase name="Leader는 자신의 동아리에 접근할 수 있다" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderServiceAccessTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

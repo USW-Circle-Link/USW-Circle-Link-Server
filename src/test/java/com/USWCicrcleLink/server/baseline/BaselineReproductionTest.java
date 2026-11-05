@@ -142,7 +142,7 @@ class BaselineReproductionTest {
     @PersistenceContext EntityManager em;
     TransactionTemplate tx; MockMvc mvc; Club club,other; Aplict a1,a2,a3,a4; User user;
     Object principal; ObjectMapper json=new ObjectMapper();
-    final Path evidence=Path.of("evidence/week10/duplicate-publication-fix");
+    final Path evidence=Path.of("evidence/week10/publication-response");
 
     @BeforeEach void setup() throws Exception {
         fcm=org.springframework.test.util.AopTestUtils.getTargetObject(fcm);
@@ -196,7 +196,7 @@ class BaselineReproductionTest {
     @Test void PUB_01_normal() throws Exception {var r=publish(a1,a2);record("PUB-01",r);assertThat(r.getResponse().getStatus()).isEqualTo(200);state("PASS/PASS","FAIL/FAIL",1);wire.verify(2,postRequestedFor(urlEqualTo("/send")));}
     @Test void PUB_02_wait() throws Exception {var r=publish(a3);record("PUB-02",r);state("PASS/WAIT","FAIL/WAIT",0);assertThat(wire.getAllServeEvents()).isEmpty();}
     @Test void PUB_03_noToken() throws Exception {tx.executeWithoutResult(s->em.find(Profile.class,a1.getProfile().getProfileId()).updateFcmToken(null));var r=publish(a1);record("PUB-03",r);state("PASS/PASS","FAIL/WAIT",1);assertThat(wire.getAllServeEvents()).isEmpty();}
-    @Test void PUB_04_repeat() throws Exception {var r=publish(a1);var r2=publish(a1);record("PUB-04",r,r2);state("PASS/PASS","FAIL/WAIT",1);assertThat(r.getResponse().getStatus()).isEqualTo(200);assertThat(r2.getResponse().getStatus()).isEqualTo(200);assertThat(wire.getAllServeEvents()).hasSize(1);}
+    @Test void PUB_04_repeat() throws Exception {var r=publish(a1);var r2=publish(a1);record("PUB-04",r,r2);state("PASS/PASS","FAIL/WAIT",1);assertThat(r.getResponse().getStatus()).isEqualTo(200);assertThat(r2.getResponse().getStatus()).isEqualTo(200);assertThat(message(r)).isEqualTo("지원 결과 처리 완료");assertThat(message(r2)).isEqualTo("이미 발표했습니다");assertThat(wire.getAllServeEvents()).hasSize(1);}
     @Test void PUB_05_duplicateBody() throws Exception {var r=publish(a1,a1);record("PUB-05",r);state("PASS/PASS","FAIL/WAIT",1);assertThat(r.getResponse().getStatus()).isEqualTo(200);assertThat(wire.getAllServeEvents()).hasSize(1);}
     @Test void PUB_MEMBER_existing() throws Exception {tx.executeWithoutResult(s->em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(em.find(Profile.class,a1.getProfile().getProfileId())).build()));var r=publish(a1);record("PUB-MEMBER",r);state("PASS/PASS","FAIL/WAIT",1);}
     @ParameterizedTest @ValueSource(ints={400,404,429,500}) void ERR_http(int code) throws Exception {
@@ -251,8 +251,23 @@ class BaselineReproductionTest {
             var results=new ArrayList<MvcResult>();for(var f:futures)results.add(f.get(30,TimeUnit.SECONDS));record("PUB-06-"+info.getCurrentRepetition(),results.toArray(MvcResult[]::new));
             state("PASS/PASS","FAIL/WAIT",1);
             assertThat(results).allSatisfy(r->assertThat(r.getResponse().getStatus()).isEqualTo(200));
+            var messages=new ArrayList<String>();for(var result:results)messages.add(message(result));
+            assertThat(Collections.frequency(messages,"지원 결과 처리 완료")).isEqualTo(1);
+            assertThat(Collections.frequency(messages,"이미 발표했습니다")).isEqualTo(9);
             assertThat(wire.getAllServeEvents()).hasSize(1);
         } finally {pool.shutdown();assertThat(pool.awaitTermination(35,TimeUnit.SECONDS)).isTrue();}
+    }
+    String message(MvcResult result) throws Exception {
+        return json.readTree(new String(result.getResponse().getContentAsByteArray(),java.nio.charset.StandardCharsets.UTF_8)).get("message").asText();
+    }
+    @Test void publicationResponseHandlesMixedAndWait() throws Exception {
+        assertThat(message(publish(a1))).isEqualTo("지원 결과 처리 완료");
+        assertThat(message(publish(a1,a2))).isEqualTo("지원 결과 처리 완료");
+        assertThat(message(publish(a1,a2))).isEqualTo("이미 발표했습니다");
+        assertThat(message(publish(a3))).isEqualTo("지원 결과 처리 완료");
+        assertThat(message(publish(a1,a3))).isEqualTo("지원 결과 처리 완료");
+        assertThat(message(publish())).isEqualTo("지원 결과 처리 완료");
+        assertThat(wire.getAllServeEvents()).hasSize(2);
     }
     @Test void memberUniqueConstraintRejectsDuplicate() throws Exception {
         tx.executeWithoutResult(s->em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(em.find(Profile.class,a1.getProfile().getProfileId())).build()));

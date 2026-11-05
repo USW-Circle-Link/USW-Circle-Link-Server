@@ -142,7 +142,7 @@ class BaselineReproductionTest {
     @PersistenceContext EntityManager em;
     TransactionTemplate tx; MockMvc mvc; Club club,other; Aplict a1,a2,a3,a4; User user;
     Object principal; ObjectMapper json=new ObjectMapper();
-    final Path evidence=Path.of("evidence/week10/reproduction");
+    final Path evidence=Path.of("evidence/week10/duplicate-publication-fix");
 
     @BeforeEach void setup() throws Exception {
         fcm=org.springframework.test.util.AopTestUtils.getTargetObject(fcm);
@@ -196,8 +196,8 @@ class BaselineReproductionTest {
     @Test void PUB_01_normal() throws Exception {var r=publish(a1,a2);record("PUB-01",r);assertThat(r.getResponse().getStatus()).isEqualTo(200);state("PASS/PASS","FAIL/FAIL",1);wire.verify(2,postRequestedFor(urlEqualTo("/send")));}
     @Test void PUB_02_wait() throws Exception {var r=publish(a3);record("PUB-02",r);state("PASS/WAIT","FAIL/WAIT",0);assertThat(wire.getAllServeEvents()).isEmpty();}
     @Test void PUB_03_noToken() throws Exception {tx.executeWithoutResult(s->em.find(Profile.class,a1.getProfile().getProfileId()).updateFcmToken(null));var r=publish(a1);record("PUB-03",r);state("PASS/PASS","FAIL/WAIT",1);assertThat(wire.getAllServeEvents()).isEmpty();}
-    @Test void PUB_04_repeat() throws Exception {var r=publish(a1);var r2=publish(a1);record("PUB-04",r,r2);state("PASS/PASS","FAIL/WAIT",1);assertThat(wire.getAllServeEvents()).hasSize(2);}
-    @Test void PUB_05_duplicateBody() throws Exception {var r=publish(a1,a1);record("PUB-05",r);state("PASS/PASS","FAIL/WAIT",1);assertThat(wire.getAllServeEvents()).hasSize(2);}
+    @Test void PUB_04_repeat() throws Exception {var r=publish(a1);var r2=publish(a1);record("PUB-04",r,r2);state("PASS/PASS","FAIL/WAIT",1);assertThat(r.getResponse().getStatus()).isEqualTo(200);assertThat(r2.getResponse().getStatus()).isEqualTo(200);assertThat(wire.getAllServeEvents()).hasSize(1);}
+    @Test void PUB_05_duplicateBody() throws Exception {var r=publish(a1,a1);record("PUB-05",r);state("PASS/PASS","FAIL/WAIT",1);assertThat(r.getResponse().getStatus()).isEqualTo(200);assertThat(wire.getAllServeEvents()).hasSize(1);}
     @Test void PUB_MEMBER_existing() throws Exception {tx.executeWithoutResult(s->em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(em.find(Profile.class,a1.getProfile().getProfileId())).build()));var r=publish(a1);record("PUB-MEMBER",r);state("PASS/PASS","FAIL/WAIT",1);}
     @ParameterizedTest @ValueSource(ints={400,404,429,500}) void ERR_http(int code) throws Exception {
         String fcmCode=switch(code){case 404->"UNREGISTERED";case 429->"QUOTA_EXCEEDED";case 500->"INTERNAL";default->"INVALID_ARGUMENT";};
@@ -249,8 +249,47 @@ class BaselineReproductionTest {
         var pool=Executors.newFixedThreadPool(10);var barrier=new CyclicBarrier(10);var futures=new ArrayList<Future<MvcResult>>();
         try {for(int i=0;i<10;i++)futures.add(pool.submit(()->{barrier.await(10,TimeUnit.SECONDS);return publish(a1);}));
             var results=new ArrayList<MvcResult>();for(var f:futures)results.add(f.get(30,TimeUnit.SECONDS));record("PUB-06-"+info.getCurrentRepetition(),results.toArray(MvcResult[]::new));
-            assertThat(snapshot().get("a1")).isEqualTo("PASS/PASS");
+            state("PASS/PASS","FAIL/WAIT",1);
+            assertThat(results).allSatisfy(r->assertThat(r.getResponse().getStatus()).isEqualTo(200));
+            assertThat(wire.getAllServeEvents()).hasSize(1);
         } finally {pool.shutdown();assertThat(pool.awaitTermination(35,TimeUnit.SECONDS)).isTrue();}
+    }
+    @Test void memberUniqueConstraintRejectsDuplicate() throws Exception {
+        tx.executeWithoutResult(s->em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(em.find(Profile.class,a1.getProfile().getProfileId())).build()));
+        assertThatThrownBy(()->tx.executeWithoutResult(s->{
+            em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(em.find(Profile.class,a1.getProfile().getProfileId())).build());em.flush();
+        })).isInstanceOf(RuntimeException.class).hasStackTraceContaining("uk_club_member");
+        assertThat(snapshot().get("members")).isEqualTo(1L);
+    }
+    @Test void publicationBatchesInOppositeOrderDoNotDuplicate() throws Exception {
+        var pool=Executors.newFixedThreadPool(2);var barrier=new CyclicBarrier(2);
+        try {
+            var first=pool.submit(()->{barrier.await(10,TimeUnit.SECONDS);return publish(a1,a2);});
+            var second=pool.submit(()->{barrier.await(10,TimeUnit.SECONDS);return publish(a2,a1);});
+            var r1=first.get(30,TimeUnit.SECONDS);var r2=second.get(30,TimeUnit.SECONDS);
+            record("PUB-BATCH-REVERSED",r1,r2);
+            assertThat(r1.getResponse().getStatus()).isEqualTo(200);assertThat(r2.getResponse().getStatus()).isEqualTo(200);
+            state("PASS/PASS","FAIL/FAIL",1);assertThat(wire.getAllServeEvents()).hasSize(2);
+        } finally {pool.shutdown();assertThat(pool.awaitTermination(35,TimeUnit.SECONDS)).isTrue();}
+    }
+    @Test void concurrentFailPublicationSendsOnce() throws Exception {
+        var pool=Executors.newFixedThreadPool(10);var barrier=new CyclicBarrier(10);var futures=new ArrayList<Future<MvcResult>>();
+        try {
+            for(int i=0;i<10;i++)futures.add(pool.submit(()->{barrier.await(10,TimeUnit.SECONDS);return publish(a2);}));
+            var results=new ArrayList<MvcResult>();for(var future:futures)results.add(future.get(30,TimeUnit.SECONDS));
+            record("PUB-FAIL-CONCURRENT",results.toArray(MvcResult[]::new));
+            assertThat(results).allSatisfy(r->assertThat(r.getResponse().getStatus()).isEqualTo(200));
+            state("PASS/WAIT","FAIL/FAIL",0);assertThat(wire.getAllServeEvents()).hasSize(1);
+        } finally {pool.shutdown();assertThat(pool.awaitTermination(35,TimeUnit.SECONDS)).isTrue();}
+    }
+    @Test void membershipUniqueAllowsDifferentClubs() {
+        tx.executeWithoutResult(s->{
+            var profile=em.find(Profile.class,a1.getProfile().getProfileId());
+            em.persist(ClubMembers.builder().club(em.find(Club.class,club.getClubId())).profile(profile).build());
+            em.persist(ClubMembers.builder().club(em.find(Club.class,other.getClubId())).profile(profile).build());
+            em.flush();
+        });
+        assertThat(snapshot().get("members")).isEqualTo(1L);
     }
     @Test void LIST_filters() throws Exception {
         tx.executeWithoutResult(s->{em.createQuery("delete from Aplict a where a.club.clubId=:id").setParameter("id",club.getClubId()).executeUpdate();

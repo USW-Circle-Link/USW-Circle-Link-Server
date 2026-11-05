@@ -6,6 +6,10 @@ import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
 ev = root / "evidence/week10/reproduction"
+historical_manifest = json.loads((ev / "run-manifest.json").read_text(encoding="utf-8"))
+for name, expected_hash in historical_manifest["codeSha256"].items():
+    if sha256((root / name).read_bytes()).hexdigest() != expected_hash:
+        raise SystemExit("Historical Before evidence is preserved. Run this script at the original baseline commit; use docs/week10/duplicate-publication-fix.md for the fix results.")
 suites = []
 for file in (root / "build/test-results/test").glob("TEST-*.xml"):
     s = ET.parse(file).getroot()

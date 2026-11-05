@@ -580,14 +580,32 @@ public class ClubLeaderService {
     public void updateApplicantResults(UUID clubUUID, List<ApplicantResultsRequest> results) throws IOException {
         Club club = validateLeaderAccess(clubUUID);
 
+        // All requests acquire overlapping row locks in the same order.
+        // Locking reads see the latest committed publicStatus before deciding to publish.
+        Map<UUID, Aplict> lockedApplicants = new HashMap<>();
+        List<UUID> applicantUUIDs = results.stream()
+                .map(ApplicantResultsRequest::getAplictUUID)
+                .distinct()
+                .sorted()
+                .toList();
+        for (UUID applicantUUID : applicantUUIDs) {
+            aplictRepository.findByAplictUUIDForUpdate(applicantUUID)
+                    .ifPresent(applicant -> lockedApplicants.put(applicantUUID, applicant));
+        }
+
         for (ApplicantResultsRequest result : results) {
 
-            Aplict applicant = aplictRepository.findByAplictUUID(result.getAplictUUID())
+            Aplict applicant = Optional.ofNullable(lockedApplicants.get(result.getAplictUUID()))
                     .orElseThrow(() -> new AplictException(ExceptionType.APPLICANT_NOT_EXISTS));
 
             // 해당 동아리 지원자가 맞는지 검증
             if (!applicant.getClub().getClubuuid().equals(clubUUID)) {
                 throw new AplictException(ExceptionType.APPLICANT_NOT_EXISTS);
+            }
+
+            // Repeated requests, including duplicates in one body, are successful no-ops.
+            if (applicant.getPublicStatus() != AplictStatus.WAIT) {
+                continue;
             }
 
             AplictStatus privateStatus = applicant.getPrivateStatus();

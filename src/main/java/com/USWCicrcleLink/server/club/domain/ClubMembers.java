@@ -14,7 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "CLUB_MEMBERS_TABLE")
+@Table(name = "CLUB_MEMBERS_TABLE", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_club_member", columnNames = {"club_Id", "profile_id"})
+})
 public class ClubMembers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

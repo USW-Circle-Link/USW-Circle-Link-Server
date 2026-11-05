@@ -1,0 +1,48 @@
+{
+  "scenario" : "PUB-06-6",
+  "snapshot" : {
+    "token2" : "T2",
+    "members" : 1,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/PASS"
+  },
+  "baselineCommit" : "794306c2b48c5d3e92a8a8018b2701e32a4c14dd",
+  "recordedAt" : "2026-11-05T17:28:41.967724700+09:00",
+  "responses" : [ {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  }, {
+    "http" : 200,
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}"
+  } ],
+  "fcm" : [ {
+    "status" : 200,
+    "time" : "Thu Nov 05 17:28:41 KST 2026",
+    "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"A3a4d13에 합격했습니다.\"},\"token\":\"T1\"}}"
+  } ]
+}

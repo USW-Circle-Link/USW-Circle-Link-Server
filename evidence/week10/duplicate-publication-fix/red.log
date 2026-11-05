@@ -1,0 +1,75 @@
+Starting a Gradle Daemon, 4 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+
+> Task :test
+
+BaselineReproductionTest > PUB_05_duplicateBody() FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:200
+
+BaselineReproductionTest > memberUniqueConstraintRejectsDuplicate() FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:259
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 1 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 2 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 3 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 4 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 5 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 6 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 7 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 8 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 9 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_06_concurrent(RepetitionInfo) > repetition 10 of 10 FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:195
+
+BaselineReproductionTest > PUB_04_repeat() FAILED
+    java.lang.AssertionError at BaselineReproductionTest.java:199
+
+17:25:37.749 [SpringContextShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default'
+17:25:38.441 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated...
+17:25:38.449 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed.
+
+> Task :test FAILED
+
+13 tests completed, 13 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///W:/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 46s
+4 actionable tasks: 2 executed, 2 up-to-date

@@ -1,0 +1,10 @@
+{
+  "expected": 1500,
+  "observed": 1500,
+  "unique_targets": 1500,
+  "missing": 0,
+  "unexpected_calls": 0,
+  "duplicate_calls": 0,
+  "non_200": 0,
+  "passed": true
+}

@@ -1,0 +1,44 @@
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✓ 'rate==1' rate=100.00%
+
+    http_req_failed
+    ✓ 'rate==0' rate=0.00%
+
+    publication_failed
+    ✓ 'rate==0' rate=0.00%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 6       0.087299/s
+    checks_succeeded...: 100.00% 6 out of 6
+    checks_failed......: 0.00%   0 out of 6
+
+    ✓ HTTP 200
+    ✓ new publication completed
+
+    CUSTOM
+    publication_failed.............: 0.00% 0 out of 3
+
+    HTTP
+    http_req_duration..............: avg=22.9s min=22.78s med=22.87s max=23.07s p(95)=23.05s p(99)=23.06s
+      { expected_response:true }...: avg=22.9s min=22.78s med=22.87s max=23.07s p(95)=23.05s p(99)=23.06s
+    http_req_failed................: 0.00% 0 out of 3
+    http_reqs......................: 3     0.04365/s
+
+    EXECUTION
+    iteration_duration.............: avg=22.9s min=22.78s med=22.87s max=23.07s p(95)=23.05s p(99)=23.07s
+    iterations.....................: 3     0.04365/s
+    vus............................: 1     min=1                 max=1
+    vus_max........................: 1     min=1                 max=1
+
+    NETWORK
+    data_received..................: 498 B 7.245849082585225 B/s
+    data_sent......................: 17 kB 246 B/s
+
+
+

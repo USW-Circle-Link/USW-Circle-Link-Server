@@ -1,0 +1,73 @@
+"""Preserve all attempted runs when final DB verification could not complete."""
+import csv
+import json
+from pathlib import Path
+
+root = Path(__file__).resolve().parents[1]
+campaign = root / 'evidence/week10/performance/20261105-203107-2f3a38ac'
+normal = json.loads((campaign / 'summary.json').read_text(encoding='utf-8'))
+failed = campaign / 'n100-vu1-r3'
+summary = json.loads((failed / 'summary.json').read_text(encoding='utf-8'))['metrics']
+failure = dict(runId='n100-vu1-r3', applicants=100, vus=1, attempts=int(summary['http_reqs']['count']),
+               httpFailures=int(summary['http_req_failed']['passes']), timeouts=1,
+               failurePercent=100*summary['http_req_failed']['value'], dbVerified=False, fcmVerified=False,
+               status='failed; final verification unavailable',
+               evidence=['k6.log: request timeout, 29 HTTP successes / 30 attempts',
+                         'server.log: POST /benchmark/stop -> Requests still active',
+                         'server.log: Hikari housekeeper delta=14h25m44s; thread starvation or clock leap warning'],
+               interpretation='Long scheduling/time anomaly observed; sleep or application cause not established. Preserve failure and repeat under stable conditions.')
+(failed / 'failure.json').write_text(json.dumps(failure, ensure_ascii=False, indent=2), encoding='utf-8')
+all_rows = [dict(run=row['run_id'], applicants=row['applicants'], attempts=row['attempts'],
+                 failures=row['http_failures'], failure_percent=row['failure_percent'],
+                 p95_ms=row['p95_ms'], p99_ms=row['p99_ms'], db_fcm_verified=True,
+                 comparison_status='verified normal run') for row in normal]
+all_rows.append(dict(run=failure['runId'], applicants=100, attempts=failure['attempts'], failures=failure['httpFailures'],
+                     failure_percent=failure['failurePercent'], p95_ms=summary['http_req_duration']['p(95)'],
+                     p99_ms=summary['http_req_duration']['p(99)'], db_fcm_verified=False,
+                     comparison_status='failed; time anomaly; not a normal comparison sample'))
+with (campaign / 'all-attempts.csv').open('w', encoding='utf-8-sig', newline='') as stream:
+    writer = csv.DictWriter(stream, fieldnames=list(all_rows[0]))
+    writer.writeheader(); writer.writerows(all_rows)
+
+relative = campaign.relative_to(root).as_posix()
+lines = ['# 발표 API 성능 측정 중간 결과', '',
+         '**정상 기준선은 아직 완료되지 않았다.** 50명 조건 3회와 100명 조건 2회는 정상 검증됐지만, 마지막 100명 실행은 요청 1건이 타임아웃됐고 종료 시 DB·FCM 검증도 완료하지 못했다.', '',
+         '- 브랜치: `codex/publication-performance`',
+         '- 애플리케이션 기준: `0abdb14e`, 중복 방지 적용 후·비동기 개선 전 현재 동기 코드.',
+         '- 측정 로그 날짜: 2026-11-05~06. 상태 확인 및 보고: 2026-11-06 (Asia/Seoul).',
+         '- 실행자: AI. 본인의 직접 코드 확인·재실행은 아직 미확인.', '',
+         '## 조건', '',
+         '지원자 50명·100명, VU 1, 각 3회 시도·실행당 새 발표 30개 요청. 매 실행 전 별도 데이터로 60초 이상 워밍업했다. FCM 대역은 HTTP 200·고정 지연 200ms이며 Google 인증 비용은 제외했다. Java 17.0.12·heap 1GB·Hikari 10개, 전용 MySQL 8.0.35 컨테이너 CPU 2개·메모리 1GB를 사용했다.', '',
+         '실제 로컬 HTTP 컨트롤러·서비스·트랜잭션·JPA·MySQL 경로를 사용했고 인증은 테스트 관리자 대역으로 대체했다. 앱과 WireMock은 같은 JVM이다. CPU·heap도 이 공유 JVM 값이다. 실제 Firebase·로그인·Redis·S3·메일 전체 통합 성능으로 설명하지 않는다.', '',
+         '각 요청에 별도 동아리·미발표 지원서를 배정하고 PASS/FAIL 절반, 가짜 FCM 토큰을 사용했다. 50명·100명은 운영 통계가 아닌 선택한 시험 규모다. 빈 스키마에서 시작해 같은 JVM에서 50명 3회→100명 3회 순서로 실행했고, 이전 실행 행은 캠페인 종료까지 남았다.', '',
+         '## 전체 실행 결과', '',
+         '| 조건 | 반복 | p95(초) | p99(초) | HTTP 실패/시도 | DB·FCM 검증 |',
+         '|---|---|---|---|---|---|']
+for row in all_rows:
+    suffix = ' ※' if not row['db_fcm_verified'] else ''
+    lines.append(f"| {row['applicants']}명 | {row['run'][-1]} | {row['p95_ms']/1000:.3f}{suffix} | {row['p99_ms']/1000:.3f}{suffix} | {row['failures']}/{row['attempts']} | {'일치' if row['db_fcm_verified'] else '미완료'} |")
+lines += ['', '※ 마지막 실행은 환경의 장시간 실행 지연 또는 시계 변화가 관측돼 정상 비교에서 제외한다. 실패 기록은 삭제하지 않았으며 전체 시도 CSV에 보존했다. 원인을 절전 또는 애플리케이션 문제로 확정하지 않았다. p95만 보면 타임아웃 한 건이 드러나지 않을 수 있으므로 실패율·p99·최댓값을 함께 확인해야 한다.', '',
+          '각 백분위수는 해당 실행 30개 표본의 값이다. p99는 참고값이며, 여러 실행의 백분위수를 합친 전체 p95는 계산하지 않았다.', '',
+          '## 정상 완료된 다섯 실행의 검증', '',
+          '| 실행 | 공개 | 회원 행 | FCM HTTP 요청 | 토큰 누락/중복 | 활성 연결 최대/대기 최대 |',
+          '|---|---|---|---|---|---|']
+for row in normal:
+    lines.append(f"| {row['run_id']} | {row['published']} | {row['members']} | {row['fcm_calls']} | {row['missing_fcm_targets']}/{row['duplicate_fcm_calls']} | {row['pool_active_peak']}/{row['pool_waiting_peak']} |")
+lines += ['', '회원 행은 PASS 인원과 대조했고 지원서 UUID 재사용과 FCM 대상 토큰의 누락·중복도 검사했다. 알림 요청 수는 가짜 FCM의 HTTP 접수 수이며 실제 휴대폰 수신 수가 아니다. VU 1의 결과를 최대 처리량이나 동시 접속 한계로 일반화하지 않는다.', '',
+          '## 마지막 실행의 실패와 남은 작업', '',
+          '- 마지막 30개 요청 중 HTTP 성공 29건·타임아웃 1건(3.33%). k6 임계값 검증 실패. 최장 요청 시간은 약 237초로 기록됐다. 설정 타임아웃 120초와의 차이도 실행 지연·시간 이상 조사 대상이다.',
+          '- 종료 시 활성 DB 연결이 남아 `/benchmark/stop`이 500을 반환했다. 최종 DB·FCM 검증 및 마지막 실행의 자원 시계열 파일은 확보하지 못했다.',
+          '- 서버 로그에 약 14시간 25분의 Hikari housekeeper 지연 경고와 이후 클라이언트 연결 종료 오류가 있다. 이 사실만으로 절전이 원인이라고 단정하지 않는다.',
+          '- 원인을 분리하고 실패 시에도 관측 로그를 보존하도록 도구를 보완한 뒤, 안정된 환경에서 100명 조건을 재측정해야 한다. 기존 실패 결과와 새 측정을 별도 보관한다.',
+          '- p95 200ms 미만은 향후 개선 목표다. 이번 작업은 현재 기준선 측정이며 지연 개선 구현은 하지 않았다.',
+          '- 본인 직접 코드 확인·테스트 재실행·수치 해석·판단 기록과 주간 보고서 확인이 남아 있다.', '',
+          '## 증거', '',
+          f'- [모든 시도 CSV](../../{relative}/all-attempts.csv) — 실패 실행 포함',
+          f'- [정상 검증된 실행 CSV](../../{relative}/summary.csv) — 정상 5회만 포함',
+          f'- [환경 manifest](../../{relative}/manifest.json), [실제 JVM 정보](../../{relative}/ready.json), [추가 환경 기록](../../{relative}/environment-details.json)',
+          f'- [마지막 실행 실패 기록](../../{relative}/n100-vu1-r3/failure.json), [k6 로그](../../{relative}/n100-vu1-r3/k6.log), [원시 요청 지표](../../{relative}/n100-vu1-r3/raw.jsonl)',
+          f'- [서버 로그](../../{relative}/server.log)',
+          '- [측정 계획과 명령](performance-test-plan.md)', '',
+          '각 정상 실행 폴더에는 dataset.json·raw.jsonl·summary.json·verification.json·fcm.json·target-integrity.json·resources.jsonl이 있다. 측정 당시 도구 사본과 SHA256도 캠페인 폴더에 보관했다.', '']
+(root / 'docs/week10/performance-baseline.md').write_text('\n'.join(lines), encoding='utf-8')
+print('Saved interrupted-run record, all-attempts.csv, and honest partial report.')

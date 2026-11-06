@@ -1,0 +1,67 @@
+diff --git a/build.gradle b/build.gradle
+index 7d753160..28203ce4 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -108,3 +108,13 @@ tasks.named('test') {
+ jar {
+ 	enabled = false
+ }
++
++// Opt-in, loopback-only HTTP benchmark. Never included in the production bootJar.
++tasks.register('publicationBenchmark', JavaExec) {
++	dependsOn testClasses
++	classpath = sourceSets.test.runtimeClasspath
++	mainClass = 'com.USWCicrcleLink.server.baseline.PublicationBenchmarkServer'
++	javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(17) }
++	jvmArgs '-Xms1g', '-Xmx1g'
++	systemProperty 'logback.configurationFile', 'logback-benchmark.xml'
++}
+diff --git a/scripts/run-baseline-tests.ps1 b/scripts/run-baseline-tests.ps1
+index 84b6a977..6b5b8e24 100644
+--- a/scripts/run-baseline-tests.ps1
++++ b/scripts/run-baseline-tests.ps1
+@@ -38,8 +38,19 @@ $binding = & docker port $container 3306
+ if ($binding -notmatch '^127\.0\.0\.1:(\d+)$') { throw 'Expected loopback-only MySQL binding.' }
+ $previousUrl = $env:BASELINE_MYSQL_URL
+ $env:BASELINE_MYSQL_URL = "jdbc:mysql://127.0.0.1:$($Matches[1])/baseline?useSSL=false&allowPublicKeyRetrieval=true"
+-$logDir = Join-Path $repoPath 'evidence/week10/publication-response'
++$previousEvidenceDir = $env:BASELINE_EVIDENCE_DIR
++$runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8)
++$logDir = Join-Path $repoPath ('evidence/week10/personal-verification/' + $runId)
++$env:BASELINE_EVIDENCE_DIR = $logDir
+ New-Item -ItemType Directory -Force $logDir | Out-Null
++@{
++    runId = $runId
++    startedAt = (Get-Date).ToString('o')
++    commit = (& git -C $repoPath rev-parse HEAD)
++    workingTreeDiff = (& git -C $repoPath diff --stat | Out-String).Trim()
++    operator = 'Not recorded: running this script does not establish who executed it.'
++} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $logDir 'run.json') -Encoding utf8
++Write-Host "Evidence directory: $logDir"
+ try {
+     & ($Drive + '\gradlew.bat') -p ($Drive + '\') test --rerun-tasks --console=plain 2>&1 | Tee-Object -FilePath (Join-Path $logDir 'green.log')
+     $testExit = $LASTEXITCODE
+@@ -47,6 +58,9 @@ try {
+     if (Test-Path (Join-Path $repoPath 'build/test-results/test')) {
+         Copy-Item -LiteralPath (Join-Path $repoPath 'build/test-results/test') -Destination $destination -Recurse
+     }
+-} finally { $env:BASELINE_MYSQL_URL = $previousUrl }
++} finally {
++    $env:BASELINE_MYSQL_URL = $previousUrl
++    $env:BASELINE_EVIDENCE_DIR = $previousEvidenceDir
++}
+ # Keep the dedicated container and drive alias for evidence reproduction. No automatic deletion.
+ exit $testExit
+diff --git a/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java b/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
+index 7e7331c7..6c7f6238 100644
+--- a/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
++++ b/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
+@@ -142,7 +142,7 @@ class BaselineReproductionTest {
+     @PersistenceContext EntityManager em;
+     TransactionTemplate tx; MockMvc mvc; Club club,other; Aplict a1,a2,a3,a4; User user;
+     Object principal; ObjectMapper json=new ObjectMapper();
+-    final Path evidence=Path.of("evidence/week10/publication-response");
++    final Path evidence=Path.of(System.getenv().getOrDefault("BASELINE_EVIDENCE_DIR", "evidence/week10/publication-response"));
+ 
+     @BeforeEach void setup() throws Exception {
+         fcm=org.springframework.test.util.AopTestUtils.getTargetObject(fcm);

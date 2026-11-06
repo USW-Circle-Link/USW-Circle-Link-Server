@@ -1,0 +1,10 @@
+{
+  "container": {
+    "Id": "0fc21fa9d9a065379c24518b397b4fe6bb19496b490d3a9f47458c68113ed23e",
+    "Image": "sha256:c6812f0dcd978b589d9d3b90c20bd5e4a799deab4fd492985e0a076c5be1ee40"
+  },
+  "recordedAt": "2026-11-05T20:59:30.5005632+09:00",
+  "sampling": "100ms target interval; actual timestamps preserved; combined application and WireMock JVM",
+  "mysqlBinding": "127.0.0.1:62271",
+  "sourceNote": "Benchmarked application code is 0abdb14e; harness source at startup preserved in harness/."
+}

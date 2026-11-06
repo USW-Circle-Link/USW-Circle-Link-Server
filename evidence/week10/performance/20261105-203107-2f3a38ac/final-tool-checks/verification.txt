@@ -1,0 +1,1 @@
+bootJar: BUILD SUCCESSFUL (2026-11-06); benchmark smoke Java17: published2/members1/FCM2; production source unchanged; DOCX2 pages rendered and visually inspected.

@@ -1,0 +1,10 @@
+{
+  "poolMaximum" : 10,
+  "scope" : "HTTP controller/service/JPA/MySQL; test authentication; fake Google token; local WireMock",
+  "javaVersion" : "17.0.12",
+  "pid" : 43484,
+  "wireMock" : "http://localhost:61579",
+  "port" : 61583,
+  "processors" : 18,
+  "heapMaxBytes" : 1073741824
+}

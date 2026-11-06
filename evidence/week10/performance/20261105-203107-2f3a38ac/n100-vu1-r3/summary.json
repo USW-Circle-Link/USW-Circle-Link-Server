@@ -1,0 +1,148 @@
+{
+    "metrics": {
+        "iterations": {
+            "count": 30,
+            "rate": 0.03359201700603833
+        },
+        "publication_failed": {
+            "passes": 1,
+            "fails": 29,
+            "thresholds": {
+                "rate==0": true
+            },
+            "value": 0.03333333333333333
+        },
+        "http_req_connecting": {
+            "p(99)": 1.654442000000002,
+            "avg": 0.07767333333333333,
+            "min": 0,
+            "med": 0,
+            "max": 2.3302,
+            "p(95)": 0
+        },
+        "http_req_waiting": {
+            "avg": 29764.895106666667,
+            "min": 22453.3138,
+            "med": 22575.2911,
+            "max": 237368.7854,
+            "p(95)": 22815.99885,
+            "p(99)": 175152.26923900016
+        },
+        "data_received": {
+            "count": 4814,
+            "rate": 5.390398995568951
+        },
+        "iteration_duration": {
+            "p(99)": 175202.63275800017,
+            "avg": 29768.977546666672,
+            "min": 22454.6599,
+            "med": 22577.90725,
+            "max": 237439.0426,
+            "p(95)": 22818.25619
+        },
+        "http_reqs": {
+            "count": 30,
+            "rate": 0.03359201700603833
+        },
+        "http_req_blocked": {
+            "p(95)": 0.28973999999999855,
+            "p(99)": 1.8072140000000014,
+            "avg": 0.09523333333333334,
+            "min": 0,
+            "med": 0,
+            "max": 2.3302
+        },
+        "checks": {
+            "passes": 58,
+            "fails": 2,
+            "thresholds": {
+                "rate==1": true
+            },
+            "value": 0.9666666666666667
+        },
+        "http_req_failed": {
+            "passes": 1,
+            "fails": 29,
+            "thresholds": {
+                "rate==0": true
+            },
+            "value": 0.03333333333333333
+        },
+        "vus": {
+            "max": 1,
+            "value": 1,
+            "min": 1
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(95)": 0,
+            "p(99)": 0
+        },
+        "http_req_duration": {
+            "max": 237368.7854,
+            "p(95)": 22816.297445,
+            "p(99)": 175152.42668000018,
+            "avg": 29765.671093333334,
+            "min": 22453.8788,
+            "med": 22576.9122
+        },
+        "http_req_sending": {
+            "p(95)": 0.5877349999999999,
+            "p(99)": 1.335382000000001,
+            "avg": 0.25799999999999995,
+            "min": 0,
+            "med": 0,
+            "max": 1.6353
+        },
+        "http_req_receiving": {
+            "avg": 0.5179866666666667,
+            "min": 0,
+            "med": 0.5418000000000001,
+            "max": 2.144,
+            "p(95)": 1.1969999999999996,
+            "p(99)": 1.8858130000000008
+        },
+        "vus_max": {
+            "min": 1,
+            "max": 1,
+            "value": 1
+        },
+        "http_req_duration{expected_response:true}": {
+            "med": 22566.3759,
+            "max": 22829.6174,
+            "p(95)": 22799.67822,
+            "p(99)": 22821.329428,
+            "avg": 22606.943013793105,
+            "min": 22453.8788
+        },
+        "data_sent": {
+            "count": 169140,
+            "rate": 189.39179188004414
+        }
+    },
+    "root_group": {
+        "groups": {},
+        "checks": {
+                "HTTP 200": {
+                    "name": "HTTP 200",
+                    "path": "::HTTP 200",
+                    "id": "b70aee8a9f7a77d66dd70844a901558a",
+                    "passes": 29,
+                    "fails": 1
+                },
+                "new publication completed": {
+                    "passes": 29,
+                    "fails": 1,
+                    "name": "new publication completed",
+                    "path": "::new publication completed",
+                    "id": "ce00a9b4137b268de6c4a5cd905ed496"
+                }
+            },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

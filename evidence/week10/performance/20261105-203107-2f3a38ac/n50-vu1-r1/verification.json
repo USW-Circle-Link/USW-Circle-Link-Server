@@ -1,0 +1,15 @@
+{
+  "db" : {
+    "published" : 1500,
+    "members" : 750
+  },
+  "resourceSamples" : 2542,
+  "fcmCalls" : 1500,
+  "runId" : "n50-vu1-r1",
+  "acquisition" : {
+    "count" : 30,
+    "p95Ms" : 0.3507,
+    "meanMs" : 0.11365333333333333,
+    "maxMs" : 2.2926
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "runId": "n100-vu1-r3",
+  "applicants": 100,
+  "vus": 1,
+  "attempts": 30,
+  "httpFailures": 1,
+  "timeouts": 1,
+  "failurePercent": 3.3333333333333335,
+  "dbVerified": false,
+  "fcmVerified": false,
+  "status": "failed; final verification unavailable",
+  "evidence": [
+    "k6.log: request timeout, 29 HTTP successes / 30 attempts",
+    "server.log: POST /benchmark/stop -> Requests still active",
+    "server.log: Hikari housekeeper delta=14h25m44s; thread starvation or clock leap warning"
+  ],
+  "interpretation": "Long scheduling/time anomaly observed; sleep or application cause not established. Preserve failure and repeat under stable conditions."
+}

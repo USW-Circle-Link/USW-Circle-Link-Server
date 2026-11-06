@@ -108,3 +108,13 @@ tasks.named('test') {
 jar {
 	enabled = false
 }
+
+// Opt-in, loopback-only HTTP benchmark. Never included in the production bootJar.
+tasks.register('publicationBenchmark', JavaExec) {
+	dependsOn testClasses
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = 'com.USWCicrcleLink.server.baseline.PublicationBenchmarkServer'
+	javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(17) }
+	jvmArgs '-Xms1g', '-Xmx1g'
+	systemProperty 'logback.configurationFile', 'logback-benchmark.xml'
+}

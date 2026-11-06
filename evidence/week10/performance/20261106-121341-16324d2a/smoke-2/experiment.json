@@ -1,0 +1,11 @@
+{
+  "smoke": true,
+  "finishedAt": "2026-11-06T12:14:27.8679040+09:00",
+  "warmup": false,
+  "vus": 1,
+  "k6Exit": 0,
+  "applicants": 2,
+  "minimumDurationMet": true,
+  "passed": true,
+  "runId": "smoke-2"
+}

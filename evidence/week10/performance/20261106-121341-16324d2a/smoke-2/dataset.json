@@ -1,0 +1,1 @@
+{"runId":"smoke-2","count":2,"batches":[{"clubUUID":"57926589-8e97-43ff-a325-176a7929d88e","body":[{"aplictUUID":"4123a45d-a560-4e31-8b01-856de39d8924"},{"aplictUUID":"cf9e1186-3ffe-494d-a026-0872e975ccf9"}]}],"pattern":"first half PASS, second half FAIL; all public WAIT; unique UUIDs"}

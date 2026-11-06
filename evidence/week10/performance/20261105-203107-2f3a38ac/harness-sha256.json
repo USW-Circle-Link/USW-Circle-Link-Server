@@ -1,0 +1,26 @@
+[
+  {
+    "file": "BaselineReproductionTest.java",
+    "Hash": "1350BA4316D7AD19E17774FEBC67AD208CA915A65634C5645F6D5857F596191A"
+  },
+  {
+    "file": "build.gradle",
+    "Hash": "3784E4FB22BF16A3B2E68981E66118ABAE3BF3E265FF047DFA4D975E156CDEA0"
+  },
+  {
+    "file": "logback-benchmark.xml",
+    "Hash": "899097E5F8BFC3055C4449F7839E35181FC6480AD1F4FFD4C21F6EB071C4AEC1"
+  },
+  {
+    "file": "publication.js",
+    "Hash": "DABEC456DA56875896928B0685F50808AE0C04542F2399D08A4FB9179BEA5549"
+  },
+  {
+    "file": "PublicationBenchmarkServer.java",
+    "Hash": "B8803CF8A3390E7DB347F18EBE28F96B0CBFFF8E24D75BBE194D36D8095BE490"
+  },
+  {
+    "file": "run-publication-benchmark.ps1",
+    "Hash": "729690F980EEC92A7C23DED0F317132A668593D66712EB8A40C3CD7CA0658233"
+  }
+]

@@ -1,0 +1,48 @@
+time="2026-11-05T21:35:03+09:00" level=warning msg="Request Failed" error="Post \"http://127.0.0.1:51506/clubs/fe11b2fe-ec8d-4cc8-961f-243efad7f1ff/applicants/notifications\": request timeout"
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✗ 'rate==1' rate=96.66%
+
+    http_req_failed
+    ✗ 'rate==0' rate=3.33%
+
+    publication_failed
+    ✗ 'rate==0' rate=3.33%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 60     0.067184/s
+    checks_succeeded...: 96.66% 58 out of 60
+    checks_failed......: 3.33%  2 out of 60
+
+    ✗ HTTP 200
+      ↳  96% — ✓ 29 / ✗ 1
+    ✗ new publication completed
+      ↳  96% — ✓ 29 / ✗ 1
+
+    CUSTOM
+    publication_failed.............: 3.33%  1 out of 30
+
+    HTTP
+    http_req_duration..............: avg=29.76s min=22.45s med=22.57s max=3m57s  p(95)=22.81s p(99)=2m55s 
+      { expected_response:true }...: avg=22.6s  min=22.45s med=22.56s max=22.82s p(95)=22.79s p(99)=22.82s
+    http_req_failed................: 3.33%  1 out of 30
+    http_reqs......................: 30     0.033592/s
+
+    EXECUTION
+    iteration_duration.............: avg=29.76s min=22.45s med=22.57s max=3m57s  p(95)=22.81s p(99)=2m55s 
+    iterations.....................: 30     0.033592/s
+    vus............................: 1      min=1                 max=1
+    vus_max........................: 1      min=1                 max=1
+
+    NETWORK
+    data_received..................: 4.8 kB 5.390398995568951 B/s
+    data_sent......................: 169 kB 189 B/s
+
+
+
+time="2026-11-05T21:35:04+09:00" level=error msg="thresholds on metrics 'checks, http_req_failed, publication_failed' have been crossed"

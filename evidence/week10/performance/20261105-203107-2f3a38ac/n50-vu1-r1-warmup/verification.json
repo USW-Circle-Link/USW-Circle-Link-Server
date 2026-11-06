@@ -1,0 +1,15 @@
+{
+  "db" : {
+    "published" : 300,
+    "members" : 150
+  },
+  "resourceSamples" : 493,
+  "fcmCalls" : 300,
+  "runId" : "n50-vu1-r1-warmup",
+  "acquisition" : {
+    "count" : 6,
+    "p95Ms" : 4.7251,
+    "meanMs" : 0.8272,
+    "maxMs" : 4.7251
+  }
+}

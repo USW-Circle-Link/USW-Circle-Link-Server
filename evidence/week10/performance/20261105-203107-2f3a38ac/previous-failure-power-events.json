@@ -1,0 +1,44 @@
+[
+  {
+    "time": "2026-11-05T21:31:08.7323687+09:00",
+    "Id": 506,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187458,
+    "Message": "시스템이 최신 대기 모드를 시작합니다. \r\n\r\n이유: Power Button."
+  },
+  {
+    "time": "2026-11-05T21:31:09.6755409+09:00",
+    "Id": 507,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187461,
+    "Message": "시스템이 최신 대기 모드를 종료합니다. \r\n\r\n이유: Lid."
+  },
+  {
+    "time": "2026-11-05T21:31:09.6769566+09:00",
+    "Id": 506,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187465,
+    "Message": "시스템이 최신 대기 모드를 시작합니다. \r\n\r\n이유: Lid."
+  },
+  {
+    "time": "2026-11-05T21:35:00.4202554+09:00",
+    "Id": 507,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187471,
+    "Message": "시스템이 최신 대기 모드를 종료합니다. \r\n\r\n이유: Austerity Battery Drain Budget Exceeded."
+  },
+  {
+    "time": "2026-11-05T21:35:00.4275417+09:00",
+    "Id": 506,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187473,
+    "Message": "시스템이 최신 대기 모드를 시작합니다. \r\n\r\n이유: Austerity Battery Drain Budget Exceeded."
+  },
+  {
+    "time": "2026-11-06T11:56:48.5673421+09:00",
+    "Id": 507,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "RecordId": 187499,
+    "Message": "시스템이 최신 대기 모드를 종료합니다. \r\n\r\n이유: Lid."
+  }
+]

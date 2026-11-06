@@ -1,0 +1,15 @@
+{
+  "db" : {
+    "published" : 2,
+    "members" : 1
+  },
+  "resourceSamples" : 13,
+  "fcmCalls" : 2,
+  "runId" : "smoke-2",
+  "acquisition" : {
+    "count" : 1,
+    "p95Ms" : 0.027801,
+    "meanMs" : 0.027801,
+    "maxMs" : 0.027801
+  }
+}

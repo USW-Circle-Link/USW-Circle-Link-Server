@@ -1,0 +1,11 @@
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+11월 06, 2026 12:31:42 오후 org.apache.coyote.AbstractProtocol init
+정보: Initializing ProtocolHandler ["http-nio-127.0.0.1-auto-1"]
+11월 06, 2026 12:31:42 오후 org.apache.catalina.core.StandardService startInternal
+정보: Starting service [Tomcat]
+11월 06, 2026 12:31:42 오후 org.apache.catalina.core.StandardEngine startInternal
+정보: Starting Servlet engine: [Apache Tomcat/10.1.25]
+11월 06, 2026 12:31:42 오후 org.apache.catalina.core.ApplicationContext log
+정보: Initializing Spring DispatcherServlet 'dispatcher'
+11월 06, 2026 12:31:42 오후 org.apache.coyote.AbstractProtocol start
+정보: Starting ProtocolHandler ["http-nio-127.0.0.1-auto-1-49196"]

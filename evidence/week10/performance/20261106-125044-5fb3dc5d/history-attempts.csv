@@ -1,0 +1,11 @@
+﻿campaign,run,applicants,requests,http_failures,p95_ms,p99_ms,selected_baseline,note
+20261105-203107-2f3a38ac,n50-vu1-r1,50,30,0,11866.571785,11926.101128,True,verified normal run
+20261105-203107-2f3a38ac,n50-vu1-r2,50,30,0,11791.77454,11795.477013,True,verified normal run
+20261105-203107-2f3a38ac,n50-vu1-r3,50,30,0,11452.93281,11485.42086,True,verified normal run
+20261105-203107-2f3a38ac,n100-vu1-r1,100,30,0,22855.44075,23173.735805,False,verified normal run
+20261105-203107-2f3a38ac,n100-vu1-r2,100,30,0,22731.25339,23782.51686,False,verified normal run
+20261105-203107-2f3a38ac,n100-vu1-r3,100,30,1,22816.297445,175152.42668000018,False,failed; time anomaly; not a normal comparison sample
+20261106-123104-a7710ab4,n100-vu1-r1,100,30,0,24179.960675,27353.315569000006,False,normal first run; following warmup had Idle Timeout standby; entire cohort stopped
+20261106-125044-5fb3dc5d,n100-vu1-r1,100,30,0,22440.95791,24721.476400000003,True,new stable100 cohort
+20261106-125044-5fb3dc5d,n100-vu1-r2,100,30,0,22364.191945,22419.473017,True,new stable100 cohort
+20261106-125044-5fb3dc5d,n100-vu1-r3,100,30,0,22382.575555,22426.122771,True,new stable100 cohort

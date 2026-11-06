@@ -1,0 +1,1201 @@
+[ {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-99\"}}",
+  "time" : "2026-11-06T04:04:47.888Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-98\"}}",
+  "time" : "2026-11-06T04:04:47.660Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-97\"}}",
+  "time" : "2026-11-06T04:04:47.431Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-96\"}}",
+  "time" : "2026-11-06T04:04:47.204Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-95\"}}",
+  "time" : "2026-11-06T04:04:46.987Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-94\"}}",
+  "time" : "2026-11-06T04:04:46.760Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-93\"}}",
+  "time" : "2026-11-06T04:04:46.544Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-92\"}}",
+  "time" : "2026-11-06T04:04:46.321Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-91\"}}",
+  "time" : "2026-11-06T04:04:46.102Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-90\"}}",
+  "time" : "2026-11-06T04:04:45.879Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-89\"}}",
+  "time" : "2026-11-06T04:04:45.658Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-88\"}}",
+  "time" : "2026-11-06T04:04:45.439Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-87\"}}",
+  "time" : "2026-11-06T04:04:45.221Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-86\"}}",
+  "time" : "2026-11-06T04:04:45.004Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-85\"}}",
+  "time" : "2026-11-06T04:04:44.786Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-84\"}}",
+  "time" : "2026-11-06T04:04:44.568Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-83\"}}",
+  "time" : "2026-11-06T04:04:44.351Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-82\"}}",
+  "time" : "2026-11-06T04:04:44.133Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-81\"}}",
+  "time" : "2026-11-06T04:04:43.903Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-80\"}}",
+  "time" : "2026-11-06T04:04:43.686Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-79\"}}",
+  "time" : "2026-11-06T04:04:43.467Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-78\"}}",
+  "time" : "2026-11-06T04:04:43.251Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-77\"}}",
+  "time" : "2026-11-06T04:04:43.031Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-76\"}}",
+  "time" : "2026-11-06T04:04:42.814Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-75\"}}",
+  "time" : "2026-11-06T04:04:42.595Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-74\"}}",
+  "time" : "2026-11-06T04:04:42.378Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-73\"}}",
+  "time" : "2026-11-06T04:04:42.149Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-72\"}}",
+  "time" : "2026-11-06T04:04:41.932Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-71\"}}",
+  "time" : "2026-11-06T04:04:41.715Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-70\"}}",
+  "time" : "2026-11-06T04:04:41.496Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-69\"}}",
+  "time" : "2026-11-06T04:04:41.277Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-68\"}}",
+  "time" : "2026-11-06T04:04:41.047Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-67\"}}",
+  "time" : "2026-11-06T04:04:40.826Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-66\"}}",
+  "time" : "2026-11-06T04:04:40.605Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-65\"}}",
+  "time" : "2026-11-06T04:04:40.374Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-64\"}}",
+  "time" : "2026-11-06T04:04:40.149Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-63\"}}",
+  "time" : "2026-11-06T04:04:39.927Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-62\"}}",
+  "time" : "2026-11-06T04:04:39.708Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-61\"}}",
+  "time" : "2026-11-06T04:04:39.487Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-60\"}}",
+  "time" : "2026-11-06T04:04:39.278Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-59\"}}",
+  "time" : "2026-11-06T04:04:39.057Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-58\"}}",
+  "time" : "2026-11-06T04:04:38.841Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-57\"}}",
+  "time" : "2026-11-06T04:04:38.622Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-56\"}}",
+  "time" : "2026-11-06T04:04:38.410Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-55\"}}",
+  "time" : "2026-11-06T04:04:38.187Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-54\"}}",
+  "time" : "2026-11-06T04:04:37.966Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-53\"}}",
+  "time" : "2026-11-06T04:04:37.746Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-52\"}}",
+  "time" : "2026-11-06T04:04:37.523Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-51\"}}",
+  "time" : "2026-11-06T04:04:37.304Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-50\"}}",
+  "time" : "2026-11-06T04:04:37.076Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-49\"}}",
+  "time" : "2026-11-06T04:04:36.854Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-48\"}}",
+  "time" : "2026-11-06T04:04:36.634Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-47\"}}",
+  "time" : "2026-11-06T04:04:36.413Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-46\"}}",
+  "time" : "2026-11-06T04:04:36.192Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-45\"}}",
+  "time" : "2026-11-06T04:04:35.970Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-44\"}}",
+  "time" : "2026-11-06T04:04:35.752Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-43\"}}",
+  "time" : "2026-11-06T04:04:35.529Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-42\"}}",
+  "time" : "2026-11-06T04:04:35.312Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-41\"}}",
+  "time" : "2026-11-06T04:04:35.098Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-40\"}}",
+  "time" : "2026-11-06T04:04:34.882Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-39\"}}",
+  "time" : "2026-11-06T04:04:34.666Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-38\"}}",
+  "time" : "2026-11-06T04:04:34.439Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-37\"}}",
+  "time" : "2026-11-06T04:04:34.217Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-36\"}}",
+  "time" : "2026-11-06T04:04:33.989Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-35\"}}",
+  "time" : "2026-11-06T04:04:33.768Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-34\"}}",
+  "time" : "2026-11-06T04:04:33.551Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-33\"}}",
+  "time" : "2026-11-06T04:04:33.330Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-32\"}}",
+  "time" : "2026-11-06T04:04:33.108Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-31\"}}",
+  "time" : "2026-11-06T04:04:32.887Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-30\"}}",
+  "time" : "2026-11-06T04:04:32.666Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-29\"}}",
+  "time" : "2026-11-06T04:04:32.445Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-28\"}}",
+  "time" : "2026-11-06T04:04:32.226Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-27\"}}",
+  "time" : "2026-11-06T04:04:32.003Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-26\"}}",
+  "time" : "2026-11-06T04:04:31.786Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-25\"}}",
+  "time" : "2026-11-06T04:04:31.559Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-24\"}}",
+  "time" : "2026-11-06T04:04:31.332Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-23\"}}",
+  "time" : "2026-11-06T04:04:31.119Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-22\"}}",
+  "time" : "2026-11-06T04:04:30.889Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-21\"}}",
+  "time" : "2026-11-06T04:04:30.674Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-20\"}}",
+  "time" : "2026-11-06T04:04:30.455Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-19\"}}",
+  "time" : "2026-11-06T04:04:30.235Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-18\"}}",
+  "time" : "2026-11-06T04:04:30.016Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-17\"}}",
+  "time" : "2026-11-06T04:04:29.795Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-16\"}}",
+  "time" : "2026-11-06T04:04:29.574Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-15\"}}",
+  "time" : "2026-11-06T04:04:29.354Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-14\"}}",
+  "time" : "2026-11-06T04:04:29.125Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-13\"}}",
+  "time" : "2026-11-06T04:04:28.904Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-12\"}}",
+  "time" : "2026-11-06T04:04:28.683Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-11\"}}",
+  "time" : "2026-11-06T04:04:28.463Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-10\"}}",
+  "time" : "2026-11-06T04:04:28.242Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-9\"}}",
+  "time" : "2026-11-06T04:04:28.012Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-8\"}}",
+  "time" : "2026-11-06T04:04:27.781Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-7\"}}",
+  "time" : "2026-11-06T04:04:27.552Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-6\"}}",
+  "time" : "2026-11-06T04:04:27.325Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-5\"}}",
+  "time" : "2026-11-06T04:04:27.106Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-4\"}}",
+  "time" : "2026-11-06T04:04:26.888Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-3\"}}",
+  "time" : "2026-11-06T04:04:26.674Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-2\"}}",
+  "time" : "2026-11-06T04:04:26.453Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-1\"}}",
+  "time" : "2026-11-06T04:04:26.230Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"B2dbd0619-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-2-0\"}}",
+  "time" : "2026-11-06T04:04:26.014Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-99\"}}",
+  "time" : "2026-11-06T04:04:25.640Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-98\"}}",
+  "time" : "2026-11-06T04:04:25.421Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-97\"}}",
+  "time" : "2026-11-06T04:04:25.200Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-96\"}}",
+  "time" : "2026-11-06T04:04:24.982Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-95\"}}",
+  "time" : "2026-11-06T04:04:24.760Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-94\"}}",
+  "time" : "2026-11-06T04:04:24.539Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-93\"}}",
+  "time" : "2026-11-06T04:04:24.318Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-92\"}}",
+  "time" : "2026-11-06T04:04:24.091Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-91\"}}",
+  "time" : "2026-11-06T04:04:23.864Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-90\"}}",
+  "time" : "2026-11-06T04:04:23.639Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-89\"}}",
+  "time" : "2026-11-06T04:04:23.422Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-88\"}}",
+  "time" : "2026-11-06T04:04:23.208Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-87\"}}",
+  "time" : "2026-11-06T04:04:22.992Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-86\"}}",
+  "time" : "2026-11-06T04:04:22.776Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-85\"}}",
+  "time" : "2026-11-06T04:04:22.547Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-84\"}}",
+  "time" : "2026-11-06T04:04:22.325Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-83\"}}",
+  "time" : "2026-11-06T04:04:22.103Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-82\"}}",
+  "time" : "2026-11-06T04:04:21.887Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-81\"}}",
+  "time" : "2026-11-06T04:04:21.665Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-80\"}}",
+  "time" : "2026-11-06T04:04:21.443Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-79\"}}",
+  "time" : "2026-11-06T04:04:21.223Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-78\"}}",
+  "time" : "2026-11-06T04:04:20.997Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-77\"}}",
+  "time" : "2026-11-06T04:04:20.776Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-76\"}}",
+  "time" : "2026-11-06T04:04:20.553Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-75\"}}",
+  "time" : "2026-11-06T04:04:20.332Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-74\"}}",
+  "time" : "2026-11-06T04:04:20.096Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-73\"}}",
+  "time" : "2026-11-06T04:04:19.863Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-72\"}}",
+  "time" : "2026-11-06T04:04:19.638Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-71\"}}",
+  "time" : "2026-11-06T04:04:19.422Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-70\"}}",
+  "time" : "2026-11-06T04:04:19.206Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-69\"}}",
+  "time" : "2026-11-06T04:04:18.985Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-68\"}}",
+  "time" : "2026-11-06T04:04:18.772Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-67\"}}",
+  "time" : "2026-11-06T04:04:18.550Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-66\"}}",
+  "time" : "2026-11-06T04:04:18.329Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-65\"}}",
+  "time" : "2026-11-06T04:04:18.108Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-64\"}}",
+  "time" : "2026-11-06T04:04:17.889Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-63\"}}",
+  "time" : "2026-11-06T04:04:17.667Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-62\"}}",
+  "time" : "2026-11-06T04:04:17.446Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-61\"}}",
+  "time" : "2026-11-06T04:04:17.225Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-60\"}}",
+  "time" : "2026-11-06T04:04:17.008Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-59\"}}",
+  "time" : "2026-11-06T04:04:16.786Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-58\"}}",
+  "time" : "2026-11-06T04:04:16.566Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-57\"}}",
+  "time" : "2026-11-06T04:04:16.344Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-56\"}}",
+  "time" : "2026-11-06T04:04:16.123Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-55\"}}",
+  "time" : "2026-11-06T04:04:15.906Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-54\"}}",
+  "time" : "2026-11-06T04:04:15.684Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-53\"}}",
+  "time" : "2026-11-06T04:04:15.459Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-52\"}}",
+  "time" : "2026-11-06T04:04:15.241Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-51\"}}",
+  "time" : "2026-11-06T04:04:15.032Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-50\"}}",
+  "time" : "2026-11-06T04:04:14.810Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-49\"}}",
+  "time" : "2026-11-06T04:04:14.589Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-48\"}}",
+  "time" : "2026-11-06T04:04:14.368Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-47\"}}",
+  "time" : "2026-11-06T04:04:14.147Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-46\"}}",
+  "time" : "2026-11-06T04:04:13.918Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-45\"}}",
+  "time" : "2026-11-06T04:04:13.701Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-44\"}}",
+  "time" : "2026-11-06T04:04:13.482Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-43\"}}",
+  "time" : "2026-11-06T04:04:13.259Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-42\"}}",
+  "time" : "2026-11-06T04:04:13.035Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-41\"}}",
+  "time" : "2026-11-06T04:04:12.813Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-40\"}}",
+  "time" : "2026-11-06T04:04:12.591Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-39\"}}",
+  "time" : "2026-11-06T04:04:12.372Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-38\"}}",
+  "time" : "2026-11-06T04:04:12.151Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-37\"}}",
+  "time" : "2026-11-06T04:04:11.929Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-36\"}}",
+  "time" : "2026-11-06T04:04:11.713Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-35\"}}",
+  "time" : "2026-11-06T04:04:11.491Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-34\"}}",
+  "time" : "2026-11-06T04:04:11.269Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-33\"}}",
+  "time" : "2026-11-06T04:04:11.049Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-32\"}}",
+  "time" : "2026-11-06T04:04:10.830Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-31\"}}",
+  "time" : "2026-11-06T04:04:10.607Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-30\"}}",
+  "time" : "2026-11-06T04:04:10.387Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-29\"}}",
+  "time" : "2026-11-06T04:04:10.165Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-28\"}}",
+  "time" : "2026-11-06T04:04:09.948Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-27\"}}",
+  "time" : "2026-11-06T04:04:09.728Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-26\"}}",
+  "time" : "2026-11-06T04:04:09.506Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-25\"}}",
+  "time" : "2026-11-06T04:04:09.285Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-24\"}}",
+  "time" : "2026-11-06T04:04:09.062Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-23\"}}",
+  "time" : "2026-11-06T04:04:08.838Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-22\"}}",
+  "time" : "2026-11-06T04:04:08.617Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-21\"}}",
+  "time" : "2026-11-06T04:04:08.397Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-20\"}}",
+  "time" : "2026-11-06T04:04:08.175Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-19\"}}",
+  "time" : "2026-11-06T04:04:07.953Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-18\"}}",
+  "time" : "2026-11-06T04:04:07.736Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-17\"}}",
+  "time" : "2026-11-06T04:04:07.512Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-16\"}}",
+  "time" : "2026-11-06T04:04:07.295Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-15\"}}",
+  "time" : "2026-11-06T04:04:07.088Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-14\"}}",
+  "time" : "2026-11-06T04:04:06.872Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-13\"}}",
+  "time" : "2026-11-06T04:04:06.638Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-12\"}}",
+  "time" : "2026-11-06T04:04:06.421Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-11\"}}",
+  "time" : "2026-11-06T04:04:06.198Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-10\"}}",
+  "time" : "2026-11-06T04:04:05.982Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-9\"}}",
+  "time" : "2026-11-06T04:04:05.762Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-8\"}}",
+  "time" : "2026-11-06T04:04:05.546Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-7\"}}",
+  "time" : "2026-11-06T04:04:05.320Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-6\"}}",
+  "time" : "2026-11-06T04:04:05.098Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-5\"}}",
+  "time" : "2026-11-06T04:04:04.868Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-4\"}}",
+  "time" : "2026-11-06T04:04:04.646Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-3\"}}",
+  "time" : "2026-11-06T04:04:04.426Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-2\"}}",
+  "time" : "2026-11-06T04:04:04.207Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-1\"}}",
+  "time" : "2026-11-06T04:04:03.978Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bac56dadd-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-1-0\"}}",
+  "time" : "2026-11-06T04:04:03.759Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-99\"}}",
+  "time" : "2026-11-06T04:04:03.325Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-98\"}}",
+  "time" : "2026-11-06T04:04:03.112Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-97\"}}",
+  "time" : "2026-11-06T04:04:02.892Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-96\"}}",
+  "time" : "2026-11-06T04:04:02.675Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-95\"}}",
+  "time" : "2026-11-06T04:04:02.452Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-94\"}}",
+  "time" : "2026-11-06T04:04:02.230Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-93\"}}",
+  "time" : "2026-11-06T04:04:01.999Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-92\"}}",
+  "time" : "2026-11-06T04:04:01.778Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-91\"}}",
+  "time" : "2026-11-06T04:04:01.556Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-90\"}}",
+  "time" : "2026-11-06T04:04:01.335Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-89\"}}",
+  "time" : "2026-11-06T04:04:01.114Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-88\"}}",
+  "time" : "2026-11-06T04:04:00.886Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-87\"}}",
+  "time" : "2026-11-06T04:04:00.664Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-86\"}}",
+  "time" : "2026-11-06T04:04:00.444Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-85\"}}",
+  "time" : "2026-11-06T04:04:00.222Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-84\"}}",
+  "time" : "2026-11-06T04:03:59.998Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-83\"}}",
+  "time" : "2026-11-06T04:03:59.784Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-82\"}}",
+  "time" : "2026-11-06T04:03:59.556Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-81\"}}",
+  "time" : "2026-11-06T04:03:59.336Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-80\"}}",
+  "time" : "2026-11-06T04:03:59.121Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-79\"}}",
+  "time" : "2026-11-06T04:03:58.892Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-78\"}}",
+  "time" : "2026-11-06T04:03:58.684Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-77\"}}",
+  "time" : "2026-11-06T04:03:58.471Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-76\"}}",
+  "time" : "2026-11-06T04:03:58.247Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-75\"}}",
+  "time" : "2026-11-06T04:03:58.024Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-74\"}}",
+  "time" : "2026-11-06T04:03:57.795Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-73\"}}",
+  "time" : "2026-11-06T04:03:57.574Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-72\"}}",
+  "time" : "2026-11-06T04:03:57.353Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-71\"}}",
+  "time" : "2026-11-06T04:03:57.132Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-70\"}}",
+  "time" : "2026-11-06T04:03:56.913Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-69\"}}",
+  "time" : "2026-11-06T04:03:56.692Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-68\"}}",
+  "time" : "2026-11-06T04:03:56.471Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-67\"}}",
+  "time" : "2026-11-06T04:03:56.249Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-66\"}}",
+  "time" : "2026-11-06T04:03:56.029Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-65\"}}",
+  "time" : "2026-11-06T04:03:55.807Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-64\"}}",
+  "time" : "2026-11-06T04:03:55.580Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-63\"}}",
+  "time" : "2026-11-06T04:03:55.350Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-62\"}}",
+  "time" : "2026-11-06T04:03:55.135Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-61\"}}",
+  "time" : "2026-11-06T04:03:54.926Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-60\"}}",
+  "time" : "2026-11-06T04:03:54.718Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-59\"}}",
+  "time" : "2026-11-06T04:03:54.494Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-58\"}}",
+  "time" : "2026-11-06T04:03:54.272Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-57\"}}",
+  "time" : "2026-11-06T04:03:54.041Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-56\"}}",
+  "time" : "2026-11-06T04:03:53.811Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-55\"}}",
+  "time" : "2026-11-06T04:03:53.594Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-54\"}}",
+  "time" : "2026-11-06T04:03:53.375Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-53\"}}",
+  "time" : "2026-11-06T04:03:53.153Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-52\"}}",
+  "time" : "2026-11-06T04:03:52.931Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-51\"}}",
+  "time" : "2026-11-06T04:03:52.708Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 불합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-50\"}}",
+  "time" : "2026-11-06T04:03:52.483Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-49\"}}",
+  "time" : "2026-11-06T04:03:52.265Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-48\"}}",
+  "time" : "2026-11-06T04:03:52.044Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-47\"}}",
+  "time" : "2026-11-06T04:03:51.829Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-46\"}}",
+  "time" : "2026-11-06T04:03:51.615Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-45\"}}",
+  "time" : "2026-11-06T04:03:51.389Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-44\"}}",
+  "time" : "2026-11-06T04:03:51.162Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-43\"}}",
+  "time" : "2026-11-06T04:03:50.941Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-42\"}}",
+  "time" : "2026-11-06T04:03:50.722Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-41\"}}",
+  "time" : "2026-11-06T04:03:50.503Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-40\"}}",
+  "time" : "2026-11-06T04:03:50.292Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-39\"}}",
+  "time" : "2026-11-06T04:03:50.069Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-38\"}}",
+  "time" : "2026-11-06T04:03:49.851Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-37\"}}",
+  "time" : "2026-11-06T04:03:49.631Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-36\"}}",
+  "time" : "2026-11-06T04:03:49.415Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-35\"}}",
+  "time" : "2026-11-06T04:03:49.190Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-34\"}}",
+  "time" : "2026-11-06T04:03:48.960Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-33\"}}",
+  "time" : "2026-11-06T04:03:48.752Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-32\"}}",
+  "time" : "2026-11-06T04:03:48.543Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-31\"}}",
+  "time" : "2026-11-06T04:03:48.335Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-30\"}}",
+  "time" : "2026-11-06T04:03:48.119Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-29\"}}",
+  "time" : "2026-11-06T04:03:47.900Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-28\"}}",
+  "time" : "2026-11-06T04:03:47.678Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-27\"}}",
+  "time" : "2026-11-06T04:03:47.455Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-26\"}}",
+  "time" : "2026-11-06T04:03:47.234Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-25\"}}",
+  "time" : "2026-11-06T04:03:47.012Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-24\"}}",
+  "time" : "2026-11-06T04:03:46.790Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-23\"}}",
+  "time" : "2026-11-06T04:03:46.570Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-22\"}}",
+  "time" : "2026-11-06T04:03:46.349Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-21\"}}",
+  "time" : "2026-11-06T04:03:46.128Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-20\"}}",
+  "time" : "2026-11-06T04:03:45.912Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-19\"}}",
+  "time" : "2026-11-06T04:03:45.691Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-18\"}}",
+  "time" : "2026-11-06T04:03:45.472Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-17\"}}",
+  "time" : "2026-11-06T04:03:45.246Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-16\"}}",
+  "time" : "2026-11-06T04:03:45.031Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-15\"}}",
+  "time" : "2026-11-06T04:03:44.809Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-14\"}}",
+  "time" : "2026-11-06T04:03:44.593Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-13\"}}",
+  "time" : "2026-11-06T04:03:44.371Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-12\"}}",
+  "time" : "2026-11-06T04:03:44.138Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-11\"}}",
+  "time" : "2026-11-06T04:03:43.918Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-10\"}}",
+  "time" : "2026-11-06T04:03:43.697Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-9\"}}",
+  "time" : "2026-11-06T04:03:43.479Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-8\"}}",
+  "time" : "2026-11-06T04:03:43.258Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-7\"}}",
+  "time" : "2026-11-06T04:03:43.035Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-6\"}}",
+  "time" : "2026-11-06T04:03:42.807Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-5\"}}",
+  "time" : "2026-11-06T04:03:42.585Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-4\"}}",
+  "time" : "2026-11-06T04:03:42.363Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-3\"}}",
+  "time" : "2026-11-06T04:03:42.143Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-2\"}}",
+  "time" : "2026-11-06T04:03:41.920Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-1\"}}",
+  "time" : "2026-11-06T04:03:41.699Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"notification\":{\"title\":\"동아리 지원 결과\",\"body\":\"Bdc9c0ab1-에 합격했습니다.\"},\"token\":\"n100-vu1-r2-warmup-0-0\"}}",
+  "time" : "2026-11-06T04:03:41.477Z",
+  "status" : 200
+} ]

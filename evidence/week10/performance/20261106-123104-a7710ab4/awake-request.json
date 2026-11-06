@@ -1,0 +1,6 @@
+{
+  "permanentPowerPolicyChanged": false,
+  "requestedAt": "2026-11-06T12:31:07.0049030+09:00",
+  "systemRequired": true,
+  "limitation": "Does not prevent explicit lid-close, power-button sleep, or critical battery shutdown."
+}

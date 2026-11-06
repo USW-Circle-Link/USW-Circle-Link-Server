@@ -87,7 +87,11 @@ public class PublicationBenchmarkServer {
         });web.addFilterDef(def);var mapping=new FilterMap();mapping.setFilterName(def.getFilterName());mapping.addURLPattern("/*");web.addFilterMap(mapping);
         Tomcat.addServlet(web,"dispatcher",new DispatcherServlet(app)).setLoadOnStartup(1);web.addServletMappingDecoded("/","dispatcher");
         tomcat.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(()->{control.scheduler.shutdownNow();app.close();try{tomcat.stop();tomcat.destroy();}catch(Exception ignored){}}));
+        Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            control.scheduler.shutdownNow();
+            if(control.sampling!=null)try{control.observations();}catch(Exception e){System.err.println("Partial observation save failed: "+e);}
+            app.close();try{tomcat.stop();tomcat.destroy();}catch(Exception ignored){}
+        }));
         Map<String,Object> ready=Map.of("port",tomcat.getConnector().getLocalPort(),"pid",ProcessHandle.current().pid(),
             "heapMaxBytes",Runtime.getRuntime().maxMemory(),"processors",Runtime.getRuntime().availableProcessors(),
             "javaVersion",System.getProperty("java.version"),"poolMaximum",control.pool.getMaximumPoolSize(),"wireMock",wire.baseUrl(),"scope","HTTP controller/service/JPA/MySQL; test authentication; fake Google token; local WireMock");
@@ -156,6 +160,19 @@ public class PublicationBenchmarkServer {
             json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("fcm.json").toFile(),journal);
             var result=Map.of("runId",run,"db",state,"fcmCalls",journal.size(),"acquisition",timing,"resourceSamples",samples.size());
             json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("verification.json").toFile(),result);return result;
+        }
+        /** Failure evidence only: deliberately never claims a stable post-request DB snapshot. */
+        @PostMapping("/observations") synchronized Map<String,Object> observations() throws Exception {
+            if(run==null)throw new IllegalStateException("No run prepared");
+            Path folder=output.resolve(run);Files.createDirectories(folder);
+            try(var writer=Files.newBufferedWriter(folder.resolve("partial-resources.jsonl"))){
+                for(var sample:List.copyOf(samples)){writer.write(json.writeValueAsString(sample));writer.newLine();}
+            }
+            var journal=wire.getAllServeEvents().stream().map(e->Map.of("status",e.getResponse().getStatus(),"body",e.getRequest().getBodyAsString(),"time",e.getRequest().getLoggedDate().toInstant().toString())).toList();
+            json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("partial-fcm.json").toFile(),journal);
+            var result=Map.<String,Object>of("runId",run,"partial",true,"activeConnections",pool.getHikariPoolMXBean().getActiveConnections(),"fcmCallsSoFar",journal.size(),"resourceSamples",samples.size());
+            json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("partial-observation.json").toFile(),result);
+            return result;
         }
         @PostMapping("/shutdown") Map<String,Object> shutdown(){scheduler.schedule(()->System.exit(0),500,TimeUnit.MILLISECONDS);return Map.of("stopping",true);}
     }

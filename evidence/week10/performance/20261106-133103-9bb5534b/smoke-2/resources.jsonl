@@ -1,0 +1,13 @@
+{"idle":10,"processCpuTimeNs":50968750000,"heapUsedBytes":342272464,"active":0,"time":"2026-11-06T04:31:34.609274400Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51031250000,"heapUsedBytes":372681168,"active":1,"time":"2026-11-06T04:31:35.431265500Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51062500000,"heapUsedBytes":372681168,"active":1,"time":"2026-11-06T04:31:35.481101Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51140625000,"heapUsedBytes":372681168,"active":1,"time":"2026-11-06T04:31:35.537179100Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51234375000,"heapUsedBytes":373729744,"active":1,"time":"2026-11-06T04:31:35.593865600Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51281250000,"heapUsedBytes":373729744,"active":1,"time":"2026-11-06T04:31:35.647633Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51343750000,"heapUsedBytes":373729744,"active":1,"time":"2026-11-06T04:31:35.700904300Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51390625000,"heapUsedBytes":373729744,"active":1,"time":"2026-11-06T04:31:35.750820800Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":9,"processCpuTimeNs":51515625000,"heapUsedBytes":373729744,"active":1,"time":"2026-11-06T04:31:35.812495300Z","waiting":0,"processCpuLoad":0.060205459172876785}
+{"idle":10,"processCpuTimeNs":51578125000,"heapUsedBytes":374778320,"active":0,"time":"2026-11-06T04:31:35.874589600Z","waiting":0,"processCpuLoad":0.06708641542775191}
+{"idle":10,"processCpuTimeNs":51640625000,"heapUsedBytes":374778320,"active":0,"time":"2026-11-06T04:31:35.935498300Z","waiting":0,"processCpuLoad":0.06708641542775191}
+{"idle":10,"processCpuTimeNs":51687500000,"heapUsedBytes":374778320,"active":0,"time":"2026-11-06T04:31:35.989515400Z","waiting":0,"processCpuLoad":0.06708641542775191}
+{"idle":10,"processCpuTimeNs":51750000000,"heapUsedBytes":374778320,"active":0,"time":"2026-11-06T04:31:36.044661Z","waiting":0,"processCpuLoad":0.06708641542775191}

@@ -19,9 +19,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', type=Path)
     parser.add_argument('--interrupted', action='store_true', help='Record the known five verified runs and final interrupted attempt honestly.')
+    parser.add_argument('--comparison-summary', type=Path, help='Six verified rows with explicit campaign provenance, old 50 + new 100.')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    rows = json.loads((args.directory / 'summary.json').read_text(encoding='utf-8'))
+    rows = json.loads((args.comparison_summary or (args.directory / 'summary.json')).read_text(encoding='utf-8'))
+    if args.comparison_summary:
+        audit = json.loads((args.directory / 'power-log-audit.json').read_text(encoding='utf-8-sig'))
+        if not audit['querySucceeded'] or audit['events']:
+            raise SystemExit('Successful empty power-log audit required for the retry report')
     partial = args.interrupted
     if partial:
         expected = {'n50-vu1-r1','n50-vu1-r2','n50-vu1-r3','n100-vu1-r1','n100-vu1-r2'}
@@ -31,7 +36,7 @@ def main():
     elif not valid_report_rows(rows):
         raise SystemExit('Report template requires exactly 50/100 applicants, VU1, 3 runs each, 30 requests each, all verified without failure.')
     source = root / 'docs/week10/10주차_주간실습보고서_수정후결과링크.docx'
-    target = root / ('docs/week10/10주차_주간실습보고서_성능측정_중간.docx' if partial else 'docs/week10/10주차_주간실습보고서_성능측정.docx')
+    target = root / ('docs/week10/10주차_주간실습보고서_성능측정_중간.docx' if partial else ('docs/week10/10주차_주간실습보고서_성능재측정완료.docx' if args.comparison_summary else 'docs/week10/10주차_주간실습보고서_성능측정.docx'))
     ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
     q = lambda name: '{' + ns['w'] + '}' + name
     p95 = {}
@@ -59,10 +64,14 @@ def main():
             for col, text in enumerate(cells):
                 set_cell(table, index, col, text)
 
-        set_cell(0, 1, 5, '26.11.03~06' if partial else '26.11.03~05')
+        set_cell(0, 1, 5, '26.11.03~06' if partial or args.comparison_summary else '26.11.03~05')
         add_row(2, ['3', 'AI가 현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
                     '성능 결과: docs/week10/performance-baseline.md\n원시 JSON·CSV: evidence/week10/performance/' + args.directory.name + '\n신규 자료는 로컬 보관, 공개 링크 미발행',
                     (f'정상 실행 p95: 50명 {p95[50]}(3회), 100명 {p95[100]}(2회). 마지막 실행 1건 타임아웃. 기준선 미완료.' if partial else f'실행별 p95: 50명 {p95[50]}, 100명 {p95[100]}. 실패 0/180건.')])
+        if args.comparison_summary:
+            set_cell(2, 3, 1, 'AI가 50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
+            set_cell(2, 3, 2, 'performance-baseline.md에 원시 결과 출처 기록. 50명은 11/5, 100명은 11/6 재측정. 새 자료는 로컬 보관, 공개 링크 미발행')
+            set_cell(2, 3, 3, f'선택한 정상6회 p95: 50명 {p95[50]}, 100명 {p95[100]}. 각30건·실패0/180. 과거 중단1회 별도 보존')
         for col, text in enumerate(['신규 지원 결과 발표 성능', '동시 요청 1개, FCM 대역 지연 200ms. 조건별 워밍업 제외 후 30개 요청씩 3회',
                                     ('5회 검증 일치. 마지막 30건 중 1건 타임아웃, DB·FCM 검증 미완료. 휴대폰 수신 검사는 아님' if partial else '6회 모두 공개·회원·알림 요청 수 일치. 실제 휴대폰 수신 검사는 아님'),
                                     'performance-baseline.md 및 실행별 verification.json·raw.jsonl']):
@@ -77,6 +86,10 @@ def main():
         if partial:
             add_row(5, ['마지막 100명 실행에서 요청 1건 타임아웃', '약14시간 실행 지연·시계 변화 경고. 절전 또는 앱 원인으로 확정하지 않음',
                         '정상 수치와 실패 기록을 분리해 보존', '실패를 삭제하지 않고 기준선 미완료로 기록', '원인 분리·관측 로그 보완·안정된 환경 재측정 필요'])
+        if args.comparison_summary:
+            set_cell(3, 2, 1, '50명11/5·100명11/6. VU1, FCM대역200ms. 각30요청씩3회, 워밍업 제외')
+            add_row(5, ['이전100명 실험 중 요청1건 타임아웃', 'Windows 전원 로그에서 요청 중 대기 모드 진입 확인',
+                        '환경 중단 기록 보존 후 재측정', '화면 꺼짐·절전을 측정 중만 억제. 발표 코드는 유지', '100명 전체3회 재측정90건 실패0. 전원 로그 조회 성공·대기0. 이전 실패 보존'])
         with ZipFile(target, 'w') as result:
             for info in original.infolist():
                 data = E.tostring(doc, encoding='UTF-8', xml_declaration=True, standalone=True) if info.filename == 'word/document.xml' else original.read(info.filename)

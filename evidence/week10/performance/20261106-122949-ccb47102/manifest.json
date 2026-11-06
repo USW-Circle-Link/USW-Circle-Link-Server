@@ -1,0 +1,42 @@
+{
+  "branch": "codex/publication-performance",
+  "data": "Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.",
+  "host": {
+    "NumberOfLogicalProcessors": 18,
+    "TotalPhysicalMemory": 16705323008
+  },
+  "docker": {
+    "ServerVersion": "29.1.3",
+    "NCPU": 18,
+    "MemTotal": 8087830528
+  },
+  "scope": "Current synchronous publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.",
+  "mysqlBinding": "127.0.0.1:62271",
+  "counts": [
+    50,
+    100
+  ],
+  "hikariMax": 10,
+  "operator": "AI (Codex) unless a human explicitly records their own execution.",
+  "sourceCommit": "f16b6b871c481367fae5b7db1371e34594a6e737",
+  "k6Sha256": "EFEC04C36452CFB9C0EF313082C021E5656CAF5004F922C2D8B807FDF4A0E02F",
+  "heap": "-Xms1g -Xmx1g",
+  "repeats": 3,
+  "db": {
+    "NanoCpus": 2000000000,
+    "Memory": 1073741824,
+    "PortBindings": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    }
+  },
+  "smoke": true,
+  "vus": 1,
+  "startedAt": "2026-11-06T12:29:50.8504502+09:00",
+  "k6Version": "k6.exe v2.3.0 (commit/e088784614, go1.26.8, windows/amd64)",
+  "iterations": 30
+}

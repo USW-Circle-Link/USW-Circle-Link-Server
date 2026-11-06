@@ -1,0 +1,41 @@
+{
+  "operator": "AI (Codex) unless a human explicitly records their own execution.",
+  "data": "Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.",
+  "vus": 1,
+  "heap": "-Xms1g -Xmx1g",
+  "db": {
+    "NanoCpus": 2000000000,
+    "Memory": 1073741824,
+    "PortBindings": {
+      "3306/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    }
+  },
+  "scope": "Current synchronous publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.",
+  "counts": [
+    100
+  ],
+  "k6Sha256": "EFEC04C36452CFB9C0EF313082C021E5656CAF5004F922C2D8B807FDF4A0E02F",
+  "sourceCommit": "f16b6b871c481367fae5b7db1371e34594a6e737",
+  "iterations": 30,
+  "smoke": false,
+  "k6Version": "k6.exe v2.3.0 (commit/e088784614, go1.26.8, windows/amd64)",
+  "branch": "codex/publication-performance",
+  "mysqlBinding": "127.0.0.1:62271",
+  "hikariMax": 10,
+  "host": {
+    "NumberOfLogicalProcessors": 18,
+    "TotalPhysicalMemory": 16705323008
+  },
+  "startedAt": "2026-11-06T12:31:05.4498198+09:00",
+  "repeats": 3,
+  "docker": {
+    "ServerVersion": "29.1.3",
+    "NCPU": 18,
+    "MemTotal": 8087830528
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "finishedAt": "2026-11-06T12:49:26.8654187+09:00",
+  "vus": 1,
+  "applicants": 2,
+  "warmup": false,
+  "minimumDurationMet": true,
+  "powerEventCount": 0,
+  "runId": "smoke-2",
+  "smoke": true,
+  "passed": true,
+  "k6Exit": 0,
+  "powerLogQuerySucceeded": true,
+  "verificationError": null
+}

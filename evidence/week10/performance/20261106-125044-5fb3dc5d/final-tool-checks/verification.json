@@ -1,0 +1,40 @@
+{
+  "suites": [
+    {
+      "name": "com.USWCicrcleLink.server.baseline.BaselineReproductionTest",
+      "failures": 0,
+      "errors": 0,
+      "tests": 83,
+      "skipped": 0
+    },
+    {
+      "name": "com.USWCicrcleLink.server.baseline.PublicationBenchmarkObservationTest",
+      "failures": 0,
+      "errors": 0,
+      "tests": 1,
+      "skipped": 0
+    },
+    {
+      "name": "ClubLeaderService 접근 권한 테스트",
+      "failures": 0,
+      "errors": 0,
+      "tests": 4,
+      "skipped": 0
+    },
+    {
+      "name": "com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadServiceTest",
+      "failures": 0,
+      "errors": 0,
+      "tests": 1,
+      "skipped": 0
+    }
+  ],
+  "totalTests": 89,
+  "operator": "AI (Codex)",
+  "checkedAt": "2026-11-06T13:31:39.1436626+09:00",
+  "wordPages": 2,
+  "productionSourceChanged": false,
+  "wordRenderer": "Word COM PDF export, bundled pdftoppm; LibreOffice unavailable",
+  "pythonChecks": 8,
+  "powerAuditChecks": 3
+}

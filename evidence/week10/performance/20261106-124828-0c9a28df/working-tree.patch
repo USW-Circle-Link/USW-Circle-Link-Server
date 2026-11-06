@@ -1,0 +1,250 @@
+diff --git a/docs/week10/performance-run-status.md b/docs/week10/performance-run-status.md
+index 5276dbfc..10c25f62 100644
+--- a/docs/week10/performance-run-status.md
++++ b/docs/week10/performance-run-status.md
+@@ -37,3 +37,12 @@
+ - 최종 도구 소량 재검증: `evidence/week10/performance/20261106-121341-16324d2a`에서 Java17·2명 공개2·회원1·FCM2 확인. 정식 성능 통계에서 제외한다.
+ - 2026-11-06 기능 테스트 88개 실패0·건너뜀0, 집계·보고서 검사8개 통과, bootJar 성공. 성능 캠페인 폴더의 final-tool-checks에 검증 기록 보관.
+ - Word 중간 보고서 2페이지를 PDF·PNG로 렌더링해 확인했다. 원래 사용자 편집본은 보존하고 별도 `10주차_주간실습보고서_성능측정_중간.docx`에 기록했다.
++
++## 2026-11-06 원인 확인과 재측정 진행
++
++- 후속 System 로그에서 이전 실패 요청 시작21:31:06 직후21:31:08 Power Button·21:31:09 Lid 대기 진입을 확인했다. `timeout-investigation.md`, 원 캠페인의 `previous-failure-power-events.json`·`standby-diagnosis.json`에 증거 보존.
++- 새100명 단독3회 캠페인: `evidence/week10/performance/20261106-123104-a7710ab4`. 각30요청·VU1·FCM200ms·동일JVM/DB자원. 자동절전임시요청은 종료 시 해제하며 덮개·전원 버튼 정책을 바꾸지 않는다.
++- 새 캠페인은 빈DB에서100명만 시작하므로 이전50명 코호트와 날짜·초기DB상태가 다르다. 출처를 분리해 보고하고, 향후100명 개선 비교에는 새100명 기준선을 사용한다.
++- 활성 요청 중에도 DB검증이라고 표시하지 않고 부분 관측을 저장하는 Java회귀검사 RED→GREEN 확인. 전원조회실패와 정상빈결과·대기사건을 구분하는 PowerShell3케이스 RED→GREEN 확인.
++- 읽기 전용 리뷰에서 전원조회오류를0건으로 취급하는 P2를 발견해 최신 도구에 `querySucceeded`를 추가했다. 진행 중 JVM/PowerShell AST는 바꾸지 않았으므로, 완료 후 캠페인 전체 시각 구간을 새 helper로 별도 감사하고 성공·대기사건0을 확인해야 결과를 확정한다.
++- 재측정 결과 확정과 Word 갱신은 아직 진행 중이다. 사용자 직접 검증으로 기록하지 않는다.
+diff --git a/scripts/run-baseline-tests.ps1 b/scripts/run-baseline-tests.ps1
+index 84b6a977..6b5b8e24 100644
+--- a/scripts/run-baseline-tests.ps1
++++ b/scripts/run-baseline-tests.ps1
+@@ -38,8 +38,19 @@ $binding = & docker port $container 3306
+ if ($binding -notmatch '^127\.0\.0\.1:(\d+)$') { throw 'Expected loopback-only MySQL binding.' }
+ $previousUrl = $env:BASELINE_MYSQL_URL
+ $env:BASELINE_MYSQL_URL = "jdbc:mysql://127.0.0.1:$($Matches[1])/baseline?useSSL=false&allowPublicKeyRetrieval=true"
+-$logDir = Join-Path $repoPath 'evidence/week10/publication-response'
++$previousEvidenceDir = $env:BASELINE_EVIDENCE_DIR
++$runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8)
++$logDir = Join-Path $repoPath ('evidence/week10/personal-verification/' + $runId)
++$env:BASELINE_EVIDENCE_DIR = $logDir
+ New-Item -ItemType Directory -Force $logDir | Out-Null
++@{
++    runId = $runId
++    startedAt = (Get-Date).ToString('o')
++    commit = (& git -C $repoPath rev-parse HEAD)
++    workingTreeDiff = (& git -C $repoPath diff --stat | Out-String).Trim()
++    operator = 'Not recorded: running this script does not establish who executed it.'
++} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $logDir 'run.json') -Encoding utf8
++Write-Host "Evidence directory: $logDir"
+ try {
+     & ($Drive + '\gradlew.bat') -p ($Drive + '\') test --rerun-tasks --console=plain 2>&1 | Tee-Object -FilePath (Join-Path $logDir 'green.log')
+     $testExit = $LASTEXITCODE
+@@ -47,6 +58,9 @@ try {
+     if (Test-Path (Join-Path $repoPath 'build/test-results/test')) {
+         Copy-Item -LiteralPath (Join-Path $repoPath 'build/test-results/test') -Destination $destination -Recurse
+     }
+-} finally { $env:BASELINE_MYSQL_URL = $previousUrl }
++} finally {
++    $env:BASELINE_MYSQL_URL = $previousUrl
++    $env:BASELINE_EVIDENCE_DIR = $previousEvidenceDir
++}
+ # Keep the dedicated container and drive alias for evidence reproduction. No automatic deletion.
+ exit $testExit
+diff --git a/scripts/run-publication-benchmark.ps1 b/scripts/run-publication-benchmark.ps1
+index c65bc46e..57fb2289 100644
+--- a/scripts/run-publication-benchmark.ps1
++++ b/scripts/run-publication-benchmark.ps1
+@@ -1,6 +1,7 @@
+ #Requires -Version 7.0
+ param([int[]]$Counts = @(50,100), [int]$Repeats = 3, [int]$Iterations = 30, [int]$Vus = 1, [switch]$Smoke)
+ $ErrorActionPreference = 'Stop'
++. (Join-Path $PSScriptRoot 'benchmark-power-events.ps1')
+ if ($Counts | Where-Object { $_ -notin @(50,100) }) { throw 'Counts must be 50 or 100.' }
+ if ($Repeats -lt 1 -or $Iterations -lt 1 -or $Iterations -gt 200 -or $Vus -ne 1) { throw 'This baseline runner supports VU 1 only.' }
+ if (-not $Smoke -and ($Iterations -lt 30 -or $Repeats -lt 3)) { throw 'Formal runs require at least 30 completions and 3 repetitions.' }
+@@ -61,7 +62,7 @@ $manifest | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $outp
+ & git -C $repo diff --binary | Set-Content -LiteralPath (Join-Path $output 'working-tree.patch') -Encoding utf8
+ $snapshot = Join-Path $output 'harness'
+ New-Item -ItemType Directory -Force $snapshot | Out-Null
+-foreach ($source in @('build.gradle','scripts/run-publication-benchmark.ps1','scripts/k6/publication.js','src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java','src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java','src/test/resources/logback-benchmark.xml')) {
++foreach ($source in @('build.gradle','scripts/run-publication-benchmark.ps1','scripts/benchmark-power-events.ps1','scripts/k6/publication.js','src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java','src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java','src/test/resources/logback-benchmark.xml')) {
+     Copy-Item -LiteralPath (Join-Path $repo $source) -Destination (Join-Path $snapshot ([IO.Path]::GetFileName($source)))
+ }
+ Get-ChildItem -LiteralPath $snapshot -File | Get-FileHash -Algorithm SHA256 | Select-Object @{n='file';e={Split-Path $_.Path -Leaf}},Hash | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'harness-sha256.json') -Encoding utf8
+@@ -69,7 +70,39 @@ $launcher = Join-Path $repo 'build/benchmark-launch.ps1'
+ Set-Content -LiteralPath $launcher -Value '& W:\gradlew.bat -p W:\ publicationBenchmark --no-daemon --console=plain; exit $LASTEXITCODE'
+ $server=$null; $base=$null; $failures=0
+ $lock = [IO.File]::Open((Join-Path $toolsDir 'running.lock'), [IO.FileMode]::OpenOrCreate, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
++$awakeSet=$false
+ try {
++    if (-not ('PublicationBenchmarkAwake' -as [type])) {
++        Add-Type -TypeDefinition @'
++using System;
++using System.Threading;
++using System.Runtime.InteropServices;
++public static class PublicationBenchmarkAwake {
++    [DllImport("kernel32.dll", SetLastError=true)] static extern uint SetThreadExecutionState(uint flags);
++    static Thread worker;
++    static ManualResetEventSlim ready, release;
++    static uint result;
++    public static uint Start() {
++        ready=new ManualResetEventSlim(false); release=new ManualResetEventSlim(false);
++        worker=new Thread(() => {
++            result=SetThreadExecutionState(0x80000003u); // continuous + system + display
++            ready.Set();
++            try { release.Wait(); } finally { SetThreadExecutionState(0x80000000u); }
++        });
++        worker.IsBackground=true; worker.Name="publication-benchmark-awake"; worker.Start();
++        if(!ready.Wait(TimeSpan.FromSeconds(5))) throw new TimeoutException("Awake request did not initialize");
++        return result;
++    }
++    public static void Stop() {
++        if(release!=null) release.Set();
++        if(worker!=null && !worker.Join(5000)) throw new TimeoutException("Awake request did not release");
++    }
++}
++'@
++    }
++    if ([PublicationBenchmarkAwake]::Start() -eq 0) { [PublicationBenchmarkAwake]::Stop(); throw 'Could not request temporary automatic-sleep and display-off prevention.' }
++    $awakeSet=$true
++    @{requestedAt=(Get-Date).ToString('o'); systemRequired=$true; displayRequired=$true; holder='dedicated background thread'; permanentPowerPolicyChanged=$false; limitation='Does not prevent explicit lid-close, power-button sleep, or critical battery shutdown.'} | ConvertTo-Json | Set-Content (Join-Path $output 'awake-request.json') -Encoding utf8
+     $server=Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -ArgumentList @('-NoProfile','-File','W:\build\benchmark-launch.ps1') -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $output 'server.log') -RedirectStandardError (Join-Path $output 'server-error.log')
+     for ($i=0; $i -lt 180; $i++) {
+         if (Test-Path (Join-Path $output 'ready.json')) { break }
+@@ -90,13 +123,24 @@ try {
+         if (($uuids | Select-Object -Unique).Count -ne ($Count*$N)) { throw 'Dataset reused applicants.' }
+         $file=Join-Path $folder 'dataset.json'; $dataset | ConvertTo-Json -Depth 10 -Compress | Set-Content -LiteralPath $file -Encoding utf8NoBOM
+         Invoke-RestMethod -Method Post -Uri "$base/benchmark/start" -Headers $headers | Out-Null
++        $experimentStarted=Get-Date
+         Write-Host "START $Id : applicants=$Count, requests=$N, VU=$Vus, warmup=$Warmup, $(Get-Date -Format o)"
+         & $k6 run --quiet --no-color --env "DATASET=$file" --env "BASE_URL=$base" --env "VUS=$Vus" --env "ITERATIONS=$N" --out "json=$(Join-Path $folder 'raw.jsonl')" --summary-export (Join-Path $folder 'summary.json') (Join-Path $repo 'scripts/k6/publication.js') *> (Join-Path $folder 'k6.log')
+         $code=$LASTEXITCODE
+-        $verification=Invoke-RestMethod -Method Post -Uri "$base/benchmark/stop" -Headers $headers -TimeoutSec 120
++        $verification=$null; $verificationError=$null
++        try { $verification=Invoke-RestMethod -Method Post -Uri "$base/benchmark/stop" -Headers $headers -TimeoutSec 120 }
++        catch {
++            $verificationError=$_.ToString()
++            try { Invoke-RestMethod -Method Post -Uri "$base/benchmark/observations" -Headers $headers -TimeoutSec 30 | Out-Null }
++            catch { Write-Warning "Partial observation capture failed: $_" }
++        }
++        $powerAudit=Get-PublicationPowerAudit -StartTime $experimentStarted
++        $powerEvents=@($powerAudit.events)
++        $powerAudit | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $folder 'power-audit.json') -Encoding utf8
++        ConvertTo-Json -InputObject $powerEvents -Depth 4 | Set-Content (Join-Path $folder 'power-events.json') -Encoding utf8
+         $summary=Get-Content (Join-Path $folder 'summary.json') -Raw | ConvertFrom-Json
+-        $passed=($code -eq 0 -and $verification.db.published -eq ($Count*$N) -and $verification.db.members -eq ($Count*$N/2) -and $verification.fcmCalls -eq ($Count*$N))
+-        $record=@{runId=$Id; applicants=$Count; vus=$Vus; warmup=$Warmup; smoke=[bool]$Smoke; passed=$passed; k6Exit=$code; minimumDurationMet=($Warmup -or [bool]$Smoke -or $summary.metrics.http_reqs.count/$summary.metrics.http_reqs.rate -ge 180); finishedAt=(Get-Date).ToString('o')}
++        $passed=($code -eq 0 -and $null -ne $verification -and $powerAudit.querySucceeded -and $powerEvents.Count -eq 0 -and $verification.db.published -eq ($Count*$N) -and $verification.db.members -eq ($Count*$N/2) -and $verification.fcmCalls -eq ($Count*$N))
++        $record=@{runId=$Id; applicants=$Count; vus=$Vus; warmup=$Warmup; smoke=[bool]$Smoke; passed=$passed; k6Exit=$code; verificationError=$verificationError; powerLogQuerySucceeded=$powerAudit.querySucceeded; powerEventCount=$powerEvents.Count; minimumDurationMet=($Warmup -or [bool]$Smoke -or $summary.metrics.http_reqs.count/$summary.metrics.http_reqs.rate -ge 180); finishedAt=(Get-Date).ToString('o')}
+         $record | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $folder 'experiment.json') -Encoding utf8
+         if (-not $passed -or -not $record.minimumDurationMet) { throw "Experiment failed verification: $Id" }
+         Write-Host "DONE $Id : p95=$($summary.metrics.http_req_duration.'p(95)') ms, published=$($verification.db.published), members=$($verification.db.members), FCM=$($verification.fcmCalls)"
+@@ -114,6 +158,10 @@ try {
+     }
+     Write-Host "All requested experiments verified. Output: $output"
+ } finally {
++    if ($awakeSet) {
++        [PublicationBenchmarkAwake]::Stop()
++        @{releasedAt=(Get-Date).ToString('o')} | ConvertTo-Json | Set-Content (Join-Path $output 'awake-released.json') -Encoding utf8
++    }
+     if ($base) { try { Invoke-RestMethod -Method Post -Uri "$base/benchmark/shutdown" -Headers @{Authorization='Bearer benchmark-local-only'} | Out-Null } catch { Write-Warning $_ } }
+     if ($server -and -not $server.WaitForExit(30000)) {
+         # Only terminate the exact benchmark JVM recorded in this run's private output folder.
+diff --git a/scripts/write-performance-weekly-report.py b/scripts/write-performance-weekly-report.py
+index 19420bfe..f48f8fb6 100644
+--- a/scripts/write-performance-weekly-report.py
++++ b/scripts/write-performance-weekly-report.py
+@@ -19,9 +19,14 @@ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('directory', type=Path)
+     parser.add_argument('--interrupted', action='store_true', help='Record the known five verified runs and final interrupted attempt honestly.')
++    parser.add_argument('--comparison-summary', type=Path, help='Six verified rows with explicit campaign provenance, old 50 + new 100.')
+     args = parser.parse_args()
+     root = Path(__file__).resolve().parents[1]
+-    rows = json.loads((args.directory / 'summary.json').read_text(encoding='utf-8'))
++    rows = json.loads((args.comparison_summary or (args.directory / 'summary.json')).read_text(encoding='utf-8'))
++    if args.comparison_summary:
++        audit = json.loads((args.directory / 'power-log-audit.json').read_text(encoding='utf-8-sig'))
++        if not audit['querySucceeded'] or audit['events']:
++            raise SystemExit('Successful empty power-log audit required for the retry report')
+     partial = args.interrupted
+     if partial:
+         expected = {'n50-vu1-r1','n50-vu1-r2','n50-vu1-r3','n100-vu1-r1','n100-vu1-r2'}
+@@ -59,10 +64,14 @@ def main():
+             for col, text in enumerate(cells):
+                 set_cell(table, index, col, text)
+ 
+-        set_cell(0, 1, 5, '26.11.03~06' if partial else '26.11.03~05')
++        set_cell(0, 1, 5, '26.11.03~06' if partial or args.comparison_summary else '26.11.03~05')
+         add_row(2, ['3', 'AI가 현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
+                     '성능 결과: docs/week10/performance-baseline.md\n원시 JSON·CSV: evidence/week10/performance/' + args.directory.name + '\n신규 자료는 로컬 보관, 공개 링크 미발행',
+                     (f'정상 실행 p95: 50명 {p95[50]}(3회), 100명 {p95[100]}(2회). 마지막 실행 1건 타임아웃. 기준선 미완료.' if partial else f'실행별 p95: 50명 {p95[50]}, 100명 {p95[100]}. 실패 0/180건.')])
++        if args.comparison_summary:
++            set_cell(2, 3, 1, 'AI가 50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
++            set_cell(2, 3, 2, 'performance-baseline.md에 원시 결과 출처 기록. 50명은 11/5, 100명은 11/6 재측정. 새 자료는 로컬 보관, 공개 링크 미발행')
++            set_cell(2, 3, 3, f'선택한 정상6회 p95: 50명 {p95[50]}, 100명 {p95[100]}. 각30건·실패0/180. 과거 중단1회 별도 보존')
+         for col, text in enumerate(['신규 지원 결과 발표 성능', '동시 요청 1개, FCM 대역 지연 200ms. 조건별 워밍업 제외 후 30개 요청씩 3회',
+                                     ('5회 검증 일치. 마지막 30건 중 1건 타임아웃, DB·FCM 검증 미완료. 휴대폰 수신 검사는 아님' if partial else '6회 모두 공개·회원·알림 요청 수 일치. 실제 휴대폰 수신 검사는 아님'),
+                                     'performance-baseline.md 및 실행별 verification.json·raw.jsonl']):
+@@ -77,6 +86,10 @@ def main():
+         if partial:
+             add_row(5, ['마지막 100명 실행에서 요청 1건 타임아웃', '약14시간 실행 지연·시계 변화 경고. 절전 또는 앱 원인으로 확정하지 않음',
+                         '정상 수치와 실패 기록을 분리해 보존', '실패를 삭제하지 않고 기준선 미완료로 기록', '원인 분리·관측 로그 보완·안정된 환경 재측정 필요'])
++        if args.comparison_summary:
++            set_cell(3, 2, 1, '50명11/5·100명11/6. VU1, FCM대역200ms. 각30요청씩3회, 워밍업 제외')
++            add_row(5, ['이전100명 실험 중 요청1건 타임아웃', 'Windows 전원 로그에서 요청 중 대기 모드 진입 확인',
++                        '환경 중단 기록 보존 후 재측정', '자동 절전을 측정 중만 억제. 발표 코드는 유지', '100명 전체3회 재측정90건 실패0. 전원 로그 조회 성공·대기0. 이전 실패 보존'])
+         with ZipFile(target, 'w') as result:
+             for info in original.infolist():
+                 data = E.tostring(doc, encoding='UTF-8', xml_declaration=True, standalone=True) if info.filename == 'word/document.xml' else original.read(info.filename)
+diff --git a/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java b/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
+index 7e7331c7..6c7f6238 100644
+--- a/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
++++ b/src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java
+@@ -142,7 +142,7 @@ class BaselineReproductionTest {
+     @PersistenceContext EntityManager em;
+     TransactionTemplate tx; MockMvc mvc; Club club,other; Aplict a1,a2,a3,a4; User user;
+     Object principal; ObjectMapper json=new ObjectMapper();
+-    final Path evidence=Path.of("evidence/week10/publication-response");
++    final Path evidence=Path.of(System.getenv().getOrDefault("BASELINE_EVIDENCE_DIR", "evidence/week10/publication-response"));
+ 
+     @BeforeEach void setup() throws Exception {
+         fcm=org.springframework.test.util.AopTestUtils.getTargetObject(fcm);
+diff --git a/src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java b/src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java
+index 593cafee..2e3bf52f 100644
+--- a/src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java
++++ b/src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java
+@@ -87,7 +87,11 @@ public class PublicationBenchmarkServer {
+         });web.addFilterDef(def);var mapping=new FilterMap();mapping.setFilterName(def.getFilterName());mapping.addURLPattern("/*");web.addFilterMap(mapping);
+         Tomcat.addServlet(web,"dispatcher",new DispatcherServlet(app)).setLoadOnStartup(1);web.addServletMappingDecoded("/","dispatcher");
+         tomcat.start();
+-        Runtime.getRuntime().addShutdownHook(new Thread(()->{control.scheduler.shutdownNow();app.close();try{tomcat.stop();tomcat.destroy();}catch(Exception ignored){}}));
++        Runtime.getRuntime().addShutdownHook(new Thread(()->{
++            control.scheduler.shutdownNow();
++            if(control.sampling!=null)try{control.observations();}catch(Exception e){System.err.println("Partial observation save failed: "+e);}
++            app.close();try{tomcat.stop();tomcat.destroy();}catch(Exception ignored){}
++        }));
+         Map<String,Object> ready=Map.of("port",tomcat.getConnector().getLocalPort(),"pid",ProcessHandle.current().pid(),
+             "heapMaxBytes",Runtime.getRuntime().maxMemory(),"processors",Runtime.getRuntime().availableProcessors(),
+             "javaVersion",System.getProperty("java.version"),"poolMaximum",control.pool.getMaximumPoolSize(),"wireMock",wire.baseUrl(),"scope","HTTP controller/service/JPA/MySQL; test authentication; fake Google token; local WireMock");
+@@ -157,6 +161,19 @@ public class PublicationBenchmarkServer {
+             var result=Map.of("runId",run,"db",state,"fcmCalls",journal.size(),"acquisition",timing,"resourceSamples",samples.size());
+             json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("verification.json").toFile(),result);return result;
+         }
++        /** Failure evidence only: deliberately never claims a stable post-request DB snapshot. */
++        @PostMapping("/observations") synchronized Map<String,Object> observations() throws Exception {
++            if(run==null)throw new IllegalStateException("No run prepared");
++            Path folder=output.resolve(run);Files.createDirectories(folder);
++            try(var writer=Files.newBufferedWriter(folder.resolve("partial-resources.jsonl"))){
++                for(var sample:List.copyOf(samples)){writer.write(json.writeValueAsString(sample));writer.newLine();}
++            }
++            var journal=wire.getAllServeEvents().stream().map(e->Map.of("status",e.getResponse().getStatus(),"body",e.getRequest().getBodyAsString(),"time",e.getRequest().getLoggedDate().toInstant().toString())).toList();
++            json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("partial-fcm.json").toFile(),journal);
++            var result=Map.<String,Object>of("runId",run,"partial",true,"activeConnections",pool.getHikariPoolMXBean().getActiveConnections(),"fcmCallsSoFar",journal.size(),"resourceSamples",samples.size());
++            json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("partial-observation.json").toFile(),result);
++            return result;
++        }
+         @PostMapping("/shutdown") Map<String,Object> shutdown(){scheduler.schedule(()->System.exit(0),500,TimeUnit.MILLISECONDS);return Map.of("stopping",true);}
+     }
+     static class Acquisition implements IMetricsTracker {

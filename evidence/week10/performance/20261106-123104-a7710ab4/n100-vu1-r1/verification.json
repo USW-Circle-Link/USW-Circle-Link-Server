@@ -1,0 +1,15 @@
+{
+  "acquisition" : {
+    "maxMs" : 0.0455,
+    "meanMs" : 0.0134801,
+    "p95Ms" : 0.0229,
+    "count" : 30
+  },
+  "runId" : "n100-vu1-r1",
+  "fcmCalls" : 3000,
+  "resourceSamples" : 6893,
+  "db" : {
+    "members" : 1500,
+    "published" : 3000
+  }
+}

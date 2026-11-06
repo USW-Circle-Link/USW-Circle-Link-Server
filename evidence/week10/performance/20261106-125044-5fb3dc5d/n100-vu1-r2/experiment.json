@@ -1,0 +1,14 @@
+{
+  "k6Exit": 0,
+  "passed": true,
+  "runId": "n100-vu1-r2",
+  "powerLogQuerySucceeded": true,
+  "warmup": false,
+  "verificationError": null,
+  "finishedAt": "2026-11-06T13:16:00.8040353+09:00",
+  "minimumDurationMet": true,
+  "powerEventCount": 0,
+  "applicants": 100,
+  "smoke": false,
+  "vus": 1
+}

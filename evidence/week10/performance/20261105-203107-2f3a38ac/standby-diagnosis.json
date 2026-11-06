@@ -1,0 +1,8 @@
+{
+  "failedRequestApproxStart": "2026-11-05T21:31:06.207208+09:00",
+  "failedRequestEnd": "2026-11-05T21:35:03.575993+09:00",
+  "durationMs": 237368.7854,
+  "windowsStandbyEntry": "2026-11-05T21:31:08+09:00",
+  "standbyEvidence": "previous-failure-power-events.json",
+  "classification": "Measurement interrupted by confirmed Windows standby during the request. Prior failure retained; repeat under awake conditions."
+}

@@ -1,0 +1,15 @@
+{
+  "acquisition" : {
+    "maxMs" : 0.012701,
+    "meanMs" : 0.011267,
+    "p95Ms" : 0.012701,
+    "count" : 3
+  },
+  "runId" : "n100-vu1-r2-warmup",
+  "fcmCalls" : 300,
+  "resourceSamples" : 701,
+  "db" : {
+    "members" : 150,
+    "published" : 300
+  }
+}

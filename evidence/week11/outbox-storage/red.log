@@ -1,0 +1,59 @@
+Starting a Gradle Daemon, 5 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :compileTestJava
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:42: error: cannot find symbol
+    @Autowired NotificationOutboxRepository repository;
+               ^
+  symbol:   class NotificationOutboxRepository
+  location: class NotificationOutboxRepositoryTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:45: error: cannot find symbol
+    NotificationOutbox task(UUID id,String token,AplictStatus result){
+    ^
+  symbol:   class NotificationOutbox
+  location: class NotificationOutboxRepositoryTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:31: error: cannot find symbol
+    @EntityScan(basePackageClasses=NotificationOutbox.class)
+                                   ^
+  symbol:   class NotificationOutbox
+  location: class NotificationOutboxRepositoryTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:32: error: cannot find symbol
+    @EnableJpaRepositories(basePackageClasses=NotificationOutboxRepository.class)
+                                              ^
+  symbol:   class NotificationOutboxRepository
+  location: class NotificationOutboxRepositoryTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:46: error: cannot find symbol
+        return NotificationOutbox.applicationResult(id,42L,token,result,"���Ƹ� ���� ���","�׽�Ʈ ���Ƹ� ���");
+               ^
+  symbol:   variable NotificationOutbox
+  location: class NotificationOutboxRepositoryTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:57: error: package NotificationOutbox does not exist
+        assertThat(loaded.getStatus()).isEqualTo(NotificationOutbox.Status.PENDING);
+                                                                   ^
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\NotificationOutboxRepositoryTest.java:77: error: package NotificationOutbox does not exist
+            assertThat(saved.getStatus()).isEqualTo(NotificationOutbox.Status.SKIPPED);
+                                                                      ^
+7 errors
+
+> Task :compileTestJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 47s
+3 actionable tasks: 1 executed, 2 up-to-date

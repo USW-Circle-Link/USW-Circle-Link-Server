@@ -1,0 +1,16 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "expiredClaimRecoversAndIgnoresStaleCompletion",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 5,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:17:33.314327Z",
+    "sentAt" : "2026-11-10T06:18:06.312203Z",
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ ]
+}

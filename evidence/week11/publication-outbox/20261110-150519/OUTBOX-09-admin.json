@@ -1,0 +1,38 @@
+{
+  "scenario" : "OUTBOX-09-admin",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/PASS",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 1,
+    "token2" : "T2"
+  },
+  "requests" : [ {
+    "method" : "POST",
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200,
+    "path" : "/clubs/36000aa0-0c2c-4406-b28a-0a55fbdbe3c2/applicants/notifications",
+    "body" : [ {
+      "aplictUUID" : "f1bd03e5-26c8-40a7-9ff8-9fcc5707a54e"
+    } ]
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "f1bd03e5-26c8-40a7-9ff8-9fcc5707a54e",
+    "result" : "PASS",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

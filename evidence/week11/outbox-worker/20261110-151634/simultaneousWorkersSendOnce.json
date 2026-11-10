@@ -1,0 +1,20 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "simultaneousWorkersSendOnce",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 17,
+    "status" : "SENT",
+    "attempts" : 1,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:17:40.120269Z",
+    "sentAt" : "2026-11-10T06:17:42.117231Z",
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 200,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

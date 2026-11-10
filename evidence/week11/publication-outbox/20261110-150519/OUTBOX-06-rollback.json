@@ -1,0 +1,40 @@
+{
+  "scenario" : "OUTBOX-06-rollback",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "requests" : [ {
+    "method" : "POST",
+    "response" : "{\"exception\":\"DataIntegrityViolationException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"could not execute statement [Duplicate entry '\\\\xDA\\\\xCF\\\\xF3\\\\x18\\\\x02\\\\xEFC\\\\x1E\\\\xA9MUY\\\\x12m\\\\xB3\\\\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}",
+    "http" : 500,
+    "path" : "/clubs/018f8eff-deb9-4f9e-a933-8e403e5b2308/applicants/notifications",
+    "body" : [ {
+      "aplictUUID" : "4b9dc82c-d74a-4229-8b73-105036abc9a6"
+    }, {
+      "aplictUUID" : "dacff318-02ef-431e-a94d-5559126db3ee"
+    } ]
+  } ],
+  "responses" : [ {
+    "body" : "{\"exception\":\"DataIntegrityViolationException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"could not execute statement [Duplicate entry '\\\\xDA\\\\xCF\\\\xF3\\\\x18\\\\x02\\\\xEFC\\\\x1E\\\\xA9MUY\\\\x12m\\\\xB3\\\\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}",
+    "http" : 500
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "dacff318-02ef-431e-a94d-5559126db3ee",
+    "result" : "FAIL",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

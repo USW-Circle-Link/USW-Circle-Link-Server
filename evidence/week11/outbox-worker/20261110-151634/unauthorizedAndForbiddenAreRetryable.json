@@ -1,0 +1,32 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "unauthorizedAndForbiddenAreRetryable",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 14,
+    "status" : "RETRY",
+    "attempts" : 1,
+    "lastError" : "HTTP_401",
+    "createdAt" : "2026-11-10T06:17:38.987241Z",
+    "sentAt" : null,
+    "nextAttemptAt" : "2026-11-10T06:17:42.984708Z"
+  }, {
+    "id" : 15,
+    "status" : "RETRY",
+    "attempts" : 1,
+    "lastError" : "HTTP_403",
+    "createdAt" : "2026-11-10T06:17:39.175675Z",
+    "sentAt" : null,
+    "nextAttemptAt" : "2026-11-10T06:17:42.984708Z"
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 401,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 403,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

@@ -43,10 +43,11 @@ $previousEvidence = $env:BASELINE_EVIDENCE_DIR
 $env:BASELINE_EVIDENCE_DIR = $out
 try {
     Push-Location $repo
-    & W:\gradlew.bat -p W:\ test --tests '*PublicationOutboxIntegrationTest' --tests '*ClubLeaderOutboxModeTest' --rerun-tasks --console=plain 2>&1 | Tee-Object (Join-Path $out 'test.log')
+    & W:\gradlew.bat -p W:\ test --tests '*PublicationOutboxIntegrationTest' --tests '*ClubLeaderOutboxModeTest' --tests '*OutboxWorkerEndToEndTest' --rerun-tasks --console=plain 2>&1 | Tee-Object (Join-Path $out 'test.log')
     $code = $LASTEXITCODE
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest.xml') $out
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest.xml') $out
+    Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.baseline.OutboxWorkerEndToEndTest.xml') $out
     @{operator='AI or user: record separately'; container=$container; database='baseline_outbox_week11'; exitCode=$code; commit=(& git rev-parse HEAD)} |
         ConvertTo-Json | Set-Content (Join-Path $out 'run.json')
 } finally {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:15:26" hostname="DESKTOP-N8U8BLI" time="3.5">
+  <properties/>
+  <testcase name="missingKeyFileIsAnIOException()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest" time="1.776"/>
+  <testcase name="getsFakeTokenFromLocalAuthenticationServer()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest" time="0.992"/>
+  <testcase name="authenticationTimeoutHasNoHiddenRetries()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest" time="0.677"/>
+  <testcase name="authentication500HasNoHiddenRetries()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest" time="0.054"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

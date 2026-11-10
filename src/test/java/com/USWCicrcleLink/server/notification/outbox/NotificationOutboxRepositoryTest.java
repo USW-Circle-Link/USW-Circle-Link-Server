@@ -35,7 +35,8 @@ class NotificationOutboxRepositoryTest {
             var ds=new HikariDataSource();
             ds.setJdbcUrl(System.getenv("OUTBOX_MYSQL_URL"));
             ds.setUsername("root"); ds.setPassword("outbox-local-only"); ds.setMaximumPoolSize(2);
-            new ResourceDatabasePopulator(new FileSystemResource("scripts/sql/20261110_create_notification_outbox.sql")).execute(ds);
+            new ResourceDatabasePopulator(new FileSystemResource("scripts/sql/20261110_create_notification_outbox.sql"),
+                    new FileSystemResource("scripts/sql/20261110_add_outbox_delivery.sql")).execute(ds);
             return ds;
         }
     }

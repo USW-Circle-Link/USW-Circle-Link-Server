@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-10T05:59:35" hostname="DESKTOP-N8U8BLI" time="1.716">
+  <properties/>
+  <testcase name="requiresOutboxPublicationMode()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" time="0.008"/>
+  <testcase name="enabledSchedulerActuallyPolls()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" time="1.675"/>
+  <testcase name="disabledByDefault()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" time="0.02"/>
+  <testcase name="testAndProductionProfilesTogetherAreRefused()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" time="0.002"/>
+  <testcase name="refusesProductionProfile()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest" time="0.003"/>
+  <system-out><![CDATA[14:59:36.881 [Test worker] INFO org.springframework.scheduling.config.TaskSchedulerRouter -- No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,24 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "authIOExceptionAndNetworkFailuresRemainRetryable",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 10,
+    "status" : "RETRY",
+    "attempts" : 3,
+    "lastError" : "NETWORK_OR_TIMEOUT",
+    "createdAt" : "2026-11-10T06:17:35.056527Z",
+    "sentAt" : null,
+    "nextAttemptAt" : "2026-11-10T06:17:51.055017Z"
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 200,
+    "fault" : "EMPTY_RESPONSE",
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 200,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

@@ -1,0 +1,32 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "permanent400And404AreNotRetried",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 8,
+    "status" : "FAILED",
+    "attempts" : 1,
+    "lastError" : "HTTP_400",
+    "createdAt" : "2026-11-10T06:17:34.467786Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  }, {
+    "id" : 9,
+    "status" : "FAILED",
+    "attempts" : 1,
+    "lastError" : "HTTP_404",
+    "createdAt" : "2026-11-10T06:17:34.696453Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 400,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 404,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

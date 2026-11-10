@@ -1,0 +1,52 @@
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :classes
+
+> Task :compileTestJava
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerConfigurationTest.java:16: error: cannot find symbol
+        new ApplicationContextRunner().withUserConfiguration(OutboxWorkerConfiguration.class)
+                                                             ^
+  symbol:   class OutboxWorkerConfiguration
+  location: class OutboxWorkerConfigurationTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerConfigurationTest.java:21: error: cannot find symbol
+        assertThatIllegalStateException().isThrownBy(()->new OutboxWorkerConfiguration(env));
+                                                             ^
+  symbol:   class OutboxWorkerConfiguration
+  location: class OutboxWorkerConfigurationTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerConfigurationTest.java:25: error: cannot find symbol
+        assertThatIllegalStateException().isThrownBy(()->new OutboxWorkerConfiguration(env));
+                                                             ^
+  symbol:   class OutboxWorkerConfiguration
+  location: class OutboxWorkerConfigurationTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerConfigurationTest.java:29: error: cannot find symbol
+        assertThatIllegalStateException().isThrownBy(()->new OutboxWorkerConfiguration(env));
+                                                             ^
+  symbol:   class OutboxWorkerConfiguration
+  location: class OutboxWorkerConfigurationTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerConfigurationTest.java:35: error: cannot find symbol
+        new ApplicationContextRunner().withUserConfiguration(OutboxWorkerConfiguration.class)
+                                                             ^
+  symbol:   class OutboxWorkerConfiguration
+  location: class OutboxWorkerConfigurationTest
+5 errors
+
+> Task :compileTestJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 28s
+3 actionable tasks: 2 executed, 1 up-to-date

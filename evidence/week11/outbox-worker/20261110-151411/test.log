@@ -1,0 +1,40 @@
+> Task :compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :processTestResources
+> Task :testClasses
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+> Task :test
+
+OutboxWorkerTest > retryBackoffIsExactlyTwoFourEightSixteenSeconds() FAILED
+    org.opentest4j.AssertionFailedError at OutboxWorkerTest.java:122
+
+15:15:39.977 [SpringContextShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default'
+15:15:39.977 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated...
+15:15:39.988 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed.
+
+
+> Task :test FAILED
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+5 actionable tasks: 5 executed
+28 tests completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///W:/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1m 28s

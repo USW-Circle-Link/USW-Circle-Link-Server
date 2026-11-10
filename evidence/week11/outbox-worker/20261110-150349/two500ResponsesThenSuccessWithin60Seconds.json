@@ -1,0 +1,47 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "two500ResponsesThenSuccessWithin60Seconds",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "real clock",
+  "tasks" : [ {
+    "id" : 20,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:04:40.553926Z",
+    "sentAt" : "2026-11-10T06:04:42.944276Z",
+    "nextAttemptAt" : null
+  }, {
+    "id" : 21,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:04:40.577279Z",
+    "sentAt" : "2026-11-10T06:04:43.118399Z",
+    "nextAttemptAt" : null
+  }, {
+    "id" : 22,
+    "status" : "SENT",
+    "attempts" : 1,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:04:40.633856Z",
+    "sentAt" : "2026-11-10T06:04:41.179214Z",
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "path" : "/send",
+    "status" : 200
+  }, {
+    "path" : "/send",
+    "status" : 200
+  }, {
+    "path" : "/send",
+    "status" : 200
+  }, {
+    "path" : "/send",
+    "status" : 500
+  }, {
+    "path" : "/send",
+    "status" : 500
+  } ]
+}

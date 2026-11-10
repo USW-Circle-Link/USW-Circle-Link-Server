@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:04:30" hostname="DESKTOP-N8U8BLI" time="1.992">
+  <properties/>
+  <testcase name="databaseRejectsDuplicateApplicationEvent()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="1.544"/>
+  <testcase name="missingTokensAreRecordedAsSkipped()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.132"/>
+  <testcase name="ddlMatchesEntityAndPersistsSnapshot()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.103"/>
+  <testcase name="waitDoesNotCreateAnAnnouncementTask()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.051"/>
+  <testcase name="allowsDifferentApplicationsForSameRecipient()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.083"/>
+  <testcase name="participatesInCallerTransactionAndRollsBack()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.069"/>
+  <system-out><![CDATA[Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+15:04:21.950 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Multiple Spring Data modules found, entering strict repository configuration mode
+15:04:21.960 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:04:22.267 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 296 ms. Found 1 JPA repository interface.
+15:04:22.719 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting...
+15:04:23.260 [Test worker] INFO com.zaxxer.hikari.pool.HikariPool -- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3e0fbeb5
+15:04:23.263 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed.
+15:04:24.311 [Test worker] INFO org.hibernate.jpa.internal.util.LogHelper -- HHH000204: Processing PersistenceUnitInfo [name: default]
+15:04:24.537 [Test worker] INFO org.hibernate.Version -- HHH000412: Hibernate ORM core version 6.5.2.Final
+15:04:24.640 [Test worker] INFO org.hibernate.cache.internal.RegionFactoryInitiator -- HHH000026: Second-level cache disabled
+15:04:25.482 [Test worker] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+15:04:26.797 [Test worker] INFO org.hibernate.validator.internal.util.Version -- HV000001: Hibernate Validator 8.0.1.Final
+15:04:28.485 [Test worker] INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+15:04:28.549 [Test worker] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:04:29.164 [Test worker] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory -- Hibernate is in classpath; If applicable, HQL parser will be used.
+15:04:31.685 [Test worker] WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- SQL Error: 1062, SQLState: 23000
+15:04:31.685 [Test worker] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- Duplicate entry '\x8A\x8E\xE0[\x17TI\xCB\x8C\x98\xC9\x94\x0E\xD2\x11\x8F-APPLICAT' for key 'notification_outbox.uk_outbox_application_event'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,178 @@
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :compileTestJava
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:30: error: cannot find symbol
+    WireMockServer wire;MutableClock clock;OutboxWorkerStore store;OutboxWorker worker;
+                                           ^
+  symbol:   class OutboxWorkerStore
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:30: error: cannot find symbol
+    WireMockServer wire;MutableClock clock;OutboxWorkerStore store;OutboxWorker worker;
+                                                                   ^
+  symbol:   class OutboxWorker
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:34: error: cannot find symbol
+        clock=new MutableClock(Instant.now().plusSeconds(2));store=new OutboxWorkerStore(repository,manager,clock);
+                                                                       ^
+  symbol:   class OutboxWorkerStore
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:35: error: cannot find symbol
+        worker=new OutboxWorker(store,new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake-token",100,200),clock);
+                   ^
+  symbol:   class OutboxWorker
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:35: error: cannot find symbol
+        worker=new OutboxWorker(store,new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake-token",100,200),clock);
+                                          ^
+  symbol:   class OutboxFcmClient
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:41: error: cannot find symbol
+        var t=task();var sender=new OutboxFcmClient(wire.baseUrl()+"/send",()->{
+                                    ^
+  symbol:   class OutboxFcmClient
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:45: error: cannot find symbol
+        assertThat(new OutboxWorker(store,sender,clock).runOnce()).isTrue();
+                       ^
+  symbol:   class OutboxWorker
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:46: error: cannot find symbol
+        assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.SENT);
+                                                                          ^
+  symbol:   variable SENT
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:47: error: cannot find symbol
+        assertThat(row(t).getSentAt()).isNotNull();assertThat(row(t).getAttemptCount()).isEqualTo(1);
+                         ^
+  symbol:   method getSentAt()
+  location: class NotificationOutbox
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:56: error: cannot find symbol
+        var w=new OutboxWorker(new OutboxWorkerStore(repository,manager,real),new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake",100,200),real);
+                  ^
+  symbol:   class OutboxWorker
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:56: error: cannot find symbol
+        var w=new OutboxWorker(new OutboxWorkerStore(repository,manager,real),new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake",100,200),real);
+                                   ^
+  symbol:   class OutboxWorkerStore
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:56: error: cannot find symbol
+        var w=new OutboxWorker(new OutboxWorkerStore(repository,manager,real),new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake",100,200),real);
+                                                                                  ^
+  symbol:   class OutboxFcmClient
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:58: error: cannot find symbol
+        while(repository.findAllById(ids).stream().anyMatch(t->t.getStatus()!=NotificationOutbox.Status.SENT)&&System.nanoTime()-started<15_000_000_000L){w.runOnce();Thread.sleep(50);}
+                                                                                                       ^
+  symbol:   variable SENT
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:59: error: cannot find symbol
+        assertThat(repository.findAllById(ids)).allSatisfy(t->{assertThat(t.getStatus()).isEqualTo(NotificationOutbox.Status.SENT);assertThat(Duration.between(t.getCreatedAt(),t.getSentAt())).isLessThan(Duration.ofSeconds(60));});
+                                                                                                                            ^
+  symbol:   variable SENT
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:59: error: cannot find symbol
+        assertThat(repository.findAllById(ids)).allSatisfy(t->{assertThat(t.getStatus()).isEqualTo(NotificationOutbox.Status.SENT);assertThat(Duration.between(t.getCreatedAt(),t.getSentAt())).isLessThan(Duration.ofSeconds(60));});
+                                                                                                                                                                                 ^
+  symbol:   method getSentAt()
+  location: variable t of type NotificationOutbox
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:64: error: cannot find symbol
+        var t=task();worker.runOnce();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.RETRY);
+                                                                                                        ^
+  symbol:   variable RETRY
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:69: error: cannot find symbol
+        var client=new OutboxFcmClient(wire.baseUrl()+"/send",()->"fake",100,200);var t=task();var delivery=store.claim().orElseThrow();
+                       ^
+  symbol:   class OutboxFcmClient
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:78: error: cannot find symbol
+            assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.FAILED);assertThat(row(t).getAttemptCount()).isEqualTo(1);
+                                                                              ^
+  symbol:   variable FAILED
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:83: error: cannot find symbol
+        var t=task();var w=new OutboxWorker(store,new OutboxFcmClient(wire.baseUrl()+"/send",()->{throw new IOException("fake auth error");},100,200),clock);
+                               ^
+  symbol:   class OutboxWorker
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:83: error: cannot find symbol
+        var t=task();var w=new OutboxWorker(store,new OutboxFcmClient(wire.baseUrl()+"/send",()->{throw new IOException("fake auth error");},100,200),clock);
+                                                      ^
+  symbol:   class OutboxFcmClient
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:84: error: cannot find symbol
+        w.runOnce();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.RETRY);assertThat(wire.getAllServeEvents()).isEmpty();
+                                                                                      ^
+  symbol:   variable RETRY
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:85: error: cannot find symbol
+        clock.advance(2);wire.stubFor(post(urlEqualTo("/send")).willReturn(aResponse().withFault(Fault.EMPTY_RESPONSE)));worker.runOnce();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.RETRY);
+                                                                                                                                                                                                            ^
+  symbol:   variable RETRY
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:86: error: cannot find symbol
+        clock.advance(4);wire.stubFor(post(urlEqualTo("/send")).willReturn(okJson("{}").withFixedDelay(500)));worker.runOnce();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.RETRY);
+                                                                                                                                                                                                 ^
+  symbol:   variable RETRY
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:91: error: cannot find symbol
+        assertThat(row(t).getAttemptCount()).isEqualTo(5);assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.FAILED);
+                                                                                                                            ^
+  symbol:   variable FAILED
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:96: error: cannot find symbol
+        clock.advance(31);var restartedStore=new OutboxWorkerStore(repository,manager,clock);var second=restartedStore.claim().orElseThrow();
+                                                 ^
+  symbol:   class OutboxWorkerStore
+  location: class OutboxWorkerTest
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:97: error: package OutboxSender does not exist
+        assertThat(first.claimToken()).isNotEqualTo(second.claimToken());assertThat(restartedStore.complete(first,OutboxSender.Outcome.sent())).isFalse();
+                                                                                                                              ^
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:98: error: cannot find symbol
+        assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.PROCESSING);
+                                                                          ^
+  symbol:   variable PROCESSING
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:99: error: package OutboxSender does not exist
+        assertThat(restartedStore.complete(second,OutboxSender.Outcome.sent())).isTrue();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.SENT);
+                                                              ^
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:99: error: cannot find symbol
+        assertThat(restartedStore.complete(second,OutboxSender.Outcome.sent())).isTrue();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.SENT);
+                                                                                                                                                           ^
+  symbol:   variable SENT
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:105: error: cannot find symbol
+            assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.SENT);wire.verify(1,postRequestedFor(urlEqualTo("/send")));
+                                                                              ^
+  symbol:   variable SENT
+  location: class Status
+W:\src\test\java\com\USWCicrcleLink\server\notification\outbox\OutboxWorkerTest.java:110: error: cannot find symbol
+        assertThat(worker.runOnce()).isFalse();assertThat(row(t).getStatus()).isEqualTo(NotificationOutbox.Status.FAILED);assertThat(wire.getAllServeEvents()).isEmpty();
+                                                                                                                 ^
+  symbol:   variable FAILED
+  location: class Status
+31 errors
+
+> Task :compileTestJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 20s
+3 actionable tasks: 1 executed, 2 up-to-date

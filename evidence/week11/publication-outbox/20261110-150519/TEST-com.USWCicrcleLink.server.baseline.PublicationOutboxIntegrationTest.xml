@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:06:49" hostname="DESKTOP-N8U8BLI" time="12.995">
+  <properties/>
+  <testcase name="unauthorizedUserAndOtherLeaderCannotChangeAnything()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.748"/>
+  <testcase name="waitCreatesNothing()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.635"/>
+  <testcase name="normalPassFailSnapshotsWithoutFcm()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.7"/>
+  <testcase name="sequentialAndBodyDuplicatesDoNotCreateMoreTasks()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.716"/>
+  <testcase name="missingAndForeignApplicationsRejectWholeRequest()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="1.225"/>
+  <testcase name="missingTokenStillPublishesAndAddsMember()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.636"/>
+  <testcase name="repetition 1 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.61"/>
+  <testcase name="repetition 2 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.689"/>
+  <testcase name="repetition 3 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.724"/>
+  <testcase name="repetition 4 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.699"/>
+  <testcase name="repetition 5 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.622"/>
+  <testcase name="repetition 6 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.618"/>
+  <testcase name="repetition 7 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.628"/>
+  <testcase name="repetition 8 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.647"/>
+  <testcase name="repetition 9 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.599"/>
+  <testcase name="repetition 10 of 10" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.786"/>
+  <testcase name="administratorRetainsAccess()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.721"/>
+  <testcase name="secondTaskUniqueFailureRollsBackFirstTaskResultAndMember()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.62"/>
+  <testcase name="writerRequiresCallerTransaction()" classname="com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest" time="0.206"/>
+  <system-out><![CDATA[15:06:49.804 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:49.804 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:49.804 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:49.967 [Test worker] WARN com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler -- [Client Error] 해당 동아리에 대한 관리 권한이 없습니다. | Request: POST /clubs/024f7dd7-cfc0-4969-992b-7a76c7444225/applicants/notifications
+15:06:50.206 [Test worker] WARN com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler -- [Client Error] 해당 동아리에 대한 관리 권한이 없습니다. | Request: POST /clubs/024f7dd7-cfc0-4969-992b-7a76c7444225/applicants/notifications
+15:06:50.551 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:50.551 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:50.552 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 1 ms
+15:06:51.272 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:51.274 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:51.274 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:51.962 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:51.962 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:51.964 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 2 ms
+15:06:52.653 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:52.653 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:52.653 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:52.897 [Test worker] WARN com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler -- [Client Error] 지원자 정보를 찾을 수 없습니다. | Request: POST /clubs/660d56f8-e74f-4fe0-bb4a-06141872aea0/applicants/notifications
+15:06:53.447 [Test worker] WARN com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler -- [Client Error] 지원자 정보를 찾을 수 없습니다. | Request: POST /clubs/660d56f8-e74f-4fe0-bb4a-06141872aea0/applicants/notifications
+15:06:53.941 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:53.943 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:53.948 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 2 ms
+15:06:54.563 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:54.563 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:54.565 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 2 ms
+15:06:55.193 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:55.194 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:55.194 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:55.892 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:55.892 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:55.892 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:56.653 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:56.653 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:56.656 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 3 ms
+15:06:57.305 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:57.305 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:57.305 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:57.944 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:57.944 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:57.946 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 2 ms
+15:06:58.496 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:58.496 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:58.496 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:59.203 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:59.203 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:59.203 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:06:59.823 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:06:59.823 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:06:59.831 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 8 ms
+15:07:00.442 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:07:00.442 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:07:00.442 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:07:01.256 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:07:01.256 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:07:01.256 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+15:07:01.967 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:07:01.967 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:07:01.968 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 1 ms
+15:07:02.171 [Test worker] WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- SQL Error: 1062, SQLState: 23000
+15:07:02.172 [Test worker] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- Duplicate entry '\xDA\xCF\xF3\x18\x02\xEFC\x1E\xA9MUY\x12m\xB3\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'
+15:07:02.239 [Test worker] ERROR com.USWCicrcleLink.server.global.exception.GlobalExceptionHandler -- [Server Error] could not execute statement [Duplicate entry '\xDA\xCF\xF3\x18\x02\xEFC\x1E\xA9MUY\x12m\xB3\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event] | Request: POST /clubs/018f8eff-deb9-4f9e-a933-8e403e5b2308/applicants/notifications
+org.springframework.dao.DataIntegrityViolationException: could not execute statement [Duplicate entry '\xDA\xCF\xF3\x18\x02\xEFC\x1E\xA9MUY\x12m\xB3\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:290)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:241)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:550)
+	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:335)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:160)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:165)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
+	at jdk.proxy3/jdk.proxy3.$Proxy149.save(Unknown Source)
+	at com.USWCicrcleLink.server.notification.outbox.PublicationOutboxWriter.save(PublicationOutboxWriter.java:19)
+	at jdk.internal.reflect.GeneratedMethodAccessor89.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:392)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.USWCicrcleLink.server.notification.outbox.PublicationOutboxWriter$$SpringCGLIB$$0.save(<generated>)
+	at com.USWCicrcleLink.server.club.leader.service.ClubLeaderService.updateApplicantResults(ClubLeaderService.java:656)
+	at jdk.internal.reflect.GeneratedMethodAccessor84.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:392)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720)
+	at com.USWCicrcleLink.server.club.leader.service.ClubLeaderService$$SpringCGLIB$$0.updateApplicantResults(<generated>)
+	at com.USWCicrcleLink.server.club.api.ClubController.pushApplicantResults(ClubController.java:200)
+	at jdk.internal.reflect.GeneratedMethodAccessor83.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+	at com.USWCicrcleLink.server.baseline.BaselineReproductionTest.call(BaselineReproductionTest.java:174)
+	at com.USWCicrcleLink.server.baseline.BaselineReproductionTest.publish(BaselineReproductionTest.java:179)
+	at com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest.publish(PublicationOutboxIntegrationTest.java:51)
+	at com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest.secondTaskUniqueFailureRollsBackFirstTaskResultAndMember(PublicationOutboxIntegrationTest.java:113)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:119)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:94)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:89)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:119)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:66)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+Caused by: org.hibernate.exception.ConstraintViolationException: could not execute statement [Duplicate entry '\xDA\xCF\xF3\x18\x02\xEFC\x1E\xA9MUY\x12m\xB3\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,claim_token,created_at,event_type,last_error,lease_until,next_attempt_at,recipient_profile_id,recipient_token,result,sent_at,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]
+	at org.hibernate.dialect.MySQLDialect.lambda$buildSQLExceptionConversionDelegate$3(MySQLDialect.java:1234)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:58)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:108)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:197)
+	at org.hibernate.id.insert.GetGeneratedKeysDelegate.performMutation(GetGeneratedKeysDelegate.java:116)
+	at org.hibernate.engine.jdbc.mutation.internal.MutationExecutorSingleNonBatched.performNonBatchedOperations(MutationExecutorSingleNonBatched.java:47)
+	at org.hibernate.engine.jdbc.mutation.internal.AbstractMutationExecutor.execute(AbstractMutationExecutor.java:55)
+	at org.hibernate.persister.entity.mutation.InsertCoordinatorStandard.doStaticInserts(InsertCoordinatorStandard.java:194)
+	at org.hibernate.persister.entity.mutation.InsertCoordinatorStandard.coordinateInsert(InsertCoordinatorStandard.java:132)
+	at org.hibernate.persister.entity.mutation.InsertCoordinatorStandard.insert(InsertCoordinatorStandard.java:95)
+	at org.hibernate.action.internal.EntityIdentityInsertAction.execute(EntityIdentityInsertAction.java:85)
+	at org.hibernate.engine.spi.ActionQueue.execute(ActionQueue.java:670)
+	at org.hibernate.engine.spi.ActionQueue.addResolvedEntityInsertAction(ActionQueue.java:291)
+	at org.hibernate.engine.spi.ActionQueue.addInsertAction(ActionQueue.java:272)
+	at org.hibernate.engine.spi.ActionQueue.addAction(ActionQueue.java:322)
+	at org.hibernate.event.internal.AbstractSaveEventListener.addInsertAction(AbstractSaveEventListener.java:391)
+	at org.hibernate.event.internal.AbstractSaveEventListener.performSaveOrReplicate(AbstractSaveEventListener.java:305)
+	at org.hibernate.event.internal.AbstractSaveEventListener.performSave(AbstractSaveEventListener.java:224)
+	at org.hibernate.event.internal.AbstractSaveEventListener.saveWithGeneratedId(AbstractSaveEventListener.java:137)
+	at org.hibernate.event.internal.DefaultPersistEventListener.entityIsTransient(DefaultPersistEventListener.java:175)
+	at org.hibernate.event.internal.DefaultPersistEventListener.persist(DefaultPersistEventListener.java:93)
+	at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:77)
+	at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:54)
+	at org.hibernate.event.service.internal.EventListenerGroupImpl.fireEventOnEachListener(EventListenerGroupImpl.java:127)
+	at org.hibernate.internal.SessionImpl.firePersist(SessionImpl.java:757)
+	at org.hibernate.internal.SessionImpl.persist(SessionImpl.java:741)
+	at jdk.internal.reflect.GeneratedMethodAccessor67.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:319)
+	at jdk.proxy3/jdk.proxy3.$Proxy141.persist(Unknown Source)
+	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.save(SimpleJpaRepository.java:629)
+	at jdk.internal.reflect.GeneratedMethodAccessor78.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:354)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker$RepositoryFragmentMethodInvoker.lambda$new$0(RepositoryMethodInvoker.java:277)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.doInvoke(RepositoryMethodInvoker.java:170)
+	at org.springframework.data.repository.core.support.RepositoryMethodInvoker.invoke(RepositoryMethodInvoker.java:158)
+	at org.springframework.data.repository.core.support.RepositoryComposition$RepositoryFragments.invoke(RepositoryComposition.java:516)
+	at org.springframework.data.repository.core.support.RepositoryComposition.invoke(RepositoryComposition.java:285)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport$ImplementationMethodExecutionInterceptor.invoke(RepositoryFactorySupport.java:628)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.doInvoke(QueryExecutorMethodInterceptor.java:168)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.invoke(QueryExecutorMethodInterceptor.java:143)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.data.projection.DefaultMethodInvokingMethodInterceptor.invoke(DefaultMethodInvokingMethodInterceptor.java:70)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:392)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	... 147 common frames omitted
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '\xDA\xCF\xF3\x18\x02\xEFC\x1E\xA9MUY\x12m\xB3\xEE-APPLICATION_RE' for key 'notification_outbox.uk_outbox_application_event'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:118)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:912)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1054)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1003)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1312)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:988)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.executeUpdate(ProxyPreparedStatement.java:61)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeUpdate(HikariProxyPreparedStatement.java)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:194)
+	... 196 common frames omitted
+15:07:02.566 [Test worker] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+15:07:02.567 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+15:07:02.567 [Test worker] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

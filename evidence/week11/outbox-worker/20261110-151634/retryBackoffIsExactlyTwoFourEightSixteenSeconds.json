@@ -1,0 +1,36 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "retryBackoffIsExactlyTwoFourEightSixteenSeconds",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 16,
+    "status" : "FAILED",
+    "attempts" : 5,
+    "lastError" : "HTTP_500",
+    "createdAt" : "2026-11-10T06:17:39.475771Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

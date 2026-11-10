@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:01:58" hostname="DESKTOP-N8U8BLI" time="0.761">
+  <properties/>
+  <testcase name="databaseRejectsDuplicateApplicationEvent()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.226"/>
+  <testcase name="missingTokensAreRecordedAsSkipped()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.157"/>
+  <testcase name="ddlMatchesEntityAndPersistsSnapshot()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.094"/>
+  <testcase name="waitDoesNotCreateAnAnnouncementTask()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.082"/>
+  <testcase name="allowsDifferentApplicationsForSameRecipient()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.107"/>
+  <testcase name="participatesInCallerTransactionAndRollsBack()" classname="com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest" time="0.088"/>
+  <system-out><![CDATA[15:01:59.067 [Test worker] WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- SQL Error: 1062, SQLState: 23000
+15:01:59.067 [Test worker] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- Duplicate entry 'M,*\x03X\xA7D\xCE\x92\x98\x04\xFD+\xDCI\x80-APPLICATION_RESULT' for key 'notification_outbox.uk_outbox_application_event'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

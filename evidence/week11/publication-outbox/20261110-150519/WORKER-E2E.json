@@ -1,0 +1,37 @@
+{
+  "operator" : "AI (Codex)",
+  "apiHttp" : 200,
+  "request" : {
+    "path" : "/clubs/9d075ea8-cb41-4df9-9201-472909e05093/applicants/notifications",
+    "body" : [ {
+      "aplictUUID" : "9277d03a-cbe0-474c-9240-062176659c4f"
+    }, {
+      "aplictUUID" : "0fc49d84-29b5-4c6c-b1e0-5fb4c5ff0995"
+    } ],
+    "method" : "POST"
+  },
+  "fcmCallsAtApiReturn" : 0,
+  "stateAtApiReturn" : "2 PENDING tasks, 1 member, 2 published",
+  "finalDb" : {
+    "a1" : "PASS/PASS",
+    "a2" : "FAIL/FAIL",
+    "token1" : "T1",
+    "members" : 1,
+    "token2" : "T2"
+  },
+  "fcmCallsAfterWorker" : 2,
+  "oldestUnfinishedAgeBeforeMs" : 629,
+  "oldestUnfinishedAgeAfterMs" : 0,
+  "tasks" : [ {
+    "attempts" : 1,
+    "state" : "SENT",
+    "creationToSentRecordMs" : 1899,
+    "id" : 1
+  }, {
+    "attempts" : 1,
+    "state" : "SENT",
+    "creationToSentRecordMs" : 2180,
+    "id" : 2
+  } ],
+  "externalServices" : "WireMock FCM and fixed fake bearer only; no Google/Firebase/S3/mail"
+}

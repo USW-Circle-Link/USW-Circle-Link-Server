@@ -1,0 +1,31 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "stopsAfterFiveAttempts",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 11,
+    "status" : "FAILED",
+    "attempts" : 5,
+    "lastError" : "HTTP_503",
+    "createdAt" : "2026-11-10T06:04:36.620006Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "path" : "/send",
+    "status" : 503
+  }, {
+    "path" : "/send",
+    "status" : 503
+  }, {
+    "path" : "/send",
+    "status" : 503
+  }, {
+    "path" : "/send",
+    "status" : 503
+  }, {
+    "path" : "/send",
+    "status" : 503
+  } ]
+}

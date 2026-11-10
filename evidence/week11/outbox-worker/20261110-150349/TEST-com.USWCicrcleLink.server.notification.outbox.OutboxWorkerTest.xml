@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:04:33" hostname="DESKTOP-N8U8BLI" time="9.821">
+  <properties/>
+  <testcase name="httpDateRetryAfterAndMalformedFallback()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="2.845"/>
+  <testcase name="stopsAfterFiveAttempts()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.667"/>
+  <testcase name="sendsAfterReleasingDatabaseConnection()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.289"/>
+  <testcase name="exhaustedExpiredLeaseFailsWithoutSending()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.458"/>
+  <testcase name="expiredClaimRecoversAndIgnoresStaleCompletion()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.322"/>
+  <testcase name="skippedTasksAreNeverSent()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.193"/>
+  <testcase name="respectsRetryAfter()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.376"/>
+  <testcase name="permanent400And404AreNotRetried()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.54"/>
+  <testcase name="authIOExceptionAndNetworkFailuresRemainRetryable()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="1.007"/>
+  <testcase name="two500ResponsesThenSuccessWithin60Seconds()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="2.89"/>
+  <testcase name="simultaneousWorkersSendOnce()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.203"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

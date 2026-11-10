@@ -1,0 +1,22 @@
+{
+  "operator" : "AI (Codex)",
+  "test" : "httpDateRetryAfterAndMalformedFallback",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 10,
+    "status" : "PROCESSING",
+    "attempts" : 1,
+    "lastError" : null,
+    "createdAt" : "2026-11-10T06:13:15.427353Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "status" : 429,
+    "path" : "/send"
+  }, {
+    "status" : 429,
+    "path" : "/send"
+  } ]
+}

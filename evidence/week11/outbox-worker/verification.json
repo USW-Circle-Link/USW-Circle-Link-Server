@@ -1,0 +1,55 @@
+{
+  "operator": "AI (Codex); user personal verification pending",
+  "worker_and_storage_suites": [
+    {
+      "name": "com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "real_clock_recovery": {
+    "tasks": 3,
+    "fcm_statuses_in_order": [
+      500,
+      500,
+      200,
+      200,
+      200
+    ],
+    "max_creation_to_sent_record_seconds": 2.480799
+  },
+  "worker_default_enabled": false,
+  "actual_production_deployed": false,
+  "external_delivery_exactly_once": false,
+  "e2e_evidence": "../publication-outbox/20261110-150519/WORKER-E2E.json",
+  "api_performance_remeasured": false,
+  "api_integration_suite_invocations": 23,
+  "existing_core_passed": 89,
+  "verified_distinct_test_invocations": 140,
+  "bootJar": "passed",
+  "review": "auth transport timeout P2 fixed; follow-up read-only review no actionable findings",
+  "actual_process_kill_test_performed": false
+}

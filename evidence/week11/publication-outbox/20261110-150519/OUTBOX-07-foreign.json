@@ -1,0 +1,35 @@
+{
+  "scenario" : "OUTBOX-07-foreign",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "requests" : [ {
+    "method" : "POST",
+    "response" : "{\"exception\":\"AplictException\",\"code\":\"APT-202\",\"message\":\"지원자 정보를 찾을 수 없습니다.\",\"status\":404,\"error\":\"Not Found\",\"additionalData\":null}",
+    "http" : 404,
+    "path" : "/clubs/660d56f8-e74f-4fe0-bb4a-06141872aea0/applicants/notifications",
+    "body" : [ {
+      "aplictUUID" : "8aafb2f3-adf1-4e6c-b3de-d18b0b4ef350"
+    }, {
+      "aplictUUID" : "0482be34-ac1e-4855-8042-8c29971b3a60"
+    } ]
+  } ],
+  "responses" : [ {
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-202\",\"message\":\"지원자 정보를 찾을 수 없습니다.\",\"status\":404,\"error\":\"Not Found\",\"additionalData\":null}",
+    "http" : 404
+  } ],
+  "tasks" : [ ],
+  "fcmCalls" : 0
+}

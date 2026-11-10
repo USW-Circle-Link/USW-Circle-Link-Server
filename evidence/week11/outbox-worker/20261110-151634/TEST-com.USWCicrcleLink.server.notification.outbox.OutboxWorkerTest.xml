@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-11-10T06:17:28" hostname="DESKTOP-N8U8BLI" time="12.178">
+  <properties/>
+  <testcase name="httpDateRetryAfterAndMalformedFallback()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="3.881"/>
+  <testcase name="stopsAfterFiveAttempts()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.597"/>
+  <testcase name="sendsAfterReleasingDatabaseConnection()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.241"/>
+  <testcase name="exhaustedExpiredLeaseFailsWithoutSending()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.367"/>
+  <testcase name="expiredClaimRecoversAndIgnoresStaleCompletion()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.474"/>
+  <testcase name="skippedTasksAreNeverSent()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.234"/>
+  <testcase name="respectsRetryAfter()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.404"/>
+  <testcase name="permanent400And404AreNotRetried()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.575"/>
+  <testcase name="authIOExceptionAndNetworkFailuresRemainRetryable()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="1.164"/>
+  <testcase name="two500ResponsesThenSuccessWithin60Seconds()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="2.775"/>
+  <testcase name="unauthorizedAndForbiddenAreRetryable()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.489"/>
+  <testcase name="retryBackoffIsExactlyTwoFourEightSixteenSeconds()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.639"/>
+  <testcase name="simultaneousWorkersSendOnce()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.265"/>
+  <system-out><![CDATA[Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+15:17:18.455 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Multiple Spring Data modules found, entering strict repository configuration mode
+15:17:18.458 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:17:18.936 [Test worker] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate -- Finished Spring Data repository scanning in 465 ms. Found 1 JPA repository interface.
+15:17:19.664 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Starting...
+15:17:20.240 [Test worker] INFO com.zaxxer.hikari.pool.HikariPool -- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4f8d86e4
+15:17:20.251 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Start completed.
+15:17:21.150 [Test worker] INFO org.hibernate.jpa.internal.util.LogHelper -- HHH000204: Processing PersistenceUnitInfo [name: default]
+15:17:21.430 [Test worker] INFO org.hibernate.Version -- HHH000412: Hibernate ORM core version 6.5.2.Final
+15:17:21.515 [Test worker] INFO org.hibernate.cache.internal.RegionFactoryInitiator -- HHH000026: Second-level cache disabled
+15:17:22.191 [Test worker] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo -- No LoadTimeWeaver setup: ignoring JPA class transformer
+15:17:23.943 [Test worker] INFO org.hibernate.validator.internal.util.Version -- HV000001: Hibernate Validator 8.0.1.Final
+15:17:25.890 [Test worker] INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator -- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+15:17:26.054 [Test worker] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:17:27.018 [Test worker] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory -- Hibernate is in classpath; If applicable, HQL parser will be used.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

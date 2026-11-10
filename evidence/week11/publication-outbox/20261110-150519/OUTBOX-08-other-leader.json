@@ -1,0 +1,33 @@
+{
+  "scenario" : "OUTBOX-08-other-leader",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "requests" : [ {
+    "method" : "POST",
+    "response" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+    "http" : 403,
+    "path" : "/clubs/024f7dd7-cfc0-4969-992b-7a76c7444225/applicants/notifications",
+    "body" : [ {
+      "aplictUUID" : "26e9d187-6d6b-44bb-ac0c-55d035b7d753"
+    } ]
+  } ],
+  "responses" : [ {
+    "body" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+    "http" : 403
+  } ],
+  "tasks" : [ ],
+  "fcmCalls" : 0
+}

@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-/** Durable publication snapshot. Sending and retries are implemented in a later step. */
+/** Durable publication snapshot and delivery lifecycle. */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,7 +19,7 @@ import java.util.UUID;
 })
 public class NotificationOutbox {
     public enum EventType { APPLICATION_RESULT }
-    public enum Status { PENDING, SKIPPED }
+    public enum Status { PENDING, PROCESSING, RETRY, SENT, FAILED, SKIPPED }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +63,32 @@ public class NotificationOutbox {
 
     @Column(name = "last_error", columnDefinition = "TEXT")
     private String lastError;
+
+    @Column(name = "claim_token", columnDefinition = "BINARY(16)")
+    private UUID claimToken;
+
+    @Column(name = "lease_until")
+    private Instant leaseUntil;
+
+    @Column(name = "sent_at")
+    private Instant sentAt;
+
+    void claim(Instant now, UUID token) {
+        status = Status.PROCESSING;
+        attemptCount++;
+        claimToken = token;
+        leaseUntil = now.plusSeconds(30);
+        nextAttemptAt = null;
+    }
+
+    void finish(Status state, Instant now, String error, Instant retryAt) {
+        status = state;
+        lastError = error;
+        nextAttemptAt = retryAt;
+        sentAt = state == Status.SENT ? now : null;
+        claimToken = null;
+        leaseUntil = null;
+    }
 
     public static NotificationOutbox applicationResult(UUID applicationUuid, Long profileId,
             String token, AplictStatus result, String title, String body) {

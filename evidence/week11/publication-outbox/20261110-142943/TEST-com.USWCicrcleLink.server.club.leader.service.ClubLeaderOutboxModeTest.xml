@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-10T05:30:43" hostname="DESKTOP-N8U8BLI" time="0.08">
+  <properties/>
+  <testcase name="normalProfileKeepsDefaultSynchronousPath()" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest" time="0.035"/>
+  <testcase name="allowsExplicitTestMode()" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest" time="0.003"/>
+  <testcase name="refusesOutboxModeOutsideDedicatedTestProfile()" classname="com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest" time="0.041"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

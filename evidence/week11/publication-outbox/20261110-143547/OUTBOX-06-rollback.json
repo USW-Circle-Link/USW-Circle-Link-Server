@@ -1,0 +1,40 @@
+{
+  "scenario" : "OUTBOX-06-rollback",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "b3203345-fa14-4061-8b2b-4b44f97b2c95"
+    }, {
+      "aplictUUID" : "7235bf9b-4290-4723-ab9a-b422323e1af0"
+    } ],
+    "path" : "/clubs/1da2ade9-a233-4c2f-841b-1f86b79f8b1f/applicants/notifications",
+    "http" : 500,
+    "response" : "{\"exception\":\"DataIntegrityViolationException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"could not execute statement [Duplicate entry 'r5\\\\xBF\\\\x9BB\\\\x90G#\\\\xAB\\\\x9A\\\\xB4\\\"2>\\\\x1A\\\\xF0-APPLICATION_RESULT' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"exception\":\"DataIntegrityViolationException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"could not execute statement [Duplicate entry 'r5\\\\xBF\\\\x9BB\\\\x90G#\\\\xAB\\\\x9A\\\\xB4\\\"2>\\\\x1A\\\\xF0-APPLICATION_RESULT' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}",
+    "http" : 500
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "7235bf9b-4290-4723-ab9a-b422323e1af0",
+    "result" : "FAIL",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

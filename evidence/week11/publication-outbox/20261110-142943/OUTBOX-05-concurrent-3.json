@@ -1,0 +1,137 @@
+{
+  "scenario" : "OUTBOX-05-concurrent-3",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 1,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/PASS"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "be2e5863-820a-41b7-83ce-c33e70492c4c"
+    } ],
+    "path" : "/clubs/92936d76-2299-47be-bafd-52038e4d3cab/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "be2e5863-820a-41b7-83ce-c33e70492c4c",
+    "result" : "PASS",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

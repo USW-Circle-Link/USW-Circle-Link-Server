@@ -28,11 +28,15 @@ import com.USWCicrcleLink.server.global.s3File.dto.S3FileResponse;
 import com.USWCicrcleLink.server.global.security.details.CustomAdminDetails;
 import com.USWCicrcleLink.server.global.security.details.CustomLeaderDetails;
 import com.USWCicrcleLink.server.user.profile.domain.MemberType;
+import com.USWCicrcleLink.server.notification.outbox.PublicationOutboxWriter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
@@ -62,11 +66,23 @@ public class ClubLeaderService {
     private final ClubCategoryMappingRepository clubCategoryMappingRepository;
     private final S3FileUploadService s3FileUploadService;
     private final FcmServiceImpl fcmService;
+    private final PublicationOutboxWriter publicationOutboxWriter;
+    private boolean publicationOutboxEnabled;
     private final LeaderRepository leaderRepository;
 
     private final com.USWCicrcleLink.server.global.security.jwt.JwtProvider jwtProvider;
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     private final com.USWCicrcleLink.server.user.service.PasswordService passwordService;
+
+    @Autowired
+    void configurePublicationMode(
+            @Value("${notification.publication.outbox-enabled:false}") boolean enabled,
+            Environment environment) {
+        if (enabled && !environment.matchesProfiles("outbox-test")) {
+            throw new IllegalStateException("Outbox publication currently requires the outbox-test profile; no sender is deployed");
+        }
+        publicationOutboxEnabled = enabled;
+    }
 
     // 최대 사진 순서(업로드, 삭제)
     int PHOTO_LIMIT = 5;
@@ -634,12 +650,14 @@ public class ClubLeaderService {
                     clubMembersRepository.save(newClubMembers);
                 }
 
-                log.debug("합격 처리/알림 완료: {}", applicant.getAplictUUID());
-                fcmService.sendMessageTo(applicant, privateStatus);
+            }
 
-            } else if (privateStatus == AplictStatus.FAIL) {
-                log.debug("불합격 알림 완료: {}", applicant.getAplictUUID());
+            if (publicationOutboxEnabled) {
+                publicationOutboxWriter.save(applicant, privateStatus);
+                log.debug("지원 결과 반영/알림 작업 저장: {}", applicant.getAplictUUID());
+            } else {
                 fcmService.sendMessageTo(applicant, privateStatus);
+                log.debug("지원 결과 동기 알림 처리: {}", applicant.getAplictUUID());
             }
 
             aplictRepository.save(applicant);

@@ -1,0 +1,33 @@
+{
+  "scenario" : "OUTBOX-02-wait",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "ce2e9d3c-9b77-4801-986c-feedc4eb6d7a"
+    } ],
+    "path" : "/clubs/04ddb6b4-76dd-4559-be25-72a88734af9a/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ ],
+  "fcmCalls" : 0
+}

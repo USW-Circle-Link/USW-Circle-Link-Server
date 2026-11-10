@@ -1,0 +1,51 @@
+[
+  {
+    "name": "com.USWCicrcleLink.server.baseline.BaselineReproductionTest",
+    "tests": 83,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "name": "com.USWCicrcleLink.server.baseline.PublicationBenchmarkObservationTest",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "name": "com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest",
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 10
+  },
+  {
+    "name": "com.USWCicrcleLink.server.club.leader.service.ClubLeaderOutboxModeTest",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "name": "ClubLeaderService 접근 권한 테스트",
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "name": "com.USWCicrcleLink.server.global.s3File.Service.S3FileUploadServiceTest",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "name": "com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest",
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 6
+  }
+]

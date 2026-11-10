@@ -1,0 +1,34 @@
+{
+  "scenario" : "OUTBOX-01-normal",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/PASS",
+    "a2" : "FAIL/FAIL",
+    "token1" : "T1",
+    "members" : 1,
+    "token2" : "T2"
+  },
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "f8f9ee7e-a3e4-49db-8ed4-368d3adae993",
+    "result" : "PASS",
+    "status" : "PENDING",
+    "lastError" : null
+  }, {
+    "applicationUuid" : "791a18a6-9942-4e36-97af-48a274256791",
+    "result" : "FAIL",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

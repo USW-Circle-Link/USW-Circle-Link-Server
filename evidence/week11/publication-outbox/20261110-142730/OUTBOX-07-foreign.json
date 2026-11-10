@@ -1,0 +1,24 @@
+{
+  "scenario" : "OUTBOX-07-foreign",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "responses" : [ {
+    "body" : "{\"exception\":\"AplictException\",\"code\":\"APT-202\",\"message\":\"지원자 정보를 찾을 수 없습니다.\",\"status\":404,\"error\":\"Not Found\",\"additionalData\":null}",
+    "http" : 404
+  } ],
+  "tasks" : [ ],
+  "fcmCalls" : 0
+}

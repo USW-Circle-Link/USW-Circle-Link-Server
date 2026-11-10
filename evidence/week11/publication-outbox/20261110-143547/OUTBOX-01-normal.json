@@ -1,0 +1,45 @@
+{
+  "scenario" : "OUTBOX-01-normal",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 1,
+    "token1" : "T1",
+    "a2" : "FAIL/FAIL",
+    "a1" : "PASS/PASS"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "d67b60f1-cedf-42ae-9d25-abcdca3457cc"
+    }, {
+      "aplictUUID" : "f9e3646f-e3c2-468a-99d8-38ab7a924e10"
+    } ],
+    "path" : "/clubs/d7243f9a-c5f0-4dae-9ce7-b6a4d154f09b/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "d67b60f1-cedf-42ae-9d25-abcdca3457cc",
+    "result" : "PASS",
+    "status" : "PENDING",
+    "lastError" : null
+  }, {
+    "applicationUuid" : "f9e3646f-e3c2-468a-99d8-38ab7a924e10",
+    "result" : "FAIL",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

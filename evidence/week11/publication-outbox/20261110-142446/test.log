@@ -1,0 +1,86 @@
+
+> Task :compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :processTestResources
+> Task :testClasses
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+> Task :test
+
+PublicationOutboxIntegrationTest > normalPassFailSnapshotsWithoutFcm() FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:56
+
+PublicationOutboxIntegrationTest > sequentialAndBodyDuplicatesDoNotCreateMoreTasks() FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:75
+
+PublicationOutboxIntegrationTest > missingAndForeignApplicationsRejectWholeRequest() FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:103
+
+PublicationOutboxIntegrationTest > missingTokenStillPublishesAndAddsMember() FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:69
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 1 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 2 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 3 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 4 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 5 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 6 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 7 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 8 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 9 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > concurrentPublication(RepetitionInfo) > repetition 10 of 10 FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:87
+
+PublicationOutboxIntegrationTest > administratorRetainsAccess() FAILED
+    java.lang.AssertionError at PublicationOutboxIntegrationTest.java:116
+
+PublicationOutboxIntegrationTest > secondTaskUniqueFailureRollsBackFirstTaskResultAndMember() FAILED
+    org.opentest4j.AssertionFailedError at PublicationOutboxIntegrationTest.java:94
+
+14:26:23.339 [SpringContextShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default'
+14:26:24.531 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated...
+14:26:24.541 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed.
+
+> Task :test FAILED
+
+18 tests completed, 16 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///W:/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1m 38s
+5 actionable tasks: 5 executed

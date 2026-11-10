@@ -1,0 +1,29 @@
+{
+  "scenario" : "OUTBOX-06-rollback",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "T1",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "responses" : [ {
+    "body" : "{\"exception\":\"DataIntegrityViolationException\",\"code\":\"NO_CATCH_ERROR\",\"message\":\"could not execute statement [Duplicate entry '\\\\xEB9\\\\xA5\\\\xD4\\\\xA3\\\\x1CG\\\\xF0\\\\xA6$b\\\\xC9\\\\x0A\\\\xE0\\\\xBC\\\\xB8-APPLICATION' for key 'notification_outbox.uk_outbox_application_event'] [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into notification_outbox (application_uuid,attempt_count,body,created_at,event_type,last_error,next_attempt_at,recipient_profile_id,recipient_token,result,status,title) values (?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [notification_outbox.uk_outbox_application_event]\",\"status\":500,\"error\":\"Internal Server Error\",\"additionalData\":null}",
+    "http" : 500
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "eb39a5d4-a31c-47f0-a624-62c90ae0bcb8",
+    "result" : "FAIL",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

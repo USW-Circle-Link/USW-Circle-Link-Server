@@ -1,0 +1,29 @@
+{
+  "scenario" : "OUTBOX-03-no-token",
+  "operator" : "AI automated test",
+  "before" : {
+    "a1" : "PASS/WAIT",
+    "a2" : "FAIL/WAIT",
+    "token1" : "NULL",
+    "members" : 0,
+    "token2" : "T2"
+  },
+  "after" : {
+    "a1" : "PASS/PASS",
+    "a2" : "FAIL/WAIT",
+    "token1" : "NULL",
+    "members" : 1,
+    "token2" : "T2"
+  },
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "616f2e6d-e27c-45e4-a914-7a090b309c1e",
+    "result" : "PASS",
+    "status" : "SKIPPED",
+    "lastError" : "NO_FCM_TOKEN"
+  } ],
+  "fcmCalls" : 0
+}

@@ -1,0 +1,51 @@
+{
+  "scenario" : "OUTBOX-04-repeat",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 1,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/PASS"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "5fddc9b8-1dd4-448c-b12d-8cc1fc823bbc"
+    }, {
+      "aplictUUID" : "5fddc9b8-1dd4-448c-b12d-8cc1fc823bbc"
+    } ],
+    "path" : "/clubs/0f9fccc6-8cde-48d0-8185-fbea992fec1d/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "method" : "POST"
+  }, {
+    "body" : [ {
+      "aplictUUID" : "5fddc9b8-1dd4-448c-b12d-8cc1fc823bbc"
+    } ],
+    "path" : "/clubs/0f9fccc6-8cde-48d0-8185-fbea992fec1d/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"이미 발표했습니다\"}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  }, {
+    "body" : "{\"message\":\"이미 발표했습니다\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "5fddc9b8-1dd4-448c-b12d-8cc1fc823bbc",
+    "result" : "PASS",
+    "status" : "PENDING",
+    "lastError" : null
+  } ],
+  "fcmCalls" : 0
+}

@@ -1,0 +1,38 @@
+{
+  "scenario" : "OUTBOX-03-no-token",
+  "operator" : "AI automated test",
+  "before" : {
+    "token2" : "T2",
+    "members" : 0,
+    "token1" : "NULL",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT"
+  },
+  "after" : {
+    "token2" : "T2",
+    "members" : 1,
+    "token1" : "NULL",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/PASS"
+  },
+  "requests" : [ {
+    "body" : [ {
+      "aplictUUID" : "5eeea938-93b5-4a48-8662-0d466cd364c1"
+    } ],
+    "path" : "/clubs/1e7a1a6e-e11c-4d95-ae3f-cd91e2a15f0b/applicants/notifications",
+    "http" : 200,
+    "response" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "method" : "POST"
+  } ],
+  "responses" : [ {
+    "body" : "{\"message\":\"지원 결과 처리 완료\"}",
+    "http" : 200
+  } ],
+  "tasks" : [ {
+    "applicationUuid" : "5eeea938-93b5-4a48-8662-0d466cd364c1",
+    "result" : "PASS",
+    "status" : "SKIPPED",
+    "lastError" : "NO_FCM_TOKEN"
+  } ],
+  "fcmCalls" : 0
+}

@@ -1,0 +1,24 @@
+{
+  "scenario" : "OUTBOX-08-other-leader",
+  "operator" : "AI automated test",
+  "before" : {
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT",
+    "token2" : "T2"
+  },
+  "after" : {
+    "members" : 0,
+    "token1" : "T1",
+    "a2" : "FAIL/WAIT",
+    "a1" : "PASS/WAIT",
+    "token2" : "T2"
+  },
+  "responses" : [ {
+    "body" : "{\"exception\":\"ClubLeaderException\",\"code\":\"CLDR-101\",\"message\":\"해당 동아리에 대한 관리 권한이 없습니다.\",\"status\":403,\"error\":\"Forbidden\",\"additionalData\":null}",
+    "http" : 403
+  } ],
+  "tasks" : [ ],
+  "fcmCalls" : 0
+}

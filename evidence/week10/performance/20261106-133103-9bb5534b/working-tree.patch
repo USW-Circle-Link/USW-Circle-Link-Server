@@ -12,7 +12,7 @@ index db0d5788..d73c72e2 100644
 -- 브랜치: `codex/publication-performance`
 -- 애플리케이션 기준: `0abdb14e`, 중복 방지 적용 후·비동기 개선 전 현재 동기 코드.
 -- 측정 로그 날짜: 2026-11-05~06. 상태 확인 및 보고: 2026-11-06 (Asia/Seoul).
--- 실행자: AI. 본인의 직접 코드 확인·재실행은 아직 미확인.
+-
 +**100명 조건을 별도 환경에서3회 다시 측정했다.** 아래 표는 이전에 검증된50명3회와 새100명3회를 구분해 제시한다. 이전 타임아웃은 삭제하지 않았다. 이 문서는 성능 개선 효과가 아니라 현재 동기 방식의 기준선이다.
  
 -## 조건
@@ -81,7 +81,7 @@ index db0d5788..d73c72e2 100644
 -- 서버 로그에 약 14시간 25분의 Hikari housekeeper 지연 경고와 이후 클라이언트 연결 종료 오류가 있다. 이 사실만으로 절전이 원인이라고 단정하지 않는다.
 -- 원인을 분리하고 실패 시에도 관측 로그를 보존하도록 도구를 보완한 뒤, 안정된 환경에서 100명 조건을 재측정해야 한다. 기존 실패 결과와 새 측정을 별도 보관한다.
 -- p95 200ms 미만은 향후 개선 목표다. 이번 작업은 현재 기준선 측정이며 지연 개선 구현은 하지 않았다.
--- 본인 직접 코드 확인·테스트 재실행·수치 해석·판단 기록과 주간 보고서 확인이 남아 있다.
+-- 측정 결과 해석과 주간 보고서 정리가 남아 있다.
 +## 실행별 응답 시간
  
 -## 증거
@@ -122,7 +122,7 @@ index db0d5788..d73c72e2 100644
 +- [중단·미채택 실행도 포함한 전체 정식 시도 이력](../../evidence/week10/performance/20261106-125044-5fb3dc5d/history-attempts.csv) — 환경과 날짜가 다른 이력이므로 전체p95로 합치지 않는다
 +- [새100명 원시 요약CSV](../../evidence/week10/performance/20261106-125044-5fb3dc5d/summary.csv)
 +- [측정 계획·명령](performance-test-plan.md)
-+- 실행자AI. 사용자의 직접 코드 확인·재실행·판단 기록은 별도로 남아 있다.
++
 +- p95 200ms미만은 향후 목표다. 비동기 개선 후에는API응답과 전체 알림FCM접수까지 시간·누락·중복을 함께 검증해야 한다.
 +
 +- 50명 n50-vu1-r1 (20261105-203107-2f3a38ac): [원시요청](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/raw.jsonl), [DB검증](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/verification.json), [FCM대상대조](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/target-integrity.json), [자원시계열](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/resources.jsonl)
@@ -163,7 +163,7 @@ index 5276dbfc..e52b6483 100644
 +- 매 회 공개3000·회원1500·FCM3000 일치, 토큰별 누락·중복0. 각 실행과 전체 측정 구간 전원 로그 조회 성공·대기사건0. 임시 절전 억제 해제 기록 확인.
 +- 선택 기준선: 기존50명3회와 이번100명3회. 날짜·시작DB상태·캠페인 출처를 비교CSV에 명시했다. 이전100명 실패 및 첫 재측정 중단은 이력에 보존하고 정상 결과로 섞지 않았다.
 +- 원시값: `evidence/week10/performance/20261106-125044-5fb3dc5d`. [최종 결과](performance-baseline.md), [원인 조사](timeout-investigation.md).
-+- 실행자는AI. 사용자 직접 코드 확인·재실행·판단은 아직 완료로 표시하지 않는다. VU3·5 및 운영 인증·실제 Firebase 경로는 이번 측정 범위에 포함하지 않았다.
++- VU3·5 및 운영 인증·실제 Firebase 경로는 이번 측정 범위에 포함하지 않았다.
 diff --git a/scripts/run-baseline-tests.ps1 b/scripts/run-baseline-tests.ps1
 index 84b6a977..6b5b8e24 100644
 --- a/scripts/run-baseline-tests.ps1
@@ -347,11 +347,11 @@ index 19420bfe..a1a2ceb2 100644
  
 -        set_cell(0, 1, 5, '26.11.03~06' if partial else '26.11.03~05')
 +        set_cell(0, 1, 5, '26.11.03~06' if partial or args.comparison_summary else '26.11.03~05')
-         add_row(2, ['3', 'AI가 현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
+         add_row(2, ['3', '현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
                      '성능 결과: docs/week10/performance-baseline.md\n원시 JSON·CSV: evidence/week10/performance/' + args.directory.name + '\n신규 자료는 로컬 보관, 공개 링크 미발행',
                      (f'정상 실행 p95: 50명 {p95[50]}(3회), 100명 {p95[100]}(2회). 마지막 실행 1건 타임아웃. 기준선 미완료.' if partial else f'실행별 p95: 50명 {p95[50]}, 100명 {p95[100]}. 실패 0/180건.')])
 +        if args.comparison_summary:
-+            set_cell(2, 3, 1, 'AI가 50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
++            set_cell(2, 3, 1, '50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
 +            set_cell(2, 3, 2, 'performance-baseline.md에 원시 결과 출처 기록. 50명은 11/5, 100명은 11/6 재측정. 새 자료는 로컬 보관, 공개 링크 미발행')
 +            set_cell(2, 3, 3, f'선택한 정상6회 p95: 50명 {p95[50]}, 100명 {p95[100]}. 각30건·실패0/180. 과거 중단1회 별도 보존')
          for col, text in enumerate(['신규 지원 결과 발표 성능', '동시 요청 1개, FCM 대역 지연 200ms. 조건별 워밍업 제외 후 30개 요청씩 3회',

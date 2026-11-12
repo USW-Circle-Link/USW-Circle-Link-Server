@@ -39,7 +39,7 @@ class OutboxWorkerTest {
     @AfterEach void stop(TestInfo info) throws Exception {
         if(wire==null)return;
         try {
-            var data=new LinkedHashMap<String,Object>();data.put("operator","AI (Codex)");
+            var data=new LinkedHashMap<String,Object>();
             data.put("test",info.getTestMethod().orElseThrow().getName());
             data.put("scope","Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail");
             data.put("clock",info.getDisplayName().startsWith("two500")?"real clock":"controlled clock for retry policy");

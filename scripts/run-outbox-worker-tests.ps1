@@ -49,7 +49,7 @@ try {
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest.xml') $out
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfigurationTest.xml') $out
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.notification.outbox.OutboxGoogleTokenProviderTest.xml') $out
-    @{operator='AI or user: record separately'; container=$container; database='outbox_week11'; exitCode=$code; commit=(& git rev-parse HEAD)} |
+    @{ container=$container; database='outbox_week11'; exitCode=$code; commit=(& git rev-parse HEAD)} |
         ConvertTo-Json | Set-Content (Join-Path $out 'run.json')
 } finally {
     Pop-Location

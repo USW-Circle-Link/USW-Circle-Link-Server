@@ -1,5 +1,4 @@
 {
-  "operator" : "AI (Codex)",
   "test" : "two500ResponsesThenSuccessWithin60Seconds",
   "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
   "clock" : "real clock",

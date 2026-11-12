@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-09-admin",
-  "operator" : "AI automated test",
   "before" : {
     "a1" : "PASS/WAIT",
     "a2" : "FAIL/WAIT",

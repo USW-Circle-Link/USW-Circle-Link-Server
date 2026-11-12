@@ -32,7 +32,7 @@ def main():
         f'- 브랜치: `{manifest["branch"]}`',
         f'- 애플리케이션 기준 커밋: `{manifest["sourceCommit"]}` — 중복 방지 적용 후, 비동기 개선 전.',
         '- 성능 개선 코드를 구현한 실험이 아니다. 이번 값이 향후 개선과 비교할 기준선이다.',
-        '- 실행자: AI(Codex). 사용자는 설명 이해까지만 확인했으며 직접 코드 검토·재실행은 아직 미확인이다.', '',
+        '', '',
         '## 측정 조건', '',
         '| 항목 | 조건 |', '|---|---|',
         '| API | POST /clubs/{clubUUID}/applicants/notifications |',

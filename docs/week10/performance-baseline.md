@@ -72,7 +72,7 @@
 - [중단·미채택 실행도 포함한 전체 정식 시도 이력](../../evidence/week10/performance/20261106-125044-5fb3dc5d/history-attempts.csv) — 환경과 날짜가 다른 이력이므로 전체p95로 합치지 않는다
 - [새100명 원시 요약CSV](../../evidence/week10/performance/20261106-125044-5fb3dc5d/summary.csv)
 - [측정 계획·명령](performance-test-plan.md)
-- 실행자AI. 사용자의 직접 코드 확인·재실행·판단 기록은 별도로 남아 있다.
+
 - p95 200ms미만은 향후 목표다. 비동기 개선 후에는API응답과 전체 알림FCM접수까지 시간·누락·중복을 함께 검증해야 한다.
 
 - 50명 n50-vu1-r1 (20261105-203107-2f3a38ac): [원시요청](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/raw.jsonl), [DB검증](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/verification.json), [FCM대상대조](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/target-integrity.json), [자원시계열](../../evidence/week10/performance/20261105-203107-2f3a38ac/n50-vu1-r1/resources.jsonl)

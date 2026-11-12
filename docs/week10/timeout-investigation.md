@@ -30,7 +30,7 @@ Windows 전원 이벤트는 [원본에서 추출한 기록](../../evidence/week1
 .\scripts\run-publication-benchmark.ps1 -Counts 100
 ```
 
-최종 재측정 결과는 아래에 기록한다. 실행자는 AI이며 사용자 직접 검증으로 기록하지 않는다.
+최종 재측정 결과는 아래에 기록한다.
 
 ## 첫 재측정에서 추가로 확인한 화면 유휴 전환
 

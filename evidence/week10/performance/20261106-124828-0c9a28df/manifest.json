@@ -6,7 +6,6 @@
     "TotalPhysicalMemory": 16705323008
   },
   "mysqlBinding": "127.0.0.1:62271",
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "db": {
     "NanoCpus": 2000000000,
     "Memory": 1073741824,

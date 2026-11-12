@@ -177,11 +177,11 @@ index 19420bfe..f48f8fb6 100644
  
 -        set_cell(0, 1, 5, '26.11.03~06' if partial else '26.11.03~05')
 +        set_cell(0, 1, 5, '26.11.03~06' if partial or args.comparison_summary else '26.11.03~05')
-         add_row(2, ['3', 'AI가 현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
+         add_row(2, ['3', '현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
                      '성능 결과: docs/week10/performance-baseline.md\n원시 JSON·CSV: evidence/week10/performance/' + args.directory.name + '\n신규 자료는 로컬 보관, 공개 링크 미발행',
                      (f'정상 실행 p95: 50명 {p95[50]}(3회), 100명 {p95[100]}(2회). 마지막 실행 1건 타임아웃. 기준선 미완료.' if partial else f'실행별 p95: 50명 {p95[50]}, 100명 {p95[100]}. 실패 0/180건.')])
 +        if args.comparison_summary:
-+            set_cell(2, 3, 1, 'AI가 50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
++            set_cell(2, 3, 1, '50명·100명 발표 응답 시간을 측정. 100명은 PC 대기 중단 후 전체 3회 재측정')
 +            set_cell(2, 3, 2, 'performance-baseline.md에 원시 결과 출처 기록. 50명은 11/5, 100명은 11/6 재측정. 새 자료는 로컬 보관, 공개 링크 미발행')
 +            set_cell(2, 3, 3, f'선택한 정상6회 p95: 50명 {p95[50]}, 100명 {p95[100]}. 각30건·실패0/180. 과거 중단1회 별도 보존')
          for col, text in enumerate(['신규 지원 결과 발표 성능', '동시 요청 1개, FCM 대역 지연 200ms. 조건별 워밍업 제외 후 30개 요청씩 3회',

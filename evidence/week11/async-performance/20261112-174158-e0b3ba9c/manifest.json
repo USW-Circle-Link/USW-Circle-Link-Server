@@ -18,7 +18,6 @@
     50,
     100
   ],
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "scope": "async publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.",
   "mode": "async",
   "smoke": true,

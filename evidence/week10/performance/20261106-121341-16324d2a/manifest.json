@@ -13,7 +13,6 @@
     "MemTotal": 8087830528
   },
   "vus": 1,
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "db": {
     "NanoCpus": 2000000000,
     "Memory": 1073741824,

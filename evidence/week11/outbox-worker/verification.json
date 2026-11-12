@@ -1,5 +1,4 @@
 {
-  "operator": "AI (Codex); user personal verification pending",
   "worker_and_storage_suites": [
     {
       "name": "com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest",

@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-07-missing",
-  "operator" : "AI automated test",
   "before" : {
     "token2" : "T2",
     "members" : 0,

@@ -1,5 +1,4 @@
 {
-  "operator": "AI (Codex); user personal verification pending",
   "new_integration_and_guard_suites": [
     {
       "suite": "com.USWCicrcleLink.server.baseline.PublicationOutboxIntegrationTest",

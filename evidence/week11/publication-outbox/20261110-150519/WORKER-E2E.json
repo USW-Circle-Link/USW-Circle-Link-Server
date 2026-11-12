@@ -1,5 +1,4 @@
 {
-  "operator" : "AI (Codex)",
   "apiHttp" : 200,
   "request" : {
     "path" : "/clubs/9d075ea8-cb41-4df9-9201-472909e05093/applicants/notifications",

@@ -100,7 +100,7 @@ def main():
             f'- [중단·미채택 실행도 포함한 전체 정식 시도 이력](../../{new_ref}/history-attempts.csv) — 환경과 날짜가 다른 이력이므로 전체p95로 합치지 않는다',
             f'- [새100명 원시 요약CSV](../../{new_ref}/summary.csv)',
             '- [측정 계획·명령](performance-test-plan.md)',
-            '- 실행자AI. 사용자의 직접 코드 확인·재실행·판단 기록은 별도로 남아 있다.',
+            '',
             '- p95 200ms미만은 향후 목표다. 비동기 개선 후에는API응답과 전체 알림FCM접수까지 시간·누락·중복을 함께 검증해야 한다.','']
     for row in selected:
         link=f"../../{row['campaign']}/{row['run_id']}"

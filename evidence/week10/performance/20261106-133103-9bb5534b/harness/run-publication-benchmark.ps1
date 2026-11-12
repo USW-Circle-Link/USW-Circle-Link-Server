@@ -55,7 +55,6 @@ $manifest = @{
     db=(& docker inspect $container | ConvertFrom-Json | Select-Object -ExpandProperty HostConfig | Select-Object NanoCpus,Memory,PortBindings)
     mysqlBinding=$binding
     host=Get-CimInstance Win32_ComputerSystem | Select-Object NumberOfLogicalProcessors,TotalPhysicalMemory
-    operator='AI (Codex) unless a human explicitly records their own execution.'
     data='Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.'
 }
 $manifest | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $output 'manifest.json') -Encoding utf8

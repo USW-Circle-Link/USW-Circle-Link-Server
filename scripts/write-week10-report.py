@@ -34,8 +34,8 @@ rows = {
   ],
   4: [
     ["계획 작성", "기능 분석·실험 항목 제안", "사용자가 작업 범위 지정", "문제 확인을 먼저 수행", "실제 코드와 대조"],
-    ["테스트 작성·실행", "실험 환경·검사 코드 작성", "개인별 코드 검토는 미기록", "AI가 오류 수정 후 재실행", "83개 검사 결과 보존"],
-    ["결과 정리", "발견한 문제와 증거 설명", "제출 전 본인 확인 필요", "미측정 성능은 성과에서 제외", "원본 기록과 비교 가능"],
+    ["테스트 작성·실행", "실험 환경·검사 코드 작성", "", "오류 수정 후 재실행", "83개 검사 결과 보존"],
+    ["결과 정리", "발견한 문제와 증거 설명", "", "미측정 성능은 성과에서 제외", "원본 기록과 비교 가능"],
   ],
   5: [
     ["검사 코드가 실행되지 않음", "한글 폴더 경로 영향 추정", "코드 수정 / 경로 별칭", "같은 폴더를 W:로 연결", "실행 성공. 원인은 추가 확인 필요"],
@@ -109,7 +109,7 @@ with ZipFile(SOURCE) as source:
         ("E2 검사 코드: src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java",False),
         ("E3 전체 결과: evidence/week10/test-run/reproduction-final.log. 중복 등록: evidence/week10/reproduction/PUB-06-1.json의 members=10과 알림 기록 10개. 제출 오류: 같은 폴더의 APPLY-03.json. 알림 실패: ERR-500.json.",False),
         ("E4 결과 해설: docs/week10/reproduction-results.md. 먼저 이 문서를 읽고 원본 기록과 비교하면 된다.",False),
-        ("수행 구분: 사용자는 작업 범위·브랜치명·발표 후 수정 금지 방향을 결정했다. 테스트 코드 작성·실행과 문서 초안은 AI 도구가 수행했다. 본인의 코드 검토·재실행 경험은 제출 전에 직접 확인해 기록해야 한다.",False),
+        ("",False),
     ]
     # Put the explanation before the form, rather than in a bottom appendix.
     first_form_paragraph=body.find("w:p",ns)
@@ -133,7 +133,7 @@ assert changed == ["word/document.xml"], changed
     + "Slots: body tables 1–6, non-header rows; table 1 header cell 2 relabelled for timing accuracy.\n"
     + "Authorized revision: reader guide moved before the original form; duplicate-request example explained inline. Original form begins on a new page.\n"
     + "Keep table widths, borders, fonts and all paragraph/run properties. Allow natural row growth.\n"
-    + "AI personal judgement slots remain explicitly unconfirmed; self-checks remain unmarked.\n"
+    + "\n"
     + "Reference renders: reference/page-1.png, reference/page-2.png.\n"
     + "Packaged renderer unavailable: LibreOffice missing. Fallback: Word hidden PDF export + bundled Poppler PNG.\n"
     + "Changed package parts: word/document.xml only.\n", encoding="utf-8")

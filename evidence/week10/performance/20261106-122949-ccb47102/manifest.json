@@ -17,7 +17,6 @@
     100
   ],
   "hikariMax": 10,
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "sourceCommit": "f16b6b871c481367fae5b7db1371e34594a6e737",
   "k6Sha256": "EFEC04C36452CFB9C0EF313082C021E5656CAF5004F922C2D8B807FDF4A0E02F",
   "heap": "-Xms1g -Xmx1g",

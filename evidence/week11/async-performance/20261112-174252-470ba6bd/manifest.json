@@ -35,7 +35,6 @@
   "scope": "async publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.",
   "k6Sha256": "EFEC04C36452CFB9C0EF313082C021E5656CAF5004F922C2D8B807FDF4A0E02F",
   "branch": "refactor/publication-outbox",
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "data": "Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.",
   "smoke": false,
   "pacing": "VU1; async waits for complete delivery outside API timer before next fresh batch",

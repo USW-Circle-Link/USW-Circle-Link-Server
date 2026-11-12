@@ -57,7 +57,7 @@ assert len(all_ids)==len(set(all_ids))==13500
 for item in read(root/'harness-sha256.json'):
     actual=hashlib.sha256((root/'harness'/item['file']).read_bytes()).hexdigest()
     assert actual.upper()==item['Hash'].upper()
-result=dict(status='passed',operator='AI',sourceCommit=read(root/'manifest.json')['sourceCommit'],
+result=dict(status='passed',sourceCommit=read(root/'manifest.json')['sourceCommit'],
             runs=runs,apiRequests=180,freshApplications=13500,members=6750,sent=13500,
             apiFailures=0,missingTargets=0,duplicateTargets=0,pacingBoundariesVerified=boundaries,
             rawPercentilesMatchSummary=True,harnessHashesMatch=True,

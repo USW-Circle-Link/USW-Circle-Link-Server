@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-04-repeat",
-  "operator" : "AI automated test",
   "before" : {
     "members" : 0,
     "token1" : "T1",

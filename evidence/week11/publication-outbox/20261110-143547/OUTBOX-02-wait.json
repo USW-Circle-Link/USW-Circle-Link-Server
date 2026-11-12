@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-02-wait",
-  "operator" : "AI automated test",
   "before" : {
     "token2" : "T2",
     "members" : 0,

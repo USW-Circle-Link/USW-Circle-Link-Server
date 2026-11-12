@@ -44,7 +44,7 @@ try {
     & W:\gradlew.bat -p W:\ test --tests '*NotificationOutboxRepositoryTest' --rerun-tasks --console=plain 2>&1 | Tee-Object (Join-Path $out 'test.log')
     $code = $LASTEXITCODE
     Copy-Item (Join-Path $repo 'build/test-results/test/TEST-com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepositoryTest.xml') $out
-    @{operator='AI or user: record separately'; container=$container; database='outbox_week11'; exitCode=$code; commit=(& git rev-parse HEAD)} |
+    @{ container=$container; database='outbox_week11'; exitCode=$code; commit=(& git rev-parse HEAD)} |
         ConvertTo-Json | Set-Content (Join-Path $out 'run.json')
 } finally {
     Pop-Location

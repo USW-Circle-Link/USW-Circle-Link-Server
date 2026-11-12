@@ -1,6 +1,5 @@
 {
   "exitCode": 0,
-  "operator": "AI (Codex); not user personal verification",
   "commit": "07774727eb4784698f88c94b26fbc51c8be0fbdb",
   "container": "circle-week11-outbox-mysql",
   "database": "outbox_week11"

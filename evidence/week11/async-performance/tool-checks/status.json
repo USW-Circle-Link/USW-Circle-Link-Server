@@ -5,7 +5,6 @@
   "afterMeasured": false,
   "recordedAt": "2026-11-12T17:38:14.7122799+09:00",
   "automaticReview": "Runtime socket cleanup command rejected: blocked by policy",
-  "operator": "AI",
   "userAction": "Asked user to start Docker Desktop normally",
   "summaryToolTestsPassed": 1,
   "review": "Read-only review: DB polling removed; API/control metrics separated; real MySQL smoke still pending."

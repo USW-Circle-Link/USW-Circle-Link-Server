@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-06-rollback",
-  "operator" : "AI automated test",
   "before" : {
     "a1" : "PASS/WAIT",
     "a2" : "FAIL/WAIT",

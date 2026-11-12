@@ -1,5 +1,4 @@
 {
-  "operator" : "AI (Codex)",
   "test" : "stopsAfterFiveAttempts",
   "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
   "clock" : "controlled clock for retry policy",

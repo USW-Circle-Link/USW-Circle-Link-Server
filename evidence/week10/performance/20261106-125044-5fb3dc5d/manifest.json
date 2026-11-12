@@ -21,7 +21,6 @@
   },
   "repeats": 3,
   "data": "Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.",
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "mysqlBinding": "127.0.0.1:62271",
   "vus": 1,
   "db": {

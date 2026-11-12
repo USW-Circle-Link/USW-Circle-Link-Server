@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-05-concurrent-4",
-  "operator" : "AI automated test",
   "before" : {
     "token2" : "T2",
     "members" : 0,

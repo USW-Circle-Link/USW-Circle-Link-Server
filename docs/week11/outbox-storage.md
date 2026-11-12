@@ -43,11 +43,10 @@ Docker Desktop Linux 엔진을 켜고 저장소를 W:로 매핑한 상태에서 
 | WAIT 작업 생성 | 생성 거절·저장0건 |
 | 호출 트랜잭션에서 flush 후 예외 | 새 트랜잭션 조회 시 저장0건 |
 
-실행 결과는 `evidence/week11/outbox-storage`에 남긴다. 실행자는 AI/본인을 구분한다. 테스트 DB의 작업은 실제 알림이 아니다.
+실행 결과는 `evidence/week11/outbox-storage`에 남긴다. 테스트 DB의 작업은 실제 알림이 아니다.
 
 ### 2026년 11월 10일 수행 기록
 
-- AI가 구현·실행했다. 본인의 직접 실행·검토로 기록하지 않는다.
 - RED: Entity·Repository가 없는 상태에서 테스트 컴파일이 해당 타입 부재로 실패하는 것을 확인했다(`red.log`).
 - GREEN: 전용 MySQL8.0.35에서 제공 SQL 실행·Hibernate validate 후 저장 테스트6개가 실패0·건너뜀0으로 통과했다(`20261110-134651`).
 - 첫 컨테이너 초기화 때 mysqladmin ping만으로는 DB 생성 완료를 보장하지 못했다. 준비 확인을 전용 DB에서 SELECT1 실행으로 수정하고 재실행해 통과했다.

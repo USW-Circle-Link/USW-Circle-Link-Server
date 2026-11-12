@@ -26,7 +26,6 @@
     50,
     100
   ],
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "smoke": false,
   "sourceCommit": "0abdb14e2a45685658eab4519b523799c717a448",
   "scope": "Current synchronous publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.",

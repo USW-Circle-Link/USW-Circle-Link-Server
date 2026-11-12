@@ -43,7 +43,7 @@ class OutboxWorkerEndToEndTest {
             f.wire.verify(1,postRequestedFor(urlEqualTo("/send")).withRequestBody(matchingJsonPath("$.message.token",equalTo("T2"))));
             assertThat(store.oldestUnfinishedAgeMillis()).isZero();
             var evidence=new LinkedHashMap<String,Object>();
-            evidence.put("operator","AI (Codex)");evidence.put("apiHttp",response.getResponse().getStatus());
+            evidence.put("apiHttp",response.getResponse().getStatus());
             evidence.put("request",Map.of("method","POST","path",f.base()+"/applicants/notifications","body",List.of(Map.of("aplictUUID",f.a1.getAplictUUID().toString()),Map.of("aplictUUID",f.a2.getAplictUUID().toString()))));
             evidence.put("fcmCallsAtApiReturn",0);evidence.put("stateAtApiReturn","2 PENDING tasks, 1 member, 2 published");
             evidence.put("finalDb",f.snapshot());evidence.put("fcmCallsAfterWorker",f.wire.getAllServeEvents().size());

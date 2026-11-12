@@ -57,7 +57,7 @@ class PublicationOutboxIntegrationTest {
     }
     void record(String scenario,Map<String,Object> before,MvcResult... responses) throws Exception {
         var data=new LinkedHashMap<String,Object>();
-        data.put("scenario",scenario);data.put("operator","AI automated test");
+        data.put("scenario",scenario);
         data.put("before",before);data.put("after",f.snapshot());
         data.put("requests",List.copyOf(requests));requests.clear();
         data.put("responses",Arrays.stream(responses).map(r->{try{return Map.of("http",r.getResponse().getStatus(),"body",r.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8));}catch(Exception e){throw new RuntimeException(e);}}).toList());

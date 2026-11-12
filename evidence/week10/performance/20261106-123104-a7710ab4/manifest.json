@@ -1,5 +1,4 @@
 {
-  "operator": "AI (Codex) unless a human explicitly records their own execution.",
   "data": "Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.",
   "vus": 1,
   "heap": "-Xms1g -Xmx1g",

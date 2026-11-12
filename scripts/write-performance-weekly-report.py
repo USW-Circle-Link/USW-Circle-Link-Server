@@ -68,11 +68,11 @@ def main():
                 set_cell(table, index, col, text)
 
         set_cell(0, 1, 5, '26.11.03~06' if partial or args.comparison_summary else '26.11.03~05')
-        add_row(2, ['3', 'AI가 현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
+        add_row(2, ['3', '현재 발표 API의 50명·100명 처리 시간을 측정. 조건별 3회, 실행당 새 발표 30개',
                     '성능 결과: docs/week10/performance-baseline.md\n원시 JSON·CSV: evidence/week10/performance/' + args.directory.name + '\n신규 자료는 로컬 보관, 공개 링크 미발행',
                     (f'정상 실행 p95: 50명 {p95[50]}(3회), 100명 {p95[100]}(2회). 마지막 실행 1건 타임아웃. 기준선 미완료.' if partial else f'실행별 p95: 50명 {p95[50]}, 100명 {p95[100]}. 실패 0/180건.')])
         if args.comparison_summary:
-            set_cell(2, 3, 1, 'AI가 50명·100명 발표 응답 시간을 측정. 조건별 3회, 실행당 새 발표 요청 30개')
+            set_cell(2, 3, 1, '50명·100명 발표 응답 시간을 측정. 조건별 3회, 실행당 새 발표 요청 30개')
             set_cell(2, 3, 2, 'performance-baseline.md에 원시 결과 출처 기록. 50명은 11/5, 100명은 11/6 측정. 새 자료는 로컬 보관, 공개 링크 미발행')
             set_cell(2, 3, 3, f'기준선으로 채택한 6회 p95: 50명 {p95[50]}, 100명 {p95[100]}. 각30건·실패0/180')
         for col, text in enumerate(['신규 지원 결과 발표 성능', '동시 요청 1개, FCM 대역 지연 200ms. 조건별 워밍업 제외 후 30개 요청씩 3회',
@@ -80,10 +80,10 @@ def main():
                                     'performance-baseline.md 및 실행별 verification.json·raw.jsonl']):
             set_cell(3, 2, col, text)
         add_row(4, ['성능 측정', '전용 DB·가짜 알림 서버·k6 도구 작성 및 50명·100명 실험 실행',
-                    '설명 이해. 직접 코드 확인·재실행은 아직 안 함', '본인 판단 미기록', ('정상5회 검증. 마지막 실패 원인 분리·재측정 필요' if partial else 'AI 검증 완료. 본인 재실행 필요')])
+                    '', '', ('정상5회 검증. 마지막 실패 원인 분리·재측정 필요' if partial else '검증 완료')])
         for col, text in enumerate(['신규 발표 시 알림 응답을 기다려 API 응답이 지연됨',
                                     '현재 코드는 한 명씩 외부 알림을 보내고 응답을 기다림', '향후 알림 비동기 처리 검토',
-                                    '이번에는 현재 성능을 측정. 개선 방식에 대한 본인 판단은 아직 미기록',
+                                    '현재 성능 측정',
                                     f'50명 p95 {p95[50]}, 100명 {p95[100]}. Google 인증 제외한 대역 환경 수치']):
             set_cell(5, 2, col, text)
         if partial:

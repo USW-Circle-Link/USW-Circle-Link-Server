@@ -17,7 +17,7 @@ No production changes or real external services. Preserve existing user edits. R
 - [x] Compare per-run p95 against recorded Week10 values, document limitations and commit.
 
 Results: docs/week11/async-performance.md; evidence/week11/async-performance/20261112-174252-470ba6bd.
-AI executed 180 formal requests, failures0, SENT13500, missing/duplicate targets0.
+Executed 180 formal requests, failures0, SENT13500, missing/duplicate targets0.
 Raw percentile recomputation and 174 pacing boundaries verified. 200ms SLO not achieved.
 Keep approved feature branch; no merge, PR, push or production deployment requested for this measurement.
 

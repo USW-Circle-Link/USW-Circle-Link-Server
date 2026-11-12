@@ -50,7 +50,7 @@ Docker Desktop Linux 엔진, Java17, 저장소의 W: 매핑이 필요하다. Pow
 
 ## 증거와 남은 작업
 
-Evidence는 `evidence/week11/publication-outbox`에 저장한다. 실행자는 AI이며 본인의 직접 검증으로 자동 기록하지 않는다. 이전 실패 로그도 보존한다.
+Evidence는 `evidence/week11/publication-outbox`에 저장한다. 이전 실패 로그도 보존한다.
 
 다음 작업은 전송 작업자·실패 재시도·재시작 복구다. 작업자가 완성되기 전에는 Outbox 경로를 운영에 활성화하지 않는다.
 

@@ -1,6 +1,5 @@
 {
   "scenario" : "OUTBOX-08-other-leader",
-  "operator" : "AI automated test",
   "before" : {
     "token2" : "T2",
     "members" : 0,

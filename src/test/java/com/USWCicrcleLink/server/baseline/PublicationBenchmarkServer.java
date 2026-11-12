@@ -41,8 +41,33 @@ import static org.mockito.Mockito.mock;
 
 /** Real loopback HTTP + production publication code + MySQL; authentication is a test fixture. */
 public class PublicationBenchmarkServer {
+    static boolean deliveryVerified(long expected, long sent, long calls, long distinctTokens) {
+        return expected == sent && expected == calls && expected == distinctTokens;
+    }
+
     @Configuration
-    @Import(BaselineReproductionTest.Config.class)
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="notification.publication.outbox-enabled", havingValue="true")
+    @Import({com.USWCicrcleLink.server.notification.outbox.PublicationOutboxWriter.class,
+        com.USWCicrcleLink.server.notification.outbox.OutboxWorkerConfiguration.class})
+    static class AsyncConfig {
+        @Bean @Primary com.USWCicrcleLink.server.notification.outbox.OutboxWorkerStore observedStore(
+                com.USWCicrcleLink.server.notification.outbox.NotificationOutboxRepository repository,
+                PlatformTransactionManager manager, Control control) {
+            return new com.USWCicrcleLink.server.notification.outbox.OutboxWorkerStore(repository,manager,Clock.systemUTC()) {
+                @Override public boolean complete(Delivery delivery, com.USWCicrcleLink.server.notification.outbox.OutboxSender.Outcome outcome) {
+                    boolean committed=super.complete(delivery,outcome);
+                    if(committed && outcome.accepted())control.completed.incrementAndGet();
+                    return committed;
+                }
+            };
+        }
+        @Bean @Primary com.USWCicrcleLink.server.notification.outbox.OutboxSender benchmarkSender(WireMockServer wire) {
+            return new com.USWCicrcleLink.server.notification.outbox.OutboxFcmClient(
+                wire.baseUrl()+"/send", () -> "benchmark-fake-token", 2000, 5000);
+        }
+    }
+    @Configuration
+    @Import({BaselineReproductionTest.Config.class, AsyncConfig.class})
     static class Config {
         @Bean ClubController controller(ApplicationContext c, ClubLeaderService leader, BaselineReproductionTest.TestFcm fcm) throws Exception {
             return BaselineReproductionTest.construct(ClubController.class,c,Map.of(ClubLeaderService.class,leader,FcmServiceImpl.class,fcm));
@@ -64,6 +89,12 @@ public class PublicationBenchmarkServer {
         web.setParentClassLoader(PublicationBenchmarkServer.class.getClassLoader());
         var app=new AnnotationConfigWebApplicationContext();
         var props=new HashMap<String,Object>();
+        boolean async="async".equals(System.getenv("BENCHMARK_MODE"));
+        if(async) {
+            app.getEnvironment().setActiveProfiles("outbox-test");
+            props.put("notification.publication.outbox-enabled", "true");
+            props.put("notification.outbox.worker.enabled", "true");
+        }
         props.put("spring.datasource.url",url);props.put("spring.datasource.username","root");
         props.put("spring.datasource.password","benchmark-local-only");
         props.put("spring.jpa.hibernate.ddl-auto","create-drop");props.put("spring.jpa.open-in-view","false");
@@ -75,7 +106,7 @@ public class PublicationBenchmarkServer {
         app.setServletContext(web.getServletContext());app.register(Config.class);app.refresh();
         var fcm=AopTestUtils.<BaselineReproductionTest.TestFcm>getTargetObject(app.getBean(BaselineReproductionTest.TestFcm.class));
         var wire=app.getBean(WireMockServer.class);ReflectionTestUtils.setField(fcm,"fcmApiUrl",wire.baseUrl()+"/send");
-        var control=app.getBean(Control.class);control.output=output;
+        var control=app.getBean(Control.class);control.output=output;control.async=async;
         var def=new FilterDef();def.setFilterName("local-fixture-auth");def.setFilter(new Filter(){
             public void doFilter(ServletRequest request,ServletResponse response,FilterChain chain) throws java.io.IOException,ServletException {
                 if(!"Bearer benchmark-local-only".equals(((HttpServletRequest)request).getHeader("Authorization"))){
@@ -96,6 +127,9 @@ public class PublicationBenchmarkServer {
             "heapMaxBytes",Runtime.getRuntime().maxMemory(),"processors",Runtime.getRuntime().availableProcessors(),
             "javaVersion",System.getProperty("java.version"),"poolMaximum",control.pool.getMaximumPoolSize(),"wireMock",wire.baseUrl(),"scope","HTTP controller/service/JPA/MySQL; test authentication; fake Google token; local WireMock");
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(output.resolve("ready.json").toFile(),ready);
+        new ObjectMapper().writeValue(output.resolve("mode.json").toFile(),Map.of("mode",async?"async":"sync",
+            "sender", async ? app.getBean(com.USWCicrcleLink.server.notification.outbox.OutboxWorker.class).getClass().getName() : "synchronous",
+            "pollIntervalMs",1000,"jobsPerPoll",10));
         new CountDownLatch(1).await();
     }
 
@@ -107,7 +141,8 @@ public class PublicationBenchmarkServer {
         final ScheduledExecutorService scheduler=Executors.newSingleThreadScheduledExecutor();
         final Acquisition acquisition=new Acquisition();final ObjectMapper json=new ObjectMapper();
         final List<Map<String,Object>> samples=new CopyOnWriteArrayList<>();
-        final List<Long> clubs=new ArrayList<>();Path output;ScheduledFuture<?> sampling;String run;
+        final List<Long> clubs=new ArrayList<>();Path output;ScheduledFuture<?> sampling;String run;boolean async;
+        final AtomicLong completed=new AtomicLong();long awaitTarget;int batchSize;
         Control(PlatformTransactionManager m,HikariDataSource pool,WireMockServer wire){
             tx=new TransactionTemplate(m);this.pool=pool;this.wire=wire;
             pool.setMetricsTrackerFactory((name,stats)->acquisition);
@@ -115,7 +150,10 @@ public class PublicationBenchmarkServer {
         @PostMapping("/prepare") synchronized Map<String,Object> prepare(@RequestParam int count,@RequestParam int batches,@RequestParam String runId){
             if(sampling!=null)throw new IllegalStateException("Stop active run first");
             if(!List.of(2,50,100).contains(count)||batches<1||batches>200||!runId.matches("[a-zA-Z0-9_-]+"))throw new IllegalArgumentException("Invalid dataset request");
-            if(pool.getHikariPoolMXBean().getActiveConnections()!=0)throw new IllegalStateException("Requests still active");
+            if(!async && pool.getHikariPoolMXBean().getActiveConnections()!=0)throw new IllegalStateException("Requests still active");
+            if(async && unfinished()!=0)throw new IllegalStateException("Previous deliveries still active");
+            if(async)tx.executeWithoutResult(s->em.createQuery("delete from NotificationOutbox").executeUpdate());
+            completed.set(0);awaitTarget=0;batchSize=count;
             clubs.clear();run=runId;wire.resetAll();
             wire.stubFor(post(urlEqualTo("/send")).willReturn(okJson("{\"name\":\"benchmark-accepted\"}").withFixedDelay(200)));
             var datasets=new ArrayList<Map<String,Object>>();
@@ -147,9 +185,22 @@ public class PublicationBenchmarkServer {
             },0,100,TimeUnit.MILLISECONDS);
             return Map.of("started",true);
         }
+        long unfinished(){
+            return tx.execute(s->em.createQuery("select count(n) from NotificationOutbox n where n.status <> :sent",Long.class)
+                .setParameter("sent",com.USWCicrcleLink.server.notification.outbox.NotificationOutbox.Status.SENT).getSingleResult());
+        }
+        @PostMapping("/await-delivery") Map<String,Object> awaitDelivery() throws InterruptedException {
+            awaitTarget+=batchSize;
+            long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(110);
+            while(completed.get()<awaitTarget && System.nanoTime()<deadline)Thread.sleep(100);
+            long left=awaitTarget-completed.get();
+            if(left!=0)throw new IllegalStateException("Delivery deadline exceeded: unfinished="+left);
+            return Map.of("completed",true);
+        }
         @PostMapping("/stop") synchronized Map<String,Object> stop() throws Exception {
             if(sampling==null)throw new IllegalStateException("Not active");
-            if(pool.getHikariPoolMXBean().getActiveConnections()!=0)throw new IllegalStateException("Requests still active");
+            if(!async && pool.getHikariPoolMXBean().getActiveConnections()!=0)throw new IllegalStateException("Requests still active");
+            if(async && unfinished()!=0)throw new IllegalStateException("Deliveries still active");
             sampling.cancel(false);sampling=null;
             var timing=acquisition.summary();
             var state=tx.execute(s->Map.of("published",em.createQuery("select count(a) from Aplict a where a.club.clubId in :ids and a.publicStatus <> :wait",Long.class).setParameter("ids",clubs).setParameter("wait",AplictStatus.WAIT).getSingleResult(),
@@ -158,7 +209,22 @@ public class PublicationBenchmarkServer {
             Path folder=output.resolve(run);Files.createDirectories(folder);
             try(var writer=Files.newBufferedWriter(folder.resolve("resources.jsonl"))){for(var sample:List.copyOf(samples)){writer.write(json.writeValueAsString(sample));writer.newLine();}}
             json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("fcm.json").toFile(),journal);
-            var result=Map.of("runId",run,"db",state,"fcmCalls",journal.size(),"acquisition",timing,"resourceSamples",samples.size());
+            var result=new LinkedHashMap<String,Object>();
+            result.putAll(Map.of("runId",run,"db",state,"fcmCalls",journal.size(),"acquisition",timing,"resourceSamples",samples.size()));
+            if(async){
+                var rows=tx.execute(s->em.createQuery("select n from NotificationOutbox n order by n.id",
+                    com.USWCicrcleLink.server.notification.outbox.NotificationOutbox.class).getResultList());
+                var deliveries=rows.stream().map(n->Map.of("id",n.getId(),"token",n.getRecipientToken(),
+                    "status",n.getStatus().name(),"attempts",n.getAttemptCount(),"createdAt",n.getCreatedAt().toString(),
+                    "sentAt",n.getSentAt()==null?"":n.getSentAt().toString(),
+                    "completionMs",n.getSentAt()==null?-1:Duration.between(n.getCreatedAt(),n.getSentAt()).toMillis())).toList();
+                json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("deliveries.json").toFile(),deliveries);
+                long sent=rows.stream().filter(n->n.getStatus()==com.USWCicrcleLink.server.notification.outbox.NotificationOutbox.Status.SENT).count();
+                long tokens=wire.getAllServeEvents().stream().map(e->{try{return json.readTree(e.getRequest().getBodyAsString()).at("/message/token").asText();}catch(Exception ex){throw new IllegalStateException(ex);}}).distinct().count();
+                result.put("delivery",Map.of("tasks",rows.size(),"sent",sent,"distinctFcmTokens",tokens,
+                    "verified",deliveryVerified((Long)state.get("published"),sent,journal.size(),tokens),
+                    "maxCompletionMs",deliveries.stream().mapToLong(d->((Number)d.get("completionMs")).longValue()).max().orElse(0)));
+            }
             json.writerWithDefaultPrettyPrinter().writeValue(folder.resolve("verification.json").toFile(),result);return result;
         }
         /** Failure evidence only: deliberately never claims a stable post-request DB snapshot. */

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.baseline.PublicationBenchmarkObservationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-12T08:38:58" hostname="DESKTOP-N8U8BLI" time="2.717">
+  <properties/>
+  <testcase name="deliverySummaryRejectsIncompleteOrDuplicateNotifications()" classname="com.USWCicrcleLink.server.baseline.PublicationBenchmarkObservationTest" time="0.067"/>
+  <testcase name="savesPartialEvidenceEvenWhileDatabaseRequestIsActive()" classname="com.USWCicrcleLink.server.baseline.PublicationBenchmarkObservationTest" time="2.649"/>
+  <system-out><![CDATA[Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

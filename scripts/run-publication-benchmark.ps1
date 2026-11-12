@@ -1,5 +1,5 @@
 #Requires -Version 7.0
-param([int[]]$Counts = @(50,100), [int]$Repeats = 3, [int]$Iterations = 30, [int]$Vus = 1, [switch]$Smoke)
+param([int[]]$Counts = @(50,100), [int]$Repeats = 3, [int]$Iterations = 30, [int]$Vus = 1, [switch]$Smoke, [ValidateSet('sync','async')][string]$Mode='sync')
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'benchmark-power-events.ps1')
 if ($Counts | Where-Object { $_ -notin @(50,100) }) { throw 'Counts must be 50 or 100.' }
@@ -14,6 +14,7 @@ try {
 } finally { Remove-Item -LiteralPath (Join-Path $repo $marker) -ErrorAction SilentlyContinue }
 $group = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)
 $output = Join-Path $repo "evidence/week10/performance/$group"
+if($Mode -eq 'async'){$output=Join-Path $repo "evidence/week11/async-performance/$group"}
 New-Item -ItemType Directory -Force $output | Out-Null
 $toolsDir = Join-Path $repo 'build/benchmark-tools'
 New-Item -ItemType Directory -Force $toolsDir | Out-Null
@@ -36,7 +37,7 @@ if ($names -contains $container) {
 }
 $ready = $false
 for ($i=0; $i -lt 45; $i++) {
-    & docker exec $container mysqladmin ping -uroot -pbenchmark-local-only --silent 2>$null | Out-Null
+    & docker exec $container mysql -uroot -pbenchmark-local-only baseline_load -e 'SELECT 1' 2>$null | Out-Null
     if ($LASTEXITCODE -eq 0) { $ready=$true; break }
     Start-Sleep -Seconds 2
 }
@@ -44,11 +45,13 @@ if (-not $ready) { throw 'Benchmark database not ready.' }
 $binding = & docker port $container 3306
 if ($binding -notmatch '^127\.0\.0\.1:(\d+)$') { throw 'Database must bind only loopback.' }
 $previousUrl=$env:BENCHMARK_MYSQL_URL; $previousOutput=$env:BENCHMARK_OUTPUT
+$previousMode=$env:BENCHMARK_MODE; $env:BENCHMARK_MODE=$Mode
 $env:BENCHMARK_MYSQL_URL="jdbc:mysql://127.0.0.1:$($Matches[1])/baseline_load?useSSL=false&allowPublicKeyRetrieval=true"
 $env:BENCHMARK_OUTPUT=$output
 $manifest = @{
     startedAt=(Get-Date).ToString('o'); sourceCommit=(& git -C $repo rev-parse HEAD); branch=(& git -C $repo branch --show-current)
-    scope='Current synchronous publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration.'
+    scope="$Mode publication implementation; real loopback HTTP/controller/service/JPA/MySQL; fixture authentication, fake Google token, WireMock 200ms; no Redis/S3/mail integration."
+    mode=$Mode; pacing='VU1; async waits for complete delivery outside API timer before next fresh batch'; apiMetric=$(if($Mode -eq 'async'){'publication_duration'}else{'http_req_duration'})
     counts=$Counts; repeats=$Repeats; iterations=$Iterations; vus=$Vus; smoke=[bool]$Smoke; heap='-Xms1g -Xmx1g'; hikariMax=10
     k6Version=(& $k6 version | Out-String).Trim(); k6Sha256=(Get-FileHash $k6 -Algorithm SHA256).Hash
     docker=(& docker info --format '{{json .}}' | ConvertFrom-Json | Select-Object ServerVersion,NCPU,MemTotal)
@@ -59,10 +62,10 @@ $manifest = @{
     data='Unique random UUIDs; deterministic half PASS/half FAIL; all WAIT and fake FCM tokens; independent club per request.'
 }
 $manifest | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $output 'manifest.json') -Encoding utf8
-& git -C $repo diff --binary | Set-Content -LiteralPath (Join-Path $output 'working-tree.patch') -Encoding utf8
+& git -C $repo diff --binary -- src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java scripts/run-publication-benchmark.ps1 | Set-Content -LiteralPath (Join-Path $output 'working-tree.patch') -Encoding utf8
 $snapshot = Join-Path $output 'harness'
 New-Item -ItemType Directory -Force $snapshot | Out-Null
-foreach ($source in @('build.gradle','scripts/run-publication-benchmark.ps1','scripts/benchmark-power-events.ps1','scripts/k6/publication.js','src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java','src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java','src/test/resources/logback-benchmark.xml')) {
+foreach ($source in @('build.gradle','scripts/run-publication-benchmark.ps1','scripts/benchmark-power-events.ps1','scripts/k6/publication.js','scripts/k6/publication-async.js','src/test/java/com/USWCicrcleLink/server/baseline/PublicationBenchmarkServer.java','src/test/java/com/USWCicrcleLink/server/baseline/BaselineReproductionTest.java','src/test/resources/logback-benchmark.xml')) {
     Copy-Item -LiteralPath (Join-Path $repo $source) -Destination (Join-Path $snapshot ([IO.Path]::GetFileName($source)))
 }
 Get-ChildItem -LiteralPath $snapshot -File | Get-FileHash -Algorithm SHA256 | Select-Object @{n='file';e={Split-Path $_.Path -Leaf}},Hash | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'harness-sha256.json') -Encoding utf8
@@ -125,7 +128,8 @@ public static class PublicationBenchmarkAwake {
         Invoke-RestMethod -Method Post -Uri "$base/benchmark/start" -Headers $headers | Out-Null
         $experimentStarted=Get-Date
         Write-Host "START $Id : applicants=$Count, requests=$N, VU=$Vus, warmup=$Warmup, $(Get-Date -Format o)"
-        & $k6 run --quiet --no-color --env "DATASET=$file" --env "BASE_URL=$base" --env "VUS=$Vus" --env "ITERATIONS=$N" --out "json=$(Join-Path $folder 'raw.jsonl')" --summary-export (Join-Path $folder 'summary.json') (Join-Path $repo 'scripts/k6/publication.js') *> (Join-Path $folder 'k6.log')
+        $scriptName=if($Mode -eq 'async'){'publication-async.js'}else{'publication.js'}
+        & $k6 run --quiet --no-color --env "DATASET=$file" --env "BASE_URL=$base" --env "VUS=$Vus" --env "ITERATIONS=$N" --out "json=$(Join-Path $folder 'raw.jsonl')" --summary-export (Join-Path $folder 'summary.json') (Join-Path $repo "scripts/k6/$scriptName") *> (Join-Path $folder 'k6.log')
         $code=$LASTEXITCODE
         $verification=$null; $verificationError=$null
         try { $verification=Invoke-RestMethod -Method Post -Uri "$base/benchmark/stop" -Headers $headers -TimeoutSec 120 }
@@ -140,10 +144,12 @@ public static class PublicationBenchmarkAwake {
         ConvertTo-Json -InputObject $powerEvents -Depth 4 | Set-Content (Join-Path $folder 'power-events.json') -Encoding utf8
         $summary=Get-Content (Join-Path $folder 'summary.json') -Raw | ConvertFrom-Json
         $passed=($code -eq 0 -and $null -ne $verification -and $powerAudit.querySucceeded -and $powerEvents.Count -eq 0 -and $verification.db.published -eq ($Count*$N) -and $verification.db.members -eq ($Count*$N/2) -and $verification.fcmCalls -eq ($Count*$N))
+        if($Mode -eq 'async'){$passed=$passed -and $verification.delivery.verified -and $verification.delivery.tasks -eq ($Count*$N)}
         $record=@{runId=$Id; applicants=$Count; vus=$Vus; warmup=$Warmup; smoke=[bool]$Smoke; passed=$passed; k6Exit=$code; verificationError=$verificationError; powerLogQuerySucceeded=$powerAudit.querySucceeded; powerEventCount=$powerEvents.Count; minimumDurationMet=($Warmup -or [bool]$Smoke -or $summary.metrics.http_reqs.count/$summary.metrics.http_reqs.rate -ge 180); finishedAt=(Get-Date).ToString('o')}
         $record | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $folder 'experiment.json') -Encoding utf8
         if (-not $passed -or -not $record.minimumDurationMet) { throw "Experiment failed verification: $Id" }
-        Write-Host "DONE $Id : p95=$($summary.metrics.http_req_duration.'p(95)') ms, published=$($verification.db.published), members=$($verification.db.members), FCM=$($verification.fcmCalls)"
+        $metric=if($Mode -eq 'async'){'publication_duration'}else{'http_req_duration'}
+        Write-Host "DONE $Id : p95=$($summary.metrics.$metric.'p(95)') ms, published=$($verification.db.published), members=$($verification.db.members), FCM=$($verification.fcmCalls)"
     }
     if ($Smoke) { Invoke-Experiment 2 1 'smoke-2' $false }
     else {
@@ -179,6 +185,7 @@ public static class PublicationBenchmarkAwake {
     }
     } finally {
         $env:BENCHMARK_MYSQL_URL=$previousUrl; $env:BENCHMARK_OUTPUT=$previousOutput
+        $env:BENCHMARK_MODE=$previousMode
         $lock.Dispose()
         if ($awakeSet) {
             [PublicationBenchmarkAwake]::Stop()

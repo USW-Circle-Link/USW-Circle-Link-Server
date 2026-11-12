@@ -15,6 +15,13 @@ import static org.mockito.Mockito.*;
 class PublicationBenchmarkObservationTest {
     @TempDir Path output;
 
+    @Test void deliverySummaryRejectsIncompleteOrDuplicateNotifications() {
+        assertThat(PublicationBenchmarkServer.deliveryVerified(2,2,2,2)).isTrue();
+        assertThat(PublicationBenchmarkServer.deliveryVerified(2,1,2,2)).isFalse();
+        assertThat(PublicationBenchmarkServer.deliveryVerified(2,2,2,1)).isFalse();
+        assertThat(PublicationBenchmarkServer.deliveryVerified(2,2,3,2)).isFalse();
+    }
+
     @Test void savesPartialEvidenceEvenWhileDatabaseRequestIsActive() throws Exception {
         var manager=mock(PlatformTransactionManager.class);
         var pool=mock(HikariDataSource.class);

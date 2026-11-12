@@ -1,2 +1,3 @@
 # Preserve raw measurement logs and archived harness hashes byte for byte.
 /evidence/week10/performance/** -text
+/evidence/week11/async-performance/** -text

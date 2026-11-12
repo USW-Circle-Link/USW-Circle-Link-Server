@@ -1,0 +1,22 @@
+{
+  "resourceSamples" : 4731,
+  "fcmCalls" : 1500,
+  "runId" : "n50-vu1-r3",
+  "acquisition" : {
+    "p95Ms" : 0.0679,
+    "meanMs" : 0.13478287778825007,
+    "maxMs" : 7.1808,
+    "count" : 3183
+  },
+  "db" : {
+    "published" : 1500,
+    "members" : 750
+  },
+  "delivery" : {
+    "maxCompletionMs" : 19155,
+    "distinctFcmTokens" : 1500,
+    "sent" : 1500,
+    "tasks" : 1500,
+    "verified" : true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "resourceSamples" : 967,
+  "fcmCalls" : 300,
+  "runId" : "n100-vu1-r3-warmup",
+  "acquisition" : {
+    "p95Ms" : 2.0213,
+    "meanMs" : 0.16238578125,
+    "maxMs" : 3.9097,
+    "count" : 640
+  },
+  "db" : {
+    "published" : 300,
+    "members" : 150
+  },
+  "delivery" : {
+    "maxCompletionMs" : 39349,
+    "distinctFcmTokens" : 300,
+    "sent" : 300,
+    "tasks" : 300,
+    "verified" : true
+  }
+}

@@ -1,0 +1,17 @@
+[ {
+  "token" : "smoke-2-0-0",
+  "attempts" : 1,
+  "id" : 1,
+  "createdAt" : "2026-11-12T08:42:38.736594Z",
+  "completionMs" : 1441,
+  "status" : "SENT",
+  "sentAt" : "2026-11-12T08:42:40.177958Z"
+}, {
+  "token" : "smoke-2-0-1",
+  "attempts" : 1,
+  "id" : 2,
+  "createdAt" : "2026-11-12T08:42:38.751619Z",
+  "completionMs" : 1672,
+  "status" : "SENT",
+  "sentAt" : "2026-11-12T08:42:40.424452Z"
+} ]

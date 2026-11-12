@@ -1,0 +1,9 @@
+[ {
+  "body" : "{\"message\":{\"token\":\"smoke-2-0-1\",\"notification\":{\"body\":\"B4d3efc5b-에 불합격했습니다.\",\"title\":\"동아리 지원 결과\"}}}",
+  "time" : "2026-11-12T08:42:40.215Z",
+  "status" : 200
+}, {
+  "body" : "{\"message\":{\"token\":\"smoke-2-0-0\",\"notification\":{\"body\":\"B4d3efc5b-에 합격했습니다.\",\"title\":\"동아리 지원 결과\"}}}",
+  "time" : "2026-11-12T08:42:39.806Z",
+  "status" : 200
+} ]

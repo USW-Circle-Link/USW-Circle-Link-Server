@@ -1,0 +1,22 @@
+{
+  "acquisition" : {
+    "maxMs" : 1.4347,
+    "meanMs" : 0.36543,
+    "p95Ms" : 1.4347,
+    "count" : 10
+  },
+  "runId" : "smoke-2",
+  "fcmCalls" : 2,
+  "resourceSamples" : 25,
+  "db" : {
+    "members" : 1,
+    "published" : 2
+  },
+  "delivery" : {
+    "sent" : 2,
+    "distinctFcmTokens" : 2,
+    "maxCompletionMs" : 1672,
+    "verified" : true,
+    "tasks" : 2
+  }
+}

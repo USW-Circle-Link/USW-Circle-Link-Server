@@ -10,11 +10,16 @@ WireMock200ms, 50/100 applicants, VU1, fresh data, 30 requests per run, three re
 No production changes or real external services. Preserve existing user edits. Remain on approved feature branch.
 
 ## Tasks
-- [ ] Extend loopback fixture with opt-in async mode using production worker/poller and real sender with fake bearer.
-- [ ] Add separate k6 API trend and wait-for-delivery control request (excluded from API metric).
-- [ ] Smoke-test two applicants; verify SENT, member, publication and unique FCM token counts.
-- [ ] Measure 50/100 x three runs; retain raw request/resource/delivery evidence.
-- [ ] Compare per-run p95 against recorded Week10 values, document limitations and commit.
+- [x] Extend loopback fixture with opt-in async mode using production worker/poller and real sender with fake bearer.
+- [x] Add separate k6 API trend and wait-for-delivery control request (excluded from API metric).
+- [x] Smoke-test two applicants; verify SENT, member, publication and unique FCM token counts.
+- [x] Measure 50/100 x three runs; retain raw request/resource/delivery evidence.
+- [x] Compare per-run p95 against recorded Week10 values, document limitations and commit.
+
+Results: docs/week11/async-performance.md; evidence/week11/async-performance/20261112-174252-470ba6bd.
+AI executed 180 formal requests, failures0, SENT13500, missing/duplicate targets0.
+Raw percentile recomputation and 174 pacing boundaries verified. 200ms SLO not achieved.
+Keep approved feature branch; no merge, PR, push or production deployment requested for this measurement.
 
 Ruling: VU1 waits for that batch's notifications outside the API timer before submitting a fresh batch.
 This preserves one-batch-at-a-time workload and avoids silently mixing a saturation/backlog experiment

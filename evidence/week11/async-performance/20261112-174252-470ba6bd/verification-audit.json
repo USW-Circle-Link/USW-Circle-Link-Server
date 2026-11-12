@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "operator": "AI",
+  "sourceCommit": "4557aa01458fe80d72e6244e24ea3abb28f71a73",
+  "runs": [
+    {
+      "run": "n50-vu1-r1",
+      "responses": 30,
+      "api_p95_ms": 881.0484949999997,
+      "published": 1500,
+      "members": 750,
+      "sent": 1500,
+      "failures": 0
+    },
+    {
+      "run": "n50-vu1-r2",
+      "responses": 30,
+      "api_p95_ms": 675.38713,
+      "published": 1500,
+      "members": 750,
+      "sent": 1500,
+      "failures": 0
+    },
+    {
+      "run": "n50-vu1-r3",
+      "responses": 30,
+      "api_p95_ms": 620.9097949999999,
+      "published": 1500,
+      "members": 750,
+      "sent": 1500,
+      "failures": 0
+    },
+    {
+      "run": "n100-vu1-r1",
+      "responses": 30,
+      "api_p95_ms": 1277.901235,
+      "published": 3000,
+      "members": 1500,
+      "sent": 3000,
+      "failures": 0
+    },
+    {
+      "run": "n100-vu1-r2",
+      "responses": 30,
+      "api_p95_ms": 1215.94622,
+      "published": 3000,
+      "members": 1500,
+      "sent": 3000,
+      "failures": 0
+    },
+    {
+      "run": "n100-vu1-r3",
+      "responses": 30,
+      "api_p95_ms": 1173.7579049999997,
+      "published": 3000,
+      "members": 1500,
+      "sent": 3000,
+      "failures": 0
+    }
+  ],
+  "apiRequests": 180,
+  "freshApplications": 13500,
+  "members": 6750,
+  "sent": 13500,
+  "apiFailures": 0,
+  "missingTargets": 0,
+  "duplicateTargets": 0,
+  "pacingBoundariesVerified": 174,
+  "rawPercentilesMatchSummary": true,
+  "harnessHashesMatch": true,
+  "scope": "Normal 200 / WireMock200ms / fake Google bearer / VU1 with delivery wait; no handset test"
+}

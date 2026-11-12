@@ -1,0 +1,8 @@
+{
+  "limitation": "Does not prevent explicit lid-close, power-button sleep, or critical battery shutdown.",
+  "requestedAt": "2026-11-12T17:42:06.4513006+09:00",
+  "permanentPowerPolicyChanged": false,
+  "holder": "dedicated background thread",
+  "displayRequired": true,
+  "systemRequired": true
+}

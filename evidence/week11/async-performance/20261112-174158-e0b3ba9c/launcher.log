@@ -1,0 +1,4 @@
+Output: C:\Users\izim5\OneDrive\문서\ChatGPT\동구라미 2\USW-Circle-Link-Server\evidence\week11\async-performance\20261112-174158-e0b3ba9c
+START smoke-2 : applicants=2, requests=1, VU=1, warmup=False, 2026-11-12T17:42:38.3451032+09:00
+DONE smoke-2 : p95=291.0702 ms, published=2, members=1, FCM=2
+All requested experiments verified. Output: C:\Users\izim5\OneDrive\문서\ChatGPT\동구라미 2\USW-Circle-Link-Server\evidence\week11\async-performance\20261112-174158-e0b3ba9c

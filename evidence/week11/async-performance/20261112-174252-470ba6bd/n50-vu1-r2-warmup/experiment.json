@@ -1,0 +1,14 @@
+{
+  "smoke": false,
+  "vus": 1,
+  "applicants": 50,
+  "powerLogQuerySucceeded": true,
+  "k6Exit": 0,
+  "powerEventCount": 0,
+  "minimumDurationMet": true,
+  "verificationError": null,
+  "warmup": true,
+  "runId": "n50-vu1-r2-warmup",
+  "passed": true,
+  "finishedAt": "2026-11-12T17:57:50.1655519+09:00"
+}

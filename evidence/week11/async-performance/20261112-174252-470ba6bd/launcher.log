@@ -1,0 +1,26 @@
+Output: C:\Users\izim5\OneDrive\문서\ChatGPT\동구라미 2\USW-Circle-Link-Server\evidence\week11\async-performance\20261112-174252-470ba6bd
+START n50-vu1-r1-warmup : applicants=50, requests=6, VU=1, warmup=True, 2026-11-12T17:43:53.2881143+09:00
+DONE n50-vu1-r1-warmup : p95=832.22455 ms, published=300, members=150, FCM=300
+START n50-vu1-r1 : applicants=50, requests=30, VU=1, warmup=False, 2026-11-12T17:45:56.0492645+09:00
+DONE n50-vu1-r1 : p95=881.048495 ms, published=1500, members=750, FCM=1500
+START n50-vu1-r2-warmup : applicants=50, requests=6, VU=1, warmup=True, 2026-11-12T17:56:00.4254927+09:00
+DONE n50-vu1-r2-warmup : p95=852.5117 ms, published=300, members=150, FCM=300
+START n50-vu1-r2 : applicants=50, requests=30, VU=1, warmup=False, 2026-11-12T17:57:56.5200890+09:00
+DONE n50-vu1-r2 : p95=675.38713 ms, published=1500, members=750, FCM=1500
+START n50-vu1-r3-warmup : applicants=50, requests=6, VU=1, warmup=True, 2026-11-12T18:07:38.7062422+09:00
+DONE n50-vu1-r3-warmup : p95=606.770325 ms, published=300, members=150, FCM=300
+START n50-vu1-r3 : applicants=50, requests=30, VU=1, warmup=False, 2026-11-12T18:09:44.2763023+09:00
+DONE n50-vu1-r3 : p95=620.909795 ms, published=1500, members=750, FCM=1500
+START n100-vu1-r1-warmup : applicants=100, requests=3, VU=1, warmup=True, 2026-11-12T18:19:00.7025912+09:00
+DONE n100-vu1-r1-warmup : p95=1125.43336 ms, published=300, members=150, FCM=300
+START n100-vu1-r1 : applicants=100, requests=30, VU=1, warmup=False, 2026-11-12T18:21:02.9957387+09:00
+DONE n100-vu1-r1 : p95=1277.901235 ms, published=3000, members=1500, FCM=3000
+START n100-vu1-r2-warmup : applicants=100, requests=3, VU=1, warmup=True, 2026-11-12T18:40:43.6200264+09:00
+DONE n100-vu1-r2-warmup : p95=1146.15416 ms, published=300, members=150, FCM=300
+START n100-vu1-r2 : applicants=100, requests=30, VU=1, warmup=False, 2026-11-12T18:42:51.2184156+09:00
+DONE n100-vu1-r2 : p95=1215.94622 ms, published=3000, members=1500, FCM=3000
+START n100-vu1-r3-warmup : applicants=100, requests=3, VU=1, warmup=True, 2026-11-12T19:02:19.6885536+09:00
+DONE n100-vu1-r3-warmup : p95=1187.20541 ms, published=300, members=150, FCM=300
+START n100-vu1-r3 : applicants=100, requests=30, VU=1, warmup=False, 2026-11-12T19:04:29.0792983+09:00
+DONE n100-vu1-r3 : p95=1173.757905 ms, published=3000, members=1500, FCM=3000
+All requested experiments verified. Output: C:\Users\izim5\OneDrive\문서\ChatGPT\동구라미 2\USW-Circle-Link-Server\evidence\week11\async-performance\20261112-174252-470ba6bd

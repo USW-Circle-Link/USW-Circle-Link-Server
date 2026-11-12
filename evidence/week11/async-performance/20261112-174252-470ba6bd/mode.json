@@ -1,0 +1,1 @@
+{"sender":"com.USWCicrcleLink.server.notification.outbox.OutboxWorker","mode":"async","pollIntervalMs":1000,"jobsPerPoll":10}

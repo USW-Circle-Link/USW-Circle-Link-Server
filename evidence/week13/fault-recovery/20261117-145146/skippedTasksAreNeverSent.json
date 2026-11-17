@@ -1,0 +1,15 @@
+{
+  "test" : "skippedTasksAreNeverSent",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 15,
+    "status" : "SKIPPED",
+    "attempts" : 0,
+    "lastError" : "NO_FCM_TOKEN",
+    "createdAt" : "2026-11-17T05:53:24.932924Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ ]
+}

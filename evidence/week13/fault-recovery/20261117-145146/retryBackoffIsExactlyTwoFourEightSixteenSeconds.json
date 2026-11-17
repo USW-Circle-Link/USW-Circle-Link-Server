@@ -1,0 +1,35 @@
+{
+  "test" : "retryBackoffIsExactlyTwoFourEightSixteenSeconds",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 25,
+    "status" : "FAILED",
+    "attempts" : 5,
+    "lastError" : "HTTP_500",
+    "createdAt" : "2026-11-17T05:53:29.719375Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

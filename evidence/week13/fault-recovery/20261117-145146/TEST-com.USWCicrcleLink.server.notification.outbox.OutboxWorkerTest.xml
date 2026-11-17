@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-11-17T05:53:22" hostname="DESKTOP-N8U8BLI" time="7.901">
+  <properties/>
+  <testcase name="httpDateRetryAfterAndMalformedFallback()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.715"/>
+  <testcase name="stopsAfterFiveAttempts()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.6"/>
+  <testcase name="sendsAfterReleasingDatabaseConnection()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.26"/>
+  <testcase name="exhaustedExpiredLeaseFailsWithoutSending()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.315"/>
+  <testcase name="expiredClaimRecoversAndIgnoresStaleCompletion()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.237"/>
+  <testcase name="skippedTasksAreNeverSent()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.14"/>
+  <testcase name="respectsRetryAfter()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.269"/>
+  <testcase name="permanent400And404AreNotRetried()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.324"/>
+  <testcase name="authIOExceptionAndNetworkFailuresRemainRetryable()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.807"/>
+  <testcase name="two500ResponsesThenSuccessWithin60Seconds()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="2.742"/>
+  <testcase name="unauthorizedAndForbiddenAreRetryable()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.461"/>
+  <testcase name="retryBackoffIsExactlyTwoFourEightSixteenSeconds()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.749"/>
+  <testcase name="simultaneousWorkersSendOnce()" classname="com.USWCicrcleLink.server.notification.outbox.OutboxWorkerTest" time="0.24"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

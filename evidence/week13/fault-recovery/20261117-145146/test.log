@@ -1,0 +1,19 @@
+Starting a Gradle Daemon, 4 incompatible Daemons could not be reused, use --status for details
+> Task :compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :processTestResources
+> Task :testClasses
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+> Task :test
+
+14:53:30.644 [SpringContextShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -- Closing JPA EntityManagerFactory for persistence unit 'default'
+14:53:30.649 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown initiated...
+14:53:30.664 [SpringContextShutdownHook] INFO com.zaxxer.hikari.HikariDataSource -- HikariPool-1 - Shutdown completed.
+
+BUILD SUCCESSFUL in 1m 44s
+5 actionable tasks: 5 executed

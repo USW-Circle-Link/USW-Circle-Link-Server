@@ -1,0 +1,6 @@
+{
+  "exitCode": 0,
+  "container": "circle-week11-outbox-mysql",
+  "commit": "701767bb89697bd8bdbe6ac8cfd715d8a41e7ad4",
+  "database": "outbox_week11"
+}

@@ -1,0 +1,15 @@
+{
+  "test" : "exhaustedExpiredLeaseFailsWithoutSending",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 13,
+    "status" : "FAILED",
+    "attempts" : 5,
+    "lastError" : "ATTEMPTS_EXHAUSTED_AFTER_LEASE",
+    "createdAt" : "2026-11-17T05:53:24.369874Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ ]
+}

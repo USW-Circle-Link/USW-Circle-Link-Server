@@ -1,0 +1,51 @@
+{
+  "test" : "two500ResponsesThenSuccessWithin60Seconds",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "real clock",
+  "tasks" : [ {
+    "id" : 20,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-17T05:53:26.527575Z",
+    "sentAt" : "2026-11-17T05:53:28.762956Z",
+    "nextAttemptAt" : null
+  }, {
+    "id" : 21,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-17T05:53:26.553926Z",
+    "sentAt" : "2026-11-17T05:53:28.997809Z",
+    "nextAttemptAt" : null
+  }, {
+    "id" : 22,
+    "status" : "SENT",
+    "attempts" : 1,
+    "lastError" : null,
+    "createdAt" : "2026-11-17T05:53:26.575897Z",
+    "sentAt" : "2026-11-17T05:53:27.054819Z",
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 500,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 200,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 200,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 200,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

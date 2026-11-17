@@ -1,0 +1,15 @@
+{
+  "test" : "expiredClaimRecoversAndIgnoresStaleCompletion",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 14,
+    "status" : "SENT",
+    "attempts" : 2,
+    "lastError" : null,
+    "createdAt" : "2026-11-17T05:53:24.686778Z",
+    "sentAt" : "2026-11-17T05:53:57.681603Z",
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ ]
+}

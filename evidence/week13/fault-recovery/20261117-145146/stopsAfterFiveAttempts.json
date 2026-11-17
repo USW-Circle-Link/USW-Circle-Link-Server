@@ -1,0 +1,35 @@
+{
+  "test" : "stopsAfterFiveAttempts",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 11,
+    "status" : "FAILED",
+    "attempts" : 5,
+    "lastError" : "HTTP_503",
+    "createdAt" : "2026-11-17T05:53:23.523832Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 503,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 503,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 503,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 503,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 503,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}

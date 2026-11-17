@@ -1,0 +1,23 @@
+{
+  "test" : "httpDateRetryAfterAndMalformedFallback",
+  "scope" : "Local MySQL + WireMock + fake bearer; check JUnit XML for pass/fail",
+  "clock" : "controlled clock for retry policy",
+  "tasks" : [ {
+    "id" : 10,
+    "status" : "PROCESSING",
+    "attempts" : 1,
+    "lastError" : null,
+    "createdAt" : "2026-11-17T05:53:22.819906Z",
+    "sentAt" : null,
+    "nextAttemptAt" : null
+  } ],
+  "fcmCalls" : [ {
+    "configuredStatus" : 429,
+    "fault" : null,
+    "path" : "/send"
+  }, {
+    "configuredStatus" : 429,
+    "fault" : null,
+    "path" : "/send"
+  } ]
+}
